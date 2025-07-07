@@ -3,15 +3,15 @@ import { ChartNoAxesColumn, ChevronRight, Link2 } from "lucide-react";
 import userIcon from "../../assets/icon/user_icon.svg";
 import HeaderTop from "../ui/HeaderTop";
 
-const fontStyleIntro = "text-medium text-[#eeeeee]";
+const fontStyleIntro = "text-medium text-[color:var(--color-white)]";
 const tagStyle =
-  "flex items-center justify-center gap-1 bg-[#FFFFFF30] rounded-sm px-2 py-0.5 text-xs text-white cursor-pointer";
+  "flex items-center justify-center gap-1 bg-[color:var(--color-white-90)] rounded-sm px-2 py-0.5 text-xs text-white cursor-pointer";
 
 const GroupHeader = () => {
   return (
     <>
       {/* group 헤더 */}
-      <div className="w-full flex flex-col items-center justify-center pb-5 bg-[#338AFF] gap-4">
+      <div className="w-full flex flex-col items-center justify-center pb-5 bg-[color:var(--color-primary-400)] gap-4">
         <HeaderTop fontColor="white" backward={true} icon="plus">
           모임 정보 수정
         </HeaderTop>
@@ -25,12 +25,12 @@ const GroupHeader = () => {
           <div className={tagStyle}>
             <ChartNoAxesColumn size={16} />
             <span>통계</span>
-            <ChevronRight color="white" size={16} />
+            <ChevronRight color="[color:var(--color-white)]" size={16} />
           </div>
           <div className={tagStyle}>
             <Link2 size={16} />
             <span>초대</span>
-            <ChevronRight color="white" size={16} />
+            <ChevronRight color="[color:var(--color-white)]" size={16} />
           </div>
         </div>
       </div>
