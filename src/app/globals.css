@@ -25,3 +25,10 @@
   --color-red: #ff5353;
   --color-white: #fff;
 }
+
+textarea::-webkit-scrollbar {
+  display: none !important;
+}
+textarea {
+  resize: none;
+}
