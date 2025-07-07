@@ -1,4 +1,5 @@
 import { ChevronLeft, Plus, SquarePen } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const headerStyle = "w-full flex items-center justify-between px-5 ";
 const fontStyle = "text-lg text-black";
@@ -11,12 +12,20 @@ const HeaderTop = ({
   children,
   backward = true,
   icon,
+  clickPlusHandler,
+  clickPenHandler,
 }: {
   fontColor: string;
   children: React.ReactNode;
   backward: boolean;
   icon?: string;
+  clickPlusHandler?: () => void;
+  clickPenHandler?: () => void;
 }) => {
+  const router = useRouter();
+  const handleBack = () => {
+    router.back();
+  };
   return (
     <>
       {/*
@@ -25,9 +34,11 @@ const HeaderTop = ({
           backward : 뒤로가기 아이콘 표시 여부 (boolean)
           icon : 아이콘 종류 (plus, pen)
           children : 헤더에 표시할 텍스트
+          clickPlusHandler : plus 클릭 핸들러
+          clickPenHandler : pen 아이콘 클릭 핸들러
       */}
       <div className={headerStyle}>
-        <span>
+        <span onClick={handleBack}>
           <ChevronLeft
             color={fontColor === "black" ? "black" : "white"}
             size={16}
@@ -38,12 +49,12 @@ const HeaderTop = ({
           {children}
         </span>
         {icon === "plus" && (
-          <span>
+          <span onClick={clickPlusHandler}>
             <Plus color={fontColor === "black" ? "black" : "white"} size={16} />
           </span>
         )}
         {icon === "pen" && (
-          <span>
+          <span onClick={clickPenHandler}>
             <SquarePen
               color={fontColor === "black" ? "black" : "white"}
               size={16}
