@@ -7,7 +7,10 @@ const Landing = () => {
 
   return (
     <>
-      <button onClick={() => setIsOpen(true)} className="font-tt-together">
+      <button
+        onClick={() => setIsOpen(true)}
+        className="font-tt-together text-[var(--color-red)]"
+      >
         Open sheet
       </button>
       <BottomSheet isOpen={isOpen} setIsOpen={setIsOpen}>

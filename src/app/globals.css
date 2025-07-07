@@ -11,3 +11,17 @@
 .font-tt-together {
   font-family: "TTTogether", sans-serif;
 }
+
+:root {
+  --color-primary-100: #f2f6fe;
+  --color-primary-200: #bde0ff;
+  --color-primary-300: #bac2ff;
+  --color-primary-400: #338aff;
+  --color-black: #161618;
+  --color-gray: #626262;
+  --color-gray-placeholder: #9ea6b2;
+  --color-gray-border: #eee;
+  --color-gray-background: #f0f2f7;
+  --color-red: #ff5353;
+  --color-white: #fff;
+}
