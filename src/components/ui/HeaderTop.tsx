@@ -2,26 +2,26 @@ import { ChevronLeft, Plus, SquarePen } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 const headerStyle = "w-full flex items-center justify-between px-5 ";
-const fontStyle = "text-lg text-black";
-const fontStyleWhite = "text-lg text-white";
-const fontStyleIntro = "text-medium text-[#eeeeee]";
-const tagStyle =
-  "flex items-center justify-center gap-1 bg-[#FFFFFF30] rounded-sm px-2 py-0.5 text-xs text-white cursor-pointer";
+const fontStyle = "text-lg text-[color:var(--color-black)]";
+const fontStyleWhite = "text-lg text-[color:var(--color-white)]";
+
+type HeaderTopProps = {
+  fontColor?: string;
+  children: React.ReactNode;
+  backward?: boolean;
+  icon?: string;
+  clickPlusHandler?: () => void;
+  clickPenHandler?: () => void;
+};
+
 const HeaderTop = ({
   fontColor = "black",
   children,
   backward = true,
-  icon,
+  icon = "",
   clickPlusHandler,
   clickPenHandler,
-}: {
-  fontColor: string;
-  children: React.ReactNode;
-  backward: boolean;
-  icon?: string;
-  clickPlusHandler?: () => void;
-  clickPenHandler?: () => void;
-}) => {
+}: HeaderTopProps) => {
   const router = useRouter();
   const handleBack = () => {
     router.back();
@@ -40,7 +40,11 @@ const HeaderTop = ({
       <div className={headerStyle}>
         <span onClick={handleBack}>
           <ChevronLeft
-            color={fontColor === "black" ? "black" : "white"}
+            color={
+              fontColor === "black"
+                ? "color:var(--color-black)"
+                : "color:var(--color-white)"
+            }
             size={16}
             className={backward ? "" : "invisible"}
           />
@@ -50,14 +54,38 @@ const HeaderTop = ({
         </span>
         {icon === "plus" && (
           <span onClick={clickPlusHandler}>
-            <Plus color={fontColor === "black" ? "black" : "white"} size={16} />
+            <Plus
+              color={
+                fontColor === "black"
+                  ? "color:var(--color-black)"
+                  : "color:var(--color-white)"
+              }
+              size={16}
+            />
           </span>
         )}
         {icon === "pen" && (
           <span onClick={clickPenHandler}>
             <SquarePen
-              color={fontColor === "black" ? "black" : "white"}
+              color={
+                fontColor === "black"
+                  ? "color:var(--color-black)"
+                  : "color:var(--color-white)"
+              }
               size={16}
+            />
+          </span>
+        )}
+        {icon === "" && (
+          <span onClick={clickPenHandler}>
+            <SquarePen
+              color={
+                fontColor === "black"
+                  ? "color:var(--color-black)"
+                  : "color:var(--color-white)"
+              }
+              size={16}
+              className="invisible"
             />
           </span>
         )}
