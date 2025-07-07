@@ -7,7 +7,9 @@ const Landing = () => {
 
   return (
     <>
-      <button onClick={() => setIsOpen(true)}>Open sheet</button>
+      <button onClick={() => setIsOpen(true)} className="font-tt-together">
+        Open sheet
+      </button>
       <BottomSheet isOpen={isOpen} setIsOpen={setIsOpen}>
         <div className="p-4">Hello from the bottom sheet</div>
       </BottomSheet>

@@ -1,1 +1,13 @@
 @import "tailwindcss";
+
+@font-face {
+  font-family: "TTTogether";
+  src: url("/fonts/TTTogether.otf") format("opentype"),
+    url("/fonts/TTTogether.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.font-tt-together {
+  font-family: "TTTogether", sans-serif;
+}
