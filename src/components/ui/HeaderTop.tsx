@@ -1,4 +1,4 @@
-import { ChevronLeft, Plus, SquarePen } from "lucide-react";
+import { ChevronLeft, Ellipsis, Plus, SquarePen } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 const headerStyle = "w-full flex items-center justify-between px-5 ";
@@ -6,12 +6,13 @@ const fontStyle = "text-lg text-[color:var(--color-black)]";
 const fontStyleWhite = "text-lg text-[color:var(--color-white)]";
 
 type HeaderTopProps = {
-  fontColor?: string;
+  fontColor: "black" | "white";
   children: React.ReactNode;
   backward?: boolean;
-  icon?: string;
+  icon?: "plus" | "pen" | "ellipsis" | "";
   clickPlusHandler?: () => void;
   clickPenHandler?: () => void;
+  clickEllipsisHandler?: () => void;
 };
 
 const HeaderTop = ({
@@ -21,6 +22,7 @@ const HeaderTop = ({
   icon = "",
   clickPlusHandler,
   clickPenHandler,
+  clickEllipsisHandler,
 }: HeaderTopProps) => {
   const router = useRouter();
   const handleBack = () => {
@@ -31,19 +33,20 @@ const HeaderTop = ({
       {/*
          props:
           fontColor : 폰트 색상 (black, white)
-          backward : 뒤로가기 아이콘 표시 여부 (boolean)
-          icon : 아이콘 종류 (plus, pen)
           children : 헤더에 표시할 텍스트
+          backward : 뒤로가기 아이콘 표시 여부 (boolean)
+          icon : 아이콘 종류 (plus, pen, ellipsis)
           clickPlusHandler : plus 클릭 핸들러
           clickPenHandler : pen 아이콘 클릭 핸들러
+          clickEllipsisHandler : ellipsis 아이콘 클릭 핸들러
       */}
       <div className={headerStyle}>
-        <span onClick={handleBack}>
+        <span onClick={handleBack} className="cursor-pointer">
           <ChevronLeft
             color={
               fontColor === "black"
-                ? "color:var(--color-black)"
-                : "color:var(--color-white)"
+                ? "var(--color-black)"
+                : "var(--color-white)"
             }
             size={16}
             className={backward ? "" : "invisible"}
@@ -53,36 +56,48 @@ const HeaderTop = ({
           {children}
         </span>
         {icon === "plus" && (
-          <span onClick={clickPlusHandler}>
+          <span onClick={clickPlusHandler} className="cursor-pointer">
             <Plus
               color={
                 fontColor === "black"
-                  ? "color:var(--color-black)"
-                  : "color:var(--color-white)"
+                  ? "var(--color-black)"
+                  : "var(--color-white)"
               }
               size={16}
             />
           </span>
         )}
         {icon === "pen" && (
-          <span onClick={clickPenHandler}>
+          <span onClick={clickPenHandler} className="cursor-pointer">
             <SquarePen
               color={
                 fontColor === "black"
-                  ? "color:var(--color-black)"
-                  : "color:var(--color-white)"
+                  ? "var(--color-black)"
+                  : "var(--color-white)"
+              }
+              size={16}
+            />
+          </span>
+        )}
+        {icon === "ellipsis" && (
+          <span onClick={clickEllipsisHandler} className="cursor-pointer">
+            <Ellipsis
+              color={
+                fontColor === "black"
+                  ? "var(--color-black)"
+                  : "var(--color-white)"
               }
               size={16}
             />
           </span>
         )}
         {icon === "" && (
-          <span onClick={clickPenHandler}>
+          <span onClick={clickPenHandler} className="cursor-pointer">
             <SquarePen
               color={
                 fontColor === "black"
-                  ? "color:var(--color-black)"
-                  : "color:var(--color-white)"
+                  ? "var(--color-black)"
+                  : "var(--color-white)"
               }
               size={16}
               className="invisible"
