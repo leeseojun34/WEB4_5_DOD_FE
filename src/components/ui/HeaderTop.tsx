@@ -1,7 +1,7 @@
 import { ChevronLeft, Ellipsis, Plus, SquarePen } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-const headerStyle = "w-full flex items-center justify-between px-5 ";
+const headerStyle = "w-full flex items-center justify-between px-5 min-h-7";
 const fontStyle = "text-lg text-[color:var(--color-black)]";
 const fontStyleWhite = "text-lg text-[color:var(--color-white)]";
 
