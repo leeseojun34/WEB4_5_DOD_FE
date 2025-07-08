@@ -27,6 +27,8 @@
   --color-red: #ff5353;
   --color-white: #fff;
   --color-white-90: #ffffff90;
+  --color-primary-400-hover: #1e6fef;
+  --shadow-common: 0px 4px 64px 0px rgba(0, 0, 0, 0.1);
 }
 
 textarea::-webkit-scrollbar {
