@@ -4,15 +4,15 @@ import google from "@/assets/icon/google_login_icon.svg";
 
 const SocialLoginButtons = () => {
   return (
-    <div className="relative flex-1 flex flex-col justify-center w-full itmes-center gap-4 px-5 text-sm">
-      <span className="absolute line top-0 right-0 text-6xl font-[TTTogether] text-[color:var(--color-primary-400)] leading-10">
+    <div className="relative flex-1 flex flex-col justify-center w-full items-center gap-4 px-5 text-sm">
+      <span className="absolute line top-0 right-0 text-6xl sm:text-7xl md:text-8xl font-[TTTogether] text-[color:var(--color-primary-400)] leading-10 md:leading-15">
         이때, 어때?
       </span>
-      <button className=" w-full bg-[color:var(--color-white)] h-11 rounded-sm flex justify-center items-center gap-2 font-semibold shadow">
+      <button className=" w-full bg-[color:var(--color-white)] h-11 rounded-sm flex justify-center items-center gap-2 font-semibold shadow cursor-pointer max-w-[700px]">
         <Image width={18} height={18} src={google} alt="" />
         구글 로그인
       </button>
-      <button className=" w-full bg-[#FEE500] h-11 rounded-sm flex justify-center items-center gap-2 font-semibold">
+      <button className=" w-full bg-[#FEE500] h-11 rounded-sm flex justify-center items-center gap-2 font-semibold cursor-pointer max-w-[700px]">
         <Image width={18} height={18} src={kakao} alt="" />
         카카오 로그인
       </button>
