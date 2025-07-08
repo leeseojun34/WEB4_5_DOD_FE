@@ -1,45 +1,35 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 type DropdownSmallProps = {
   children?: [React.ReactNode, React.ReactNode];
-  topClickHandler: () => void;
-  bottomClickHandler: () => void;
+  isOpen: boolean;
+  onClose: () => void;
+  onTopClick: () => void;
+  onBottomClick: () => void;
 };
 
 const DropdownSmall = ({
   children,
-  topClickHandler,
-  bottomClickHandler,
+  isOpen,
+  onClose,
+  onTopClick,
+  onBottomClick,
 }: DropdownSmallProps) => {
-  const [isOpen, setIsOpen] = useState(true);
-  const [topChild, bottomChild] = children ?? [];
   const menuRef = useRef<HTMLDivElement>(null);
+  const [topChild, bottomChild] = children ?? [];
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-        setIsOpen(false);
+        onClose();
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [onClose]);
 
-  const topToggleHandler = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    topClickHandler();
-    console.log("첫번째 메뉴 클릭");
-    setIsOpen(false);
-  };
-  const bottomToggleHandler = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    bottomClickHandler();
-    console.log("첫번째 메뉴 클릭");
-    setIsOpen(false);
-  };
-  console.log(children);
   if (!isOpen) return null;
   return (
     <>
@@ -48,12 +38,20 @@ const DropdownSmall = ({
           <div className="min-w-[92px] flex flex-col  bg-[color:var(--color-white)] text-[var(--color-black)] px-5 py-2  rounded-lg gap-4 text-xs font-semibold shadow-[box-shadow:var(--shadow-common)]">
             <div
               className="w-full text-center hover:text-[var(--color-primary-400)] cursor-pointer"
-              onClick={topToggleHandler}>
+              onClick={(e) => {
+                e.stopPropagation();
+                onTopClick();
+                onClose();
+              }}>
               {topChild}
             </div>
             <div
               className="w-full text-center hover:text-[var(--color-primary-400)] cursor-pointer"
-              onClick={bottomToggleHandler}>
+              onClick={(e) => {
+                e.stopPropagation();
+                onBottomClick();
+                onClose();
+              }}>
               {bottomChild}
             </div>
           </div>
