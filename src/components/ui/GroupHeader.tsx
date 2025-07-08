@@ -13,6 +13,8 @@ type GroupHeaderProps = {
   topIcon?: "plus" | "pen" | "ellipsis" | "";
 };
 
+// children ❌ 그룹 정보 받아와서 사용하도록 추후 수정
+
 const GroupHeader = ({ children, topIcon }: GroupHeaderProps) => {
   return (
     <>
