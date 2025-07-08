@@ -72,6 +72,6 @@ const Map = ({ latitude = 37.4849424, longitude = 127.0106459 }: MapProps) => {
     };
   }, [latitude, longitude]);
 
-  return <div ref={mapRef} style={{ width: "375px", height: "800px" }} />;
+  return <div ref={mapRef} style={{ width: "100%", height: "100%" }} />;
 };
 export default Map;
