@@ -14,7 +14,7 @@ export const Calendar = ({ isCompact }: CalendarProps) => {
   const [expanded, setExpanded] = useState(false);
   const defaultClassNames = getDefaultClassNames();
 
-  // console.log(defaultClassNames);
+  console.log(defaultClassNames);
   const today = new Date();
   console.log(today.getDate());
 
@@ -35,12 +35,6 @@ export const Calendar = ({ isCompact }: CalendarProps) => {
             (d) => d.toLocaleDateString() === date.toLocaleDateString()
           )
       : undefined;
-
-  // const hiddenDays1 = [
-  //   new Date(2025, 6, 10),
-  //   new Date(2025, 7, 20),
-  //   new Date(2025, 7, 11),
-  // ];
 
   return (
     <>
@@ -68,15 +62,17 @@ export const Calendar = ({ isCompact }: CalendarProps) => {
           selected: `bg-[color:var(--color-primary-400)] text-[color:var(--color-white)]`,
           chevron: `${defaultClassNames.chevron} fill-[color:var(--color-black)]! w-[18px] h-[18px]`,
           outside: `text-[color:var(--color-gray-placeholder)]`,
-          month_grid: `border-separate border-spacing-4 h-[122px]`,
+          month_grid: `border-separate border-spacing-x-4 border-spacing-y-1`,
           day_button: `w-6 h-6 text-sm font-medium`,
-          month_caption: `h-[22px]`,
+          month_caption: `h-[22px] flex justify-center items-center mb-2`,
+          button_next: `${defaultClassNames.button_next} translate-y-[-12px] h-[16px]`,
+          button_previous: `${defaultClassNames.button_previous} translate-y-[-12px] h-[16px]`,
         }}
         footer={
           isCompact && (
             <button
               onClick={() => setExpanded((prev) => !prev)}
-              className="mt-4 flex justify-center w-full"
+              className="flex justify-center w-full"
             >
               {expanded ? (
                 <IoChevronUp className="w-[14px] h-[14px] text-[color:var(--color-gray-placeholder)]" />
