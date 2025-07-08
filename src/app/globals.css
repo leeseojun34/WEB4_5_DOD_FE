@@ -28,3 +28,10 @@
   --color-white: #fff;
   --color-white-90: #ffffff90;
 }
+
+textarea::-webkit-scrollbar {
+  display: none !important;
+}
+textarea {
+  resize: none;
+}
