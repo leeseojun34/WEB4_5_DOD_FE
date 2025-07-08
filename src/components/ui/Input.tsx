@@ -83,7 +83,7 @@ const Input = ({
 
   return (
     <div className={containerClass}>
-      {label && <label className="text-xs font-medium">{label}</label>}
+      {label && <label className="text-xs font-medium ml-2">{label}</label>}
       <div className={inputWrapperClass}>
         {isTextarea ? (
           <>
@@ -128,8 +128,8 @@ const Input = ({
               <span
                 className={
                   isFocused
-                    ? "text-[var(--color-primary-400)]"
-                    : "text-[var(--color-gray-placeholder)]"
+                    ? "text-[var(--color-primary-400)] cursor-pointer"
+                    : "text-[var(--color-gray-placeholder)] cursor-pointer"
                 }
               >
                 {icon}
@@ -151,7 +151,7 @@ const Input = ({
         )}
       </div>
       {showMaxLengthError && (
-        <p className="text-xs text-[var(--color-red)] mt-1">
+        <p className="text-xs text-[var(--color-red)] ml-2 ">
           *{error || "최대 글자 수 초과"}
         </p>
       )}
