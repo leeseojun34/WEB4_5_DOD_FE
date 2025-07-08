@@ -92,16 +92,8 @@ const HeaderTop = ({
           </span>
         )}
         {icon === "" && (
-          <span onClick={clickPenHandler} className="cursor-pointer">
-            <SquarePen
-              color={
-                fontColor === "black"
-                  ? "var(--color-black)"
-                  : "var(--color-white)"
-              }
-              size={16}
-              className="invisible"
-            />
+          <span>
+            <SquarePen size={16} className="invisible" />
           </span>
         )}
       </div>
