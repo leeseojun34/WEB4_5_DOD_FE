@@ -8,14 +8,22 @@ const fontStyleIntro = "text-sm text-[color:var(--color-white)] font-normal";
 const tagStyle =
   "flex items-center justify-center gap-1 bg-[color:var(--color-white-30)] rounded-sm px-2 py-0.5 text-xs text-white cursor-pointer";
 
-const GroupHeader = () => {
+type GroupHeaderProps = {
+  children: React.ReactNode;
+  topIcon?: "plus" | "pen" | "ellipsis" | "";
+};
+
+const GroupHeader = ({ children, topIcon }: GroupHeaderProps) => {
   return (
     <>
+      {/*  그룹 정보 : 그룹명, 소개문구, 인원수  */}
       {/* group 헤더 */}
       <div className="w-full flex flex-col items-center justify-center pb-5 bg-[color:var(--color-primary-400)] gap-4">
-        <HeaderTop fontColor="white" backward={true} icon="plus">
-          모임 정보 수정
+        <HeaderTop fontColor="white" backward={true} icon={topIcon}>
+          {/* 그룹명 */}
+          {children}
         </HeaderTop>
+        {/*  소개문구 */}
         <p className={fontStyleIntro}>던전앤 파이터 커플 놀이 하는 날</p>
         <div className={tagStyle}>
           <Image
@@ -25,6 +33,7 @@ const GroupHeader = () => {
             height={16}
             className="filter invert"
           />
+          {/* 인원수 */}
           <span>2</span>
         </div>
         {/* 방장 권한이 있는 경우에만 보이는 부분 */}
