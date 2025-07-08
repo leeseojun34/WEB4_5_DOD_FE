@@ -1,12 +1,12 @@
 interface BubbleProps {
   children: React.ReactNode;
-  size: "sm" | "lg";
+  size?: "sm" | "lg";
   className?: string;
 }
 
 export const Bubble = ({
   children,
-  size = "lg",
+  size = "sm",
   className = "",
 }: BubbleProps) => {
   const baseStyle =
