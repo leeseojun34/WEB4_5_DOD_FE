@@ -9,13 +9,14 @@ const tagStyle =
   "flex items-center justify-center gap-1 bg-[color:var(--color-white-30)] rounded-sm pl-2 pr-0.5 py-0.5 text-xs text-white cursor-pointer";
 
 type GroupHeaderProps = {
-  children: React.ReactNode;
-  topIcon?: "plus" | "pen" | "ellipsis" | "";
+  children?: React.ReactNode;
+  // 최상단 오른쪽 아이콘(pen, ellipsis)
+  topIcon?: "pen" | "ellipsis" | "";
 };
 
 // children ❌ 그룹 정보 받아와서 사용하도록 추후 수정
 
-const GroupHeader = ({ children, topIcon }: GroupHeaderProps) => {
+const GroupHeader = ({ children, topIcon = "" }: GroupHeaderProps) => {
   return (
     <>
       {/*  그룹 정보 : 그룹명, 소개문구, 인원수  */}
