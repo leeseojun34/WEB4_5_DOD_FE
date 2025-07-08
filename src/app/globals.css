@@ -12,6 +12,11 @@
   font-family: "TTTogether", sans-serif;
 }
 
+body {
+  font-family: var(--font-pretendard), "Apple SD Gothic Neo", "Malgun Gothic",
+    "맑은 고딕", sans-serif;
+}
+
 :root {
   --color-primary-100: #f2f6fe;
   --color-primary-200: #bde0ff;
