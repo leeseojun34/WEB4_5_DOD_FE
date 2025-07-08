@@ -15,7 +15,7 @@
 :root {
   --color-primary-100: #f2f6fe;
   --color-primary-200: #bde0ff;
-  --color-primary-300: #bac2ff;
+  --color-primary-300: #8ac2ff;
   --color-primary-400: #338aff;
   --color-black: #161618;
   --color-gray: #626262;
@@ -25,6 +25,7 @@
   --color-muted: #eee;
   --color-gray-background: #f0f2f7;
   --color-red: #ff5353;
+  --color-red-60: #ff535399;
   --color-white: #fff;
   --color-white-90: #ffffff90;
 }
@@ -34,4 +35,12 @@ textarea::-webkit-scrollbar {
 }
 textarea {
   resize: none;
+}
+
+.rdp-weekdays th[aria-label="토요일"] {
+  color: var(--color-primary-300);
+}
+
+.rdp-weekdays th[aria-label="일요일"] {
+  color: var(--color-red-60);
 }
