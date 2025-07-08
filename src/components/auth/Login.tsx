@@ -3,7 +3,7 @@ import SocialLoginButtons from "./SocialLoginButtons";
 
 const Login = () => {
   return (
-    <div className="h-[100vh] flex flex-col">
+    <div className="h-screen flex flex-col">
       <LoginBanner />
       <SocialLoginButtons />
     </div>

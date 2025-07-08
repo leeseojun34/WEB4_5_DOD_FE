@@ -5,7 +5,7 @@ import google from "@/assets/icon/google_login_icon.svg";
 const SocialLoginButtons = () => {
   return (
     <div className="relative flex-1 flex flex-col justify-center w-full items-center gap-4 px-5 text-sm">
-      <span className="absolute line top-0 right-0 text-6xl sm:text-7xl md:text-8xl font-[TTTogether] text-[color:var(--color-primary-400)] leading-10 md:leading-15">
+      <span className="absolute top-0 right-0 text-6xl sm:text-7xl md:text-8xl font-[TTTogether] text-[color:var(--color-primary-400)] leading-10 md:leading-15">
         이때, 어때?
       </span>
       <button className=" w-full bg-[color:var(--color-white)] h-11 rounded-sm flex justify-center items-center gap-2 font-semibold shadow cursor-pointer max-w-[700px]">
