@@ -1,6 +1,6 @@
 import { ChartNoAxesColumn, ChevronRight, Link2 } from "lucide-react";
 import UserIcon from "../../assets/icon/user_icon.svg";
-import HeaderTop from "../ui/HeaderTop";
+import HeaderTop from "./HeaderTop";
 import Link from "next/link";
 
 type GroupHeaderProps = {
