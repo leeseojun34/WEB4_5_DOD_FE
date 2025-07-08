@@ -1,10 +1,6 @@
-import Schedule from "../feature/Schedule";
+"use client";
 
 const Landing = () => {
-  return (
-    <div className="flex flex-col gap-4 justify-center items-center">
-      <Schedule />
-    </div>
-  );
+  return <div>Landing</div>;
 };
 export default Landing;
