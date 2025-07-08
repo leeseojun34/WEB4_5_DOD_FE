@@ -52,3 +52,8 @@ textarea {
 .rdp-weekdays th[aria-label="일요일"] {
   color: var(--color-red-60);
 }
+
+.rdp-chevron polygon {
+  stroke: none;
+  stroke-width: 1;
+}

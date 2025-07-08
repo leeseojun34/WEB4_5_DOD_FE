@@ -1,15 +1,22 @@
 "use client";
 import { useState } from "react";
-import { DayPicker, getDefaultClassNames } from "react-day-picker";
+import {
+  CalendarDay,
+  DayPicker,
+  getDefaultClassNames,
+  Modifiers,
+} from "react-day-picker";
 import "react-day-picker/style.css";
 import { ko } from "date-fns/locale";
 import { IoChevronDown, IoChevronUp } from "react-icons/io5";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface CalendarProps {
   isCompact: boolean;
+  events?: Date[];
 }
 
-export const Calendar = ({ isCompact }: CalendarProps) => {
+export const Calendar = ({ isCompact, events }: CalendarProps) => {
   const [selected, setSelected] = useState<Date[] | undefined>([]);
   const [expanded, setExpanded] = useState(false);
   const defaultClassNames = getDefaultClassNames();
@@ -53,18 +60,69 @@ export const Calendar = ({ isCompact }: CalendarProps) => {
             `${month.getFullYear()}년 ${month.getMonth() + 1}월`,
         }}
         hidden={hiddenDays}
+        modifiers={{ answered: events }}
+        components={{
+          Chevron: ({ orientation }) =>
+            orientation === "left" ? (
+              <ChevronLeft className="h-4 w-4 stroke-1 translate-x-2" />
+            ) : (
+              <ChevronRight className="h-4 w-4 stroke-1 translate-x-[-8px]" />
+            ),
+          DayButton: (
+            props: {
+              day: CalendarDay;
+              modifiers: Modifiers;
+            } & React.HTMLAttributes<HTMLButtonElement>
+          ) => {
+            const { day, modifiers, ...rest } = props;
+
+            return (
+              <button
+                className={`w-full h-full text-center flex flex-col items-center justify-center p-2 relative`}
+                {...rest}
+              >
+                <div className="w-6 h-6 flex justify-center items-center">
+                  {day.date.getDate()}
+                </div>
+                {modifiers.answered && (
+                  <div className="w-full h-1 flex justify-center">
+                    <div className="absolute translate-y-1 w-1 h-1 bg-[color:var(--color-primary-400)] rounded-full "></div>
+                  </div>
+                )}
+              </button>
+            );
+          },
+        }}
+        // components={{
+        //   NextMonthButton: () => (
+        //     <button>
+        //       <ChevronRight
+        //         className={`${defaultClassNames.button_next} w-4! h-4! stroke-1 translate-y-[3px]`}
+        //       />
+        //     </button>
+        //   ),
+        //   PreviousMonthButton: () => (
+        //     <ChevronLeft
+        //       className={` ${defaultClassNames.button_previous} w-4! h-4! stroke-1 translate-x-[22px] translate-y-[3px]`}
+        //     />
+        //   ),
+        // }}
         classNames={{
-          root: `${defaultClassNames.root} w-[335px] h-[full] rounded-[20px] bg-[color:var(--color-white)] px-4 py-3 flex flex-col justify-center items-center `,
+          root: `${defaultClassNames.root} w-[335px] h-[full] rounded-[20px] bg-[color:var(--color-white)] p-4 flex flex-col justify-center items-center`,
           day: `rounded-full leading-none`,
-          caption_label: `font-semibold flex justify-center items-center text-sm`,
-          today: `outline outline-[color:var(--color-primary-400)] text-[color:var(--color-primary-400)] box-border w-6 h-6`,
-          weekday: `text-[color:var(--color-gray-placeholder)] font-medium text-sm`,
+          caption_label: `font-regular flex justify-center items-center text-sm`,
+          today: `text-[color:var(--color-primary-400)] box-border w-6 h-6`,
+          weekday: `text-[color:var(--color-gray-placeholder)] font-light text-xs`,
           selected: `bg-[color:var(--color-primary-400)] text-[color:var(--color-white)]`,
-          chevron: `${defaultClassNames.chevron} fill-[color:var(--color-black)]! w-[18px] h-[18px]`,
+          // chevron: `${defaultClassNames.chevron} fill-[color:var(--color-black)]! w-[18px] h-[18px]`,
           outside: `text-[color:var(--color-gray-placeholder)]`,
-          month_grid: `border-separate border-spacing-x-4 border-spacing-y-1`,
-          day_button: `w-6 h-6 text-sm font-medium`,
-          month_caption: `h-[22px] flex justify-center items-center mb-2`,
+          month_grid: `border-separate border-spacing-x-4 ${
+            expanded ? "border-spacing-y-4" : "border-spacing-y-1"
+          }`,
+          day_button: `w-6 h-6 text-sm `,
+          month_caption: `h-[22px] flex justify-center items-center ${
+            expanded ? "" : "mb-3"
+          }`,
           button_next: `${defaultClassNames.button_next} translate-y-[-12px] h-[16px]`,
           button_previous: `${defaultClassNames.button_previous} translate-y-[-12px] h-[16px]`,
         }}
@@ -75,9 +133,9 @@ export const Calendar = ({ isCompact }: CalendarProps) => {
               className="flex justify-center w-full"
             >
               {expanded ? (
-                <IoChevronUp className="w-[14px] h-[14px] text-[color:var(--color-gray-placeholder)]" />
+                <IoChevronUp className="w-[14px] h-[14px] text-[color:var(--color-gray-placeholder)] cursor-pointer" />
               ) : (
-                <IoChevronDown className="w-[14px] h-[14px] text-[color:var(--color-gray-placeholder)]" />
+                <IoChevronDown className="w-[14px] h-[14px] text-[color:var(--color-gray-placeholder)] cursor-pointer" />
               )}
             </button>
           )
