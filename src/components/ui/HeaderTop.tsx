@@ -1,3 +1,5 @@
+"use client";
+
 import { ChevronLeft, Ellipsis, Plus, SquarePen } from "lucide-react";
 import { useRouter } from "next/navigation";
 
