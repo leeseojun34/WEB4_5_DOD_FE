@@ -37,16 +37,28 @@ const Input = ({
   const [isFocused, setIsFocused] = useState(false);
   const [showMaxLengthError, setShowMaxLengthError] = useState(false);
 
-  useEffect(() => {
-    if (showMaxLengthError) {
-      const timer = setTimeout(() => {
-        setShowMaxLengthError(false);
-      }, 1000); //에러메세지 1초 동안
-      return () => clearTimeout(timer);
-    }
-  }, [showMaxLengthError]);
+  const handleInputFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    setIsFocused(true);
+    if ((props as InputHTMLAttributes<HTMLInputElement>).onFocus)
+      (props as InputHTMLAttributes<HTMLInputElement>).onFocus!(e);
+  };
+  const handleInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    setIsFocused(false);
+    if ((props as InputHTMLAttributes<HTMLInputElement>).onBlur)
+      (props as InputHTMLAttributes<HTMLInputElement>).onBlur!(e);
+  };
+  const handleTextareaFocus = (e: React.FocusEvent<HTMLTextAreaElement>) => {
+    setIsFocused(true);
+    if ((props as TextareaHTMLAttributes<HTMLTextAreaElement>).onFocus)
+      (props as TextareaHTMLAttributes<HTMLTextAreaElement>).onFocus!(e);
+  };
+  const handleTextareaBlur = (e: React.FocusEvent<HTMLTextAreaElement>) => {
+    setIsFocused(false);
+    if ((props as TextareaHTMLAttributes<HTMLTextAreaElement>).onBlur)
+      (props as TextareaHTMLAttributes<HTMLTextAreaElement>).onBlur!(e);
+  };
 
-  const keyDownHandler = (e: React.KeyboardEvent) => {
+  const handleKeyDownInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (
       maxLength !== undefined &&
       valueLength >= maxLength &&
@@ -55,10 +67,39 @@ const Input = ({
     ) {
       setShowMaxLengthError(true);
     }
-    if (props.onKeyDown) {
-      props.onKeyDown(e);
+    if ((props as React.InputHTMLAttributes<HTMLInputElement>).onKeyDown) {
+      (props as React.InputHTMLAttributes<HTMLInputElement>).onKeyDown!(e);
     }
   };
+
+  const handleKeyDownTextarea = (
+    e: React.KeyboardEvent<HTMLTextAreaElement>
+  ) => {
+    if (
+      maxLength !== undefined &&
+      valueLength >= maxLength &&
+      e.key !== "Backspace" &&
+      e.key !== "Delete"
+    ) {
+      setShowMaxLengthError(true);
+    }
+    if (
+      (props as React.TextareaHTMLAttributes<HTMLTextAreaElement>).onKeyDown
+    ) {
+      (props as React.TextareaHTMLAttributes<HTMLTextAreaElement>).onKeyDown!(
+        e
+      );
+    }
+  };
+
+  useEffect(() => {
+    if (showMaxLengthError) {
+      const timer = setTimeout(() => {
+        setShowMaxLengthError(false);
+      }, 1000); //에러메세지 1초 동안
+      return () => clearTimeout(timer);
+    }
+  }, [showMaxLengthError]);
 
   //label, input, error 랩
   const containerClass = classNames(
@@ -91,7 +132,9 @@ const Input = ({
               className={inputBaseClass}
               maxLength={maxLength}
               value={value}
-              onKeyDown={keyDownHandler}
+              onKeyDown={handleKeyDownTextarea}
+              onFocus={handleTextareaFocus}
+              onBlur={handleTextareaBlur}
               {...(props as TextareaHTMLAttributes<HTMLTextAreaElement>)}
             />
             {maxLength !== undefined && (
@@ -113,16 +156,10 @@ const Input = ({
               className={inputBaseClass}
               maxLength={maxLength}
               value={value}
+              onFocus={handleInputFocus}
+              onBlur={handleInputBlur}
+              onKeyDown={handleKeyDownInput}
               {...(props as InputHTMLAttributes<HTMLInputElement>)}
-              onFocus={(e) => {
-                setIsFocused(true);
-                if (props.onFocus) props.onFocus(e);
-              }}
-              onBlur={(e) => {
-                setIsFocused(false);
-                if (props.onBlur) props.onBlur(e);
-              }}
-              onKeyDown={keyDownHandler}
             />
             {icon && (
               <span
