@@ -11,7 +11,8 @@ export const Button = ({
   className = "",
   ...props
 }: ButtonProps) => {
-  const baseStyle = "w-full h-[50px] rounded-lg text-sm";
+  const baseStyle =
+    "w-full h-11 rounded-lg text-sm  transition duration-300 max-w-[700px]";
 
   const stateStyles = {
     default:
