@@ -4,7 +4,7 @@ export const MyScheduleItem = () => {
   return (
     <>
       <div className="flex gap-5 w-full items-center">
-        <div className="flex items-center justify-center w-18 h-[50px] bg-[color:var(--color-gray-background)] text-[color:var(--color-primary-400)] rounded-lg">
+        <div className="flex items-center justify-center w-18 h-[50px] bg-[color:var(--color-gray-background)] text-[color:var(--color-primary-400)] rounded-lg text-xs">
           D-DAY
         </div>
         <div className="flex flex-col justify-between">
