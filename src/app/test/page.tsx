@@ -12,10 +12,10 @@ export default function Page() {
     new Date("2025-07-11"),
   ];
   return (
-    <div className="flex min-h-screen justify-center items-center bg-black">
-      <div className="w-[335px] flex flex-col gap-12">
+    <div className="flex min-h-screen justify-center items-center bg-black px-5">
+      <div className="w-full flex flex-col gap-12">
         <Calendar
-          isCompact={false}
+          isCompact={true}
           selected={selected}
           setSelected={setSelected}
           events={events}

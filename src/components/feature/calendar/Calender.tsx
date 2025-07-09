@@ -49,7 +49,7 @@ export const Calendar = ({
       DayButton: DayButton,
     },
     classNames: {
-      root: `${defaultClassNames.root} w-[335px] h-full rounded-[20px] bg-[color:var(--color-white)] p-4 flex flex-col justify-center items-center`,
+      root: `${defaultClassNames.root} min-w-[335px] h-full max-w-185 h-auto rounded-[20px] bg-[color:var(--color-white)] p-4 flex flex-col justify-center items-center`,
       day: `rounded-full leading-none`,
       caption_label: `font-regular flex justify-center items-center text-sm`,
       today: `text-[color:var(--color-primary-400)] box-border w-6 h-6`,
