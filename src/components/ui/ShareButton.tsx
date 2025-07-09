@@ -11,7 +11,7 @@ import { MdKeyboardArrowRight } from "react-icons/md";
 const ShareButton = ({ color = "white" }: { color?: string }) => {
   return (
     <div
-      className={`flex flex-row rounded-md px-5 py-4 gap-[90px] cursor-pointer shadow-md transition-all duration-300 hover:scale-101`}
+      className={`flex flex-row rounded-md px-5 py-4 gap-24 cursor-pointer shadow-md transition-all duration-300 hover:scale-101`}
       style={{ backgroundColor: color }}
     >
       <div className="flex flex-row gap-4">

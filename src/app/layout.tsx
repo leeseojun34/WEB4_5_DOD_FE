@@ -21,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={pretendard.variable}>{children}</body>
+      <body className={`${pretendard.variable} max-w-screen-lg mx-auto w-full`}>{children}</body>
     </html>
   );
 }
