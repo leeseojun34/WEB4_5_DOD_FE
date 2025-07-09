@@ -3,13 +3,13 @@ import NameTag from "./NameTag";
 
 interface ScheduleItemProps {
   name: string;
-  onoffline: "온라인" | "오프라인";
+  type: "온라인" | "오프라인";
   time: string;
   members: string[];
 }
 const ScheduleItem = ({
   name,
-  onoffline,
+  type,
   time,
   members,
 }: ScheduleItemProps) => {
@@ -21,7 +21,7 @@ const ScheduleItem = ({
             {name}
           </p>
           <p className="text-[color:var(--color-primary-400)] text-xs font-regular">
-            {onoffline}
+            {type}
           </p>
         </div>
         <button>
@@ -33,7 +33,7 @@ const ScheduleItem = ({
       </div>
       <div className="flex gap-1">
         {members.map((member, i) => (
-          <NameTag name={member} key={i} />
+          <NameTag name={member} key={`${member}-${i}`} />
         ))}
       </div>
     </div>
