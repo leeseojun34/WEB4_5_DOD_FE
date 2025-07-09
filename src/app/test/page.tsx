@@ -1,13 +1,12 @@
 "use client";
 
 import { Calendar } from "@/components/feature/Calender";
-import { Button } from "@/components/ui/Button";
 import { useState } from "react";
 
 export default function Page() {
   const [selected, setSelected] = useState<Date[] | undefined>([]);
 
-  const answeredDays = [
+  const events = [
     new Date("2025-07-08"),
     new Date("2025-07-09"),
     new Date("2025-07-11"),
@@ -19,8 +18,8 @@ export default function Page() {
           isCompact={true}
           selected={selected}
           setSelected={setSelected}
+          events={events}
         />
-        <Button onClick={() => console.log(selected)}>제출</Button>
       </div>
     </div>
   );
