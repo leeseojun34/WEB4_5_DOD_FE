@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/Button";
 
 const MeetingTypeChoice = () => {
   return (
-    <main className="flex flex-col px-5 gap-8 min-h-screen relative pt-8 max-w-[740px]">
+    <main className="flex flex-col px-5 gap-8 min-h-screen relative pt-8 max-w-[740px] mx-auto">
       <h1 className="text-xl font-bold">모임 유형을 선택해주세요</h1>
       <MeetingTypeOptions />
       <Tip>
