@@ -14,11 +14,11 @@ const ElectionStart = () => {
   };
   return (
     <main className="flex flex-col  min-h-screen relative pb-32 pt-8 max-w-[740px] mx-auto overflow-hidden">
-      <div className="flex flex-col gap-2 px-5 py-7.5">
-        <h2 className="font-semibold text-xl text-[var(--color-gray)]">
+      <div className="flex flex-col gap-2 px-5 pt-7.5 ">
+        <h2 className="font-semibold sm:text-2xl text-xl text-[var(--color-gray)]">
           카츠오모이 가는 날
         </h2>
-        <h1 className="font-semibold text-xl text-[var(--color-black)]">
+        <h1 className="font-semibold text-xl sm:text-2xl text-[var(--color-black)]">
           <span className="text-[var(--color-primary-400)]">중간 지점</span>{" "}
           찾으러 가기
         </h1>

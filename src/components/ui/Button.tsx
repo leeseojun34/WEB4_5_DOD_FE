@@ -15,7 +15,7 @@ export const Button = ({
 
   const stateStyles = {
     default:
-      "bg-[color:var(--color-primary-400)] text-[color:var(--color-white)] transition-colors hover:scale-101 cursor-pointer",
+      "bg-[color:var(--color-primary-400)] text-[color:var(--color-white)] transition-colors hover:scale-101 hover:bg-[var(--color-primary-400-hover)] transition duraiton-300 cursor-pointer",
     disabled:
       "bg-[color:var(--color-gray-border)] text-[color:var(--color-gray-placeholder)] cursor-not-allowed",
   };
