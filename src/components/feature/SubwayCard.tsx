@@ -1,5 +1,6 @@
 import { Station } from "@/types/station";
 import React from "react";
+import { OptionBox } from "../ui/OptionBox";
 const STYLES = {
   stationMark:
     "rounded-full font-semibold flex justify-center items-center text-[var(--color-white)] text-xs",
@@ -7,16 +8,13 @@ const STYLES = {
 
 interface SubwayCardProps {
   station: Station;
+  isSelected: boolean;
 }
 
-const SubwayCard: React.FC<SubwayCardProps> = ({ station }) => {
+const SubwayCard: React.FC<SubwayCardProps> = ({ station, isSelected }) => {
   return (
     <>
-      <div
-        className="w-full py-4 flex-col flex gap-3 items-center justify-center rounded-lg border border-[var(--color-gray-border)] hover:border-[var(--color-primary-400)] bg-[var(--color-white)]
-      hover:bg-[var(--color-primary-100)] transition duration-300 cursor-pointer
-      "
-      >
+      <OptionBox isSelected={isSelected}>
         <div className="flex gap-2 items-center justify-center">
           {station.metroLines.map((line, idx) => {
             const isSingleChar = line.length === 1;
@@ -41,7 +39,7 @@ const SubwayCard: React.FC<SubwayCardProps> = ({ station }) => {
             이동 시간 : {station.travelTime}분
           </h2>
         </div>
-      </div>
+      </OptionBox>
     </>
   );
 };
