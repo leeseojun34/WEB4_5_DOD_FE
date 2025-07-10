@@ -1,5 +1,6 @@
 import { IoPaperPlaneOutline } from "react-icons/io5";
 import { MdHowToVote, MdKeyboardArrowRight } from "react-icons/md";
+import { FiCalendar } from "react-icons/fi";
 
 /**
  * @param title - 버튼 타이틀
@@ -19,21 +20,26 @@ const ShareButton = ({
 }: {
   title: string;
   description: string;
-  mode?: "share" | "vote";
+  mode?: "share" | "vote" | "group";
   color?: string;
 }) => {
+  const icon = () => {
+    if (mode === "share") return <IoPaperPlaneOutline />;
+    if (mode === "vote") return <MdHowToVote />;
+    if (mode === "group") return <FiCalendar />;
+  };
+
   return (
     <>
       <div
-        className={`flex flex-row rounded-md px-5 py-4 gap-24 cursor-pointer shadow-md transition-all duration-300 hover:scale-101`}
+        className={`flex flex-row rounded-md px-5 py-4 justify-between cursor-pointer shadow-md transition-all duration-300 hover:scale-101`}
         style={{ backgroundColor: color }}
       >
         <div className="flex flex-row gap-4">
           <div className="font-bold flex items-center justify-center">
-            {mode === "share" && <IoPaperPlaneOutline />}
-            {mode === "vote" && <MdHowToVote />}
+            {icon()}
           </div>
-          <div className="flex flex-col justify-start">
+          <div className="flex flex-col justify-start gap-2">
             <div className="text-sm">{title}</div>
             <div className="text-[#8ac2ff] text-xs">{description}</div>
           </div>
