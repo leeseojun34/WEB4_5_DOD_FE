@@ -1,17 +1,10 @@
 "use client";
 
-import Schedule from "@/components/feature/Schedule";
-import BaseSheet from "@/components/mypage/BaseSheet";
 import ListBox from "@/components/mypage/ListBox";
 import NameSheet from "@/components/mypage/NameSheet";
 import Profile from "@/components/mypage/Profile";
-import SearchPlaceList from "@/components/mypage/SearchPlaceList";
 import StationSheet from "@/components/mypage/StationSheet";
 import TimeSheet from "@/components/mypage/TimeSheet";
-import BottomSheet from "@/components/ui/BottomSheet";
-import { Button } from "@/components/ui/Button";
-import Input from "@/components/ui/Input";
-import { Search, X } from "lucide-react";
 import { ChangeEvent, useState } from "react";
 
 type SheetType = "name" | "time" | "station" | "calendar";
@@ -102,36 +95,6 @@ function MyPage() {
             saveHandler();
           }}
         />
-        // <BaseSheet
-        //   isOpen={isOpen}
-        //   setIsOpen={setIsOpen}
-        //   onSave={saveHandler}
-        //   snapPoints={480}
-        //   title="내 주변역 등록하기"
-        //   showCloseIcon={true}>
-        //   <div className="flex flex-col gap-4 ">
-        //     <Input
-        //       value={text}
-        //       icon={<Search className="w-4 h-4" />}
-        //       onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-        //         setText(e.target.value)
-        //       }
-        //       placeholder="가까운 지하철을 검색해주세요."
-        //     />
-        //     {/* SearchPlaceList */}
-        //     {/* <div className="w-full max-h-[200px] overflow-y-auto"> */}
-        //     <div className="w-full flex-1 overflow-y-auto ">
-        //       <SearchPlaceList
-        //         stationName="서울역"
-        //         stationAddress="서울역 중구 퇴게로"
-        //       />
-        //       <SearchPlaceList
-        //         stationName="서울역"
-        //         stationAddress="서울역 중구 퇴게로"
-        //       />
-        //     </div>
-        //   </div>
-        // </BaseSheet>
       )}
     </div>
   );
