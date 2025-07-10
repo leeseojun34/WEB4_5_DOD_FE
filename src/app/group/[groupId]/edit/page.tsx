@@ -39,7 +39,7 @@ const EditGroup = () => {
           <button className="text-[color:var(--color-red)] text-xs w-full text-center cursor-pointer">
             그룹 삭제하기
           </button>
-          <Button>그룹 생성</Button>
+          <Button>수정 완료</Button>
         </div>
       </div>
     </div>
