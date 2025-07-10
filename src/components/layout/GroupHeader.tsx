@@ -24,7 +24,7 @@ type GroupHeaderProps = {
 };
 
 const fontStyleWhite = "text-lg text-[color:var(--color-white)]";
-const fontStyleIntro = "text-sm text-[color:var(--color-white)] font-normal";
+const fontStyleIntro = "text-sm text-[color:var(--color-muted)] font-normal";
 const tagStyle =
   "flex items-center justify-center gap-1 bg-[color:var(--color-white-30)] rounded-sm pl-2 pr-0.5 py-0.5 text-xs text-white cursor-pointer";
 
