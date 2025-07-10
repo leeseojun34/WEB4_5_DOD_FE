@@ -149,6 +149,7 @@ const mypage = () => {
                 </div>
               </div>
             </div>
+            {/* 저장하기 버튼 */}
             <div className="flex justify-between items-center">
               <Button onClick={saveHandler}>저장하기</Button>
             </div>
