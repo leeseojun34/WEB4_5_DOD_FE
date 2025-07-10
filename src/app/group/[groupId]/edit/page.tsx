@@ -1,5 +1,6 @@
 "use client";
 
+import HeaderTop from "@/components/layout/HeaderTop";
 import { Button } from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import { ChangeEvent, useState } from "react";
@@ -9,7 +10,8 @@ const EditGroup = () => {
   const [groupDescription, setGroupDescription] = useState("");
 
   return (
-    <div className="bg-[color:var(--color-white)] min-w-[375px] w-full max-w-185 mx-auto flex flex-col items-center mt-9 p-5">
+    <div className="bg-[color:var(--color-white)] min-w-[375px] w-full max-w-185 mx-auto flex flex-col items-center pt-25 p-5">
+      <HeaderTop>그룹 정보 수정</HeaderTop>
       <div className="flex flex-col w-full gap-8">
         <Input
           label="그룹 이름"
