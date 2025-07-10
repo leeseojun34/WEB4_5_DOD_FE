@@ -41,7 +41,7 @@ const HeaderTop = ({
           clickPenHandler : pen 아이콘 클릭 핸들러
           clickEllipsisHandler : ellipsis 아이콘 클릭 핸들러
       */}
-      <div className={headerStyle}>
+      <div className={`${headerStyle} bg-transparent relative z-10`}>
         <span onClick={handleBack} className="cursor-pointer">
           <ChevronLeft
             color={
