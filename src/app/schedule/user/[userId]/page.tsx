@@ -6,10 +6,10 @@ import Image from "next/image";
 const UserSchedule = () => {
   return (
     <>
-      <div className="min-w-[375px] w-full max-w-185 bg-[color:var(--color-gray-background)] mx-auto pt-23">
+      <div className="min-w-[375px] w-full max-w-185 bg-[color:var(--color-gray-background)] mx-auto">
         <HeaderTop>나의 이때어때 일정</HeaderTop>
       </div>
-      <div className="min-w-[375px] w-full max-w-185 min-h-screen bg-[color:var(--color-gray-background)] px-5 mx-auto">
+      <div className="min-w-[375px] w-full max-w-185 min-h-screen bg-[color:var(--color-gray-background)] px-5 mx-auto pt-20">
         <Image
           src={rabbitWriting}
           alt="글쓰는 토끼 이미지"
