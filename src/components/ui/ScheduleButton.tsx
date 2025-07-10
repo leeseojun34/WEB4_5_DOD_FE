@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/Button";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 const ScheduleButton = ({
   level,
@@ -11,6 +12,15 @@ const ScheduleButton = ({
   setLevel: (level: number) => void;
 }) => {
   const [buttonText, setButtonText] = useState("다음");
+  const router = useRouter();
+
+  const handleClick = () => {
+    if (level === 2) {
+      router.push("/schedule/complete");
+    } else {
+      setLevel(level + 1);
+    }
+  };
 
   useEffect(() => {
     if (level === 2) {
@@ -20,7 +30,7 @@ const ScheduleButton = ({
 
   return (
     <div className="my-8 mx-5 flex justify-center items-center">
-      <Button onClick={() => setLevel(level + 1)}>{buttonText}</Button>
+      <Button onClick={handleClick}>{buttonText}</Button>
     </div>
   );
 };
