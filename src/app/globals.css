@@ -12,6 +12,10 @@
   font-family: "TTTogether", sans-serif;
 }
 
+.dropbox-scroll::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
 body {
   font-family: var(--font-pretendard), "Apple SD Gothic Neo", "Malgun Gothic",
     "맑은 고딕", sans-serif;
@@ -53,4 +57,13 @@ textarea {
 
 .rdp-weekdays th[aria-label="일요일"] {
   color: var(--color-red-60);
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
 }
