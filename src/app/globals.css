@@ -12,6 +12,10 @@
   font-family: "TTTogether", sans-serif;
 }
 
+.dropbox-scroll::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
 body {
   font-family: var(--font-pretendard), "Apple SD Gothic Neo", "Malgun Gothic",
     "맑은 고딕", sans-serif;
