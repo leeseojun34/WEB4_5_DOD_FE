@@ -7,6 +7,7 @@ type GroupHeaderProps = {
   groupName: string;
   groupIntroduction: string;
   groupCount: number;
+  clickToInvite: () => void;
   // 최상단 오른쪽 아이콘(pen, ellipsis)
   topIcon?: "pen" | "ellipsis" | "";
 };
@@ -19,11 +20,9 @@ const GroupHeader = ({
   groupName,
   groupIntroduction,
   groupCount,
+  clickToInvite,
   topIcon = "",
 }: GroupHeaderProps) => {
-  const moveToInvite = () => {
-    // 초대 링크
-  };
   return (
     <>
       {/* group 헤더,  그룹 정보 : 그룹명, 소개문구, 인원수*/}
@@ -50,7 +49,7 @@ const GroupHeader = ({
             </div>
           </Link>
 
-          <div className={tagStyle} onClick={moveToInvite}>
+          <div className={tagStyle} onClick={clickToInvite}>
             <Link2 size={12} strokeWidth={2} />
             <span>초대</span>
             <ChevronRight color="var(--color-white)" size={14} />
