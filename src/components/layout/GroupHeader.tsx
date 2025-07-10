@@ -6,6 +6,7 @@ import { BiUser } from "react-icons/bi";
 type GroupHeaderProps = {
   groupName: string;
   groupIntroduction: string;
+  groupCount: number;
   // 최상단 오른쪽 아이콘(pen, ellipsis)
   topIcon?: "pen" | "ellipsis" | "";
 };
@@ -17,6 +18,7 @@ const tagStyle =
 const GroupHeader = ({
   groupName,
   groupIntroduction,
+  groupCount,
   topIcon = "",
 }: GroupHeaderProps) => {
   const moveToInvite = () => {
@@ -36,7 +38,7 @@ const GroupHeader = ({
           <BiUser color="var(--color-white)" size={14} />
 
           {/* 인원수 */}
-          <span className="pr-1.5">2</span>
+          <span className="pr-1.5">{groupCount}</span>
         </div>
         {/* 방장 권한이 있는 경우에만 보이는 부분 */}
         <div className="flex items-center justify-center gap-4">
