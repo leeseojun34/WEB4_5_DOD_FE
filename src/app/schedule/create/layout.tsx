@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   description: "이때어때 - 모임 생성",
 };
 
-// import Header from "@/components/ui/HeaderTop";
+import Header from "@/components/layout/HeaderTop";
 
 export default function RootLayout({
   children,
@@ -14,8 +14,10 @@ export default function RootLayout({
 }>) {
   return (
     <>
-      {/* <Header fontColor="black"> </Header> */}
-      <div className="flex flex-col justify-between h-screen">{children}</div>
+      <Header fontColor="black"> </Header>
+      <div className="flex flex-col justify-between h-[calc(100vh-70px)]">
+        {children}
+      </div>
     </>
   );
 }

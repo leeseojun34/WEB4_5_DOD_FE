@@ -72,7 +72,7 @@ const MovingRabbit = ({
 const ScheduleRabbit = ({ level }: { level: number }) => {
   return (
     <>
-      <div className="flex flex-row gap-2 mt-10 mx-5">
+      <div className="flex flex-row gap-2 mt-5 mx-5">
         <ScheduleLoadingRabbits level={level} />
       </div>
     </>
