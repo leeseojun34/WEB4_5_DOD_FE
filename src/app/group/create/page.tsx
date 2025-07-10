@@ -13,7 +13,7 @@ const CreateGroup = () => {
   };
   return (
     <>
-      <div className="bg-[color:var(--color-white)] min-w-[375px] w-full max-w-185 px-5 flex flex-col items-center gap-8 mx-auto pt-20">
+      <div className="bg-[color:var(--color-white)] min-w-[375px] w-full max-w-185 px-5 flex flex-col items-center gap-8 mx-auto pt-25">
         <HeaderTop />
         <div className="text-xl text-[color:var(--color-black)] text-start w-full font-semibold">
           그룹 이름과 설명을 입력해 주세요
