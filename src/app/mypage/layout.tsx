@@ -7,7 +7,7 @@ function layout({ children }: { children: React.ReactNode }) {
     <>
       <div className="w-full min-h-screen flex flex-col bg-[var(--color-gray-background)]">
         <HeaderTop fontColor="black" backward={true}></HeaderTop>
-        <div className="px-10">{children}</div>
+        <div className="px-10 pt-[8vh]">{children}</div>
       </div>
 
       <Footer />
