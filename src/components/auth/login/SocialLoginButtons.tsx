@@ -2,6 +2,7 @@
 
 import GoogleLoginButton from "./GoogleLoginButton";
 import KakaoLoginButton from "./KakaoLoginButton";
+import LogoutButton from "./LogoutButton";
 
 const SocialLoginButtons = () => {
   return (
@@ -11,6 +12,7 @@ const SocialLoginButtons = () => {
       </span>
       <GoogleLoginButton />
       <KakaoLoginButton />
+      <LogoutButton />
     </div>
   );
 };

@@ -3,7 +3,7 @@ import kakao from "@/assets/icon/kakao_login_icon.svg";
 
 const KakaoLoginButton = () => {
   const handleLogin = () => {
-    window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI}&response_type=code`;
+    window.location.href = `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/oauth2/authorization/kakao`;
   };
   return (
     <button

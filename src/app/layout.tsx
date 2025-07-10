@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import localFont from "next/font/local";
+import TanstackProvider from "@/providers/TanstackProvider";
 
 export const metadata: Metadata = {
   title: "이때어때",
@@ -21,7 +22,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={`${pretendard.variable} max-w-screen-lg mx-auto w-full`}>{children}</body>
+      <body className={`${pretendard.variable} max-w-screen-lg mx-auto w-full`}>
+        {" "}
+        <TanstackProvider>{children}</TanstackProvider>
+      </body>
     </html>
   );
 }
