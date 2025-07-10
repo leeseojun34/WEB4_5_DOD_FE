@@ -1,11 +1,9 @@
 import Input from "@/components/ui/Input";
 import ScheduleTitleText from "@/components/ui/ScheduleTitle";
-import ScheduleRabbit from "@/components/ui/ScheduleRabbit";
 
-const ScheduleInfo = ({ level }: { level: number }) => {
+const ScheduleInfo = () => {
   return (
     <>
-      <ScheduleRabbit level={level} />
       <div className="flex flex-col gap-4 mt-10">
         <ScheduleTitleText title="일정 이름과 설명을 입력해 주세요" />
       </div>

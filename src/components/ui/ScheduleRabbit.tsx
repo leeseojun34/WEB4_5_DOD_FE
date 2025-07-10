@@ -12,19 +12,13 @@ const ScheduleLoadingRabbits = ({ level }: { level: number }) => {
         >
           {index === level ? (
             <div className="w-full h-6 md:h-12">
-              <MovingRabbit />
+              <MovingRabbit target="rabbit" level={level} index={index} />
             </div>
           ) : (
             <div className="h-6 md:h-12"></div>
           )}
           <div className="relative w-full h-1 rounded-full bg-gray-200 overflow-hidden">
-            <div
-              className={`absolute top-0 left-0 h-full rounded-full transition-all duration-1000 ${
-                level === index || level > index
-                  ? "bg-[var(--color-primary-400)] w-full"
-                  : "w-0"
-              }`}
-            ></div>
+            <MovingRabbit target="info" level={level} index={index} />
           </div>
         </div>
       ))}
@@ -32,7 +26,15 @@ const ScheduleLoadingRabbits = ({ level }: { level: number }) => {
   );
 };
 
-const MovingRabbit = () => {
+const MovingRabbit = ({
+  target,
+  level,
+  index,
+}: {
+  target: string;
+  level: number;
+  index: number;
+}) => {
   const [start, setStart] = useState(false);
 
   useEffect(() => {
@@ -41,6 +43,18 @@ const MovingRabbit = () => {
     }, 10);
     return () => clearTimeout(timer);
   }, []);
+
+  if (target === "info") {
+    return (
+      <div
+        className={`absolute top-0 left-0 h-full rounded-full transition-all duration-1000 ${
+          (start && level === index) || level > index
+            ? "bg-[var(--color-primary-400)] w-full"
+            : "w-0"
+        }`}
+      ></div>
+    );
+  }
 
   return (
     <Image
