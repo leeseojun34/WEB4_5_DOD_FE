@@ -1,5 +1,6 @@
 import character1 from "@/assets/images/profile_pastel_black.png";
-import UserIcon from "@/assets/icon/user_icon.svg";
+// import UserIcon from "@/assets/icon/user_icon.svg";
+import { BiUser } from "react-icons/bi";
 import Image from "next/image";
 
 export const MyGroupItem = () => {
@@ -20,7 +21,7 @@ export const MyGroupItem = () => {
               사이버 카츠오모이
             </div>
             <div className="flex gap-1">
-              <UserIcon className="text-[color:var(--color-gray-placeholder)] w-[10px] h-[10px]" />
+              <BiUser className="text-[color:var(--color-gray-placeholder)] w-[10px] h-[10px]" />
               <span className="text-[color:var(--color-gray-placeholder)] text-[8px] font-semibold">
                 {/* 그룹원 수 */}
                 60
