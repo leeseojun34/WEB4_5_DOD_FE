@@ -7,6 +7,7 @@ import Map from "@/components/feature/Map";
 import { Button } from "@/components/ui/Button";
 import PopupMessage from "@/components/ui/PopupMessage";
 import HeaderTop from "@/components/layout/HeaderTop";
+import { useRouter } from "next/navigation";
 
 const dummyData = {
   locationName: "상동역",
@@ -19,6 +20,11 @@ const dummyData = {
 };
 
 const ElectionResult = () => {
+  const router = useRouter();
+
+  const goToSchedule = () => {
+    router.push("/schedule/123");
+  };
   return (
     <>
       <main className="flex flex-col px-5.5 min-h-screen relative pb-32  max-w-[740px] mx-auto">
@@ -61,7 +67,7 @@ const ElectionResult = () => {
           </div>
         </div>
         <div className="absolute bottom-22 left-0 right-0 w-full px-5 flex flex-col items-center justify-center gap-7 ">
-          <Button>세부 장소 정하러 가기</Button>
+          <Button onClick={goToSchedule}>세부 장소 정하러 가기</Button>
         </div>
       </main>
     </>
