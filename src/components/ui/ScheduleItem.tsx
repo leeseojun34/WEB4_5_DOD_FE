@@ -1,3 +1,5 @@
+'use client'
+
 import { EllipsisVertical } from "lucide-react";
 import NameTag from "./NameTag";
 
@@ -7,12 +9,7 @@ interface ScheduleItemProps {
   time: string;
   members: string[];
 }
-const ScheduleItem = ({
-  name,
-  type,
-  time,
-  members,
-}: ScheduleItemProps) => {
+const ScheduleItem = ({ name, type, time, members }: ScheduleItemProps) => {
   return (
     <div className="min-w-[335px] max-w-185 w-full h-auto p-4 rounded-lg bg-[color:var(--color-white)] shadow-[--shadow-common] gap-2 flex flex-col">
       <div className="flex justify-between">

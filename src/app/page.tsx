@@ -17,6 +17,6 @@ const Home = () => {
     }
   }, []);
 
-  return <>{!isLogin ? <Dashboard /> : <Landing />}</>;
+  return <>{isLogin ? <Dashboard /> : <Landing />}</>;
 };
 export default Home;

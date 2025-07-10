@@ -19,7 +19,6 @@ const dummyData = [
     stationColors: ["#00A84D", "#0052A4", "#996CAC"],
     travelTime: 47,
     noVoteCount: 0,
-    schedules_STATUS: "ALMOST",
   },
   {
     locationName: "역삼역",
@@ -31,7 +30,6 @@ const dummyData = [
     stationColors: ["#00A84D", "#E6186C"],
     travelTime: 47,
     noVoteCount: 0,
-    schedules_STATUS: "WINNER",
   },
   {
     locationName: "홍대입구역",
@@ -43,7 +41,6 @@ const dummyData = [
     stationColors: ["#00A84D", "#996CAC", "#77C4A3", "#FABE00"],
     travelTime: 47,
     noVoteCount: 0,
-    schedules_STATUS: "DEFAULT",
   },
 ];
 
