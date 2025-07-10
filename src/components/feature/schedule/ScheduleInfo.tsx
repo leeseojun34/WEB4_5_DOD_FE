@@ -1,5 +1,7 @@
 import Input from "@/components/ui/Input";
 import ScheduleTitleText from "@/components/ui/ScheduleTitle";
+import { listVariants, itemVariants } from "./motion";
+import { motion } from "framer-motion";
 
 const ScheduleInfo = () => {
   return (
@@ -7,8 +9,13 @@ const ScheduleInfo = () => {
       <div className="flex flex-col gap-4 mt-10">
         <ScheduleTitleText title="일정 이름과 설명을 입력해 주세요" />
       </div>
-      <div className="mt-8 mx-5">
-        <div>
+      <motion.div
+        variants={listVariants}
+        initial="hidden"
+        animate="visible"
+        className="mt-8 mx-5"
+      >
+        <motion.div variants={itemVariants}>
           <Input
             label="일정 이름"
             placeholder="일정 이름을 입력해 주세요"
@@ -16,8 +23,8 @@ const ScheduleInfo = () => {
             value=""
             onChange={() => {}}
           />
-        </div>
-        <div className="mt-4">
+        </motion.div>
+        <motion.div className="mt-4" variants={itemVariants}>
           <Input
             label="일정 설명"
             placeholder="일정 설명을 입력해 주세요"
@@ -26,8 +33,8 @@ const ScheduleInfo = () => {
             value=""
             onChange={() => {}}
           />
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </>
   );
 };

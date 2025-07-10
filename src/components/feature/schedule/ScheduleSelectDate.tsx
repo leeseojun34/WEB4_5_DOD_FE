@@ -1,6 +1,9 @@
 import ScheduleTitleText from "@/components/ui/ScheduleTitle";
 import Dropdown from "@/components/ui/Dropdown";
 import { Calendar } from "@/components/feature/calendar/Calender";
+import { listVariants, itemVariants } from "./motion";
+import { motion } from "framer-motion";
+
 const timeOptions: string[] = [];
 
 for (let hour = 0; hour <= 24; hour++) {
@@ -23,18 +26,29 @@ const ScheduleSelectDate = () => {
           description="날짜는 최대 7일까지 선택 가능해요!"
         />
       </div>
-      <div className="mx-5 flex flex-col gap-8 md:w-1/2 md:mx-auto">
-        <div className="flex items-center gap-4 justify-around mx-7">
+      <motion.div
+        variants={listVariants}
+        initial="hidden"
+        animate="visible"
+        className="mx-5 flex flex-col gap-8 md:w-1/2 md:mx-auto"
+      >
+        <motion.div
+          className="flex items-center gap-4 justify-around mx-7"
+          variants={itemVariants}
+        >
           <Dropdown label="" options={timeOptions} />
           <span className="">-</span>
           <Dropdown label="" options={timeOptions} />
-        </div>
-        <div className="w-full border-1 border-[var(--color-gray-100)] rounded-lg">
+        </motion.div>
+        <motion.div
+          className="w-full border-1 border-[var(--color-gray-100)] rounded-lg"
+          variants={itemVariants}
+        >
           <div className="w-full h-full p-4 flex justify-center items-center">
             <Calendar />
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </div>
   );
 };
