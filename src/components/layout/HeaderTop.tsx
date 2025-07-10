@@ -3,13 +3,14 @@
 import { ChevronLeft, Ellipsis, Plus, SquarePen } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-const headerStyle = "w-full flex items-center justify-between px-5 min-h-7";
+const headerStyle =
+  "w-full flex items-center justify-between px-5 pt-11 min-h-7";
 const fontStyle = "text-lg text-[color:var(--color-black)]";
 const fontStyleWhite = "text-lg text-[color:var(--color-white)]";
 
 type HeaderTopProps = {
-  fontColor: "black" | "white";
-  children: React.ReactNode;
+  fontColor?: "black" | "white";
+  children?: React.ReactNode;
   backward?: boolean;
   icon?: "plus" | "pen" | "ellipsis" | "";
   clickPlusHandler?: () => void;
@@ -42,7 +43,7 @@ const HeaderTop = ({
           clickPenHandler : pen 아이콘 클릭 핸들러
           clickEllipsisHandler : ellipsis 아이콘 클릭 핸들러
       */}
-      <div className={headerStyle}>
+      <div className={`${headerStyle} bg-transparent relative z-10`}>
         <span onClick={handleBack} className="cursor-pointer">
           <ChevronLeft
             color={
@@ -50,7 +51,7 @@ const HeaderTop = ({
                 ? "var(--color-black)"
                 : "var(--color-white)"
             }
-            size={16}
+            size={20}
             className={backward ? "" : "invisible"}
           />
         </span>
