@@ -5,9 +5,9 @@ import React from "react";
 function layout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <div className="w-full min-h-screen flex flex-col bg-[var(--color-gray-background)] px-10">
+      <div className="w-full min-h-screen flex flex-col bg-[var(--color-gray-background)]">
         <HeaderTop fontColor="black" backward={true}></HeaderTop>
-        {children}
+        <div className="px-10">{children}</div>
       </div>
 
       <Footer />
