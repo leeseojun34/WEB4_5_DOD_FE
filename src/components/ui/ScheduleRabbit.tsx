@@ -12,13 +12,13 @@ const ScheduleLoadingRabbits = ({ level }: { level: number }) => {
         >
           {index === level ? (
             <div className="w-full h-6 md:h-12">
-              <MovingRabbit target="rabbit" level={level} index={index} />
+              <Moving target="rabbit" level={level} index={index} />
             </div>
           ) : (
             <div className="h-6 md:h-12"></div>
           )}
           <div className="relative w-full h-1 rounded-full bg-gray-200 overflow-hidden">
-            <MovingRabbit target="info" level={level} index={index} />
+            <Moving target="info" level={level} index={index} />
           </div>
         </div>
       ))}
@@ -26,7 +26,7 @@ const ScheduleLoadingRabbits = ({ level }: { level: number }) => {
   );
 };
 
-const MovingRabbit = ({
+const Moving = ({
   target,
   level,
   index,
@@ -57,15 +57,19 @@ const MovingRabbit = ({
   }
 
   return (
-    <Image
-      src={rabbits}
-      alt="loading_rabbit"
-      width={18}
-      height={24}
-      className={`transition-transform duration-1000 md:w-9 md:h-12 ${
-        start ? "translate-x-[100%]" : "translate-x-0"
+    <div
+      className={`transition-transform duration-1000 ${
+        start ? "translate-x-3/4" : "translate-x-0"
       }`}
-    />
+    >
+      <Image
+        src={rabbits}
+        alt="loading_rabbit"
+        width={18}
+        height={24}
+        className="md:w-9 md:h-12"
+      />
+    </div>
   );
 };
 
