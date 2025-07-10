@@ -122,7 +122,7 @@ const Input = ({
   //기본 스타일
   const inputBaseClass = classNames(
     "w-full outline-none text-sm placeholder:text-[var(--color-gray-placeholder)]",
-    isTextarea ? "min-h-[100px] pr-12 " : "h-4"
+    isTextarea ? "min-h-[100px] pr-12 " : "h-4 appearance-none "
   );
 
   return (

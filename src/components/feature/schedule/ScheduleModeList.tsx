@@ -23,7 +23,7 @@ const ScheduleModeList = () => {
             className="flex items-center gap-2 mx-auto "
             variants={itemVariants}
           >
-            <div className="w-15">
+            <div className="w-13">
               <Input
                 type="number"
                 value={0}
