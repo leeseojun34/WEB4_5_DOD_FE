@@ -1,6 +1,7 @@
 import { Station } from "@/types/station";
 import React from "react";
 import { OptionBox } from "../ui/OptionBox";
+
 const STYLES = {
   stationMark:
     "rounded-full font-semibold flex justify-center items-center text-[var(--color-white)] text-xs",
@@ -9,12 +10,17 @@ const STYLES = {
 interface SubwayCardProps {
   station: Station;
   isSelected: boolean;
+  isPointer?: boolean;
 }
 
-const SubwayCard: React.FC<SubwayCardProps> = ({ station, isSelected }) => {
+const SubwayCard: React.FC<SubwayCardProps> = ({
+  station,
+  isSelected,
+  isPointer = true,
+}) => {
   return (
     <>
-      <OptionBox isSelected={isSelected}>
+      <OptionBox isSelected={isSelected} isPointer={isPointer}>
         <div className="flex gap-2 items-center justify-center">
           {station.metroLines.map((line, idx) => {
             const isSingleChar = line.length === 1;

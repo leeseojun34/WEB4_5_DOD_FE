@@ -1,3 +1,5 @@
+"use client";
+
 import { ChevronLeft, Ellipsis, Plus, SquarePen } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -41,7 +43,7 @@ const HeaderTop = ({
           clickPenHandler : pen 아이콘 클릭 핸들러
           clickEllipsisHandler : ellipsis 아이콘 클릭 핸들러
       */}
-      <div className={`${headerStyle} bg-transparent relative z-10`}>
+      <div className={`${headerStyle} bg-transparent fixed top-0 left-0  z-10`}>
         <span onClick={handleBack} className="cursor-pointer">
           <ChevronLeft
             color={

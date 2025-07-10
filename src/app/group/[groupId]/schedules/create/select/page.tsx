@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/Button";
 
 const GroupScheduleCreateSelectPage = () => {
   return (
-    <div className="mt-[35px] min-w-[375px] w-full max-w-185 px-5 flex flex-col items-center gap-9 mx-auto">
+    <div className="mt-9 min-w-[375px] w-full max-w-185 px-5 flex flex-col items-center gap-9 mx-auto">
       <div className="flex flex-col w-full gap-8">
         <p className="w-full text-xl font-bold text-[color:var(--color-black)] text-start">
           일정 추가 방법을 선택해주세요

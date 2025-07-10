@@ -1,10 +1,6 @@
 "use client";
 
 const DepartureRegister = () => {
-  return (
-    <>
-      <h1>page Component</h1>
-    </>
-  );
+  return <>출발등록페이지</>;
 };
 export default DepartureRegister;

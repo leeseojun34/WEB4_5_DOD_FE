@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Dashboard from "@/components/dashboard/dashboard";
+import Dashboard from "@/components/dashboard/Dashboard";
 import Landing from "@/components/landing/Landing";
 
 const Home = () => {
@@ -17,6 +17,6 @@ const Home = () => {
     }
   }, []);
 
-  return <>{!isLogin ? <Dashboard /> : <Landing />}</>;
+  return <>{isLogin ? <Dashboard /> : <Landing />}</>;
 };
 export default Home;
