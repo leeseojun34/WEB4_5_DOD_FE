@@ -20,6 +20,7 @@ const SubwayCard: React.FC<SubwayCardProps> = ({ station, isSelected }) => {
             const isSingleChar = line.length === 1;
             const widthClass = isSingleChar ? "w-5 h-5" : "px-2 py-1 rounded";
             const bgColor = station.stationColors[idx] || "#353535";
+
             return (
               <p
                 key={idx}
