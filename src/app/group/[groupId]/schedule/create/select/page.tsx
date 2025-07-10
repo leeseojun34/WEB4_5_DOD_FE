@@ -8,7 +8,7 @@ import HeaderTop from "@/components/layout/HeaderTop";
 
 const GroupScheduleCreateSelectPage = () => {
   return (
-    <div className="min-w-[375px] w-full max-w-185 px-5 flex flex-col items-center gap-9 mx-auto pt-20">
+    <div className="min-w-[375px] w-full max-w-185 px-5 flex flex-col items-center gap-9 mx-auto pt-25">
       <HeaderTop />
       <div className="flex flex-col w-full gap-8">
         <p className="w-full text-xl font-bold text-[color:var(--color-black)] text-start">
