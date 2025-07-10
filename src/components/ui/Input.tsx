@@ -14,6 +14,7 @@ type BaseProps = {
   maxLength?: number;
   isTextarea?: boolean;
   fullWidth?: boolean;
+  width?: number;
 };
 
 type InputProps = BaseProps &
@@ -31,6 +32,7 @@ const Input = ({
   fullWidth = false,
   className,
   value = "",
+  width,
   ...props
 }: InputProps) => {
   const valueLength = typeof value === "string" ? value.length : 0;
@@ -113,12 +115,13 @@ const Input = ({
     "border border-[var(--color-gray-placeholder)]",
     "focus-within:border-[var(--color-primary-400)]",
     className,
-    isTextarea && "relative"
+    isTextarea && "relative",
+    width !== undefined ? `w-[${width}px]` : ""
   );
 
   //기본 스타일
   const inputBaseClass = classNames(
-    "flex-1 outline-none text-sm placeholder:text-[var(--color-gray-placeholder)]",
+    "w-full outline-none text-sm placeholder:text-[var(--color-gray-placeholder)]",
     isTextarea ? "min-h-[100px] pr-12 " : "h-4"
   );
 
