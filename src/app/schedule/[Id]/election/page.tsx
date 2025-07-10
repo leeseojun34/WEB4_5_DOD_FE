@@ -76,14 +76,14 @@ const ElectionSpot = () => {
       <div className="p-5.5 flex flex-col relative min-h-screen">
         <div className="flex justify-between items-center">
           <div className="flex flex-col gap-2 text-left  justify-center">
-            <h1 className="font-semibold text-xl text-[var(--color-gray)]">
+            <h1 className="font-semibold text-xl text-[var(--color-gray)] sm:text-2xl">
               카츠오모이 가는 날
             </h1>
-            <h1 className="font-semibold text-xl text-[var(--color-black)]">
+            <h1 className="font-semibold text-xl text-[var(--color-black)] sm:text-2xl">
               <span className="text-[var(--color-primary-400)]">모임 지역</span>{" "}
               투표하기
             </h1>
-            <h2 className="font-semibold text-base text-[var(--color-gray-placeholder)]">
+            <h2 className="font-semibold text-base sm:text-xl text-[var(--color-gray-placeholder)]">
               <span className="text-[var(--color-primary-400)]">3개</span>의
               역이 선정되었습니다.
             </h2>
