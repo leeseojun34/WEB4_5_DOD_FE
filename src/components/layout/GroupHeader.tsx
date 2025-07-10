@@ -1,7 +1,7 @@
 import { ChartNoAxesColumn, ChevronRight, Link2 } from "lucide-react";
-import UserIcon from "../../assets/icon/user_icon.svg";
-import HeaderTop from "../ui/HeaderTop";
+import HeaderTop from "./HeaderTop";
 import Link from "next/link";
+import { BiUser } from "react-icons/bi";
 
 type GroupHeaderProps = {
   children?: React.ReactNode;
@@ -30,7 +30,7 @@ const GroupHeader = ({ children, topIcon = "" }: GroupHeaderProps) => {
         {/*  소개문구 */}
         <p className={fontStyleIntro}>던전앤 파이터 커플 놀이 하는 날</p>
         <div className={tagStyle}>
-          <UserIcon className="text-[var(--color-white)]" />
+          <BiUser color="var(--color-white)" size={14} />
 
           {/* 인원수 */}
           <span className="pr-1.5">2</span>
