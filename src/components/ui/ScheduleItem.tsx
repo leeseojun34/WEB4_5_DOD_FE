@@ -24,7 +24,7 @@ const ScheduleItem = ({
             {type}
           </p>
         </div>
-        <button>
+        <button className="cursor-pointer">
           <EllipsisVertical className="w-[18px] h-[18px] text-[color:var(--color-black)]" />
         </button>
       </div>
