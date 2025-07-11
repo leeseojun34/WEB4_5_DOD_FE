@@ -1,14 +1,14 @@
 "use client";
 import Image from "next/image";
-import blue from "@/assets/images/profile_pastel_blue.png";
-import black from "@/assets/images/profile_black.png";
-import green from "@/assets/images/profile_green.png";
-import navy from "@/assets/images/profile_navy.png";
-import orange from "@/assets/images/profile_orange.png";
-import pink from "@/assets/images/profile_pink.png";
-import purple from "@/assets/images/profile_purple.png";
-import white from "@/assets/images/profile_white.png";
-import yellow from "@/assets/images/profile_yellow.png";
+// import blue from "@/assets/images/profile_pastel_blue.png";
+// import black from "@/assets/images/profile_black.png";
+// import green from "@/assets/images/profile_green.png";
+// import navy from "@/assets/images/profile_navy.png";
+// import orange from "@/assets/images/profile_orange.png";
+// import pink from "@/assets/images/profile_pink.png";
+// import purple from "@/assets/images/profile_purple.png";
+// import white from "@/assets/images/profile_white.png";
+// import yellow from "@/assets/images/profile_yellow.png";
 import pastel_black from "@/assets/images/profile_pastel_black.png";
 import pastel_blue from "@/assets/images/profile_pastel_blue.png";
 import pastel_gray from "@/assets/images/profile_pastel_gray.png";
@@ -22,15 +22,15 @@ import { Pen, Shuffle } from "lucide-react";
 import { useState } from "react";
 
 const profiles = [
-  blue,
-  black,
-  green,
-  navy,
-  orange,
-  pink,
-  purple,
-  white,
-  yellow,
+  // blue,
+  // black,
+  // green,
+  // navy,
+  // orange,
+  // pink,
+  // purple,
+  // white,
+  // yellow,
   pastel_black,
   pastel_blue,
   pastel_gray,
