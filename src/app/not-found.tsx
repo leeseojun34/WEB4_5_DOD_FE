@@ -16,10 +16,10 @@ const NotFound = () => {
             <Image src={notFoundPhoto} alt="404" width={284} height={284} />
           </div>
         </div>
-        <div className="w-full p-5">
-          <Link href="/">
-            <Button>홈으로 돌아가기</Button>
-          </Link>
+        <div className="w-full p-5 flex justify-center items-center">
+          <Button>
+            <Link href="/">홈으로 돌아가기</Link>
+          </Button>
         </div>
       </div>
     </>
