@@ -5,11 +5,11 @@ import TitleWithShare from "./TitleWithShare";
 
 const CoordinateContent = () => {
   return (
-    <div className="pt-6 px-5 pb-9 flex flex-col w-full items-center gap-7 md:gap-8 md:pt-10">
+    <div className="pt-6 px-5 pb-9 flex flex-col w-full items-center gap-7 sm:gap-8 sm:pt-10">
       <div className="w-full">
         <TitleWithShare />
       </div>
-      <div className="flex justify-center md:justify-between w-full md:gap-5">
+      <div className="flex justify-center sm:justify-between w-full sm:gap-5">
         {/* 내 가능한 시간대 */}
         <ScheduleSection
           title={
@@ -30,7 +30,7 @@ const CoordinateContent = () => {
               가능한 시간대
             </>
           }
-          className="hidden md:flex"
+          className="hidden sm:flex"
         />
       </div>
       <Tip>
@@ -45,9 +45,9 @@ const CoordinateContent = () => {
             가능한 시간대
           </>
         }
-        className="block md:hidden"
+        className="block sm:hidden"
       />
-      <ActionButtons className="md:mt-2" />
+      <ActionButtons className="sm:mt-2" />
     </div>
   );
 };
