@@ -69,8 +69,8 @@ const ElectionSpot = () => {
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const isActive = selectedId !== null;
   return (
-    <>
-      <div className="p-5.5 flex flex-col relative min-h-screen">
+    <main className="max-w-[740px] mx-auto">
+      <div className=" p-5 flex flex-col relative min-h-screen">
         <div className="flex justify-between items-center">
           <div className="flex flex-col gap-2 text-left  justify-center">
             <h1 className="font-semibold text-xl text-[var(--color-gray)] sm:text-2xl">
@@ -85,13 +85,7 @@ const ElectionSpot = () => {
               역이 선정되었습니다.
             </h2>
           </div>
-          <Image
-            src={takka}
-            alt="vote"
-            width={144}
-            height={216}
-            className="mr-5"
-          />
+          <Image src={takka} alt="vote" width={144} height={216} />
         </div>
 
         <motion.div
@@ -122,7 +116,7 @@ const ElectionSpot = () => {
         </PopupMessage>
         <Button state={isActive ? "default" : "disabled"}>투표완료</Button>
       </div>
-    </>
+    </main>
   );
 };
 export default ElectionSpot;

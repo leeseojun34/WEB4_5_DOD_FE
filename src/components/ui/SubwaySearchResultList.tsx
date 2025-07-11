@@ -14,14 +14,16 @@ const SubwaySearchResultList: React.FC<SubwaySearchResultListProps> = ({
 }) => {
   return (
     <div className="flex flex-col gap-3.5">
-      {results.map((station) => (
-        <SubwaySearchResultItem
-          key={station.id}
-          station={station}
-          onClick={onSelect}
-          keyword={keyword}
-        />
-      ))}
+      <div className="max-h-[274px] overflow-y-auto">
+        {results.map((station) => (
+          <SubwaySearchResultItem
+            key={station.id}
+            station={station}
+            onClick={onSelect}
+            keyword={keyword}
+          />
+        ))}
+      </div>
     </div>
   );
 };
