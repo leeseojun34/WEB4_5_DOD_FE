@@ -1,7 +1,24 @@
 import { AtSign, ChevronRight, Pen } from "lucide-react";
-import { BiLogoZoom } from "react-icons/bi";
+import zoomIcon from "@/assets/icon/zoom_icon.svg";
+import googleMeetIcon from "@/assets/icon/googlemeet_icon.svg";
+import discordIcon from "@/assets/icon/discord_icon.svg";
+import zepIcon from "@/assets/icon/zep_icon.svg";
+import Image from "next/image";
 
-const OnlineMeetingRoom = () => {
+type Platform = "zoom" | "googleMeet" | "discord" | "zep";
+
+interface OnlineMeetingRoomProps {
+  platform: Platform;
+  name: string;
+}
+
+const OnlineMeetingRoom = ({ platform, name }: OnlineMeetingRoomProps) => {
+  const PLATFORM = {
+    zoom: zoomIcon,
+    googleMeet: googleMeetIcon,
+    discord: discordIcon,
+    zep: zepIcon,
+  };
   return (
     <div className="bg-[color:var(--color-white)] px-5 py-4 gap-4 rounded-lg flex flex-col shadow-[var(--shadow-common)]">
       <div className="flex w-full justify-between items-center">
@@ -20,11 +37,9 @@ const OnlineMeetingRoom = () => {
       <div className="flex w-full justify-between items-center">
         <div className="flex gap-4 items-center">
           <div>
-            <BiLogoZoom className="text-[color:var(--color-white)] bg-[color:var(--color-primary-400)] w-3 h-3 rounded-full px-[2px]" />
+            <Image src={PLATFORM[platform]} alt={`${platform} 아이콘`} />
           </div>
-          <div className="text-[color:var(--color-black)] text-sm">
-            박준규 팬미팅
-          </div>
+          <div className="text-[color:var(--color-black)] text-sm">{name}</div>
         </div>
         <div>
           <ChevronRight className="w-[14px] h-[14px] text-[color:var(--color-gray)]" />
