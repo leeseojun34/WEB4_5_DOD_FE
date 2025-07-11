@@ -1,13 +1,13 @@
 import Image from "next/image";
 import blue from "@/assets/images/profile_blue.png";
 
-function LogoWebHeader({ type }: { type: string }) {
+function LogoWebHeader({ type = "" }: { type: "" | "blue" }) {
   return (
     <div
       className={`flex justify-center items-center font-[TTTogether] text-xs font-normal ${
-        type === "white"
-          ? `text-[color:var(--color-black)]`
-          : `text-[color:var(--color-white)]`
+        type === "blue"
+          ? "text-[color:var(--color-white)]"
+          : "text-[color:var(--color-black)]"
       } gap-1`}>
       <span>이때</span>
       <Image src={blue} alt="파란토끼" width={20} height={20} />

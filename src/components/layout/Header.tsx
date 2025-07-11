@@ -4,18 +4,18 @@ import profile from "@/assets/images/profile_pastel_orange.png";
 import calendarBlue from "@/assets/images/calendar_blue.png";
 import calendarWhite from "@/assets/images/calendar_white.png";
 
-const Header = ({ type = "white" }: { type: "white" }) => {
+const Header = ({ type = "" }: { type?: "" | "blue" }) => {
   return (
     <div
       className={`w-full flex justify-between items-center px-20 py-6 ${
-        type === "white"
-          ? "bg-[color:var(--color-white)]"
-          : "bg-[color:var(--color-primary-400)]"
+        type === "blue"
+          ? "bg-[color:var(--color-primary-400)]"
+          : "bg-[color:var(--color-white)]"
       }`}>
       <LogoWebHeader type={type} />
       <div className="flex justify-between items-center gap-8">
         <Image
-          src={type === "white" ? calendarBlue : calendarWhite}
+          src={type === "blue" ? calendarWhite : calendarBlue}
           alt="달력"
           width={24}
           height={24}
