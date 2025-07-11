@@ -1,8 +1,8 @@
 import BottomSheet from "@/components/ui/BottomSheet";
-import { X } from "lucide-react";
 import TimeSelector from "./TimeSelector";
 import { Dispatch, SetStateAction } from "react";
 import useMediaQuery from "../hooks/useMediaQuery";
+import BottomSheetHeader from "@/components/layout/BottomSheetHeader";
 
 interface TimeEditBottomSheetProps {
   isOpen: boolean;
@@ -19,23 +19,13 @@ const TimeEditBottomSheet = ({
   setSelectedDate,
   onComplete,
 }: TimeEditBottomSheetProps) => {
-
-  const isMobile = useMediaQuery('(min-width: 640px)')
-  const snapPoints = isMobile ? [0.55] : [0.9]
+  const isMobile = useMediaQuery("(min-width: 640px)");
+  const snapPoints = isMobile ? [0.55] : [0.9];
   return (
     <BottomSheet isOpen={isOpen} setIsOpen={setIsOpen} snapPoints={snapPoints}>
       {() => (
         <div className="w-[375px] flex flex-col items-center px-5 mx-auto pt-3 gap-8">
-          <div className="flex justify-between w-full">
-            <X className="invisible w-5 h-5" />
-            <div className="font-semibold text-base text-[color:var(--color-black)]">
-              모임 시간 수정
-            </div>
-            <X
-              className="w-5 h-5 text-[color:var(--color-black)] cursor-pointer"
-              onClick={() => setIsOpen(false)}
-            />
-          </div>
+          <BottomSheetHeader setIsOpen={setIsOpen} title="모임 시간 수정" />
           <TimeSelector
             selectedDate={selectedDate}
             setSelectedDate={setSelectedDate}
