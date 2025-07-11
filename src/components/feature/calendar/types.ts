@@ -1,17 +1,17 @@
 import { Dispatch, SetStateAction } from "react";
 
 interface CalendarPropsCompact {
-  isCompact: true;
-  events?: Date[];
   selected: Date | undefined;
   setSelected: Dispatch<SetStateAction<Date | undefined>>;
+  isCompact: true;
+  events?: Date[];
 }
 
 interface CalendarPropsMultiple {
-  isCompact?: false;
-  events?: Date[];
   selected: Date[] | undefined;
   setSelected: Dispatch<SetStateAction<Date[] | undefined>>;
+  isCompact?: false;
+  events?: Date[];
 }
 
 export type CalendarProps = CalendarPropsCompact | CalendarPropsMultiple;
