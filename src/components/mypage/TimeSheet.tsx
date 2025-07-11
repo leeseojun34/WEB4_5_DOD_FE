@@ -25,7 +25,7 @@ function TimeSheet({ isOpen, setIsOpen, onSave }: TimeSheetType) {
         <div className="w-full flex-1 overflow-y-auto ">
           <Schedule />
         </div>
-        <div className="flex justify-between items-center px-5">
+        <div className="flex justify-center items-center px-5">
           <Button onClick={onSave}>저장하기</Button>
         </div>
       </div>

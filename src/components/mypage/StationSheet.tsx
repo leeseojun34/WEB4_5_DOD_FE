@@ -32,7 +32,7 @@ function StationSheet({
             className="text-[var(--color-black)] cursor-pointer"
           />
         </div>
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 w-full max-w-[700px] mx-auto">
           <Input
             value={text}
             icon={<Search className="w-4 h-4" />}
@@ -51,7 +51,7 @@ function StationSheet({
             />
           </div>
         </div>
-        <div className="flex justify-between items-center">
+        <div className="flex justify-center">
           <Button onClick={onSave}>저장하기</Button>
         </div>
       </div>

@@ -31,13 +31,15 @@ function NameSheet({
             className="text-[var(--color-black)] cursor-pointer"
           />
         </div>
-        <Input
-          label="이름"
-          value={text}
-          maxLength={10}
-          onChange={onChange}
-          placeholder="이름을 입력해주세요."
-        />
+        <div className="flex flex-col gap-4 w-full max-w-[700px] mx-auto">
+          <Input
+            label="이름"
+            value={text}
+            maxLength={10}
+            onChange={onChange}
+            placeholder="이름을 입력해주세요."
+          />
+        </div>
         <div className="flex justify-center items-center">
           <Button
             onClick={() => {
