@@ -1,5 +1,5 @@
 import rabbitWriting from "@/assets/images/rabbit_writing.png";
-import ScheduleItem from "@/components/ui/ScheduleItem";
+import ScheduleCard from "@/components/ui/ScheduleCard";
 import Image from "next/image";
 
 const UserSchedule = () => {
@@ -11,17 +11,19 @@ const UserSchedule = () => {
         className="w-[178px] h-[178px] ml-auto"
       />
       <div className="flex flex-col items-center gap-4">
-        <ScheduleItem
-          name="카츠오모이가는날"
-          type="온라인"
+        <ScheduleCard
+          variant="event"
+          title="카츠오모이 가는 날"
+          meetingType="온라인"
           time="7월 4일 (금) 18:00 - 22:00"
-          members={["박준규", "박은서", "현혜주", "박상윤", "황수지"]}
+          members={["박은서", "현혜주", "황수지", "박준규", "박상윤"]}
         />
-        <ScheduleItem
-          name="박준규 팬미팅"
-          type="오프라인"
-          time="7월 5일 (토) 12:00 - 22:00"
-          members={["박준규", "박은서", "현혜주", "박상윤", "황수지"]}
+        <ScheduleCard
+          variant="event"
+          title="카츠오모이 가는 날"
+          meetingType="온라인"
+          time="7월 4일 (금) 18:00 - 22:00"
+          members={["박은서", "현혜주"]}
         />
       </div>
     </div>
