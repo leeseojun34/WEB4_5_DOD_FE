@@ -21,11 +21,10 @@ const EditScheduleInfo = () => {
     handleEditComplete,
     handleDelete,
   } = useEditSchedule();
-
   return (
     <div className="min-w-[375px] w-full max-w-185 mx-auto pt-25 px-5 min-h-screen relative">
       <HeaderTop>일정 정보 수정</HeaderTop>
-      
+
       <ScheduleForm
         scheduleName={scheduleName}
         scheduleDescription={scheduleDescription}
