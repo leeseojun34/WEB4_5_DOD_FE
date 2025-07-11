@@ -1,6 +1,7 @@
 "use client";
 
 import MeetingInfo from "@/components/feature/MeetingInfo";
+import MeetingLocation from "@/components/feature/MeetingLocation";
 import OnlineMeetingRoom from "@/components/feature/OnlineMeetingRoom";
 import WorkSpace from "@/components/feature/WorkSpace";
 import GroupHeader from "@/components/layout/GroupHeader";
@@ -21,8 +22,15 @@ const ScheduleDetail = () => {
             members={["박준규", "카리나"]}
             time="7월 5일 (금) 12:00 - 24:00"
           />
-          <OnlineMeetingRoom />
-          <WorkSpace />
+          <MeetingLocation location="강남역" specificLocation="강남역 스타벅스"  />
+          <OnlineMeetingRoom platform="zoom" name=" 박준규 팬미팅" />
+          <WorkSpace
+            workspaces={[
+              { platform: "notion", name: "프론트엔드 기획서" },
+              { platform: "github", name: "이때 어때 레포지토리" },
+              { platform: "miro", name: "이때 어때 미로" },
+            ]}
+          />
         </div>
       </div>
     </div>
