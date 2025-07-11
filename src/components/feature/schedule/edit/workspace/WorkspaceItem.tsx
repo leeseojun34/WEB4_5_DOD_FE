@@ -11,6 +11,7 @@ interface WorkspaceItemProps {
   type: "github" | "notion" | "miro" | "figma" | "canva" | "googledocs";
   name: string;
   url: string;
+  onClick?: (data: { type: string; name: string; url: string }) => void;
 }
 
 const workspaceLogos = {
@@ -22,7 +23,7 @@ const workspaceLogos = {
   googledocs: googledocsIcon,
 };
 
-const WorkspaceItem = ({ type, name, url }: WorkspaceItemProps) => {
+const WorkspaceItem = ({ type, name, url, onClick }: WorkspaceItemProps) => {
   const logo = workspaceLogos[type];
   return (
     <>
@@ -44,6 +45,7 @@ const WorkspaceItem = ({ type, name, url }: WorkspaceItemProps) => {
           <Edit
             size={14}
             className="cursor-pointer text-[color:var(--color-gray)]"
+            onClick={() => onClick?.({ type, name, url })}
           />
         </div>
         <div className="bg-[color:var(--color-gray-background)] rounded-sm text-[color:var(--color-gray)] px-2 py-1 text-xs underline">
