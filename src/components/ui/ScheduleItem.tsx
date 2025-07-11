@@ -11,7 +11,7 @@ interface ScheduleItemProps {
 }
 const ScheduleItem = ({ name, type, time, members }: ScheduleItemProps) => {
   return (
-    <div className="min-w-[335px] max-w-185 w-full h-auto p-4 rounded-lg bg-[color:var(--color-white)] shadow-[--shadow-common] gap-2 flex flex-col">
+    <div className="min-w-[335px] max-w-185 w-full h-auto p-4 rounded-lg bg-[color:var(--color-white)] shadow-[var(--shadow-common)] gap-2 flex flex-col">
       <div className="flex justify-between">
         <div className="flex gap-3">
           <p className="text-[color:var(--color-gray)] text-xs font-medium">
