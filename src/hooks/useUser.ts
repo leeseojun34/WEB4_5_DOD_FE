@@ -2,7 +2,9 @@ import { axiosInstance } from "@/api/axiosInstance";
 import { useQuery } from "@tanstack/react-query";
 
 const getUserInfo = async () => {
-  const res = await axiosInstance.get("/member/me", { withCredentials: true });
+  const res = await axiosInstance.get("/member/me", {
+    withCredentials: true,
+  });
   return res.data;
 };
 
