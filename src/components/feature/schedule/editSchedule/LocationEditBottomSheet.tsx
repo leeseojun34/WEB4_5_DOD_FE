@@ -25,7 +25,7 @@ const LocationEditBottomSheet = ({
           <div className="flex justify-between w-full">
             <X className="invisible w-5 h-5" />
             <div className="font-semibold text-base text-[color:var(--color-black)]">
-              모임 장소 등록/편집
+              모임 장소 정하기
             </div>
             <X
               className="w-5 h-5 text-[color:var(--color-black)] cursor-pointer"
