@@ -9,6 +9,7 @@ import discordIcon from "@/assets/icon/discord_icon.svg";
 import zepIcon from "@/assets/icon/zep_icon.svg";
 import Image from "next/image";
 import { ChangeEvent, useState } from "react";
+import useMediaQuery from "../hooks/useMediaQuery";
 
 interface OnlineMeetingEditBottomSheetProps {
   isOpen: boolean;
@@ -24,7 +25,9 @@ const OnlineMeetingEditBottomSheet = ({
   const [selectedPlatform, setSelectedPlatform] = useState<PlatformType | null>(
     null
   );
-  const [value, setValue] = useState("");
+  const [inputValue, setInputValue] = useState("");
+  const isMobile = useMediaQuery("(min-width: 640px)");
+  const snapPoints = isMobile ? [0.5] : [0.8];
 
   const ICONMAP: Record<PlatformType, string> = {
     zoom: zoomIcon,
@@ -37,7 +40,7 @@ const OnlineMeetingEditBottomSheet = ({
     setSelectedPlatform(p);
   };
   return (
-    <BottomSheet isOpen={isOpen} setIsOpen={setIsOpen} snapPoints={[0.5]}>
+    <BottomSheet isOpen={isOpen} setIsOpen={setIsOpen} snapPoints={snapPoints}>
       {() => (
         <div className="min-w-[375px] w-full max-w-185 flex flex-col items-center px-5 mx-auto pt-3 gap-8">
           <div className="flex justify-between w-full">
@@ -87,9 +90,9 @@ const OnlineMeetingEditBottomSheet = ({
             <Input
               fullWidth={true}
               placeholder="온라인 회의장 링크를 입력해주세요"
-              value={value}
+              value={inputValue}
               onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setValue(e.target.value)
+                setInputValue(e.target.value)
               }
             />
             <button className="cursor-pointer text-[color:var(--color-red)] text-xs font-semibold">

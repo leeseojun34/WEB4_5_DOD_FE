@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import ShareButton from "@/components/ui/ShareButton";
 import { Search, X } from "lucide-react";
+import useMediaQuery from "../hooks/useMediaQuery";
+import { ChangeEvent, useState } from "react";
 
 interface LocationEditBottomSheetProps {
   isOpen: boolean;
@@ -13,8 +15,11 @@ const LocationEditBottomSheet = ({
   isOpen,
   setIsOpen,
 }: LocationEditBottomSheetProps) => {
+  const [inputValue, setInputValue] = useState("");
+  const isMobile = useMediaQuery("(min-width: 640px)");
+  const snapPoints = isMobile ? [0.4] : [0.65];
   return (
-    <BottomSheet isOpen={isOpen} setIsOpen={setIsOpen} snapPoints={[0.4]}>
+    <BottomSheet isOpen={isOpen} setIsOpen={setIsOpen} snapPoints={snapPoints}>
       {() => (
         <div className="min-w-[375px] w-full max-w-185 flex flex-col items-center px-5 mx-auto pt-3 gap-8">
           <div className="flex justify-between w-full">
@@ -41,6 +46,10 @@ const LocationEditBottomSheet = ({
             }
             fullWidth={true}
             placeholder="장소를 검색하세요"
+            value={inputValue}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setInputValue(e.target.value)
+            }
           />
           <Button>저장하기</Button>
         </div>
