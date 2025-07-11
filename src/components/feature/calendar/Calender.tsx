@@ -1,27 +1,20 @@
 "use client";
-import { Dispatch, SetStateAction, useState } from "react";
+
+import { useState } from "react";
 import { DayPicker, getDefaultClassNames } from "react-day-picker";
-import "react-day-picker/style.css";
 import { ko } from "date-fns/locale";
 import { IoChevronDown, IoChevronUp } from "react-icons/io5";
 import { CalendarProps } from "./types";
 import { useWeekDates } from "./hooks/useWeekDates";
 import { CalendarChevron } from "./CalendarChevron";
 import { DayButton } from "./DayButton";
+import "react-day-picker/style.css";
 
-export const Calendar = ({
-  isCompact = false,
-  events,
-  selected,
-  setSelected,
-}: CalendarProps) => {
+export const Calendar = (props: CalendarProps) => {
+  const { isCompact = false, events } = props;
   const [expanded, setExpanded] = useState(false);
   const defaultClassNames = getDefaultClassNames();
   const weekDates = useWeekDates();
-
-  const today = new Date();
-  const startOfWeek = new Date(today);
-  startOfWeek.setDate(today.getDate() - today.getDay() + 1);
 
   const hiddenDays =
     isCompact && !expanded
@@ -49,7 +42,7 @@ export const Calendar = ({
       DayButton: DayButton,
     },
     classNames: {
-      root: `${defaultClassNames.root} min-w-[335px] w-full max-w-185 h-auto rounded-[20px] bg-[color:var(--color-white)] p-4 flex flex-col justify-center items-center`,
+      root: `${defaultClassNames.root} min-w-[335px] w-full max-w-185 h-auto rounded-[20px] bg-[color:var(--color-white)] p-4 flex flex-col justify-center items-center ${!isCompact && "border border-[color:var(--color-gray-100)]"}`,
       day: `rounded-full leading-none`,
       caption_label: `font-regular flex justify-center items-center text-sm`,
       today: `text-[color:var(--color-primary-400)] box-border w-6 h-6`,
@@ -80,19 +73,34 @@ export const Calendar = ({
     ) : undefined,
   };
 
-  return isCompact ? (
-    <DayPicker
-      {...commonProps}
-      mode="single"
-      selected={selected as Date | undefined}
-      onSelect={setSelected as Dispatch<SetStateAction<Date | undefined>>}
-    />
-  ) : (
+  if (props.isCompact) {
+    return (
+      <DayPicker
+        {...commonProps}
+        mode="single"
+        selected={props.selected}
+        onSelect={props.setSelected}
+      />
+    );
+  }
+
+  if (props.selectionMode === "single") {
+    return (
+      <DayPicker
+        {...commonProps}
+        mode="single"
+        selected={props.selected}
+        onSelect={props.setSelected}
+      />
+    );
+  }
+
+  return (
     <DayPicker
       {...commonProps}
       mode="multiple"
-      selected={selected as Date[] | undefined}
-      onSelect={setSelected as Dispatch<SetStateAction<Date[] | undefined>>}
+      selected={props.selected}
+      onSelect={props.setSelected}
     />
   );
 };

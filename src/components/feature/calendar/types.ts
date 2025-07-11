@@ -1,24 +1,33 @@
 import { Dispatch, SetStateAction } from "react";
 
-interface CalendarPropsCompact {
+export type SelectionMode = "single" | "multiple";
+
+interface CalendarBaseProps {
+  events?: Date[];
+  selectionMode?: SelectionMode;
+}
+
+export interface CalendarPropsCompact extends CalendarBaseProps {
   selected: Date | undefined;
   setSelected: Dispatch<SetStateAction<Date | undefined>>;
   isCompact: true;
-  events?: Date[];
 }
 
-interface CalendarPropsMultiple {
+export interface CalendarPropsExpandedSingle extends CalendarBaseProps {
+  selected: Date | undefined;
+  setSelected: Dispatch<SetStateAction<Date | undefined>>;
+  selectionMode: "single";
+  isCompact?: false;
+}
+
+export interface CalendarPropsExpandedMultiple extends CalendarBaseProps {
   selected: Date[] | undefined;
   setSelected: Dispatch<SetStateAction<Date[] | undefined>>;
+  selectionMode?: "multiple"; 
   isCompact?: false;
-  events?: Date[];
 }
 
-export type CalendarProps = CalendarPropsCompact | CalendarPropsMultiple;
-
-export interface ChevronProps {
-  orientation?: "left" | "right" | "up" | "down";
-  className?: string;
-  size?: number;
-  disabled?: boolean;
-}
+export type CalendarProps =
+  | CalendarPropsCompact
+  | CalendarPropsExpandedSingle
+  | CalendarPropsExpandedMultiple;
