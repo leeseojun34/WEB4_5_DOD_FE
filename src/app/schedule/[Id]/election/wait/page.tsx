@@ -1,5 +1,5 @@
 "use client";
-import Map from "@/components/feature/Map";
+import Map from "@/components/feature/kakaoMap/Map";
 import HeaderTop from "@/components/layout/HeaderTop";
 import PopupMessage from "@/components/ui/PopupMessage";
 import ShareButton from "@/components/ui/ShareButton";

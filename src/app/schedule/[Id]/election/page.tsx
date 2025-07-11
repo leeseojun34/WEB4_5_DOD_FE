@@ -3,7 +3,7 @@ import takka from "@/assets/images/rabbit_vote2.png";
 import Image from "next/image";
 import { Station } from "@/types/station";
 import { useState } from "react";
-import SubwayCard from "@/components/feature/SubwayCard";
+import SubwayCard from "@/components/ui/SubwayCard";
 import PopupMessage from "@/components/ui/PopupMessage";
 import { Button } from "@/components/ui/Button";
 import { motion } from "framer-motion";
