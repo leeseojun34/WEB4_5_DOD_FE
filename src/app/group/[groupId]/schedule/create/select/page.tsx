@@ -4,10 +4,12 @@ import newScheduleImg from "@/assets/images/rabbit_new_schedule.png";
 import prevScheduleImg from "@/assets/images/rabbit_prev_schedule.png";
 import Tip from "@/components/ui/Tip";
 import { Button } from "@/components/ui/Button";
+import HeaderTop from "@/components/layout/HeaderTop";
 
 const GroupScheduleCreateSelectPage = () => {
   return (
-    <div className="mt-9 min-w-[375px] w-full max-w-185 px-5 flex flex-col items-center gap-9 mx-auto">
+    <div className="min-w-[375px] w-full max-w-185 px-5 flex flex-col items-center gap-9 mx-auto pt-25">
+      <HeaderTop />
       <div className="flex flex-col w-full gap-8">
         <p className="w-full text-xl font-bold text-[color:var(--color-black)] text-start">
           일정 추가 방법을 선택해주세요
