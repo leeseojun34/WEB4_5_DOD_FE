@@ -31,13 +31,13 @@ const TimeResult = () => {
             <ScheduleCard
               variant="attendance"
               totalCount={6}
-              members={["박준규", "현혜주"]}
+              members={["박은서", "현혜주"]}
               time="7월 4일 (금) 18:00 - 22:00"
             />
             <ScheduleCard
               variant="attendance"
               totalCount={6}
-              members={["박준규", "현혜주"]}
+              members={["박상윤", "박은서", "황수지", "현혜주", "박준규"]}
               time="7월 4일 (금) 18:00 - 22:00"
             />
           </div>
