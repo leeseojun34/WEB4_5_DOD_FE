@@ -27,7 +27,7 @@ const ElectionResult = () => {
   };
   return (
     <>
-      <main className="flex flex-col px-5.5 min-h-screen relative pb-32  max-w-[740px] mx-auto">
+      <main className="flex flex-col px-5 min-h-screen relative pb-32  max-w-[740px] mx-auto">
         <HeaderTop fontColor="black" backward={true} />
         <div className="flex flex-col gap-2 px-5 pt-7.5 ">
           <h2 className="font-semibold sm:text-2xl text-xl text-[var(--color-gray)]">

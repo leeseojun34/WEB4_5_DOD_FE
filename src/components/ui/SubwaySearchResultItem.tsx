@@ -21,6 +21,8 @@ const SubwaySearchResultItem: React.FC<SubwaySearchResultItemProps> = ({
   onClick,
   keyword,
 }) => {
+  const lastCategory = station.category_name?.split(">").pop()?.trim() || "";
+
   return (
     <button
       className="w-full flex flex-col items-start rounded-lg hover:bg-[var(--color-muted)] transition duration-300 py-1.5 px-7.5 gap-2.5
@@ -35,7 +37,7 @@ const SubwaySearchResultItem: React.FC<SubwaySearchResultItemProps> = ({
           }}
         />
         <span className="text-xs text-[var(--color-gray)] ml-2.5">
-          {station.category_name}
+          {lastCategory}
         </span>
       </div>
       <span className="text-xs">{station.road_address_name}</span>
