@@ -9,10 +9,12 @@ import Image from "next/image";
 
 type Platform = "github" | "notion" | "figma" | "googleDocs" | "miro" | "canva";
 interface WorkSpaceProps {
-  workspaces: {
-    platform: Platform;
-    name: string;
-  }[];
+  workspaces:
+    | {
+        platform: Platform;
+        name: string;
+      }[]
+    | null;
 }
 
 const WorkSpace = ({ workspaces }: WorkSpaceProps) => {
@@ -40,27 +42,33 @@ const WorkSpace = ({ workspaces }: WorkSpaceProps) => {
         </div>
       </div>
       <div className="flex flex-col gap-3 w-full">
-        {workspaces.map((workspace, i) => (
-          <div
-            className="flex w-full justify-between items-center"
-            key={`${workspace.name}-${i}`}
-          >
-            <div className="flex gap-4 items-center">
-              <div>
-                <Image
-                  src={PLATFORM[workspace.platform]}
-                  alt={`${PLATFORM[workspace.platform]} 아이콘`}
-                />
-              </div>
-              <div className="text-[color:var(--color-black)] text-sm">
-                {workspace.name}
-              </div>
-            </div>
-            <div>
-              <ChevronRight className="w-[14px] h-[14px] text-[color:var(--color-gray)]" />
-            </div>
+        {!workspaces && (
+          <div className="flex w-full justify-center items-center py-4 text-xs text-[color:var(--color-gray)]">
+            연동된 워크스페이스가 없습니다.
           </div>
-        ))}
+        )}
+        {workspaces &&
+          workspaces.map((workspace, i) => (
+            <div
+              className="flex w-full justify-between items-center"
+              key={`${workspace.name}-${i}`}
+            >
+              <div className="flex gap-4 items-center">
+                <div>
+                  <Image
+                    src={PLATFORM[workspace.platform]}
+                    alt={`${PLATFORM[workspace.platform]} 아이콘`}
+                  />
+                </div>
+                <div className="text-[color:var(--color-black)] text-sm">
+                  {workspace.name}
+                </div>
+              </div>
+              <div>
+                <ChevronRight className="w-[14px] h-[14px] text-[color:var(--color-gray)]" />
+              </div>
+            </div>
+          ))}
       </div>
     </div>
   );
