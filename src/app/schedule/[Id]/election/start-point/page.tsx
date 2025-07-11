@@ -23,7 +23,7 @@ const StartPoint = () => {
   }, []);
 
   return (
-    <main className="flex flex-col h-screen w-full relative mx-auto">
+    <main className="flex flex-col h-screen relative max-w-[1024px] mx-auto">
       {isSmOrLarger ? (
         <GroupHeader
           groupName="카츠오모이 가는날"
@@ -40,7 +40,7 @@ const StartPoint = () => {
           latitude={selectedStation ? Number(selectedStation.y) : 37.4849424}
         />
       </div>
-      <div className="w-full">
+      <div className="w-[740px]">
         <SubwaySearch onSelectStation={setSelectedStation} />
       </div>
     </main>
