@@ -16,8 +16,8 @@ const LocationEditBottomSheet = ({
   setIsOpen,
 }: LocationEditBottomSheetProps) => {
   const [inputValue, setInputValue] = useState("");
-  const isMobile = useMediaQuery("(min-width: 640px)");
-  const snapPoints = isMobile ? [0.4] : [0.65];
+  const isMobile = useMediaQuery("(min-height: 935px)");
+  const snapPoints = isMobile ? [0.4] : [0.6];
   return (
     <BottomSheet isOpen={isOpen} setIsOpen={setIsOpen} snapPoints={snapPoints}>
       {() => (

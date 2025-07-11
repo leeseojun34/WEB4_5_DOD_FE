@@ -8,7 +8,7 @@ import GroupHeader from "@/components/layout/GroupHeader";
 import ShareButton from "@/components/ui/ShareButton";
 
 const ScheduleDetail = () => {
-  const isOnline = true;
+  const isOnline = false;
   return (
     <div>
       {" "}
