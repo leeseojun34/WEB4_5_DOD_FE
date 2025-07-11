@@ -22,9 +22,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={`${pretendard.variable} max-w-screen-lg mx-auto w-full`}>
-        {" "}
-        <TanstackProvider>{children}</TanstackProvider>
+      <body className={`${pretendard.variable}  w-full`}>
+        <div className="max-w-screen-lg mx-auto">
+          {" "}
+          <TanstackProvider>{children}</TanstackProvider>
+        </div>
       </body>
     </html>
   );
