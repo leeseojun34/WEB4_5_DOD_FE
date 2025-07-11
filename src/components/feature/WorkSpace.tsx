@@ -1,7 +1,29 @@
 import { ChevronRight, Link2, Pen } from "lucide-react";
-import { SiGithub, SiMiro, SiNotion } from "react-icons/si";
+import githubIcon from "@/assets/icon/github_icon.svg";
+import notionIcon from "@/assets/icon/notion_icon.svg";
+import figmaIcon from "@/assets/icon/figma_icon.svg";
+import googleDocsIcon from "@/assets/icon/googledocs_icon.svg";
+import miroIcon from "@/assets/icon/miro_icon.svg";
+import canvaIcon from "@/assets/icon/canva_icon.svg";
+import Image from "next/image";
 
-const WorkSpace = () => {
+type Platform = "github" | "notion" | "figma" | "googleDocs" | "miro" | "canva";
+interface WorkSpaceProps {
+  workspaces: {
+    platform: Platform;
+    name: string;
+  }[];
+}
+
+const WorkSpace = ({ workspaces }: WorkSpaceProps) => {
+  const PLATFORM = {
+    github: githubIcon,
+    notion: notionIcon,
+    figma: figmaIcon,
+    googleDocs: googleDocsIcon,
+    miro: miroIcon,
+    canva: canvaIcon,
+  };
   return (
     <div className="bg-[color:var(--color-white)] px-5 py-4 gap-4 rounded-lg flex flex-col shadow-[var(--shadow-common)]">
       <div className="flex w-full justify-between items-center">
@@ -18,45 +40,27 @@ const WorkSpace = () => {
         </div>
       </div>
       <div className="flex flex-col gap-3 w-full">
-        <div className="flex w-full justify-between items-center">
-          <div className="flex gap-4 items-center">
+        {workspaces.map((workspace, i) => (
+          <div
+            className="flex w-full justify-between items-center"
+            key={`${workspace.name}-${i}`}
+          >
+            <div className="flex gap-4 items-center">
+              <div>
+                <Image
+                  src={PLATFORM[workspace.platform]}
+                  alt={`${PLATFORM[workspace.platform]} 아이콘`}
+                />
+              </div>
+              <div className="text-[color:var(--color-black)] text-sm">
+                {workspace.name}
+              </div>
+            </div>
             <div>
-              <SiNotion className="w-4 h-4 text-[color:var(--color-black)]" />
-            </div>
-            <div className="text-[color:var(--color-black)] text-sm">
-              프론트엔드 기획서
+              <ChevronRight className="w-[14px] h-[14px] text-[color:var(--color-gray)]" />
             </div>
           </div>
-          <div>
-            <ChevronRight className="w-[14px] h-[14px] text-[color:var(--color-gray)]" />
-          </div>
-        </div>
-        <div className="flex w-full justify-between items-center">
-          <div className="flex gap-4 items-center">
-            <div>
-              <SiGithub className="w-4 h-4 text-[color:var(--color-black)]" />
-            </div>
-            <div className="text-[color:var(--color-black)] text-sm">
-              박준규 팬미팅
-            </div>
-          </div>
-          <div>
-            <ChevronRight className="w-[14px] h-[14px] text-[color:var(--color-gray)]" />
-          </div>
-        </div>
-        <div className="flex w-full justify-between items-center">
-          <div className="flex gap-4 items-center">
-            <div>
-              <SiMiro className="w-4 h-4 text-[color:var(--color-black)] bg-amber-300 rounded-xs p-[2px]" />
-            </div>
-            <div className="text-[color:var(--color-black)] text-sm">
-              박준규 팬미팅
-            </div>
-          </div>
-          <div>
-            <ChevronRight className="w-[14px] h-[14px] text-[color:var(--color-gray)]" />
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );
