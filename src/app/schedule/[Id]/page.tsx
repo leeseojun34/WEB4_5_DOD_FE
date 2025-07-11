@@ -8,6 +8,7 @@ import GroupHeader from "@/components/layout/GroupHeader";
 import ShareButton from "@/components/ui/ShareButton";
 
 const ScheduleDetail = () => {
+  const isOnline = false;
   return (
     <div>
       {" "}
@@ -22,8 +23,15 @@ const ScheduleDetail = () => {
             members={["박준규", "카리나"]}
             time="7월 5일 (금) 12:00 - 24:00"
           />
-          <MeetingLocation location="강남역" specificLocation="강남역 스타벅스"  />
-          <OnlineMeetingRoom platform="zoom" name=" 박준규 팬미팅" />
+          {isOnline ? (
+            <OnlineMeetingRoom platform="zoom" name=" 박준규 팬미팅" />
+          ) : (
+            <MeetingLocation
+              location="강남역"
+              specificLocation="강남역 스타벅스"
+            />
+          )}
+
           <WorkSpace
             workspaces={[
               { platform: "notion", name: "프론트엔드 기획서" },
