@@ -1,9 +1,9 @@
 "use client";
 
-import SubwayCard from "@/components/feature/SubwayCard";
+import SubwayCard from "@/components/ui/SubwayCard";
 import tikky from "@/assets/images/rabbit_pin_sit.png";
 import Image from "next/image";
-import Map from "@/components/feature/Map";
+import Map from "@/components/feature/kakaoMap/Map";
 import { Button } from "@/components/ui/Button";
 import PopupMessage from "@/components/ui/PopupMessage";
 import HeaderTop from "@/components/layout/HeaderTop";
@@ -27,7 +27,7 @@ const ElectionResult = () => {
   };
   return (
     <>
-      <main className="flex flex-col px-5.5 min-h-screen relative pb-32  max-w-[740px] mx-auto">
+      <main className="flex flex-col px-5 min-h-screen relative pb-32  max-w-[740px] mx-auto">
         <HeaderTop fontColor="black" backward={true} />
         <div className="flex flex-col gap-2 px-5 pt-7.5 ">
           <h2 className="font-semibold sm:text-2xl text-xl text-[var(--color-gray)]">
