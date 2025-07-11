@@ -42,16 +42,17 @@ const STYLES = {
   container: "pl-3 pr-6",
   header: "sticky top-0 z-10 bg-white",
   dayGrid: "grid grid-cols-7 gap-1 pl-6",
-  dayCell: "py-2 text-center text-[#9EA6B2] text-[8px] font-bold",
+  dayCell: "py-2 text-center text-[#9EA6B2] text-[8px] md:text-xl font-bold",
   dayText: "block",
   dateText: "text-[var(--color-primary-400)]",
   timeColumn: "flex w-6 flex-col items-end gap-1 pr-1",
-  timeCell: "h-10 text-right",
-  timeText: "block text-[#9EA6B2] text-[8px] font-bold translate-y-0",
-  scheduleGrid: "grid flex-1 grid-cols-7 gap-1",
+  timeCell: "h-10 md:h-20 text-right pr-1",
+  timeText:
+    "block text-[#9EA6B2] text-[8px] md:text-base font-bold translate-y-0",
+  scheduleGrid: "grid flex-1 grid-cols-7 gap-1 md:gap-4",
   dayColumn: "flex flex-col gap-2 overflow-hidden rounded-lg",
   timeSlot:
-    "w-10 h-5 border-b border-white last:border-b-0 odd:border-dashed even:border-solid cursor-pointer transition-colors duration-150",
+    "w-full h-5 md:h-10 border-b border-white last:border-b-0 odd:border-dashed even:border-solid cursor-pointer transition-colors duration-150",
   selectedSlot: "bg-[var(--color-primary-400)]",
   unselectedSlot: "bg-[var(--color-muted)]",
 } as const;
@@ -114,6 +115,34 @@ const Schedule = () => {
     }
   }, [isDragging]);
 
+  const handleTouchStart = useCallback(
+    (e: React.TouchEvent, dayIndex: number, timeIndex: number): void => {
+      e.preventDefault();
+      const cellId = getCellId(dayIndex, timeIndex);
+      setIsDragging(true);
+      setDragStartCell(cellId);
+      toggleCellSelection(cellId);
+    },
+    [getCellId, toggleCellSelection]
+  );
+
+  const handleTouchMove = useCallback(
+    (e: React.TouchEvent): void => {
+      if (!isDragging || !dragStartCell) return;
+
+      e.preventDefault();
+      const touch = e.touches[0];
+      const target = document.elementFromPoint(touch.clientX, touch.clientY);
+      if (!target) return;
+
+      const id = (target as HTMLElement).id;
+      if (id.startsWith("cell-")) {
+        toggleCellSelection(id);
+      }
+    },
+    [isDragging, dragStartCell, toggleCellSelection]
+  );
+
   const renderDayHeader = (dayInfo: DayInfo, index: number) => (
     <div key={index} className={STYLES.dayCell}>
       <span className={STYLES.dayText}>{dayInfo.day}</span>
@@ -140,11 +169,14 @@ const Schedule = () => {
     return (
       <div
         key={timeIndex}
+        id={cellId}
         className={`${STYLES.timeSlot} ${
           isSelected ? STYLES.selectedSlot : STYLES.unselectedSlot
         }`}
         onMouseDown={() => handleMouseDown(dayIndex, timeIndex)}
         onMouseEnter={() => handleMouseEnter(dayIndex, timeIndex)}
+        onTouchStart={(e) => handleTouchStart(e, dayIndex, timeIndex)}
+        onTouchMove={handleTouchMove}
       />
     );
   };

@@ -18,19 +18,21 @@ import { useRef } from "react";
 interface BottomSheetProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
-  children: (snapTo: (i: number) => void) => React.ReactNode;
+  children: (snapTo?: (i: number) => void) => React.ReactNode;
   snapPoints?: number[];
   initialSnap?: number;
   className?: string;
+  disableDrag?: boolean;
 }
 
 const BottomSheet = ({
   isOpen,
   setIsOpen,
   children,
+  disableDrag = false,
   snapPoints = [0.8, 0.4, 0.2],
   initialSnap = 0,
-  className,
+  className = "",
 }: BottomSheetProps) => {
   const sheetRef = useRef<SheetRef>(null);
   const snapTo = (i: number) => {
@@ -51,6 +53,7 @@ const BottomSheet = ({
         onClose={() => setIsOpen(false)}
         initialSnap={initialSnap}
         className={`${className} w-full md:max-w-5xl md:mx-auto`}
+        disableDrag={disableDrag}
       >
         <Sheet.Container style={{ borderRadius: "20px 20px 0 0" }}>
           <Sheet.Header />
