@@ -1,11 +1,9 @@
-import HeaderTop from "@/components/layout/HeaderTop";
 import WorkspaceItem from "./WorkspaceItem";
 
 const EditWorkspace = () => {
   return (
     <>
-      <HeaderTop icon="plus">워크스페이스 관리</HeaderTop>
-      <div className="pt-25 px-5 space-y-4">
+      <div className="space-y-4">
         <WorkspaceItem
           type="miro"
           name="이때어때 미로"
