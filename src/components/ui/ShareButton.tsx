@@ -32,7 +32,7 @@ const ShareButton = ({
   return (
     <>
       <div
-        className={`flex flex-row rounded-md px-5 py-4 justify-between cursor-pointer shadow-md transition-all duration-300 hover:scale-101`}
+        className={`w-full flex flex-row rounded-md px-5 py-4 justify-between cursor-pointer shadow-md transition-all duration-300 hover:scale-101`}
         style={{ backgroundColor: color }}
       >
         <div className="flex flex-row gap-4">
