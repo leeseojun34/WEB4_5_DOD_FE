@@ -27,7 +27,7 @@ const ScheduleCard = (props: ScheduleCardProps) => {
 
   return (
     <div
-      className="min-w-[335px] max-w-185 w-full h-auto p-4 rounded-lg bg-[color:var(--color-white)]  flex"
+      className="min-w-[335px] max-w-185 w-full h-auto p-4 rounded-lg bg-[color:var(--color-white)]  flex cursor-pointer transition-all duration-100 hover:-translate-y-0.5"
       style={{ boxShadow: "var(--shadow-common)" }}
     >
       <div className="flex flex-col flex-1 gap-2">
