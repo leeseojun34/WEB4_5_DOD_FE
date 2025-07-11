@@ -3,10 +3,12 @@ import profileBlack from "@/assets/images/profile_pastel_black.png";
 import profileBlue from "@/assets/images/profile_pastel_blue.png";
 import profileGray from "@/assets/images/profile_pastel_gray.png";
 import profileGreen from "@/assets/images/profile_pastel_green.png";
+import HeaderTop from "@/components/layout/HeaderTop";
 
 const GroupMembers = () => {
   return (
-    <div className="mt-9 min-w-[375px] w-full max-w-185 flex flex-col justify-center bg-[color:var(--color-white)] mx-auto px-5 gap-5">
+    <div className="pt-25 min-w-[375px] w-full max-w-185 flex flex-col justify-center bg-[color:var(--color-white)] mx-auto px-5 gap-5">
+      <HeaderTop>그룹원</HeaderTop>
       <div className="text-xs text-[color:var(--color-gray)]">
         인원 <span>1</span>
       </div>

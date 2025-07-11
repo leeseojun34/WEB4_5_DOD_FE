@@ -20,15 +20,18 @@ const ScheduleModeList = () => {
       <div className="mx-5">
         <div className="flex flex-col gap-8">
           <motion.div
-            className="flex items-center gap-2 w-1/3 mx-auto"
+            className="flex items-center gap-2 mx-auto "
             variants={itemVariants}
           >
-            <Input
-              type="number"
-              value={0}
-              placeholder="0"
-              onChange={() => {}}
-            />
+            <div className="w-13">
+              <Input
+                type="number"
+                value={0}
+                placeholder="0"
+                onChange={() => {}}
+              />
+            </div>
+
             <span> 명</span>
           </motion.div>
           <motion.div variants={itemVariants}>

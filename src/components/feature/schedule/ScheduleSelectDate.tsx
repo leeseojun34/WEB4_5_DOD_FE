@@ -36,9 +36,12 @@ const ScheduleSelectDate = () => {
           className="flex items-center gap-4 justify-around mx-7"
           variants={itemVariants}
         >
-          <Dropdown label="" options={timeOptions} />
+          <Dropdown options={timeOptions} defaultIndex={0} />
           <span className="">-</span>
-          <Dropdown label="" options={timeOptions} />
+          <Dropdown
+            options={timeOptions}
+            defaultIndex={timeOptions.length - 1}
+          />
         </motion.div>
         <motion.div
           className="w-full border-1 border-[var(--color-gray-100)] rounded-lg"
