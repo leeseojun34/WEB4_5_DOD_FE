@@ -1,4 +1,6 @@
 import { MapPin, Pen } from "lucide-react";
+import LocationEditBottomSheet from "./schedule/editSchedule/LocationEditBottomSheet";
+import { useState } from "react";
 
 interface MeetingLocationProps {
   location?: string;
@@ -9,6 +11,7 @@ const MeetingLocation = ({
   location,
   specificLocation,
 }: MeetingLocationProps) => {
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="bg-[color:var(--color-white)] px-5 py-4 gap-4 rounded-lg flex flex-col shadow-[var(--shadow-common)]">
       <div className="flex w-full justify-between items-center">
@@ -17,11 +20,11 @@ const MeetingLocation = ({
             <MapPin className="w-3 h-3 text-[color:var(--color-black)]" />
           </div>
           <div className="text-[color:var(--color-primary-300)] text-xs">
-            온라인 회의장
+            모임 장소
           </div>
         </div>
-        <div>
-          <Pen className="w-3 h-3 text-[color:var(--color-gray)]" />
+        <div onClick={() => setIsOpen(true)}>
+          <Pen className="w-3 h-3 text-[color:var(--color-gray)] cursor-pointer" />
         </div>
       </div>
       {!location && !specificLocation && (
@@ -49,6 +52,7 @@ const MeetingLocation = ({
           </div>
         </div>
       )}
+      <LocationEditBottomSheet isOpen={isOpen} setIsOpen={setIsOpen} />
     </div>
   );
 };
