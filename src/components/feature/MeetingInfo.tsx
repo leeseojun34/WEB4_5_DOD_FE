@@ -7,7 +7,7 @@ interface MeetingInfoProps {
 }
 const MeetingInfo = ({ members, time }: MeetingInfoProps) => {
   return (
-    <div className="bg-[color:var(--color-white)] px-5 py-4 gap-4 rounded-lg flex flex-col shadow-[--shadow-common]">
+    <div className="bg-[color:var(--color-white)] px-5 py-4 gap-4 rounded-lg flex flex-col shadow-[var(--shadow-common)]">
       <div className="flex w-full items-center gap-4">
         <div>
           <MdOutlineGroups className="text-[color:var(--color-black)] w-4 h-4" />

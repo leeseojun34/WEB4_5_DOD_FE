@@ -3,7 +3,7 @@ import { BiLogoZoom } from "react-icons/bi";
 
 const OnlineMeetingRoom = () => {
   return (
-    <div className="bg-[color:var(--color-white)] px-5 py-4 gap-4 rounded-lg flex flex-col shadow-[--shadow-common]">
+    <div className="bg-[color:var(--color-white)] px-5 py-4 gap-4 rounded-lg flex flex-col shadow-[var(--shadow-common)]">
       <div className="flex w-full justify-between items-center">
         <div className="flex gap-4 items-center">
           <div>
