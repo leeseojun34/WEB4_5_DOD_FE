@@ -2,7 +2,6 @@ import BottomSheet from "@/components/ui/BottomSheet";
 import { Button } from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import ShareButton from "@/components/ui/ShareButton";
-import { X } from "lucide-react";
 import zoomIcon from "@/assets/icon/zoom_icon.svg";
 import googleMeetIcon from "@/assets/icon/googlemeet_icon.svg";
 import discordIcon from "@/assets/icon/discord_icon.svg";
@@ -10,6 +9,7 @@ import zepIcon from "@/assets/icon/zep_icon.svg";
 import Image from "next/image";
 import { ChangeEvent, useState } from "react";
 import useMediaQuery from "../hooks/useMediaQuery";
+import BottomSheetHeader from "@/components/layout/BottomSheetHeader";
 
 interface OnlineMeetingEditBottomSheetProps {
   isOpen: boolean;
@@ -43,16 +43,10 @@ const OnlineMeetingEditBottomSheet = ({
     <BottomSheet isOpen={isOpen} setIsOpen={setIsOpen} snapPoints={snapPoints}>
       {() => (
         <div className="min-w-[375px] w-full max-w-185 flex flex-col items-center px-5 mx-auto pt-3 gap-8">
-          <div className="flex justify-between w-full">
-            <X className="invisible w-5 h-5" />
-            <div className="font-semibold text-base text-[color:var(--color-black)]">
-              온라인 회의장 정하기
-            </div>
-            <X
-              className="w-5 h-5 text-[color:var(--color-black)] cursor-pointer"
-              onClick={() => setIsOpen(false)}
-            />
-          </div>
+          <BottomSheetHeader
+            setIsOpen={setIsOpen}
+            title="온라인 회의장 정하기"
+          />
           <ShareButton
             title="회의장이 없나요"
             description="Zoom 회의장을 만들어드려요"

@@ -2,9 +2,10 @@ import BottomSheet from "@/components/ui/BottomSheet";
 import { Button } from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import ShareButton from "@/components/ui/ShareButton";
-import { Search, X } from "lucide-react";
+import { Search } from "lucide-react";
 import useMediaQuery from "../hooks/useMediaQuery";
 import { ChangeEvent, useState } from "react";
+import BottomSheetHeader from "@/components/layout/BottomSheetHeader";
 
 interface LocationEditBottomSheetProps {
   isOpen: boolean;
@@ -22,16 +23,7 @@ const LocationEditBottomSheet = ({
     <BottomSheet isOpen={isOpen} setIsOpen={setIsOpen} snapPoints={snapPoints}>
       {() => (
         <div className="min-w-[375px] w-full max-w-185 flex flex-col items-center px-5 mx-auto pt-3 gap-8">
-          <div className="flex justify-between w-full">
-            <X className="invisible w-5 h-5" />
-            <div className="font-semibold text-base text-[color:var(--color-black)]">
-              모임 장소 정하기
-            </div>
-            <X
-              className="w-5 h-5 text-[color:var(--color-black)] cursor-pointer"
-              onClick={() => setIsOpen(false)}
-            />
-          </div>
+          <BottomSheetHeader setIsOpen={setIsOpen} title="모임 장소 정하기" />
           <ShareButton
             title="만남 장소 정하기 어려우신가요?"
             description="모임인원들의 중간 지점을 찾아드려요"
