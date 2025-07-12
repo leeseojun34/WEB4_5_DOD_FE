@@ -18,7 +18,9 @@ const LocationEditBottomSheet = ({
 }: LocationEditBottomSheetProps) => {
   const [inputValue, setInputValue] = useState("");
   const isMobile = useMediaQuery("(min-height: 935px)");
-  const snapPoints = isMobile ? [0.4] : [0.6];
+  const snapPoints = isMobile ? [0.5] : [0.6];
+  const midPointStation = "2호선 건대입구역";
+  // const midPointStation = "";
   return (
     <BottomSheet isOpen={isOpen} setIsOpen={setIsOpen} snapPoints={snapPoints}>
       {() => (
@@ -43,6 +45,25 @@ const LocationEditBottomSheet = ({
               setInputValue(e.target.value)
             }
           />
+          {midPointStation && (
+            <div className="w-full flex flex-col gap-2">
+              <div className="flex justify-between">
+                <div className="text-sm font-medium text-[color:var(--color-black)]">
+                  중간 장소
+                </div>
+                <button className="text-[10px] font-medium text-[color:var(--color-gray)] cursor-pointer">
+                  투표 다시하기
+                </button>
+              </div>
+              <Input
+                fullWidth={true}
+                value={midPointStation}
+                readOnly
+                disabled
+              />
+            </div>
+          )}
+
           <Button>저장하기</Button>
         </div>
       )}
