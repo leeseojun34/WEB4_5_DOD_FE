@@ -13,7 +13,7 @@ const GroupAnalytics = () => {
       <div className="min-w-[375px] w-full max-w-185 mx-auto bg-[color:var(--color-primary-100)] ">
         <HeaderTop>그룹 통계</HeaderTop>
       </div>
-      <div className="min-w-[375px] w-full max-w-185 px-5 pt-9 bg-[color:var(--color-primary-100)] min-h-screen flex flex-col gap-4 mx-auto">
+      <div className="min-w-[375px] w-full max-w-185 px-5 pt-25 bg-[color:var(--color-primary-100)] min-h-screen flex flex-col gap-4 mx-auto">
         <GroupAnalyticsSection color="blue" title="그룹원별 참여율">
           <MemberParticipationItem name="박준규" index={0} percentage={92} />
           <MemberParticipationItem name="현혜주" index={1} percentage={90} />
