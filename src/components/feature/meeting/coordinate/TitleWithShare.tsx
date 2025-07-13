@@ -10,7 +10,7 @@ const TitleWithShare = () => {
           description="시간 조율을 위해 링크를 공유해요"
         />
       </div>
-      <PageTitle>가입한 시간을 입력해주세요</PageTitle>
+      <PageTitle>가능한 시간을 입력해주세요</PageTitle>
       <div className="w-full hidden sm:block">
         <ShareButton
           title="일정 초대 링크 공유"
