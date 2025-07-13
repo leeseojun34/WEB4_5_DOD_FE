@@ -5,15 +5,20 @@ import LocationFrequencyItem from "@/components/feature/group/LocationFrequencyI
 import MemberParticipationItem from "@/components/feature/group/MemberParticipationItem";
 import PlaceLegendSection from "@/components/feature/group/PlaceLegendSection";
 import WeekdayMeetingChart from "@/components/feature/group/WeekdayFrequencyBarChart";
+import Footer from "@/components/layout/Footer";
+import Header from "@/components/layout/Header";
 import HeaderTop from "@/components/layout/HeaderTop";
 
 const GroupAnalytics = () => {
   return (
-    <>
-      <div className="min-w-[375px] w-full max-w-185 mx-auto bg-[color:var(--color-primary-100)] ">
+    <div className="bg-[color:var(--color-primary-100)] w-full">
+      <div className="hidden sm:block">
+        <Header />
+      </div>
+      <div className="min-w-[375px] w-full max-w-185 mx-auto ">
         <HeaderTop>그룹 통계</HeaderTop>
       </div>
-      <div className="min-w-[375px] w-full max-w-185 px-5 pt-25 bg-[color:var(--color-primary-100)] min-h-screen flex flex-col gap-4 mx-auto">
+      <div className="min-w-[375px] w-full max-w-185 px-5 pt-25 sm:pt-40 min-h-screen flex flex-col gap-4 mx-auto">
         <GroupAnalyticsSection color="blue" title="그룹원별 참여율">
           <MemberParticipationItem name="박준규" index={0} percentage={92} />
           <MemberParticipationItem name="현혜주" index={1} percentage={90} />
@@ -38,7 +43,10 @@ const GroupAnalytics = () => {
           </div>
         </GroupAnalyticsSection>
       </div>
-    </>
+      <div className="sm:hidden">
+        <Footer />
+      </div>
+    </div>
   );
 };
 export default GroupAnalytics;

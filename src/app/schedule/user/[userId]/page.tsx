@@ -2,14 +2,19 @@ import rabbitWriting from "@/assets/images/rabbit_writing.png";
 import ScheduleCard from "@/components/ui/ScheduleCard";
 import HeaderTop from "@/components/layout/HeaderTop";
 import Image from "next/image";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 
 const UserSchedule = () => {
   return (
-    <>
-      <div className="min-w-[375px] w-full max-w-185 bg-[color:var(--color-gray-background)] mx-auto">
+    <div className="w-full min-h-screen bg-[color:var(--color-gray-background)]">
+      <div className="hidden sm:block">
+        <Header />
+      </div>
+      <div className="min-w-[375px] w-full max-w-185 bg-[color:var(--color-gray-background)] mx-auto pt-8 sm:pt-30">
         <HeaderTop>나의 이때어때 일정</HeaderTop>
       </div>
-      <div className="min-w-[375px] w-full max-w-185 min-h-screen bg-[color:var(--color-gray-background)] px-5 mx-auto pt-20">
+      <div className="min-w-[375px] w-full max-w-185 min-h-screen px-5 mx-auto pt-20">
         <Image
           src={rabbitWriting}
           alt="글쓰는 토끼 이미지"
@@ -33,7 +38,10 @@ const UserSchedule = () => {
           />
         </div>
       </div>
-    </>
+      <div className="sm:hidden">
+        <Footer />
+      </div>
+    </div>
   );
 };
 export default UserSchedule;
