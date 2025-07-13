@@ -1,6 +1,8 @@
+import Link from "next/link";
 import { MyGroupItem } from "./MyGroupItem";
 
 export const MyGroupSection = () => {
+  const groupId = 1;
   return (
     <>
       <div className="bg-[color:var(--color-white)] p-5 rounded-xl w-full gap-2 flex flex-col">
@@ -9,8 +11,13 @@ export const MyGroupSection = () => {
             나의 모임
           </p>
         </div>
-        <MyGroupItem />
-        <MyGroupItem />
+        <Link href={`/group/${groupId}`}>
+          <MyGroupItem />
+        </Link>
+        <Link href={`/group/${groupId}`}>
+          <MyGroupItem />
+        </Link>
+
         {/* <EmptyGroup /> */}
       </div>
     </>

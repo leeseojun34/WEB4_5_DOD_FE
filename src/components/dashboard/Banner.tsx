@@ -1,6 +1,7 @@
 import bannerImg from "@/assets/images/banner_jewerly.png";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export const Banner = () => {
   return (
@@ -16,9 +17,12 @@ export const Banner = () => {
           내 보석함에서 <br />
           누구를 꺼내 볼까?
         </div>
-        <button className="flex text-xs md:text-xl text-[color:var(--color-white)] justify-end items-center">
+        <Link
+          href={"/meeting"}
+          className="flex text-xs md:text-xl text-[color:var(--color-white)] justify-end items-center cursor-pointer"
+        >
           일정 만들러 가기 <ArrowRight className="w-[14px] h-4" />
-        </button>
+        </Link>
       </div>
     </div>
   );
