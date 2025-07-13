@@ -15,7 +15,7 @@ const Header = ({ type = "" }: { type?: "" | "blue" }) => {
       className={`w-full flex justify-between items-center px-20 py-6 ${
         type === "blue"
           ? "bg-[color:var(--color-primary-400)]"
-          : "bg-[color:var(--color-white)]"
+          : "bg-transparent"
       }`}>
       <LogoWebHeader type={type} handleLogoClick={() => router.push("/")} />
       <div className="flex justify-between items-center gap-8">
@@ -27,7 +27,7 @@ const Header = ({ type = "" }: { type?: "" | "blue" }) => {
             width={24}
             height={24}
             className="cursor-pointer"
-            onClick={() => router.push("/create")}
+            onClick={() => router.push("/schedule/create")}
           />
           <Image
             src={profile}
