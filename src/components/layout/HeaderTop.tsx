@@ -44,7 +44,8 @@ const HeaderTop = ({
           clickEllipsisHandler : ellipsis 아이콘 클릭 핸들러
       */}
       <div
-        className={`${headerStyle} bg-transparent fixed top-0 left-1/2 -translate-x-1/2  z-10 max-w-[1024px]`}>
+        className={`${headerStyle} bg-transparent fixed top-0 sm:top-10 left-1/2  -translate-x-1/2  z-10 max-w-[740px] `}
+      >
         <span onClick={handleBack} className="cursor-pointer">
           <ChevronLeft
             color={
