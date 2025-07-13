@@ -12,7 +12,7 @@ function layout({ children }: { children: React.ReactNode }) {
         </div>
         <HeaderTop fontColor="black" backward={true}></HeaderTop>
 
-        <div className="w-full px-5 pt-[8vh] max-w-[740px] mx-auto">
+        <div className="w-full px-5 pt-25 max-w-[740px] mx-auto">
           {children}
         </div>
       </div>
