@@ -42,7 +42,11 @@ export const Calendar = (props: CalendarProps) => {
       DayButton: DayButton,
     },
     classNames: {
-      root: `${defaultClassNames.root} min-w-[335px] w-full max-w-185 h-auto rounded-[20px] bg-[color:var(--color-white)] p-4 flex flex-col justify-center items-center ${!isCompact && "border border-[color:var(--color-gray-100)]"}`,
+      root: `${
+        defaultClassNames.root
+      } min-w-[335px] w-full max-w-185 h-auto rounded-[20px] bg-[color:var(--color-white)] p-4 flex flex-col justify-center items-center ${
+        !isCompact && "border border-[color:var(--color-gray-100)]"
+      }`,
       day: `rounded-full leading-none`,
       caption_label: `font-regular flex justify-center items-center text-sm`,
       today: `text-[color:var(--color-primary-400)] box-border w-6 h-6`,
@@ -52,7 +56,7 @@ export const Calendar = (props: CalendarProps) => {
       month_grid: `border-separate border-spacing-x-4 ${
         expanded || !isCompact ? "border-spacing-y-4" : "border-spacing-y-1"
       }`,
-      day_button: `w-6 h-6 text-sm `,
+      day_button: `w-6 h-6 text-sm cursor-pointer`,
       month_caption: `h-[22px] flex justify-center items-center ${
         expanded ? "" : "mb-3"
       }`,
