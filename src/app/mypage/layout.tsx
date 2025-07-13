@@ -12,7 +12,9 @@ function layout({ children }: { children: React.ReactNode }) {
         </div>
         <HeaderTop fontColor="black" backward={true}></HeaderTop>
 
-        <div className="px-10 pt-[8vh]">{children}</div>
+        <div className="w-full px-10 pt-[8vh] max-w-[740px] mx-auto">
+          {children}
+        </div>
       </div>
       <div className="lg:hidden">
         <Footer />
