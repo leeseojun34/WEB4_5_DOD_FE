@@ -1,30 +1,28 @@
 import Tip from "@/components/ui/Tip";
 import Image from "next/image";
 import purplerabbit from "@/assets/images/rabbit_walking_backpack.png";
-import HeaderTop from "@/components/layout/HeaderTop";
 import ScheduleCard from "@/components/ui/ScheduleCard";
+import { ChevronDown } from "lucide-react";
 
 const TimeResult = () => {
   return (
-    <div className="flex flex-col  min-h-screen relative pb-32 pt-8 max-w-[740px] mx-auto overflow-hidden px-5">
-      <HeaderTop />
-      <main>
-        <div className="flex justify-between items-center">
-          <div className="flex flex-col gap-2 px-5 pt-7.5 ">
-            <h2 className="font-medium sm:text-2xl text-xl text-[var(--color-gray)]">
-              카츠오모이 가는 날
-            </h2>
-            <h1 className="font-medium text-xl sm:text-2xl text-[var(--color-black)]">
-              <span className="text-[var(--color-primary-400)]">6명</span>의
-              시간 조율 결과
-            </h1>
-          </div>
-          <Image
-            src={purplerabbit}
-            alt="purplerabbit"
-            width={120}
-            height={180}
-          />
+    <main>
+      <div className="flex justify-between items-center">
+        <div className="flex flex-col gap-2 px-5 pt-7.5 ">
+          <h2 className="font-medium sm:text-2xl text-xl text-[var(--color-gray)]">
+            카츠오모이 가는 날
+          </h2>
+          <h1 className="font-medium text-xl sm:text-2xl text-[var(--color-black)]">
+            <span className="text-[var(--color-primary-400)]">6명</span>의 시간
+            조율 결과
+          </h1>
+        </div>
+        <Image src={purplerabbit} alt="purplerabbit" width={120} height={180} />
+      </div>
+      <div className="flex flex-col gap-2">
+        <div className="flex text-[color:var(--color-gray-placeholder)] items-center gap-1 px-2 cursor-pointer">
+          <p className="text-xs">빠른 시간 순</p>
+          <ChevronDown size={12} />
         </div>
         <div className="flex flex-col gap-5">
           <div className="flex flex-col gap-4">
@@ -47,8 +45,8 @@ const TimeResult = () => {
             함께할 구성원들과 먼저 상의해보는 걸 추천드려요!
           </Tip>
         </div>
-      </main>
-    </div>
+      </div>
+    </main>
   );
 };
 export default TimeResult;
