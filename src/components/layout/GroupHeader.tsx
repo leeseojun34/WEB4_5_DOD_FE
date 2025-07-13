@@ -42,6 +42,8 @@ const GroupHeader = ({
   const handleBack = () => {
     router.back();
   };
+
+  const groupId = 1;
   return (
     <>
       {/* group 헤더,  그룹 정보 : 그룹명, 소개문구, 인원수*/}
@@ -58,9 +60,9 @@ const GroupHeader = ({
           <span className={fontStyleWhite}>{groupName}</span>
 
           {icon === "pen" && (
-            <span onClick={clickPenHandler} className="cursor-pointer">
+            <Link href={`/group/${groupId}/edit`} onClick={clickPenHandler} className="cursor-pointer">
               <SquarePen color={"var(--color-white)"} size={16} />
-            </span>
+            </Link>
           )}
           {icon === "ellipsis" && (
             <span onClick={clickEllipsisHandler} className="cursor-pointer">
@@ -75,15 +77,15 @@ const GroupHeader = ({
         </div>
         {/*  소개문구 */}
         <p className={fontStyleIntro}>{groupIntroduction}</p>
-        <div className={tagStyle}>
+        <Link href={`/group/${groupId}/members`} className={tagStyle}>
           <BiUser color="var(--color-white)" size={14} />
 
           {/* 인원수 */}
           <span className="pr-1.5">{groupCount}</span>
-        </div>
+        </Link>
         {/* 방장 권한이 있는 경우에만 보이는 부분 */}
         <div className="flex items-center justify-center gap-4">
-          <Link href="/statistics">
+          <Link href={`/group/${groupId}/analytics`}>
             <div className={tagStyle}>
               <ChartNoAxesColumn size={14} strokeWidth={3} />
               <span>통계</span>

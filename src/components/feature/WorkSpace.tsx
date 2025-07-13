@@ -6,6 +6,7 @@ import googleDocsIcon from "@/assets/icon/googledocs_icon.svg";
 import miroIcon from "@/assets/icon/miro_icon.svg";
 import canvaIcon from "@/assets/icon/canva_icon.svg";
 import Image from "next/image";
+import Link from "next/link";
 
 type Platform = "github" | "notion" | "figma" | "googleDocs" | "miro" | "canva";
 interface WorkSpaceProps {
@@ -26,6 +27,8 @@ const WorkSpace = ({ workspaces }: WorkSpaceProps) => {
     miro: miroIcon,
     canva: canvaIcon,
   };
+
+  const scheduleId = 1;
   return (
     <div className="bg-[color:var(--color-white)] px-5 py-4 gap-4 rounded-lg flex flex-col shadow-[var(--shadow-common)]">
       <div className="flex w-full justify-between items-center">
@@ -37,9 +40,9 @@ const WorkSpace = ({ workspaces }: WorkSpaceProps) => {
             워크 스페이스
           </div>
         </div>
-        <div>
+        <Link href={`/schedule/${scheduleId}/edit/workspace`}>
           <Pen className="w-3 h-3 text-[color:var(--color-gray)] cursor-pointer" />
-        </div>
+        </Link>
       </div>
       <div className="flex flex-col gap-3 w-full">
         {!workspaces && (

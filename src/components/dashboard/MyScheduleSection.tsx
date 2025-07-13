@@ -1,7 +1,10 @@
 import { ArrowRight } from "lucide-react";
 import { MyScheduleItem } from "./MyScheduleItem";
+import Link from "next/link";
 
 export const MyScheduleSection = () => {
+  const userId = 1;
+  const scheduleId = 1;
   return (
     <>
       <div className="bg-[color:var(--color-white)] p-5 rounded-xl w-full gap-2 flex flex-col">
@@ -9,12 +12,18 @@ export const MyScheduleSection = () => {
           <p className="font-semibold text-base text-[color:var(--color-black)]">
             나의 일정
           </p>
-          <button className="font-medium text-xs text-[color:var(--color-gray-placeholder)]">
-            일정 모두 보기
-          </button>
+          <Link href={`/schedule/user/${userId}`}>
+            <button className="font-medium text-xs text-[color:var(--color-gray-placeholder)] cursor-pointer">
+              일정 모두 보기
+            </button>
+          </Link>
         </div>
-        <MyScheduleItem />
-        <MyScheduleItem />
+        <Link href={`/schedule/${scheduleId}`}>
+          <MyScheduleItem />
+        </Link>
+        <Link href={`/schedule/${scheduleId}`}>
+          <MyScheduleItem />
+        </Link>
 
         {/* <EmptySchedule /> */}
       </div>

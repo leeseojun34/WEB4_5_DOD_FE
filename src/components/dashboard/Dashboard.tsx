@@ -3,6 +3,7 @@ import { Calendar } from "../feature/calendar/Calender";
 import { Banner } from "./Banner";
 import { MyGroupSection } from "./MyGroupSection";
 import { MyScheduleSection } from "./MyScheduleSection";
+import Footer from "../layout/Footer";
 
 const Dashboard = () => {
   const [selected, setSelected] = useState<Date | undefined>();
@@ -17,6 +18,7 @@ const Dashboard = () => {
         />
         <MyScheduleSection />
         <MyGroupSection />
+        <Footer />
       </div>
     </div>
   );
