@@ -15,11 +15,7 @@ export const Calendar = (props: CalendarProps) => {
   const defaultClassNames = getDefaultClassNames();
 
   const getWeekDatesFromSelected = () => {
-    const baseDate = props.isCompact
-      ? props.selected || new Date()
-      : props.selectionMode === "single"
-      ? props.selected || new Date()
-      : props.selected?.[0] || new Date();
+    const baseDate = (props.isCompact && props.selected) || new Date();
 
     const startOfWeek = new Date(baseDate);
     const dayOfWeek = baseDate.getDay();
