@@ -41,6 +41,7 @@ body {
   --color-primary-400-hover: #1e6fef;
   --color-purple: #8A38F5;
   --shadow-common: 0px 4px 64px 0px rgba(0, 0, 0, 0.1);
+  --shadow-420: 0px 4px 64px 0px rgba(0, 0, 0, 0.42);
 }
 
 textarea::-webkit-scrollbar {
