@@ -43,10 +43,7 @@ const ScheduleSelectDate = () => {
             defaultIndex={timeOptions.length - 1}
           />
         </motion.div>
-        <motion.div
-          className="w-full border-1 border-[var(--color-gray-100)] rounded-lg"
-          variants={itemVariants}
-        >
+        <motion.div className="w-full" variants={itemVariants}>
           <div className="w-full h-full p-4 flex justify-center items-center">
             <Calendar />
           </div>

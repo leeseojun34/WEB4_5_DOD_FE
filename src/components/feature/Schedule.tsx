@@ -11,8 +11,8 @@
  *
  * @returns 일정 등록 페이지 컴포넌트
  */
-
-import { useState, useRef, useCallback } from "react";
+"use client";
+import { useState, useRef, useCallback, useEffect } from "react";
 
 // 타입 정의
 // type ScheduleProps = {}
@@ -39,7 +39,7 @@ const TOTAL_TIME_SLOTS = HOURS_COUNT * TIME_SLOTS_PER_HOUR; // 총 시간 슬롯
 const DAYS_COUNT = 7; // 요일 수
 
 const STYLES = {
-  container: "pl-3 pr-6",
+  container: "pl-3 pr-6 w-full",
   header: "sticky top-0 z-10 bg-white",
   dayGrid: "grid grid-cols-7 gap-1 pl-6",
   dayCell: "py-2 text-center text-[#9EA6B2] text-[8px] md:text-xl font-bold",
@@ -63,6 +63,28 @@ const Schedule = () => {
   const [dragStartCell, setDragStartCell] = useState<string | null>(null);
 
   const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const handleTouchMoveDOM = (e: TouchEvent) => {
+      const target = e.target as HTMLElement;
+      const isTimeSlot = target?.classList?.contains("cursor-pointer"); // 시간셀인지 확인
+
+      if (isDragging && isTimeSlot) {
+        e.preventDefault(); // 오직 시간 셀을 터치 중일 때만 preventDefault
+      }
+    };
+
+    container.addEventListener("touchmove", handleTouchMoveDOM, {
+      passive: false,
+    });
+
+    return () => {
+      container.removeEventListener("touchmove", handleTouchMoveDOM);
+    };
+  }, [isDragging]);
 
   // 주어진 dayIndex와 timeIndex로 고유한 셀 ID를 생성
   const getCellId = useCallback(
@@ -220,6 +242,8 @@ const Schedule = () => {
       ref={containerRef}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseLeave}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
     >
       <div className="flex flex-col">
         <div className={STYLES.header}>
