@@ -38,7 +38,7 @@ const WorkSpace = ({ workspaces }: WorkSpaceProps) => {
           </div>
         </div>
         <div>
-          <Pen className="w-3 h-3 text-[color:var(--color-gray)]" />
+          <Pen className="w-3 h-3 text-[color:var(--color-gray)] cursor-pointer" />
         </div>
       </div>
       <div className="flex flex-col gap-3 w-full">

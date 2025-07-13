@@ -1,6 +1,7 @@
 import { IoPaperPlaneOutline } from "react-icons/io5";
 import { MdHowToVote, MdKeyboardArrowRight } from "react-icons/md";
 import { FiCalendar } from "react-icons/fi";
+import { Frown } from "lucide-react";
 
 /**
  * @param title - 버튼 타이틀
@@ -17,23 +18,31 @@ const ShareButton = ({
   description,
   mode = "share",
   color = "white",
+  borderColor,
 }: {
   title: string;
   description: string;
-  mode?: "share" | "vote" | "group";
+  mode?: "share" | "vote" | "group" | "help";
   color?: string;
+  borderColor?: string;
 }) => {
   const icon = () => {
     if (mode === "share") return <IoPaperPlaneOutline />;
     if (mode === "vote") return <MdHowToVote />;
     if (mode === "group") return <FiCalendar />;
+    if (mode === "help") return <Frown className="w-4 h-4 " />;
   };
 
   return (
     <>
       <div
-        className={`w-full flex flex-row rounded-md px-5 py-4 justify-between cursor-pointer shadow-md transition-all duration-300 hover:scale-101`}
-        style={{ backgroundColor: color }}
+        className={`w-full flex flex-row rounded-md px-5 py-4 justify-between cursor-pointer shadow-md transition-all duration-300 hover:scale-101 ${
+          borderColor ? "border" : ""
+        }`}
+        style={{
+          backgroundColor: color,
+          ...(borderColor ? { borderColor } : {}),
+        }}
       >
         <div className="flex flex-row gap-4">
           <div className="font-bold flex items-center justify-center">

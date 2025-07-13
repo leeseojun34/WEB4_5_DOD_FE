@@ -13,7 +13,12 @@ const ScheduleDetail = () => {
     <div>
       {" "}
       <div className="min-w-[375px] w-full max-w-185 mx-auto bg-[color:var(--color-gray-background)] min-h-screen">
-        <GroupHeader />
+        <GroupHeader
+          groupName="대나무 행주"
+          groupIntroduction="안녕하세요 대나무행주입니다람쥐"
+          groupCount={6}
+          clickToInvite={() => console.log("초대함")}
+        />
         <div className="flex flex-col pt-6 px-5 gap-4">
           <ShareButton
             title="상세 일정 정보 공유하기"
