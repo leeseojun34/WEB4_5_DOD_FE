@@ -12,11 +12,12 @@ const Header = ({ type = "" }: { type?: "" | "blue" }) => {
 
   return (
     <div
-      className={`w-full flex justify-between items-center px-20 py-6 ${
+      className={`w-full max-w-5xl fixed flex justify-between items-center px-10 md:px-20 py-6 z-50 ${
         type === "blue"
           ? "bg-[color:var(--color-primary-400)]"
-          : "bg-[color:var(--color-white)]"
-      }`}>
+          : "bg-transparent"
+      }`}
+    >
       <LogoWebHeader type={type} handleLogoClick={() => router.push("/")} />
       <div className="flex justify-between items-center gap-8">
         {/* 로그인 했을 때 */}
@@ -27,7 +28,7 @@ const Header = ({ type = "" }: { type?: "" | "blue" }) => {
             width={24}
             height={24}
             className="cursor-pointer"
-            onClick={() => router.push("/create")}
+            onClick={() => router.push("/schedule/create")}
           />
           <Image
             src={profile}
@@ -46,7 +47,8 @@ const Header = ({ type = "" }: { type?: "" | "blue" }) => {
               type === "blue"
                 ? "border-[color:var(--color-white)] text-[color:var(--color-white)] hover:bg-[color:var(--color-white)] hover:text-[color:var(--color-primary-400)]"
                 : "border-[color:var(--color-primary-400)] text-[color:var(--color-primary-400)] hover:bg-[color:var(--color-primary-400)] hover:text-[color:var(--color-white)]"
-            } text-xs font-medium cursor-pointer `}>
+            } text-xs font-medium cursor-pointer `}
+        >
           로그인
         </button>
       </div>
