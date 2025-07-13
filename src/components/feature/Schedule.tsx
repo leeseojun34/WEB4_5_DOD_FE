@@ -64,6 +64,7 @@ const Schedule = () => {
 
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // 주어진 dayIndex와 timeIndex로 고유한 셀 ID를 생성
   const getCellId = useCallback(
     (dayIndex: number, timeIndex: number): string => {
       return `cell-${dayIndex}-${timeIndex}`;
@@ -71,7 +72,8 @@ const Schedule = () => {
     []
   );
 
-  const toggleCellSelection = useCallback((cellId: string): void => {
+  // 셀 ID의 선택 상태를 토글 (선택되었으면 해제, 아니면 선택)
+  const toggleCellSelection = useCallback((cellId: string) => {
     setSelectedCells((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(cellId)) {
@@ -83,8 +85,9 @@ const Schedule = () => {
     });
   }, []);
 
+  // 마우스 클릭으로 드래그 시작 및 해당 셀 선택
   const handleMouseDown = useCallback(
-    (dayIndex: number, timeIndex: number): void => {
+    (dayIndex: number, timeIndex: number) => {
       const cellId = getCellId(dayIndex, timeIndex);
       setIsDragging(true);
       setDragStartCell(cellId);
@@ -93,8 +96,9 @@ const Schedule = () => {
     [getCellId, toggleCellSelection]
   );
 
+  // 마우스가 셀 위로 이동할 때 셀 선택 (드래그 중일 경우)
   const handleMouseEnter = useCallback(
-    (dayIndex: number, timeIndex: number): void => {
+    (dayIndex: number, timeIndex: number) => {
       if (!isDragging || !dragStartCell) return;
 
       const cellId = getCellId(dayIndex, timeIndex);
@@ -103,21 +107,23 @@ const Schedule = () => {
     [isDragging, dragStartCell, getCellId, toggleCellSelection]
   );
 
-  const handleMouseUp = useCallback((): void => {
+  // 마우스 클릭 종료 시 드래그 상태 초기화
+  const handleMouseUp = useCallback(() => {
     setIsDragging(false);
     setDragStartCell(null);
   }, []);
 
-  const handleMouseLeave = useCallback((): void => {
+  // 마우스가 영역을 벗어나면 드래그 상태 초기화
+  const handleMouseLeave = useCallback(() => {
     if (isDragging) {
       setIsDragging(false);
       setDragStartCell(null);
     }
   }, [isDragging]);
 
+  // 터치 시작 시 드래그 시작 및 해당 셀 선택
   const handleTouchStart = useCallback(
-    (e: React.TouchEvent, dayIndex: number, timeIndex: number): void => {
-      e.preventDefault();
+    (e: React.TouchEvent, dayIndex: number, timeIndex: number) => {
       const cellId = getCellId(dayIndex, timeIndex);
       setIsDragging(true);
       setDragStartCell(cellId);
@@ -126,11 +132,11 @@ const Schedule = () => {
     [getCellId, toggleCellSelection]
   );
 
+  // 터치 이동 시 셀 위에 있으면 선택 처리
   const handleTouchMove = useCallback(
-    (e: React.TouchEvent): void => {
+    (e: React.TouchEvent) => {
       if (!isDragging || !dragStartCell) return;
 
-      e.preventDefault();
       const touch = e.touches[0];
       const target = document.elementFromPoint(touch.clientX, touch.clientY);
       if (!target) return;
@@ -143,6 +149,7 @@ const Schedule = () => {
     [isDragging, dragStartCell, toggleCellSelection]
   );
 
+  // 요일 및 날짜 헤더를 렌더링
   const renderDayHeader = (dayInfo: DayInfo, index: number) => (
     <div key={index} className={STYLES.dayCell}>
       <span className={STYLES.dayText}>{dayInfo.day}</span>
@@ -150,6 +157,7 @@ const Schedule = () => {
     </div>
   );
 
+  // 왼쪽의 시간(0~23시) 열을 렌더링
   const renderTimeColumn = () => (
     <div className={STYLES.timeColumn}>
       <div>
@@ -162,6 +170,7 @@ const Schedule = () => {
     </div>
   );
 
+  // 시간 셀 하나를 렌더링 (선택/비선택 상태 포함)
   const renderTimeSlot = (dayIndex: number, timeIndex: number) => {
     const cellId = getCellId(dayIndex, timeIndex);
     const isSelected = selectedCells.has(cellId);
@@ -181,6 +190,7 @@ const Schedule = () => {
     );
   };
 
+  // 한 요일의 모든 시간 셀을 렌더링
   const renderDayColumn = (dayIndex: number) => (
     <div
       key={dayIndex}
