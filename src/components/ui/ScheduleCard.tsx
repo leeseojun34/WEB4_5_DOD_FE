@@ -73,7 +73,7 @@ const ScheduleCard = (props: ScheduleCardProps) => {
       </Link>
 
       {variant === "event" ? (
-        <div>
+        <div className="relative">
           <button onClick={() => setIsOpen(true)}>
             <EllipsisVertical className="w-[18px] h-[18px] text-[color:var(--color-black)] cursor-pointer" />
           </button>
