@@ -121,15 +121,18 @@ const Schedule = () => {
     }
   }, [isDragging]);
 
-  // 터치 시작 시 드래그 시작 및 해당 셀 선택
+  const lastTouchedCell = useRef<string | null>(null);
+
+  // 터치 시작 시 드래그 시작 (셀 선택은 하지 않음, 중복 방지용 lastTouchedCell 설정)
   const handleTouchStart = useCallback(
     (e: React.TouchEvent, dayIndex: number, timeIndex: number) => {
       const cellId = getCellId(dayIndex, timeIndex);
       setIsDragging(true);
       setDragStartCell(cellId);
-      toggleCellSelection(cellId);
+      lastTouchedCell.current = cellId; // 중복 방지를 위해 초기 설정
+      // 첫 터치에서 이미 터치무브로 선택될 수 있으므로 이 시점에는 선택하지 않음
     },
-    [getCellId, toggleCellSelection]
+    [getCellId]
   );
 
   // 터치 이동 시 셀 위에 있으면 선택 처리
@@ -142,12 +145,17 @@ const Schedule = () => {
       if (!target) return;
 
       const id = (target as HTMLElement).id;
-      if (id.startsWith("cell-")) {
+      if (id.startsWith("cell-") && lastTouchedCell.current !== id) {
         toggleCellSelection(id);
+        lastTouchedCell.current = id; // 마지막 셀 ID 저장
       }
     },
     [isDragging, dragStartCell, toggleCellSelection]
   );
+
+  const handleTouchEnd = useCallback(() => {
+    lastTouchedCell.current = null;
+  }, []);
 
   // 요일 및 날짜 헤더를 렌더링
   const renderDayHeader = (dayInfo: DayInfo, index: number) => (
@@ -186,6 +194,7 @@ const Schedule = () => {
         onMouseEnter={() => handleMouseEnter(dayIndex, timeIndex)}
         onTouchStart={(e) => handleTouchStart(e, dayIndex, timeIndex)}
         onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       />
     );
   };
