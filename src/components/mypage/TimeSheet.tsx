@@ -15,7 +15,8 @@ function TimeSheet({ isOpen, setIsOpen, onSave }: TimeSheetType) {
       isOpen={isOpen}
       setIsOpen={setIsOpen}
       initialSnap={0}
-      snapPoints={[0.9]}>
+      snapPoints={[0.9]}
+    >
       {(snapTo) => (
         <div className="w-full h-[90%] flex flex-col px-5 gap-8 pb-12">
           <div className="flex justify-between items-center px-5">
@@ -27,7 +28,7 @@ function TimeSheet({ isOpen, setIsOpen, onSave }: TimeSheetType) {
               className="text-[var(--color-black)] cursor-pointer"
             />
           </div>
-          <div className="w-full flex-1 overflow-y-auto ">
+          <div className="w-full flex-1 flex justify-center overflow-y-auto ">
             <Schedule />
           </div>
           <div className="flex justify-center">

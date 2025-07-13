@@ -13,7 +13,7 @@ const TimeResult = () => {
         <Header />
       </div>
       <HeaderTop />
-      <div className="flex flex-col  min-h-screen relative pb-32 pt-8 sm:pt-22 max-w-[740px] mx-auto px-5">
+      <div className="flex flex-col  min-h-screen relative pb-32 pt-8 sm:pt-25 max-w-[740px] mx-auto px-5">
         <main>
           <div className="flex justify-between items-center">
             <div className="flex flex-col gap-2 pt-7.5 ">

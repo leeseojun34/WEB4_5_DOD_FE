@@ -7,16 +7,16 @@ function layout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <div className="w-full min-h-screen flex flex-col bg-[var(--color-gray-background)]">
-        <div className="hidden lg:flex">
+        <div className="hidden sm:flex">
           <Header />
         </div>
         <HeaderTop fontColor="black" backward={true}></HeaderTop>
 
-        <div className="w-full px-10 pt-[8vh] max-w-[740px] mx-auto">
+        <div className="w-full px-5 pt-[8vh] max-w-[740px] mx-auto">
           {children}
         </div>
       </div>
-      <div className="lg:hidden">
+      <div className="sm:hidden">
         <Footer />
       </div>
     </>
