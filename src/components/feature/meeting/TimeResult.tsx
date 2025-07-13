@@ -6,7 +6,7 @@ import ScheduleCard from "@/components/ui/ScheduleCard";
 import Header from "@/components/layout/Header";
 import HeaderTop from "@/components/layout/HeaderTop";
 import Footer from "@/components/layout/Footer";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import DropdownSmall from "@/components/ui/DropdownSmall";
 import { useState } from "react";
 
@@ -52,7 +52,8 @@ const TimeResult = () => {
               onClick={() => setIsOpen(true)}
             >
               <p className="text-xs">빠른 시간 순</p>
-              <ChevronDown size={12} />
+              {isOpen ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+
               {isOpen && (
                 <div className="absolute left-0 top-6">
                   <DropdownSmall
