@@ -2,6 +2,9 @@
 
 import { ArrowRight, EllipsisVertical } from "lucide-react";
 import NameTag from "./NameTag";
+import Link from "next/link";
+import { useState } from "react";
+import DropdownSmall from "./DropdownSmall";
 
 interface BaseProps {
   variant: "event" | "attendance";
@@ -24,13 +27,18 @@ type ScheduleCardProps = EventProps | AttendanceProps;
 
 const ScheduleCard = (props: ScheduleCardProps) => {
   const { time, members, variant } = props;
+  const [isOpen, setIsOpen] = useState(false);
+  const scheduleId = 1;
 
   return (
     <div
       className="min-w-[335px] max-w-185 w-full h-auto p-4 rounded-lg bg-[color:var(--color-white)]  flex cursor-pointer transition-all duration-100 hover:-translate-y-0.5"
       style={{ boxShadow: "var(--shadow-common)" }}
     >
-      <div className="flex flex-col flex-1 gap-2">
+      <Link
+        href={`/schedule/${scheduleId}`}
+        className="flex flex-col flex-1 gap-2"
+      >
         <div className="flex justify-between">
           <div className="flex gap-3">
             {variant === "event" ? (
@@ -62,13 +70,25 @@ const ScheduleCard = (props: ScheduleCardProps) => {
             <NameTag name={member} key={`${member}-${i}`} />
           ))}
         </div>
-      </div>
+      </Link>
 
       {variant === "event" ? (
         <div>
-          <button onClick={() => console.log("hi")}>
-            <EllipsisVertical className="w-[18px] h-[18px] text-[color:var(--color-black)]" />
+          <button onClick={() => setIsOpen(true)}>
+            <EllipsisVertical className="w-[18px] h-[18px] text-[color:var(--color-black)] cursor-pointer" />
           </button>
+          {isOpen && (
+            <div className="absolute right-0 top-6">
+              <DropdownSmall
+                isOpen={isOpen}
+                onClose={() => setIsOpen(false)}
+                onTopClick={() => console.log("click")}
+                onBottomClick={() => console.log("click")}
+              >
+                {["일정 삭제", "링크 복사"]}
+              </DropdownSmall>
+            </div>
+          )}
         </div>
       ) : (
         <button onClick={() => console.log("hi")}>
