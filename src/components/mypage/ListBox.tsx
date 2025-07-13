@@ -8,11 +8,17 @@ import React, { useState } from "react";
 
 type ListBoxProps = {
   children: React.ReactNode;
+  buttonText?: string;
   station?: string;
   clickHandler: () => void;
 };
 
-const ListBox = ({ children, station, clickHandler }: ListBoxProps) => {
+const ListBox = ({
+  children,
+  station,
+  buttonText = "",
+  clickHandler,
+}: ListBoxProps) => {
   const [isConnected, setIsConnected] = useState(false);
 
   const handleToggle = () => {
@@ -39,7 +45,7 @@ const ListBox = ({ children, station, clickHandler }: ListBoxProps) => {
           <span
             onClick={clickHandler}
             className="text-xs font-medium cursor-pointer text-[var(--color-black)] hover:text-[var(--color-primary-400)]">
-            {children === "가능한 시간" ? "수정" : "등록"}
+            {buttonText}
           </span>
         </div>
         {children === "캘린더 연동" && (
@@ -56,7 +62,7 @@ const ListBox = ({ children, station, clickHandler }: ListBoxProps) => {
               </div>
               <span className="text-xs font-normal">구글 로그인</span>
             </div>
-            <button onClick={handleToggle} className="relative">
+            <button onClick={handleToggle} className="relative cursor-pointer">
               <FaToggleOff
                 size={24}
                 color="var(--color-gray-100)"

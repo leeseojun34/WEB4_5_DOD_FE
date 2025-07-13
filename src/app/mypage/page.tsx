@@ -44,13 +44,16 @@ function MyPage() {
           <Profile editHandler={() => openSheet("name")} />
 
           <div className="flex flex-col gap-4">
-            <ListBox clickHandler={() => openSheet("time")}>
+            <ListBox buttonText="수정" clickHandler={() => openSheet("time")}>
               가능한 시간
             </ListBox>
-            <ListBox station="고덕역" clickHandler={() => openSheet("station")}>
+            <ListBox
+              buttonText="등록"
+              station="고덕역"
+              clickHandler={() => openSheet("station")}>
               내 주변역
             </ListBox>
-            <ListBox clickHandler={() => openSheet("calendar")}>
+            <ListBox buttonText="" clickHandler={() => openSheet("calendar")}>
               캘린더 연동
             </ListBox>
           </div>
