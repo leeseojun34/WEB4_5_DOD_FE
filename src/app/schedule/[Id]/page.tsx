@@ -10,7 +10,7 @@ import Header from "@/components/layout/Header";
 import ShareButton from "@/components/ui/ShareButton";
 
 const ScheduleDetail = () => {
-  const isOnline = false;
+  const isOnline = true;
   return (
     <div className="w-full bg-[color:var(--color-gray-background)] min-h-screen">
       <div className="hidden sm:block">
