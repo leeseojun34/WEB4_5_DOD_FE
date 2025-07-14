@@ -5,7 +5,6 @@ import NameTag from "./NameTag";
 import Link from "next/link";
 import { useState } from "react";
 import DropdownSmall from "./DropdownSmall";
-import { useRouter } from "next/navigation";
 
 interface BaseProps {
   variant: "event" | "attendance";
@@ -27,7 +26,6 @@ interface AttendanceProps extends BaseProps {
 type ScheduleCardProps = EventProps | AttendanceProps;
 
 const ScheduleCard = (props: ScheduleCardProps) => {
-  const router = useRouter();
   const { time, members, variant } = props;
   const [isOpen, setIsOpen] = useState(false);
   const scheduleId = 1;
@@ -36,7 +34,6 @@ const ScheduleCard = (props: ScheduleCardProps) => {
     <div
       className="min-w-[335px] max-w-185 w-full h-auto p-4 rounded-lg bg-[color:var(--color-white)]  flex cursor-pointer transition-all duration-100 hover:-translate-y-0.5"
       style={{ boxShadow: "var(--shadow-common)" }}
-      onClick={() => router.push("/schedule/1")}
     >
       <Link
         href={`/schedule/${scheduleId}`}

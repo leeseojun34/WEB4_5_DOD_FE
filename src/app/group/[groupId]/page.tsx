@@ -8,11 +8,10 @@ import ShareButton from "@/components/ui/ShareButton";
 import Link from "next/link";
 
 const GroupPage = () => {
-  const scheduleId = 1;
   return (
     <div className="w-full min-h-screen bg-[color:var(--color-gray-background)]">
       <div className="hidden sm:block">
-        <Header type="blue"/>
+        <Header type="blue" />
       </div>
       <GroupHeader
         groupName="박준규 팬미팅"
@@ -29,42 +28,34 @@ const GroupPage = () => {
             />
           </Link>
           <div className="flex flex-col gap-4">
-            <Link href={`/schedule/${scheduleId}`}>
-              <ScheduleCard
-                variant="event"
-                title="카츠오모이 가는 날"
-                meetingType="온라인"
-                time="7월 4일 (금) 18:00 - 22:00"
-                members={["박준규", "박은서", "현혜주", "박상윤", "황수지"]}
-              />
-            </Link>
-            <Link href={`/schedule/${scheduleId}`}>
-              <ScheduleCard
-                variant="event"
-                title="카츠오모이 가는 날"
-                meetingType="온라인"
-                time="7월 4일 (금) 18:00 - 22:00"
-                members={["박은서", "현혜주"]}
-              />
-            </Link>
-            <Link href={`/schedule/${scheduleId}`}>
-              <ScheduleCard
-                variant="event"
-                title="카츠오모이 가는 날"
-                meetingType="온라인"
-                time="7월 4일 (금) 18:00 - 22:00"
-                members={["박은서", "현혜주"]}
-              />
-            </Link>
-            <Link href={`/schedule/${scheduleId}`}>
-              <ScheduleCard
-                variant="event"
-                title="카츠오모이 가는 날"
-                meetingType="온라인"
-                time="7월 4일 (금) 18:00 - 22:00"
-                members={["박은서", "현혜주"]}
-              />
-            </Link>
+            <ScheduleCard
+              variant="event"
+              title="카츠오모이 가는 날"
+              meetingType="온라인"
+              time="7월 4일 (금) 18:00 - 22:00"
+              members={["박준규", "박은서", "현혜주", "박상윤", "황수지"]}
+            />
+            <ScheduleCard
+              variant="event"
+              title="카츠오모이 가는 날"
+              meetingType="온라인"
+              time="7월 4일 (금) 18:00 - 22:00"
+              members={["박은서", "현혜주"]}
+            />
+            <ScheduleCard
+              variant="event"
+              title="카츠오모이 가는 날"
+              meetingType="온라인"
+              time="7월 4일 (금) 18:00 - 22:00"
+              members={["박은서", "현혜주"]}
+            />
+            <ScheduleCard
+              variant="event"
+              title="카츠오모이 가는 날"
+              meetingType="온라인"
+              time="7월 4일 (금) 18:00 - 22:00"
+              members={["박은서", "현혜주"]}
+            />
           </div>
         </div>
       </div>
