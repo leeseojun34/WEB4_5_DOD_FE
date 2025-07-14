@@ -35,10 +35,6 @@ const BottomSheet = ({
   const sheetRef = useRef<SheetRef>(null);
   const snapTo = (i: number) => {
     if (typeof window === "undefined") return;
-
-    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-    if (!isMobile) return;
-
     sheetRef.current?.snapTo(i);
   };
 
