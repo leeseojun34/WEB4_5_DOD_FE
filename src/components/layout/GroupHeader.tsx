@@ -47,7 +47,7 @@ const GroupHeader = ({
     <>
       {/* group 헤더,  그룹 정보 : 그룹명, 소개문구, 인원수*/}
       <div className="w-full bg-[color:var(--color-primary-400)] flex justify-center items-center min-w-[375px]">
-        <div className="flex flex-col w-full max-w-[740px]  items-center justify-center gap-4 pb-5 pt-10 sm:pt-18 px-5">
+        <div className="flex flex-col w-full max-w-[740px]  items-center justify-center gap-4 pb-5 pt-10 sm:pt-19 px-5">
           <div className="w-full flex justify-between items-center">
             <span onClick={handleBack} className="cursor-pointer">
               <ChevronLeft
