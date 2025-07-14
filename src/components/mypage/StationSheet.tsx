@@ -25,7 +25,8 @@ function StationSheet({
       isOpen={isOpen}
       setIsOpen={setIsOpen}
       initialSnap={0}
-      snapPoints={[0.6]}>
+      snapPoints={[0.6]}
+    >
       {(snapTo) => (
         <div className="w-full h-full flex flex-col px-5 gap-8 pb-12">
           <div className="flex justify-between items-center px-5">
@@ -45,7 +46,7 @@ function StationSheet({
               placeholder="가까운 지하철을 검색해주세요."
             />
             {/* SearchPlaceList */}
-            <div className="w-full flex flex-1 flex-col gap-2 rounded-lg bg-[var(--color-white)]  px-6 py-2.5 overflow-y-auto ">
+            <div className="w-full flex flex-1 flex-col gap-2 rounded-lg bg-[var(--color-white)] py-2.5 overflow-y-auto ">
               <SearchPlaceList
                 stationName="서울역"
                 stationAddress="서울역 중구 퇴게로"
