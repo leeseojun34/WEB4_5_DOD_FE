@@ -16,9 +16,19 @@ type AlertBox = {
   cancel: string;
   action: string;
   children: React.ReactNode;
+  cancelHandler?: () => void;
+  actionHandler: () => void;
 };
 
-const AlertBox = ({ title, content, cancel, action, children }: AlertBox) => {
+const AlertBox = ({
+  title,
+  content,
+  cancel,
+  action,
+  children,
+  cancelHandler,
+  actionHandler,
+}: AlertBox) => {
   return (
     <>
       <AlertDialog>
@@ -34,10 +44,14 @@ const AlertBox = ({ title, content, cancel, action, children }: AlertBox) => {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="w-full flex flex-row justify-center items-center gap-4">
-            <AlertDialogCancel className="flex-1 border-0 font-normal text-sm text-[color:var(--color-black)] bg-[color:var(--color-muted)] transition-colors hover:scale-101 hover:bg-[var(--color-gray-border)]  duraiton-300 cursor-pointer ">
+            <AlertDialogCancel
+              onClick={cancelHandler}
+              className="flex-1 border-0 font-normal text-sm text-[color:var(--color-black)] bg-[color:var(--color-muted)] transition-colors hover:scale-101 hover:bg-[var(--color-gray-border)]  duraiton-300 cursor-pointer ">
               {cancel}
             </AlertDialogCancel>
-            <AlertDialogAction className="flex-1 border-0 bg-[color:var(--color-primary-400)] text-[color:var(--color-white)] transition-colors hover:scale-101 hover:bg-[var(--color-primary-400-hover)]  duraiton-300 cursor-pointer">
+            <AlertDialogAction
+              onClick={actionHandler}
+              className="flex-1 border-0 bg-[color:var(--color-primary-400)] text-[color:var(--color-white)] transition-colors hover:scale-101 hover:bg-[var(--color-primary-400-hover)]  duraiton-300 cursor-pointer">
               {action}
             </AlertDialogAction>
           </AlertDialogFooter>
