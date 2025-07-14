@@ -1,3 +1,4 @@
+"use client";
 import Tip from "@/components/ui/Tip";
 import Image from "next/image";
 import purplerabbit from "@/assets/images/rabbit_walking_backpack.png";
@@ -5,15 +6,28 @@ import ScheduleCard from "@/components/ui/ScheduleCard";
 import Header from "@/components/layout/Header";
 import HeaderTop from "@/components/layout/HeaderTop";
 import Footer from "@/components/layout/Footer";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import DropdownSmall from "@/components/ui/DropdownSmall";
+import { useState } from "react";
 
 const TimeResult = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleTopClick = () => {
+    console.log("상단 정렬 클릭");
+  };
+
+  const handleBottomClick = () => {
+    console.log("하단 정렬 클릭");
+  };
+
   return (
     <section>
       <div className="hidden sm:block">
         <Header />
       </div>
       <HeaderTop />
-      <div className="flex flex-col  min-h-screen relative pb-32 pt-8 sm:pt-22 max-w-[740px] mx-auto px-5">
+      <div className="flex flex-col  min-h-screen relative pb-32 pt-8 sm:pt-25 max-w-[740px] mx-auto px-5">
         <main>
           <div className="flex justify-between items-center">
             <div className="flex flex-col gap-2 pt-7.5 ">
@@ -32,26 +46,48 @@ const TimeResult = () => {
               height={180}
             />
           </div>
-          <div className="flex flex-col gap-5">
-            <div className="flex flex-col gap-4">
-              <ScheduleCard
-                variant="attendance"
-                totalCount={6}
-                members={["박은서", "현혜주"]}
-                time="7월 4일 (금) 18:00 - 22:00"
-              />
-              <ScheduleCard
-                variant="attendance"
-                totalCount={6}
-                members={["박상윤", "박은서", "황수지", "현혜주", "박준규"]}
-                time="7월 4일 (금) 18:00 - 22:00"
-              />
+          <div className="flex flex-col gap-2">
+            <div
+              className="flex text-[color:var(--color-gray-placeholder)] items-center gap-1 px-2 cursor-pointer relative"
+              onClick={() => setIsOpen(true)}
+            >
+              <p className="text-xs">빠른 시간 순</p>
+              {isOpen ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+
+              {isOpen && (
+                <div className="absolute left-0 top-6">
+                  <DropdownSmall
+                    isOpen={isOpen}
+                    onClose={() => setIsOpen(false)}
+                    onTopClick={handleTopClick}
+                    onBottomClick={handleBottomClick}
+                  >
+                    {["빠른 시간 순", "많은 참여자 순"]}
+                  </DropdownSmall>
+                </div>
+              )}
             </div>
-            <Tip>
-              일정을 선택하면 모임 리더가 되어 일정이 확정돼요.
-              <br />
-              함께할 구성원들과 먼저 상의해보는 걸 추천드려요!
-            </Tip>
+            <div className="flex flex-col gap-5">
+              <div className="flex flex-col gap-4">
+                <ScheduleCard
+                  variant="attendance"
+                  totalCount={6}
+                  members={["박은서", "현혜주"]}
+                  time="7월 4일 (금) 18:00 - 22:00"
+                />
+                <ScheduleCard
+                  variant="attendance"
+                  totalCount={6}
+                  members={["박상윤", "박은서", "황수지", "현혜주", "박준규"]}
+                  time="7월 4일 (금) 18:00 - 22:00"
+                />
+              </div>
+              <Tip>
+                일정을 선택하면 모임 리더가 되어 일정이 확정돼요.
+                <br />
+                함께할 구성원들과 먼저 상의해보는 걸 추천드려요!
+              </Tip>
+            </div>
           </div>
         </main>
       </div>
