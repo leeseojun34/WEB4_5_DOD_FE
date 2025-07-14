@@ -19,12 +19,14 @@ const ShareButton = ({
   mode = "share",
   color = "white",
   borderColor,
+  onClick,
 }: {
   title: string;
   description: string;
   mode?: "share" | "vote" | "group" | "help";
   color?: string;
   borderColor?: string;
+  onClick?: () => void;
 }) => {
   const icon = () => {
     if (mode === "share") return <IoPaperPlaneOutline />;
@@ -43,6 +45,7 @@ const ShareButton = ({
           backgroundColor: color,
           ...(borderColor ? { borderColor } : {}),
         }}
+        onClick={onClick}
       >
         <div className="flex flex-row gap-4">
           <div className="font-bold flex items-center justify-center">
