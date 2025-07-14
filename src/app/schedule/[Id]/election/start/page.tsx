@@ -10,7 +10,7 @@ const ElectionStart = () => {
   const router = useRouter();
   // 임시 라우트
   const clickHandler = () => {
-    router.push("/schedule/123/departure/register");
+    router.push("/schedule/1/election/start-point");
   };
   return (
     <main className="flex flex-col  min-h-screen relative pb-32 pt-8 max-w-[740px] mx-auto overflow-hidden">

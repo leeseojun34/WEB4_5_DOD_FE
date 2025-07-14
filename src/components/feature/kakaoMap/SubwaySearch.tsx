@@ -8,6 +8,7 @@ import { kakaoSearch } from "@/types/kakaoSearch";
 import { Button } from "@/components/ui/Button";
 import { X } from "lucide-react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const REST_API_KEY = process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY as string;
 
@@ -23,7 +24,7 @@ const SubwaySearch = ({ onSelectStation, snapTo }: SubwaySearchProps) => {
   const [selectedStation, setSelectedStation] = useState<kakaoSearch | null>(
     null
   );
-
+  const router = useRouter();
   //쿼리초기화, 검색 결과 초기화 추가 필요
 
   const selectHandler = ({ station }: { station: kakaoSearch }) => {
@@ -103,6 +104,9 @@ const SubwaySearch = ({ onSelectStation, snapTo }: SubwaySearchProps) => {
           <Button
             state={selectedStation ? "default" : "disabled"}
             className="w-full"
+            onClick={() => {
+              router.push("/schedule/1/election/wait");
+            }}
           >
             다음
           </Button>
