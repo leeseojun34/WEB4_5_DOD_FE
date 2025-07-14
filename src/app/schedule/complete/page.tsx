@@ -9,6 +9,7 @@ import {
   itemVariants,
 } from "@/components/feature/schedule/motion";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 // TODO: 생성된 그룹 명 받아와야 함
 const Complete = () => {
@@ -51,7 +52,9 @@ const Complete = () => {
         <div className="text-center text-[var(--color-gray-placeholder)] text-base mb-6 ">
           모임 친구들과 시간 맞추러 가기
         </div>
-        <Button state="default">이동</Button>
+        <Link href="/meeting/coordinate" className="w-full">
+          <Button state="default">이동</Button>
+        </Link>
       </div>
     </div>
   );

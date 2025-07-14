@@ -59,7 +59,7 @@ const Moving = ({
   return (
     <div
       className={`transition-transform duration-1000 ${
-        start ? "translate-x-3/4" : "translate-x-0"
+        start ? "translate-x-4/5" : "translate-x-0"
       }`}
     >
       <Image
