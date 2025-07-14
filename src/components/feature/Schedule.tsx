@@ -11,8 +11,8 @@
  *
  * @returns 일정 등록 페이지 컴포넌트
  */
-
-import { useState, useRef, useCallback } from "react";
+"use client";
+import { useState, useRef, useCallback, useEffect } from "react";
 
 // 타입 정의
 // type ScheduleProps = {}
@@ -39,19 +39,20 @@ const TOTAL_TIME_SLOTS = HOURS_COUNT * TIME_SLOTS_PER_HOUR; // 총 시간 슬롯
 const DAYS_COUNT = 7; // 요일 수
 
 const STYLES = {
-  container: "pl-3 pr-6",
+  container: "pl-3 pr-6 w-full",
   header: "sticky top-0 z-10 bg-white",
   dayGrid: "grid grid-cols-7 gap-1 pl-6",
-  dayCell: "py-2 text-center text-[#9EA6B2] text-[8px] font-bold",
+  dayCell: "py-2 text-center text-[#9EA6B2] text-[8px] md:text-xl font-bold",
   dayText: "block",
   dateText: "text-[var(--color-primary-400)]",
   timeColumn: "flex w-6 flex-col items-end gap-1 pr-1",
-  timeCell: "h-10 text-right",
-  timeText: "block text-[#9EA6B2] text-[8px] font-bold translate-y-0",
-  scheduleGrid: "grid flex-1 grid-cols-7 gap-1",
+  timeCell: "h-10 md:h-20 text-right pr-1",
+  timeText:
+    "block text-[#9EA6B2] text-[8px] md:text-base font-bold translate-y-0",
+  scheduleGrid: "grid flex-1 grid-cols-7 gap-1 md:gap-4",
   dayColumn: "flex flex-col gap-2 overflow-hidden rounded-lg",
   timeSlot:
-    "w-10 h-5 border-b border-white last:border-b-0 odd:border-dashed even:border-solid cursor-pointer transition-colors duration-150",
+    "w-full h-5 md:h-10 border-b border-white last:border-b-0 odd:border-dashed even:border-solid cursor-pointer transition-colors duration-150",
   selectedSlot: "bg-[var(--color-primary-400)]",
   unselectedSlot: "bg-[var(--color-muted)]",
 } as const;
@@ -63,6 +64,29 @@ const Schedule = () => {
 
   const containerRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const handleTouchMoveDOM = (e: TouchEvent) => {
+      const target = e.target as HTMLElement;
+      const isTimeSlot = target?.classList?.contains("cursor-pointer"); // 시간셀인지 확인
+
+      if (isDragging && isTimeSlot) {
+        e.preventDefault(); // 오직 시간 셀을 터치 중일 때만 preventDefault
+      }
+    };
+
+    container.addEventListener("touchmove", handleTouchMoveDOM, {
+      passive: false,
+    });
+
+    return () => {
+      container.removeEventListener("touchmove", handleTouchMoveDOM);
+    };
+  }, [isDragging]);
+
+  // 주어진 dayIndex와 timeIndex로 고유한 셀 ID를 생성
   const getCellId = useCallback(
     (dayIndex: number, timeIndex: number): string => {
       return `cell-${dayIndex}-${timeIndex}`;
@@ -70,7 +94,8 @@ const Schedule = () => {
     []
   );
 
-  const toggleCellSelection = useCallback((cellId: string): void => {
+  // 셀 ID의 선택 상태를 토글 (선택되었으면 해제, 아니면 선택)
+  const toggleCellSelection = useCallback((cellId: string) => {
     setSelectedCells((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(cellId)) {
@@ -82,8 +107,9 @@ const Schedule = () => {
     });
   }, []);
 
+  // 마우스 클릭으로 드래그 시작 및 해당 셀 선택
   const handleMouseDown = useCallback(
-    (dayIndex: number, timeIndex: number): void => {
+    (dayIndex: number, timeIndex: number) => {
       const cellId = getCellId(dayIndex, timeIndex);
       setIsDragging(true);
       setDragStartCell(cellId);
@@ -92,8 +118,9 @@ const Schedule = () => {
     [getCellId, toggleCellSelection]
   );
 
+  // 마우스가 셀 위로 이동할 때 셀 선택 (드래그 중일 경우)
   const handleMouseEnter = useCallback(
-    (dayIndex: number, timeIndex: number): void => {
+    (dayIndex: number, timeIndex: number) => {
       if (!isDragging || !dragStartCell) return;
 
       const cellId = getCellId(dayIndex, timeIndex);
@@ -102,18 +129,57 @@ const Schedule = () => {
     [isDragging, dragStartCell, getCellId, toggleCellSelection]
   );
 
-  const handleMouseUp = useCallback((): void => {
+  // 마우스 클릭 종료 시 드래그 상태 초기화
+  const handleMouseUp = useCallback(() => {
     setIsDragging(false);
     setDragStartCell(null);
   }, []);
 
-  const handleMouseLeave = useCallback((): void => {
+  // 마우스가 영역을 벗어나면 드래그 상태 초기화
+  const handleMouseLeave = useCallback(() => {
     if (isDragging) {
       setIsDragging(false);
       setDragStartCell(null);
     }
   }, [isDragging]);
 
+  const lastTouchedCell = useRef<string | null>(null);
+
+  // 터치 시작 시 드래그 시작 (셀 선택은 하지 않음, 중복 방지용 lastTouchedCell 설정)
+  const handleTouchStart = useCallback(
+    (e: React.TouchEvent, dayIndex: number, timeIndex: number) => {
+      const cellId = getCellId(dayIndex, timeIndex);
+      setIsDragging(true);
+      setDragStartCell(cellId);
+      lastTouchedCell.current = cellId; // 중복 방지를 위해 초기 설정
+      // 첫 터치에서 이미 터치무브로 선택될 수 있으므로 이 시점에는 선택하지 않음
+    },
+    [getCellId]
+  );
+
+  // 터치 이동 시 셀 위에 있으면 선택 처리
+  const handleTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (!isDragging || !dragStartCell) return;
+
+      const touch = e.touches[0];
+      const target = document.elementFromPoint(touch.clientX, touch.clientY);
+      if (!target) return;
+
+      const id = (target as HTMLElement).id;
+      if (id.startsWith("cell-") && lastTouchedCell.current !== id) {
+        toggleCellSelection(id);
+        lastTouchedCell.current = id; // 마지막 셀 ID 저장
+      }
+    },
+    [isDragging, dragStartCell, toggleCellSelection]
+  );
+
+  const handleTouchEnd = useCallback(() => {
+    lastTouchedCell.current = null;
+  }, []);
+
+  // 요일 및 날짜 헤더를 렌더링
   const renderDayHeader = (dayInfo: DayInfo, index: number) => (
     <div key={index} className={STYLES.dayCell}>
       <span className={STYLES.dayText}>{dayInfo.day}</span>
@@ -121,6 +187,7 @@ const Schedule = () => {
     </div>
   );
 
+  // 왼쪽의 시간(0~23시) 열을 렌더링
   const renderTimeColumn = () => (
     <div className={STYLES.timeColumn}>
       <div>
@@ -133,6 +200,7 @@ const Schedule = () => {
     </div>
   );
 
+  // 시간 셀 하나를 렌더링 (선택/비선택 상태 포함)
   const renderTimeSlot = (dayIndex: number, timeIndex: number) => {
     const cellId = getCellId(dayIndex, timeIndex);
     const isSelected = selectedCells.has(cellId);
@@ -140,15 +208,20 @@ const Schedule = () => {
     return (
       <div
         key={timeIndex}
+        id={cellId}
         className={`${STYLES.timeSlot} ${
           isSelected ? STYLES.selectedSlot : STYLES.unselectedSlot
         }`}
         onMouseDown={() => handleMouseDown(dayIndex, timeIndex)}
         onMouseEnter={() => handleMouseEnter(dayIndex, timeIndex)}
+        onTouchStart={(e) => handleTouchStart(e, dayIndex, timeIndex)}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       />
     );
   };
 
+  // 한 요일의 모든 시간 셀을 렌더링
   const renderDayColumn = (dayIndex: number) => (
     <div
       key={dayIndex}
@@ -169,6 +242,8 @@ const Schedule = () => {
       ref={containerRef}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseLeave}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
     >
       <div className="flex flex-col">
         <div className={STYLES.header}>

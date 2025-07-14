@@ -9,6 +9,7 @@ const KakaoLoginButton = () => {
     <button
       className=" w-full bg-[#FEE500] h-11 rounded-sm flex justify-center items-center gap-2 font-semibold cursor-pointer max-w-[700px]"
       onClick={handleLogin}
+      style={{ boxShadow: "var(--shadow-common)" }}
     >
       <Image width={18} height={18} src={kakao} alt="" />
       카카오 로그인

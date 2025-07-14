@@ -5,6 +5,7 @@ import NameSheet from "@/components/mypage/NameSheet";
 import Profile from "@/components/mypage/Profile";
 import StationSheet from "@/components/mypage/StationSheet";
 import TimeSheet from "@/components/mypage/TimeSheet";
+import AlertBox from "@/components/ui/AlertBox";
 import { ChangeEvent, useState } from "react";
 
 type SheetType = "name" | "time" | "station" | "calendar";
@@ -26,6 +27,13 @@ function MyPage() {
     setText(e.target.value);
   };
 
+  const handleLeave = () => {
+    console.log("탈퇴누름");
+  };
+  const handleLogout = () => {
+    console.log("로그아웃누름");
+  };
+
   // 추가 저장 로직 필요
   const saveHandler = () => setIsOpen(false);
 
@@ -36,25 +44,39 @@ function MyPage() {
           <Profile editHandler={() => openSheet("name")} />
 
           <div className="flex flex-col gap-4">
-            <ListBox clickHandler={() => openSheet("time")}>
+            <ListBox buttonText="수정" clickHandler={() => openSheet("time")}>
               가능한 시간
             </ListBox>
-            <ListBox station="고덕역" clickHandler={() => openSheet("station")}>
+            <ListBox
+              buttonText="등록"
+              station="고덕역"
+              clickHandler={() => openSheet("station")}>
               내 주변역
             </ListBox>
-            <ListBox clickHandler={() => openSheet("calendar")}>
+            <ListBox buttonText="" clickHandler={() => openSheet("calendar")}>
               캘린더 연동
             </ListBox>
           </div>
         </div>
 
         <div className="flex justify-center items-center text-xs gap-24">
-          <span className="font-light text-[var(--color-gray-placeholder)] hover:text-[var(--color-primary-400)] cursor-pointer">
-            계정탈퇴
-          </span>
-          <span className="font-light text-[var(--color-gray-placeholder)] hover:text-[var(--color-primary-400)] cursor-pointer">
-            로그아웃
-          </span>
+          <AlertBox content="탈퇴하시겠습니까?" cancel="취소" action="탈퇴">
+            <span
+              onClick={handleLeave}
+              className="font-light text-[var(--color-gray-placeholder)] hover:text-[var(--color-primary-400)] cursor-pointer">
+              계정탈퇴
+            </span>
+          </AlertBox>
+          <AlertBox
+            content="로그아웃하시겠습니까?"
+            cancel="취소"
+            action="로그아웃">
+            <span
+              onClick={handleLogout}
+              className="font-light text-[var(--color-gray-placeholder)] hover:text-[var(--color-primary-400)] cursor-pointer">
+              로그아웃
+            </span>
+          </AlertBox>
         </div>
       </div>
       {/* 이름 수정하기 */}
