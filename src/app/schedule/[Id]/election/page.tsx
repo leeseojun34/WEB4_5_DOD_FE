@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/Button";
 import { motion } from "framer-motion";
 import Header from "@/components/layout/Header";
 import HeaderTop from "@/components/layout/HeaderTop";
+import { useRouter } from "next/navigation";
 
 const dummyData = [
   {
@@ -70,6 +71,8 @@ const itemVariants = {
 const ElectionSpot = () => {
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const isActive = selectedId !== null;
+  const router = useRouter();
+
   return (
     <main className="flex flex-col h-screen w-full mx-auto">
       <div className="hidden sm:block">
@@ -126,7 +129,16 @@ const ElectionSpot = () => {
             <span className="text-[var(--color-primary-400)]">완료</span>
             되었어요!
           </PopupMessage>
-          <Button state={isActive ? "default" : "disabled"}>투표완료</Button>
+          <Button
+            state={isActive ? "default" : "disabled"}
+            onClick={() => {
+              if (isActive) {
+                router.push("election/wait");
+              }
+            }}
+          >
+            투표완료
+          </Button>
         </div>
       </div>
     </main>
