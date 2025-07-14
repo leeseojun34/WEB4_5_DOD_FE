@@ -1,11 +1,13 @@
 interface OptionBoxProps {
   isSelected: boolean;
+  onClick?: () => void;
   children: React.ReactNode;
   isPointer?: boolean;
 }
 
 export const OptionBox = ({
   isSelected,
+  onClick,
   children,
 
   isPointer = true,
@@ -18,5 +20,9 @@ export const OptionBox = ({
   const selectedStyle = isSelected
     ? "border-[color:var(--color-primary-400)] bg-[color:var(--color-primary-100)]"
     : "border-black/10 text-[color:var(--color-gray)]";
-  return <div className={`${baseStyle} ${selectedStyle}`}>{children}</div>;
+  return (
+    <div className={`${baseStyle} ${selectedStyle}`} onClick={onClick}>
+      {children}
+    </div>
+  );
 };

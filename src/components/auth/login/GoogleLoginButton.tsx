@@ -8,7 +8,7 @@ const GoogleLoginButton = () => {
 
   return (
     <button
-      className=" w-full bg-[color:var(--color-white)] h-11 rounded-sm flex justify-center items-center gap-2 font-semibold  cursor-pointer max-w-[700px] "
+      className=" w-full bg-[color:var(--color-white)] h-11 rounded-sm flex justify-center items-center gap-2 font-semibold  cursor-pointer max-w-[700px] border border-[#DADFE660]"
       style={{ boxShadow: "var(--shadow-common)" }}
       onClick={handleLogin}
     >

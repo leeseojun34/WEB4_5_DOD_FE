@@ -1,5 +1,4 @@
 import { CalendarDay, Modifiers } from "react-day-picker";
-
 export const DayButton = (
   props: {
     day: CalendarDay;
@@ -10,16 +9,12 @@ export const DayButton = (
 
   return (
     <button
-      className="w-full h-full text-center flex flex-col items-center justify-center p-2 relative"
+      className="w-6 h-6 p-2 text-center flex items-center justify-center relative"
       {...rest}
     >
-      <div className="w-6 h-6 flex justify-center items-center">
-        {day.date.getDate()}
-      </div>
+      {day.date.getDate()}
       {modifiers.events && (
-        <div className="w-full h-1 flex justify-center">
-          <div className="absolute translate-y-1 w-1 h-1 bg-[color:var(--color-primary-400)] rounded-full" />
-        </div>
+        <div className="absolute bottom-[-2px] w-1 h-1 bg-[color:var(--color-primary-400)] rounded-full" />
       )}
     </button>
   );

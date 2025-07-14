@@ -3,19 +3,19 @@
 import { useEffect, useState } from "react";
 import Dashboard from "@/components/dashboard/Dashboard";
 import Landing from "@/components/landing/Landing";
+import { useUser } from "@/hooks/useUser";
 
 const Home = () => {
   const [isLogin, setIsLogin] = useState(false);
+  const { isSuccess, isError } = useUser();
 
   useEffect(() => {
-    // 로그인 유무에 따라 페이지 분기
-    const token = localStorage.getItem("token");
-    if (token) {
+    if (isSuccess) {
       setIsLogin(true);
-    } else {
+    } else if (isError) {
       setIsLogin(false);
     }
-  }, []);
+  }, [isSuccess, isError]);
 
   return <>{isLogin ? <Dashboard /> : <Landing />}</>;
 };

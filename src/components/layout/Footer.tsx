@@ -1,3 +1,4 @@
+"use client";
 import HomeIcon from "@/assets/icon/home_icon.svg";
 import { UserRound, Plus } from "lucide-react";
 import Image from "next/image";

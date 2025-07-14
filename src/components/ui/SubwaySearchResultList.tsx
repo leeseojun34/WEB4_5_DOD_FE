@@ -12,9 +12,10 @@ const SubwaySearchResultList: React.FC<SubwaySearchResultListProps> = ({
   onSelect,
   keyword,
 }) => {
+  const needScroll = results.length > 4;
   return (
     <div className="flex flex-col gap-3.5">
-      <div className="max-h-[274px] overflow-y-auto">
+      <div className={needScroll ? "max-h-[232px] overflow-y-auto" : ""}>
         {results.map((station) => (
           <SubwaySearchResultItem
             key={station.id}

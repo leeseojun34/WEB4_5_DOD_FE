@@ -7,6 +7,9 @@ import SubwayCard from "@/components/ui/SubwayCard";
 import PopupMessage from "@/components/ui/PopupMessage";
 import { Button } from "@/components/ui/Button";
 import { motion } from "framer-motion";
+import Header from "@/components/layout/Header";
+import HeaderTop from "@/components/layout/HeaderTop";
+import { useRouter } from "next/navigation";
 
 const dummyData = [
   {
@@ -68,11 +71,21 @@ const itemVariants = {
 const ElectionSpot = () => {
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const isActive = selectedId !== null;
+  const router = useRouter();
+
   return (
-    <main className="max-w-[740px] mx-auto">
-      <div className=" p-5 flex flex-col relative min-h-screen">
-        <div className="flex justify-between items-center">
-          <div className="flex flex-col gap-2 text-left  justify-center">
+    <main className="flex flex-col h-screen w-full mx-auto">
+      <div className="hidden sm:block">
+        <Header />
+      </div>
+      <HeaderTop fontColor="black" backward={true}>
+        카츠오모이 가는 날
+      </HeaderTop>
+
+      <div className="pt-[112px] px-5 flex-1 flex flex-col justify-between">
+        {/* 상단 설명/이미지 */}
+        <div className="flex justify-between items-center mb-6">
+          <div className="flex flex-col gap-2 text-left pt-12 justify-center">
             <h1 className="font-semibold text-xl text-[var(--color-gray)] sm:text-2xl">
               카츠오모이 가는 날
             </h1>
@@ -88,33 +101,45 @@ const ElectionSpot = () => {
           <Image src={takka} alt="vote" width={144} height={216} />
         </div>
 
-        <motion.div
-          variants={listVariants}
-          initial="hidden"
-          animate="visible"
-          className="flex flex-col gap-3"
-        >
-          {dummyData.map((station, idx) => (
-            <motion.div
-              key={idx}
-              variants={itemVariants}
-              onClick={() => setSelectedId(station.suggestedMemberId)}
-            >
-              <SubwayCard
-                station={station as Station}
-                isSelected={selectedId === station.suggestedMemberId}
-              />
-            </motion.div>
-          ))}
-        </motion.div>
-      </div>
-      <div className="absolute bottom-9 left-0 right-0 w-full px-5 flex flex-col items-center justify-center gap-7 ">
-        <PopupMessage>
-          출발지 선택이{" "}
-          <span className="text-[var(--color-primary-400)]">완료</span>
-          되었어요!
-        </PopupMessage>
-        <Button state={isActive ? "default" : "disabled"}>투표완료</Button>
+        <div className="flex-1 flex flex-col justify-center w-full">
+          <motion.div
+            variants={listVariants}
+            initial="hidden"
+            animate="visible"
+            className="flex flex-col gap-3"
+          >
+            {dummyData.map((station, idx) => (
+              <motion.div
+                key={idx}
+                variants={itemVariants}
+                onClick={() => setSelectedId(station.suggestedMemberId)}
+              >
+                <SubwayCard
+                  station={station as Station}
+                  isSelected={selectedId === station.suggestedMemberId}
+                />
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+
+        <div className="w-full flex flex-col items-center justify-center gap-7 mb-8">
+          <PopupMessage>
+            출발지 선택이{" "}
+            <span className="text-[var(--color-primary-400)]">완료</span>
+            되었어요!
+          </PopupMessage>
+          <Button
+            state={isActive ? "default" : "disabled"}
+            onClick={() => {
+              if (isActive) {
+                router.push("election/wait");
+              }
+            }}
+          >
+            투표완료
+          </Button>
+        </div>
       </div>
     </main>
   );

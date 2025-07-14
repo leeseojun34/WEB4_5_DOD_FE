@@ -29,7 +29,7 @@ const ElectionStart = () => {
           alt="rabbit"
           width={438}
           height={438}
-          className="mx-auto w-[438px] h-[438px] md:w-[385px] md:h-[385px] object-cover "
+          className="mx-auto w-[438px] h-[438px] sm:w-[385px] sm:h-[385px] object-cover "
           sizes="(min-width: 768px) 385px, 438px"
         />
       </div>

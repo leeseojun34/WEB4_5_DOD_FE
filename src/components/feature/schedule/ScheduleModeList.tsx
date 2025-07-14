@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Input from "@/components/ui/Input";
 import Tip from "@/components/ui/Tip";
 import { OptionBox } from "@/components/ui/OptionBox";
@@ -10,6 +13,12 @@ import { listVariants, itemVariants } from "./motion";
 // TODO: 추후 리펙토링 필요할듯
 
 const ScheduleModeList = () => {
+  const [mode, setMode] = useState<"online" | "offline" | null>(null);
+
+  const handleModeChange = (mode: "online" | "offline") => {
+    setMode(mode);
+  };
+
   return (
     <motion.div
       variants={listVariants}
@@ -26,7 +35,7 @@ const ScheduleModeList = () => {
             <div className="w-13">
               <Input
                 type="number"
-                value={0}
+                value={10}
                 placeholder="0"
                 onChange={() => {}}
               />
@@ -36,14 +45,20 @@ const ScheduleModeList = () => {
           </motion.div>
           <motion.div variants={itemVariants}>
             <div className="flex gap-5">
-              <OptionBox isSelected={true}>
-                <div className="flex flex-col gap-3 items-center">
+              <OptionBox isSelected={mode === "online"}>
+                <div
+                  className="flex flex-col gap-3 items-center"
+                  onClick={() => handleModeChange("online")}
+                >
                   <Image src={schedule_notebook} alt="온라인" width={52} />
                   온라인
                 </div>
               </OptionBox>
-              <OptionBox isSelected={false}>
-                <div className="flex flex-col gap-3 items-center">
+              <OptionBox isSelected={mode === "offline"}>
+                <div
+                  className="flex flex-col gap-3 items-center"
+                  onClick={() => handleModeChange("offline")}
+                >
                   <Image src={schedule_backpack} alt="오프라인" width={52} />
                   오프라인
                 </div>

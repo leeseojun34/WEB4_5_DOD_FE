@@ -25,6 +25,8 @@ const ScheduleButton = ({
   useEffect(() => {
     if (level === 2) {
       setButtonText("일정 생성");
+    } else {
+      setButtonText("다음");
     }
   }, [level]);
 

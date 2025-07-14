@@ -1,5 +1,6 @@
 import { Clock } from "lucide-react";
-import { MdOutlineGroups } from "react-icons/md";
+import groupIcon from "@/assets/icon/group_icon.svg";
+import Image from "next/image";
 
 interface MeetingInfoProps {
   members: string[];
@@ -10,7 +11,7 @@ const MeetingInfo = ({ members, time }: MeetingInfoProps) => {
     <div className="bg-[color:var(--color-white)] px-5 py-4 gap-4 rounded-lg flex flex-col shadow-[var(--shadow-common)]">
       <div className="flex w-full items-center gap-4">
         <div>
-          <MdOutlineGroups className="text-[color:var(--color-black)] w-4 h-4" />
+          <Image src={groupIcon} alt="그룹 아이콘" className="w-4 h-4" />
         </div>
         <div className="w-full">
           <div className="text-[color:var(--color-primary-300)] text-xs">

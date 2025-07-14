@@ -24,7 +24,6 @@ export default function RootLayout({
     <html lang="ko">
       <body className={`${pretendard.variable}  w-full`}>
         <div className="max-w-screen-lg mx-auto">
-          {" "}
           <TanstackProvider>{children}</TanstackProvider>
         </div>
       </body>

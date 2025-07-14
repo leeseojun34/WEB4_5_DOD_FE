@@ -6,12 +6,15 @@ import { kakaoSearch } from "@/types/kakaoSearch";
 import Map from "@/components/feature/kakaoMap/Map";
 import HeaderTop from "@/components/layout/HeaderTop";
 import GroupHeader from "@/components/layout/GroupHeader";
+import BottomSheet from "@/components/ui/BottomSheet";
+import Header from "@/components/layout/Header";
 
 const StartPoint = () => {
   const [selectedStation, setSelectedStation] = useState<kakaoSearch | null>(
     null
   );
   const [isSmOrLarger, setIsSmOrLarger] = useState(false);
+  const [isSheetOpen, setIsSheetOpen] = useState(true);
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -22,8 +25,15 @@ const StartPoint = () => {
     return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
+  const selectStationHandler = (station: kakaoSearch) => {
+    setSelectedStation(station);
+    //setIsSheetOpen(false);
+  };
   return (
-    <main className="flex flex-col h-screen relative max-w-[1024px] mx-auto">
+    <main className="flex flex-col h-screen relative w-full mx-auto">
+      <div className="hidden sm:block">
+        <Header type="blue" />
+      </div>
       {isSmOrLarger ? (
         <GroupHeader
           groupName="카츠오모이 가는날"
@@ -40,9 +50,20 @@ const StartPoint = () => {
           latitude={selectedStation ? Number(selectedStation.y) : 37.4849424}
         />
       </div>
-      <div className="w-[740px]">
-        <SubwaySearch onSelectStation={setSelectedStation} />
-      </div>
+      <BottomSheet
+        isOpen={isSheetOpen}
+        setIsOpen={setIsSheetOpen}
+        snapPoints={[0.4, 0.22, 0.15]}
+        initialSnap={1}
+        className="px-4"
+      >
+        {(snapTo) => (
+          <SubwaySearch
+            onSelectStation={selectStationHandler}
+            snapTo={snapTo}
+          />
+        )}
+      </BottomSheet>
     </main>
   );
 };

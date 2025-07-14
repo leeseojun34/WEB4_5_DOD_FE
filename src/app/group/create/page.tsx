@@ -1,4 +1,5 @@
 "use client";
+import Header from "@/components/layout/Header";
 import HeaderTop from "@/components/layout/HeaderTop";
 import { Button } from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
@@ -12,8 +13,11 @@ const CreateGroup = () => {
     console.log("그룹 생성하기");
   };
   return (
-    <>
-      <div className="bg-[color:var(--color-white)] min-w-[375px] w-full max-w-185 px-5 flex flex-col items-center gap-8 mx-auto pt-25">
+    <div className="bg-[color:var(--color-white)] min-h-screen">
+      <div className="hidden sm:block">
+        <Header />
+      </div>
+      <div className="min-w-[375px] w-full max-w-185 px-5 flex flex-col items-center gap-8 mx-auto pt-25 sm:pt-40">
         <HeaderTop />
         <div className="text-xl text-[color:var(--color-black)] text-start w-full font-semibold">
           그룹 이름과 설명을 입력해 주세요
@@ -47,7 +51,7 @@ const CreateGroup = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 export default CreateGroup;
