@@ -133,7 +133,7 @@ const ElectionSpot = () => {
             state={isActive ? "default" : "disabled"}
             onClick={() => {
               if (isActive) {
-                router.push("election/wait");
+                router.push("election/result");
               }
             }}
           >
