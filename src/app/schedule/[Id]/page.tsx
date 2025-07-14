@@ -14,7 +14,7 @@ const ScheduleDetail = () => {
   return (
     <div className="w-full bg-[color:var(--color-gray-background)] min-h-screen">
       <div className="hidden sm:block">
-        <Header />
+        <Header type="blue" />
       </div>
       <GroupHeader
         groupName="대나무 행주"

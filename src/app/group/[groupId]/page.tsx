@@ -12,7 +12,7 @@ const GroupPage = () => {
   return (
     <div className="w-full min-h-screen bg-[color:var(--color-gray-background)]">
       <div className="hidden sm:block">
-        <Header />
+        <Header type="blue"/>
       </div>
       <GroupHeader
         groupName="박준규 팬미팅"
