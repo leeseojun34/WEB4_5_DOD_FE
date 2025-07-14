@@ -4,22 +4,26 @@ import MeetingInfo from "@/components/feature/MeetingInfo";
 import MeetingLocation from "@/components/feature/MeetingLocation";
 import OnlineMeetingRoom from "@/components/feature/OnlineMeetingRoom";
 import WorkSpace from "@/components/feature/WorkSpace";
+import Footer from "@/components/layout/Footer";
 import GroupHeader from "@/components/layout/GroupHeader";
+import Header from "@/components/layout/Header";
 import ShareButton from "@/components/ui/ShareButton";
 
 const ScheduleDetail = () => {
-  const isOnline = false;
+  const isOnline = true;
   return (
-    <div>
-      {" "}
-      <div className="min-w-[375px] w-full max-w-185 mx-auto bg-[color:var(--color-gray-background)] min-h-screen">
-        <GroupHeader
-          groupName="대나무 행주"
-          groupIntroduction="안녕하세요 대나무행주입니다람쥐"
-          groupCount={6}
-          clickToInvite={() => console.log("초대함")}
-        />
-        <div className="flex flex-col pt-6 px-5 gap-4">
+    <div className="w-full bg-[color:var(--color-gray-background)] min-h-screen">
+      <div className="hidden sm:block">
+        <Header />
+      </div>
+      <GroupHeader
+        groupName="대나무 행주"
+        groupIntroduction="안녕하세요 대나무행주입니다람쥐"
+        groupCount={6}
+        clickToInvite={() => console.log("초대함")}
+      />
+      <div className="min-w-[375px] w-full max-w-185 mx-auto pt-6 sm:pt-10">
+        <div className="flex flex-col px-5 gap-4">
           <ShareButton
             title="상세 일정 정보 공유하기"
             description="확정된 일정 내용을 공유해보세요"
@@ -45,6 +49,9 @@ const ScheduleDetail = () => {
             ]}
           />
         </div>
+      </div>
+      <div className="sm:hidden">
+        <Footer />
       </div>
     </div>
   );

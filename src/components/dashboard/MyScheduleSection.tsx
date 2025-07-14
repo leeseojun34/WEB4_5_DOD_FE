@@ -7,7 +7,7 @@ export const MyScheduleSection = () => {
   const scheduleId = 1;
   return (
     <>
-      <div className="bg-[color:var(--color-white)] p-5 rounded-xl w-full gap-2 flex flex-col">
+      <div className="bg-[color:var(--color-white)] p-5 rounded-[20px] w-full gap-2 flex flex-col">
         <div className="flex justify-between">
           <p className="font-semibold text-base text-[color:var(--color-black)]">
             나의 일정

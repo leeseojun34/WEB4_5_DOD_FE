@@ -2,6 +2,9 @@
 
 import { ArrowRight, EllipsisVertical } from "lucide-react";
 import NameTag from "./NameTag";
+import Link from "next/link";
+import { useState } from "react";
+import DropdownSmall from "./DropdownSmall";
 import { useRouter } from "next/navigation";
 
 interface BaseProps {
@@ -26,6 +29,8 @@ type ScheduleCardProps = EventProps | AttendanceProps;
 const ScheduleCard = (props: ScheduleCardProps) => {
   const router = useRouter();
   const { time, members, variant } = props;
+  const [isOpen, setIsOpen] = useState(false);
+  const scheduleId = 1;
 
   return (
     <div
@@ -33,7 +38,10 @@ const ScheduleCard = (props: ScheduleCardProps) => {
       style={{ boxShadow: "var(--shadow-common)" }}
       onClick={() => router.push("/schedule/1")}
     >
-      <div className="flex flex-col flex-1 gap-2">
+      <Link
+        href={`/schedule/${scheduleId}`}
+        className="flex flex-col flex-1 gap-2"
+      >
         <div className="flex justify-between">
           <div className="flex gap-3">
             {variant === "event" ? (
@@ -65,13 +73,25 @@ const ScheduleCard = (props: ScheduleCardProps) => {
             <NameTag name={member} key={`${member}-${i}`} />
           ))}
         </div>
-      </div>
+      </Link>
 
       {variant === "event" ? (
-        <div>
-          <button onClick={() => console.log("hi")}>
-            <EllipsisVertical className="w-[18px] h-[18px] text-[color:var(--color-black)]" />
+        <div className="relative">
+          <button onClick={() => setIsOpen(true)}>
+            <EllipsisVertical className="w-[18px] h-[18px] text-[color:var(--color-black)] cursor-pointer" />
           </button>
+          {isOpen && (
+            <div className="absolute right-0 top-6">
+              <DropdownSmall
+                isOpen={isOpen}
+                onClose={() => setIsOpen(false)}
+                onTopClick={() => console.log("click")}
+                onBottomClick={() => console.log("click")}
+              >
+                {["일정 삭제", "링크 복사"]}
+              </DropdownSmall>
+            </div>
+          )}
         </div>
       ) : (
         <button onClick={() => console.log("hi")}>

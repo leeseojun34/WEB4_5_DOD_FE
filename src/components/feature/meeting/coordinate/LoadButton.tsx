@@ -1,4 +1,4 @@
-import { FolderInput } from "lucide-react";
+import { TbCalendarDown } from "react-icons/tb";
 
 const LoadButton = () => {
   return (
@@ -6,7 +6,7 @@ const LoadButton = () => {
       <div className="text-[color:var(--color-gray-placeholder)] text-xs">
         불러오기
       </div>
-      <FolderInput className="w-[10px] h-[10px] text-[color:var(--color-gray-placeholder)]" />
+      <TbCalendarDown className="w-[10px] h-[10px] text-[color:var(--color-gray-placeholder)]" />
     </div>
   );
 };

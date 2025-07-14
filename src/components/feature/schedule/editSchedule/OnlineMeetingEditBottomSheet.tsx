@@ -57,7 +57,7 @@ const OnlineMeetingEditBottomSheet = ({
           <div className="flex flex-col gap-4 w-full">
             <div className="flex flex-col gap-5">
               <p className="font-medium text-[color:var(--color-black)] text-sm">
-                워크스페이스 종류
+                온라인 회의장 종류
               </p>
               <div className="flex gap-6">
                 {(Object.keys(ICONMAP) as PlatformType[]).map((p) => (

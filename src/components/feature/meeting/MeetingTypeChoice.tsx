@@ -28,7 +28,7 @@ const MeetingTypeChoice = () => {
         </div>
         <HeaderTop />
         <div className="flex flex-col  max-h-screen relative max-w-[740px] mx-auto px-5">
-          <main className="flex flex-col gap-8 relative pt-25 sm:pt-30 min-h-screen box-border">
+          <main className="flex flex-col gap-8 relative pt-25 sm:pt-40 min-h-screen box-border">
             <h1 className="text-xl font-bold">모임 유형을 선택해주세요</h1>
             <MeetingTypeOptions
               selectedType={selectedType}
