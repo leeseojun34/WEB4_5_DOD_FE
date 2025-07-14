@@ -9,6 +9,7 @@ import Image from "next/image";
 import Input from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { useState } from "react";
+import BottomSheetHeader from "@/components/layout/BottomSheetHeader";
 
 const workspaceLogos = {
   github: githubIcon,
@@ -42,11 +43,26 @@ const WorkspaceBottomSheet = ({
   const [type, setType] = useState(defaultValue?.type ?? "");
 
   return (
-    <BottomSheet isOpen={isOpen} setIsOpen={setIsOpen}>
+    <BottomSheet
+      isOpen={isOpen}
+      setIsOpen={setIsOpen}
+      initialSnap={0}
+      snapPoints={[0.5]}
+    >
       {() => (
         <div className="px-5 w-full h-full flex flex-col gap-4">
-          <h1>{defaultValue ? "워크스페이스 편집" : "워크스페이스 등록"}</h1>
-          <div className="space-y-4 h-[55%]">
+          {defaultValue ? (
+            <BottomSheetHeader
+              setIsOpen={setIsOpen}
+              title="워크스페이스 편집"
+            />
+          ) : (
+            <BottomSheetHeader
+              setIsOpen={setIsOpen}
+              title="워크스페이스 등록"
+            />
+          )}
+          <div className=" w-full max-w-[740px] px-5 flex flex-col mx-auto gap-4 ">
             {/* 워크 스페이스 종류 */}
             <div className="w-full  space-y-4">
               <h3 className="text-xs font-medium ml-2">워크 스페이스 종류</h3>
@@ -96,7 +112,7 @@ const WorkspaceBottomSheet = ({
           </div>
 
           {/* 버튼 */}
-          <div className="w-full flex justify-center items-center flex-col gap-4">
+          <div className="w-full flex justify-center items-center flex-col gap-4 mt-8">
             <button className="text-[color:var(--color-red)] text-xs cursor-pointer">
               삭제하기
             </button>

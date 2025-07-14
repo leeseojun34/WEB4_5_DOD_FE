@@ -49,7 +49,12 @@ const WorkspaceItem = ({ type, name, url, onClick }: WorkspaceItemProps) => {
           />
         </div>
         <div className="bg-[color:var(--color-gray-background)] rounded-sm text-[color:var(--color-gray)] px-2 py-1 text-xs underline">
-          <a href={url} target="_blank" rel="noopener noreferrer">
+          <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="truncate whitespace-nowrap overflow-hidden block max-w-full"
+          >
             {url}
           </a>
         </div>
