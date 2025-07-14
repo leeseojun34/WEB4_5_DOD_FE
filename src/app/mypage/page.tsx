@@ -6,6 +6,7 @@ import Profile from "@/components/mypage/Profile";
 import StationSheet from "@/components/mypage/StationSheet";
 import TimeSheet from "@/components/mypage/TimeSheet";
 import AlertBox from "@/components/ui/AlertBox";
+import { useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
 
 type SheetType = "name" | "time" | "station" | "calendar";
@@ -14,6 +15,8 @@ function MyPage() {
   const [isOpen, setIsOpen] = useState(false);
   const [sheetType, setSheetType] = useState<SheetType | null>(null);
   const [text, setText] = useState("");
+
+  const router = useRouter();
 
   const openSheet = (type: SheetType) => {
     setSheetType(type);
@@ -29,9 +32,11 @@ function MyPage() {
 
   const handleLeave = () => {
     console.log("탈퇴누름");
+    router.push("/");
   };
   const handleLogout = () => {
     console.log("로그아웃누름");
+    router.push("/");
   };
 
   // 추가 저장 로직 필요
@@ -60,20 +65,21 @@ function MyPage() {
         </div>
 
         <div className="flex justify-center items-center text-xs gap-24">
-          <AlertBox content="탈퇴하시겠습니까?" cancel="취소" action="탈퇴">
-            <span
-              onClick={handleLeave}
-              className="font-light text-[var(--color-gray-placeholder)] hover:text-[var(--color-primary-400)] cursor-pointer">
+          <AlertBox
+            actionHandler={handleLeave}
+            content="탈퇴하시겠습니까?"
+            cancel="취소"
+            action="탈퇴">
+            <span className="font-light text-[var(--color-gray-placeholder)] hover:text-[var(--color-primary-400)] cursor-pointer">
               계정탈퇴
             </span>
           </AlertBox>
           <AlertBox
+            actionHandler={handleLogout}
             content="로그아웃하시겠습니까?"
             cancel="취소"
             action="로그아웃">
-            <span
-              onClick={handleLogout}
-              className="font-light text-[var(--color-gray-placeholder)] hover:text-[var(--color-primary-400)] cursor-pointer">
+            <span className="font-light text-[var(--color-gray-placeholder)] hover:text-[var(--color-primary-400)] cursor-pointer">
               로그아웃
             </span>
           </AlertBox>
