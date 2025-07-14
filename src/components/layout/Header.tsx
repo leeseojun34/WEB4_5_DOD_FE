@@ -16,8 +16,7 @@ const Header = ({ type = "" }: { type?: "" | "blue" }) => {
         type === "blue"
           ? "bg-[color:var(--color-primary-400)]"
           : "bg-transparent"
-      }`}
-    >
+      }`}>
       <LogoWebHeader type={type} handleLogoClick={() => router.push("/")} />
       <div className="flex justify-between items-center gap-8">
         {/* 로그인 했을 때 */}
@@ -41,14 +40,13 @@ const Header = ({ type = "" }: { type?: "" | "blue" }) => {
         </div>
         {/* 비로그인 */}
         <button
-          onClick={() => router.push("/login")}
+          onClick={() => router.push("/auth/login")}
           className={`flex items-center px-4 py-2 rounded-[50px] border border-x 
             ${
               type === "blue"
                 ? "border-[color:var(--color-white)] text-[color:var(--color-white)] hover:bg-[color:var(--color-white)] hover:text-[color:var(--color-primary-400)]"
                 : "border-[color:var(--color-primary-400)] text-[color:var(--color-primary-400)] hover:bg-[color:var(--color-primary-400)] hover:text-[color:var(--color-white)]"
-            } text-xs font-medium cursor-pointer `}
-        >
+            } text-xs font-medium cursor-pointer `}>
           로그인
         </button>
       </div>
