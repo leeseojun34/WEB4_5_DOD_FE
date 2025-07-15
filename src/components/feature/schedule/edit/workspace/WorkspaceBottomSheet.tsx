@@ -10,37 +10,63 @@ import Input from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { useState } from "react";
 import BottomSheetHeader from "@/components/layout/BottomSheetHeader";
+import {
+  useCreateWorkspace,
+  useDeleteWorkspace,
+  WorkSpaceType,
+} from "@/lib/api/scheduleApi";
 
 const workspaceLogos = {
-  github: githubIcon,
-  notion: notionIcon,
-  miro: miroIcon,
-  figma: figmaIcon,
-  canva: canvaIcon,
-  googledocs: googledocsIcon,
+  GITHUB: githubIcon,
+  NOTION: notionIcon,
+  MIRO: miroIcon,
+  FIGMA: figmaIcon,
+  CANVA: canvaIcon,
+  GOOGLEDOCS: googledocsIcon,
 } as const;
 
 const workspaceTypes = [
-  "github",
-  "notion",
-  "figma",
-  "googledocs",
-  "canva",
-  "miro",
+  "GITHUB",
+  "NOTION",
+  "FIGMA",
+  "GOOGLEDOCS",
+  "CANVA",
+  "MIRO",
 ] as const;
 
 const WorkspaceBottomSheet = ({
   isOpen,
   setIsOpen,
   defaultValue,
+  id,
 }: {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
   defaultValue?: { type: string; name: string; url: string } | null;
+  id: string;
 }) => {
   const [name, setName] = useState(defaultValue?.name ?? "");
   const [url, setUrl] = useState(defaultValue?.url ?? "");
-  const [type, setType] = useState(defaultValue?.type ?? "");
+  const [type, setType] = useState<WorkSpaceType | "">(
+    (defaultValue?.type as WorkSpaceType) ?? ""
+  );
+  const { mutate: createWorkspace } = useCreateWorkspace();
+  const { mutate: deleteWorkspace } = useDeleteWorkspace();
+
+  const handleCreateWorkSpace = () => {
+    if (!type) return;
+
+    createWorkspace({
+      id,
+      data: {
+        workspace: type,
+        workspaceName: name,
+        url,
+      },
+    });
+  };
+
+  const handleDeleteWorkSpace = () => {};
 
   return (
     <BottomSheet
@@ -101,7 +127,6 @@ const WorkspaceBottomSheet = ({
               }
             />
             <Input
-              maxLength={10}
               label="URL"
               placeholder="워크스페이스 링크 주소를 입력해주세요"
               value={url}
@@ -113,10 +138,15 @@ const WorkspaceBottomSheet = ({
 
           {/* 버튼 */}
           <div className="w-full flex justify-center items-center flex-col gap-4 mt-8">
-            <button className="text-[color:var(--color-red)] text-xs cursor-pointer">
-              삭제하기
-            </button>
-            <Button>저장하기</Button>
+            {defaultValue && (
+              <button
+                className="text-[color:var(--color-red)] text-xs cursor-pointer"
+                onClick={handleDeleteWorkSpace}
+              >
+                삭제하기
+              </button>
+            )}
+            <Button onClick={handleCreateWorkSpace}>저장하기</Button>
           </div>
         </div>
       )}
