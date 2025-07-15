@@ -39,10 +39,6 @@ const createGroup = async (data: CreateGroupRequest) => {
 const updateGroup = async (id: string, data: UpdateGroupRequest) => {
   const res = await axiosInstance.patch(`/groups/${id}`, data, {
     params: { id },
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
   });
   return res.data;
 };
@@ -51,10 +47,6 @@ const deleteGroup = async (id: string) => {
   const res = await axiosInstance.delete(`/groups/${id}`, {
     params: { id },
     data: {},
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
   });
   return res.data;
 };
