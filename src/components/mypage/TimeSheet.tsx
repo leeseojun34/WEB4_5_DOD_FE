@@ -17,7 +17,7 @@ function TimeSheet({ isOpen, setIsOpen, onSave }: TimeSheetType) {
       initialSnap={0}
       snapPoints={[0.9]}
     >
-      {(snapTo) => (
+      {() => (
         <div className="w-full h-[90%] flex flex-col px-5 gap-8 pb-12">
           <div className="flex justify-between items-center px-5">
             <X className="invisible" />
