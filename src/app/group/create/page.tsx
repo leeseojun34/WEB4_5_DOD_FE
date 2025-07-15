@@ -13,10 +13,6 @@ const CreateGroup = () => {
   const createGroupMutation = useCreateGroup();
 
   const handleCreateGroup = () => {
-    if (!groupName.trim() || !groupDescription.trim()) {
-      alert("모든 정보를 입력해주세요");
-      return;
-    }
     createGroupMutation.mutate({
       name: groupName.trim(),
       description: groupDescription.trim(),

@@ -4,11 +4,42 @@ import Header from "@/components/layout/Header";
 import HeaderTop from "@/components/layout/HeaderTop";
 import { Button } from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
-import { ChangeEvent, useState } from "react";
+import { useGroup, useUpdateGroup } from "@/lib/api/groupApi";
+import { useParams } from "next/navigation";
+import { ChangeEvent, useEffect, useState } from "react";
 
 const EditGroup = () => {
+  const params = useParams();
+  const groupId = params.groupId as string;
+
   const [groupName, setGroupName] = useState("");
   const [groupDescription, setGroupDescription] = useState("");
+
+  const updateGroupMutation = useUpdateGroup();
+
+  const { data: groupData } = useGroup(groupId);
+
+  useEffect(() => {
+    if (groupData) {
+      setGroupName(groupData.name);
+      setGroupDescription(groupData.description);
+    }
+  }, [groupData]);
+
+  const handleUpdateGroup = () => {
+    updateGroupMutation.mutate({
+      id: groupId,
+      data: {
+        name: groupName.trim(),
+        description: groupDescription.trim(),
+      },
+    });
+  };
+
+  const isFormValid =
+    groupName.trim().length > 0 && groupDescription.trim().length > 0;
+  const isLoading = updateGroupMutation.isPending;
+  const buttonState = !isFormValid || isLoading ? "disabled" : "default";
 
   return (
     <div className="w-full">
@@ -46,7 +77,9 @@ const EditGroup = () => {
             <button className="text-[color:var(--color-red)] text-xs w-full text-center cursor-pointer">
               그룹 삭제하기
             </button>
-            <Button>수정 완료</Button>
+            <Button onClick={handleUpdateGroup} state={buttonState}>
+              {isLoading ? "수정 중.." : "수정 완료"}
+            </Button>
           </div>
         </div>
       </div>

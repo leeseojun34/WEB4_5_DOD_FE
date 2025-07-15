@@ -19,8 +19,15 @@ export interface GroupResponse {
   id: string;
 }
 
+// 전체 그룹 조회
 const getGroups = async () => {
   const res = await axiosInstance.get("/groups");
+  return res.data;
+};
+
+// 특정 그룹 정보 조회
+const getGroup = async (id: string) => {
+  const res = await axiosInstance.get(`/groups/${id}`);
   return res.data;
 };
 
@@ -29,10 +36,20 @@ const createGroup = async (data: CreateGroupRequest) => {
   return res.data;
 };
 
-// const updateGroup = async (id: string, data: UpdateGroupRequest) => {
-//   const res = await axiosInstance.patch(`/groups/${id}`, data);
-//   return res.data;
-// };
+const updateGroup = async (id: string, data: UpdateGroupRequest) => {
+  const res = await axiosInstance.patch(`/groups/${id}`, data);
+  return res.data;
+};
+
+export const useGroup = (id: string) => {
+  return useQuery({
+    queryKey: ["group", id],
+    queryFn: () => getGroup(id),
+    enabled: !!id,
+    retry: false,
+    refetchOnWindowFocus: false,
+  });
+};
 
 export const useGroups = () => {
   return useQuery({
@@ -53,10 +70,31 @@ export const useCreateGroup = () => {
       console.log("그룹 생성 성공 : ", data);
       queryClient.invalidateQueries({ queryKey: ["groups"] });
       //router.push(`/group/${data.id}`);
-      router.push(`/group/1`);
+      router.push(`/group/10001`);
     },
     onError: (err) => {
       console.error("그룹 생성 실패 : ", err);
+    },
+  });
+};
+
+export const useUpdateGroup = () => {
+  const router = useRouter();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: UpdateGroupRequest }) =>
+      updateGroup(id, data),
+    onSuccess: (data) => {
+      console.log("그룹 정보 수정 성공 : ", data);
+      queryClient.invalidateQueries({ queryKey: ["groups"] });
+      queryClient.invalidateQueries({ queryKey: ["group", data.id] });
+
+      //router.push(`/group/${data.id}`);
+      router.push(`/group/10001`);
+    },
+    onError: (err) => {
+      console.error("그룹 정보 수정 실패 : ", err);
     },
   });
 };

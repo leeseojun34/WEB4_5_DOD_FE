@@ -19,7 +19,7 @@ const GroupPage = () => {
   };
 
   const handleEditClick = () => {
-    router.push("/group/1/edit");
+    router.push("/group/10001/edit");
   };
   const handleQuitClick = () => {
     console.log("나가기 버튼 클릭");
