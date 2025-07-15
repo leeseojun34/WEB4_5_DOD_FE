@@ -24,7 +24,8 @@ const SubwaySearch = ({ onSelectStation, snapTo }: SubwaySearchProps) => {
   const [selectedStation, setSelectedStation] = useState<kakaoSearch | null>(
     null
   );
-  const route = useRouter();
+  const router = useRouter();
+  //쿼리초기화, 검색 결과 초기화 추가 필요
 
   const selectHandler = ({ station }: { station: kakaoSearch }) => {
     setSelectedStation(station);
