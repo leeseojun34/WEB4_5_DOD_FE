@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Dashboard from "@/components/dashboard/Dashboard";
 import Landing from "@/components/landing/Landing";
-import { useUser } from "@/hooks/useUser";
+import { useUser } from "@/lib/api/userApi";
 
 const Home = () => {
   const [isLogin, setIsLogin] = useState(false);
