@@ -15,14 +15,21 @@ const StartPoint = () => {
   );
   const [isSmOrLarger, setIsSmOrLarger] = useState(false);
   const [isSheetOpen, setIsSheetOpen] = useState(true);
+  const [snapPoints, setSnapPoints] = useState([0.6, 0.33, 0.25]); //모바일 화면 비 값 : 서치결과, 서치, 선택
 
   useEffect(() => {
-    const checkScreenSize = () => {
-      setIsSmOrLarger(window.innerWidth >= 640); // sm: 640px
+    const handleResize = () => {
+      const width = window.innerWidth;
+      setIsSmOrLarger(width >= 640); // sm: 640px
+      setSnapPoints(
+        width >= 640
+          ? [0.4, 0.22, 0.16] // PC/태블릿 비율
+          : [0.6, 0.33, 0.25] // 모바일 비율
+      );
     };
-    checkScreenSize();
-    window.addEventListener("resize", checkScreenSize);
-    return () => window.removeEventListener("resize", checkScreenSize);
+    handleResize(); // 최초 1회 실행
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const selectStationHandler = (station: kakaoSearch) => {
@@ -53,7 +60,7 @@ const StartPoint = () => {
       <BottomSheet
         isOpen={isSheetOpen}
         setIsOpen={setIsSheetOpen}
-        snapPoints={[0.4, 0.22, 0.15]}
+        snapPoints={snapPoints}
         initialSnap={1}
         className="px-4"
       >
