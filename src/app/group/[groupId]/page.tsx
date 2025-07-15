@@ -3,11 +3,28 @@
 import Footer from "@/components/layout/Footer";
 import GroupHeader from "@/components/layout/GroupHeader";
 import Header from "@/components/layout/Header";
+import DropdownSmall from "@/components/ui/DropdownSmall";
 import ScheduleCard from "@/components/ui/ScheduleCard";
 import ShareButton from "@/components/ui/ShareButton";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const GroupPage = () => {
+  const router = useRouter();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleEllipsisClick = () => {
+    setIsOpen(true);
+  };
+
+  const handleEditClick = () => {
+    router.push("/group/1/edit");
+  };
+  const handleQuitClick = () => {
+    console.log("나가기 버튼 클릭");
+  };
+
   return (
     <div className="w-full min-h-screen bg-[color:var(--color-gray-background)]">
       <div className="hidden sm:block">
@@ -18,7 +35,21 @@ const GroupPage = () => {
         groupIntroduction="박준규 팬미팅에 오신 것을 환영합니다"
         groupCount={6000}
         clickToInvite={() => console.log("초대함")}
+        icon="ellipsis"
+        clickEllipsisHandler={handleEllipsisClick}
       />
+      {isOpen && (
+        <div className="absolute right-4 top-18">
+          <DropdownSmall
+            isOpen={isOpen}
+            onClose={() => setIsOpen(false)}
+            onTopClick={handleEditClick}
+            onBottomClick={handleQuitClick}
+          >
+            {["그룹 정보 수정", "그룹 나가기"]}
+          </DropdownSmall>
+        </div>
+      )}
       <div className="min-w-[375px] w-full max-w-185 flex flex-col min-h-screen mx-auto">
         <div className="flex flex-col p-5 pt-4 w-full gap-4 flex-1">
           <Link href="/group/1/schedule/create/select">
