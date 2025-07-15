@@ -8,7 +8,7 @@ const CoordinatePage = () => {
   return (
     <section>
       <div className="hidden sm:block">
-        <Header type="blue"/>
+        <Header type="blue" />
       </div>
       <GroupHeader
         groupName="박준규 팬미팅"
