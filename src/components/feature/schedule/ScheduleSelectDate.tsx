@@ -3,6 +3,7 @@ import Dropdown from "@/components/ui/Dropdown";
 import { Calendar } from "@/components/feature/calendar/Calender";
 import { listVariants, itemVariants } from "./motion";
 import { motion } from "framer-motion";
+import toast from "react-hot-toast";
 
 const timeOptions: string[] = [];
 
@@ -66,7 +67,15 @@ const ScheduleSelectDate = ({
               selected={dateList}
               setSelected={(dates) => {
                 if (dates!.length > 7) {
-                  alert("최대 7일까지 선택 가능해요!");
+                  toast("최대 7일까지 선택 가능해요!", {
+                    icon: "😥",
+                    style: {
+                      borderRadius: "50px",
+                      background: "#fff",
+                      border: "1px solid var(--color-red)",
+                      color: "#000",
+                    },
+                  });
                   return;
                 }
                 setDateList(dates as Date[]);
