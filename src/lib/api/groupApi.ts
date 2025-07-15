@@ -37,17 +37,12 @@ const createGroup = async (data: CreateGroupRequest) => {
 };
 
 const updateGroup = async (id: string, data: UpdateGroupRequest) => {
-  const res = await axiosInstance.patch(`/groups/${id}`, data, {
-    params: { id },
-  });
+  const res = await axiosInstance.patch(`/groups/${id}`, data);
   return res.data;
 };
 
 const deleteGroup = async (id: string) => {
-  const res = await axiosInstance.delete(`/groups/${id}`, {
-    params: { id },
-    data: {},
-  });
+  const res = await axiosInstance.delete(`/groups/${id}`, { data: {} });
   return res.data;
 };
 
