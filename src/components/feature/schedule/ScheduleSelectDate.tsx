@@ -48,13 +48,13 @@ const ScheduleSelectDate = ({
         >
           <Dropdown
             options={timeOptions}
-            defaultIndex={0}
+            defaultIndex={18}
             onSelect={(selected) => setStartTime(selected)}
           />
           <span className="">-</span>
           <Dropdown
             options={timeOptions}
-            defaultIndex={timeOptions.length - 1}
+            defaultIndex={36}
             onSelect={(selected) => setEndTime(selected)}
           />
         </motion.div>
@@ -65,7 +65,7 @@ const ScheduleSelectDate = ({
               isCompact={false}
               selected={dateList}
               setSelected={(dates) => {
-                if (dates!.length > 6) {
+                if (dates!.length > 7) {
                   alert("최대 7일까지 선택 가능해요!");
                   return;
                 }

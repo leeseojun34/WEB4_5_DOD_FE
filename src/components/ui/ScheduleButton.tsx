@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/ui/Button";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 
 const ScheduleButton = ({
   level,
@@ -23,12 +22,10 @@ const ScheduleButton = ({
 }) => {
   const [buttonText, setButtonText] = useState("다음");
   const [isDisabled, setIsDisabled] = useState(true);
-  const router = useRouter();
 
   const handleClick = () => {
     if (level === 2) {
       handleCreateSchedule();
-      // router.push("/schedule/complete");
     } else {
       setLevel(level + 1);
     }
@@ -43,6 +40,9 @@ const ScheduleButton = ({
 
       setButtonText("다음");
     } else if (level === 1) {
+      console.log(dateList);
+      console.log(startTime);
+      console.log(endTime);
       if (dateList.length === 0 || startTime === "" || endTime === "")
         setIsDisabled(true);
       else setIsDisabled(false);

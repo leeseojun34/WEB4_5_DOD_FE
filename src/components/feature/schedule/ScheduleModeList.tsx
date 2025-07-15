@@ -1,6 +1,3 @@
-"use client";
-
-import { useState } from "react";
 import Input from "@/components/ui/Input";
 import Tip from "@/components/ui/Tip";
 import { OptionBox } from "@/components/ui/OptionBox";
@@ -19,14 +16,11 @@ const ScheduleModeList = ({
   schedule: ScheduleType;
   setSchedule: (schedule: ScheduleType) => void;
 }) => {
-  const [mode, setMode] = useState<"ONLINE" | "OFFLINE" | null>(null);
-
   const handleModeChange = (mode: "ONLINE" | "OFFLINE") => {
     setSchedule({
       ...schedule,
       meetingType: mode,
     });
-    setMode(mode);
   };
 
   return (
@@ -44,7 +38,7 @@ const ScheduleModeList = ({
           >
             <div className="w-13">
               <Input
-                type="number"
+                type="text"
                 value={schedule.maxMember}
                 placeholder="0"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,7 +49,6 @@ const ScheduleModeList = ({
                 }}
               />
             </div>
-
             <span> 명</span>
           </motion.div>
           <motion.div variants={itemVariants}>
@@ -64,7 +57,7 @@ const ScheduleModeList = ({
                 className="flex flex-col gap-3 items-center cursor-pointer w-full"
                 onClick={() => handleModeChange("ONLINE")}
               >
-                <OptionBox isSelected={mode === "ONLINE"}>
+                <OptionBox isSelected={schedule.meetingType === "ONLINE"}>
                   <Image src={schedule_notebook} alt="온라인" width={52} />
                   온라인
                 </OptionBox>
@@ -73,7 +66,7 @@ const ScheduleModeList = ({
                 className="flex flex-col gap-3 items-center cursor-pointer w-full"
                 onClick={() => handleModeChange("OFFLINE")}
               >
-                <OptionBox isSelected={mode === "OFFLINE"}>
+                <OptionBox isSelected={schedule.meetingType === "OFFLINE"}>
                   <Image src={schedule_backpack} alt="오프라인" width={52} />
                   오프라인
                 </OptionBox>

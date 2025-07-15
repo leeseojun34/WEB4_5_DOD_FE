@@ -8,6 +8,10 @@ import ScheduleSelectDate from "@/components/feature/schedule/ScheduleSelectDate
 import ScheduleSelectMode from "@/components/feature/schedule/ScheduleSelectMode";
 import { ChevronLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { formatDate } from "@/app/utils/dateFormat";
+import { createSchedule } from "@/lib/api/scheduleApi";
+
+// TODO: groupId 가져오기
 
 const CreateSchedule = () => {
   const router = useRouter();
@@ -22,15 +26,15 @@ const CreateSchedule = () => {
     dateList: [
       {
         dates: [],
-        startTime: "",
-        endTime: "",
+        startTime: "09:00",
+        endTime: "18:00",
       },
     ],
   });
 
   const [dateList, setDateList] = useState<Date[]>([]);
-  const [startTime, setStartTime] = useState<string>("");
-  const [endTime, setEndTime] = useState<string>("");
+  const [startTime, setStartTime] = useState<string>("09:00");
+  const [endTime, setEndTime] = useState<string>("18:00");
 
   const handleBack = () => {
     if (level === 0) {
@@ -40,12 +44,29 @@ const CreateSchedule = () => {
     }
   };
 
-  const handleCreateSchedule = () => {
+  const handleCreateSchedule = async () => {
     // 이벤트 등록 api 호출
-    console.log(schedule);
-    console.log(dateList);
-    console.log(startTime);
-    console.log(endTime);
+    const formattedDateList = dateList.map((date) => formatDate(date));
+    const newSchedule = {
+      ...schedule,
+      dateList: [
+        {
+          dates: formattedDateList,
+          startTime: startTime,
+          endTime: endTime,
+        },
+      ],
+    };
+
+    try {
+      const response = await createSchedule(newSchedule);
+      if (response.code === "200") {
+        // TODO: 이벤트 정보 조회 빛 title 가져와야 함
+        router.push("/schedule/complete");
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
