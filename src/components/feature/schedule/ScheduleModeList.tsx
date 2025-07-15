@@ -12,10 +12,20 @@ import { listVariants, itemVariants } from "./motion";
 
 // TODO: 추후 리펙토링 필요할듯
 
-const ScheduleModeList = () => {
-  const [mode, setMode] = useState<"online" | "offline" | null>(null);
+const ScheduleModeList = ({
+  schedule,
+  setSchedule,
+}: {
+  schedule: ScheduleType;
+  setSchedule: (schedule: ScheduleType) => void;
+}) => {
+  const [mode, setMode] = useState<"ONLINE" | "OFFLINE" | null>(null);
 
-  const handleModeChange = (mode: "online" | "offline") => {
+  const handleModeChange = (mode: "ONLINE" | "OFFLINE") => {
+    setSchedule({
+      ...schedule,
+      meetingType: mode,
+    });
     setMode(mode);
   };
 
@@ -35,9 +45,14 @@ const ScheduleModeList = () => {
             <div className="w-13">
               <Input
                 type="number"
-                value={10}
+                value={schedule.maxMember}
                 placeholder="0"
-                onChange={() => {}}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setSchedule({
+                    ...schedule,
+                    maxMember: Number(e.target.value),
+                  });
+                }}
               />
             </div>
 
@@ -45,24 +60,24 @@ const ScheduleModeList = () => {
           </motion.div>
           <motion.div variants={itemVariants}>
             <div className="flex gap-5">
-              <OptionBox isSelected={mode === "online"}>
-                <div
-                  className="flex flex-col gap-3 items-center"
-                  onClick={() => handleModeChange("online")}
-                >
+              <div
+                className="flex flex-col gap-3 items-center cursor-pointer w-full"
+                onClick={() => handleModeChange("ONLINE")}
+              >
+                <OptionBox isSelected={mode === "ONLINE"}>
                   <Image src={schedule_notebook} alt="온라인" width={52} />
                   온라인
-                </div>
-              </OptionBox>
-              <OptionBox isSelected={mode === "offline"}>
-                <div
-                  className="flex flex-col gap-3 items-center"
-                  onClick={() => handleModeChange("offline")}
-                >
+                </OptionBox>
+              </div>
+              <div
+                className="flex flex-col gap-3 items-center cursor-pointer w-full"
+                onClick={() => handleModeChange("OFFLINE")}
+              >
+                <OptionBox isSelected={mode === "OFFLINE"}>
                   <Image src={schedule_backpack} alt="오프라인" width={52} />
                   오프라인
-                </div>
-              </OptionBox>
+                </OptionBox>
+              </div>
             </div>
           </motion.div>
         </div>
