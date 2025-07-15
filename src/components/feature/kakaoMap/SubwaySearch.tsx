@@ -8,6 +8,7 @@ import { kakaoSearch } from "@/types/kakaoSearch";
 import { Button } from "@/components/ui/Button";
 import { X } from "lucide-react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const REST_API_KEY = process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY as string;
 
@@ -23,8 +24,7 @@ const SubwaySearch = ({ onSelectStation, snapTo }: SubwaySearchProps) => {
   const [selectedStation, setSelectedStation] = useState<kakaoSearch | null>(
     null
   );
-
-  //쿼리초기화, 검색 결과 초기화 추가 필요
+  const route = useRouter();
 
   const selectHandler = ({ station }: { station: kakaoSearch }) => {
     setSelectedStation(station);
@@ -38,7 +38,7 @@ const SubwaySearch = ({ onSelectStation, snapTo }: SubwaySearchProps) => {
     try {
       const data = await searchSubwayStation(query, REST_API_KEY);
       setResults(data.documents);
-      if (snapTo) snapTo(1);
+      if (snapTo) snapTo(0);
     } catch (e) {
       console.log("fail", e);
     }
@@ -49,7 +49,7 @@ const SubwaySearch = ({ onSelectStation, snapTo }: SubwaySearchProps) => {
     setSelectedStation(null);
     setQuery("");
     setResults([]);
-    if (snapTo) snapTo(0);
+    if (snapTo) snapTo(1);
   };
 
   return (
@@ -99,10 +99,15 @@ const SubwaySearch = ({ onSelectStation, snapTo }: SubwaySearchProps) => {
             </div>
           </div>
         )}
-        <div className="w-full mt-8">
+        <div className="w-full pb-8.5">
           <Button
             state={selectedStation ? "default" : "disabled"}
             className="w-full"
+            onClick={() => {
+              if (selectedStation) {
+                route.push("wait");
+              }
+            }}
           >
             다음
           </Button>
