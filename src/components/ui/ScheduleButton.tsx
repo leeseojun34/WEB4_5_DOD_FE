@@ -40,9 +40,6 @@ const ScheduleButton = ({
 
       setButtonText("다음");
     } else if (level === 1) {
-      console.log(dateList);
-      console.log(startTime);
-      console.log(endTime);
       if (dateList.length === 0 || startTime === "" || endTime === "")
         setIsDisabled(true);
       else setIsDisabled(false);
