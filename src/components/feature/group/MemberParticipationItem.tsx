@@ -15,14 +15,16 @@ const MemberParticipationItem = ({
         index === 0 && "border border-[color:var(--color-primary-400)]"
       }`}
     >
-      <div>{index + 1}위</div>
+      <div className="min-w-8">{index + 1}위</div>
       <div>{name}</div>
       <div
-        className={`${
-          percentage >= 50
-            ? "text-[color:var(--color-primary-400)]"
-            : "text-[color:var(--color-red)]"
-        }`}
+        className={`
+          min-w-10
+          ${
+            percentage >= 50
+              ? "text-[color:var(--color-primary-400)]"
+              : "text-[color:var(--color-red)]"
+          }`}
       >
         {percentage}%
       </div>
