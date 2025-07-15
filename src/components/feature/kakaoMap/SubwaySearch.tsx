@@ -39,7 +39,7 @@ const SubwaySearch = ({ onSelectStation, snapTo }: SubwaySearchProps) => {
     try {
       const data = await searchSubwayStation(query, REST_API_KEY);
       setResults(data.documents);
-      if (snapTo) snapTo(1);
+      if (snapTo) snapTo(0);
     } catch (e) {
       console.log("fail", e);
     }
@@ -50,7 +50,7 @@ const SubwaySearch = ({ onSelectStation, snapTo }: SubwaySearchProps) => {
     setSelectedStation(null);
     setQuery("");
     setResults([]);
-    if (snapTo) snapTo(0);
+    if (snapTo) snapTo(1);
   };
 
   return (
@@ -100,12 +100,14 @@ const SubwaySearch = ({ onSelectStation, snapTo }: SubwaySearchProps) => {
             </div>
           </div>
         )}
-        <div className="w-full mt-8">
+        <div className="w-full pb-8.5">
           <Button
             state={selectedStation ? "default" : "disabled"}
             className="w-full"
             onClick={() => {
-              router.push("/schedule/1/election/wait");
+              if (selectedStation) {
+                route.push("wait");
+              }
             }}
           >
             다음
