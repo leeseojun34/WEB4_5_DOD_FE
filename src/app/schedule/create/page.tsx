@@ -61,8 +61,13 @@ const CreateSchedule = () => {
     try {
       const response = await createSchedule(newSchedule);
       if (response.code === "200") {
-        // TODO: 이벤트 정보 조회 빛 title 가져와야 함
-        router.push("/schedule/complete");
+        if (response.data.eventId) {
+          router.push(`/schedule/${response.data.eventId}/complete`);
+        } else {
+          throw new Error(response.message);
+        }
+      } else {
+        throw new Error(response.message);
       }
     } catch (error) {
       console.error(error);

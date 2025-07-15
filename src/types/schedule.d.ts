@@ -10,3 +10,8 @@ interface ScheduleType {
     endTime: string;
   }[];
 }
+
+interface EventInfoType {
+  title: string;
+  eventId: number;
+}
