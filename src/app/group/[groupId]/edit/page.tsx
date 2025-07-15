@@ -4,7 +4,7 @@ import Header from "@/components/layout/Header";
 import HeaderTop from "@/components/layout/HeaderTop";
 import { Button } from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
-import { useGroup, useUpdateGroup } from "@/lib/api/groupApi";
+import { useDeleteGroup, useGroup, useUpdateGroup } from "@/lib/api/groupApi";
 import { useParams } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
 
@@ -16,13 +16,14 @@ const EditGroup = () => {
   const [groupDescription, setGroupDescription] = useState("");
 
   const updateGroupMutation = useUpdateGroup();
+  const deleteGroupMutatuon = useDeleteGroup();
 
   const { data: groupData } = useGroup(groupId);
 
   useEffect(() => {
-    if (groupData) {
-      setGroupName(groupData.name);
-      setGroupDescription(groupData.description);
+    if (groupData?.data) {
+      setGroupName(groupData.data.name || "");
+      setGroupDescription(groupData.data.description || "");
     }
   }, [groupData]);
 
@@ -30,10 +31,14 @@ const EditGroup = () => {
     updateGroupMutation.mutate({
       id: groupId,
       data: {
-        name: groupName.trim(),
+        groupName: groupName.trim(),
         description: groupDescription.trim(),
       },
     });
+  };
+
+  const handleDeleteGroup = () => {
+    deleteGroupMutatuon.mutate(groupId);
   };
 
   const isFormValid =
@@ -74,7 +79,10 @@ const EditGroup = () => {
 
         <div className="fixed w-full left-0 right-0 px-5 bottom-9">
           <div className="max-w-185 mx-auto flex flex-col items-center gap-5">
-            <button className="text-[color:var(--color-red)] text-xs w-full text-center cursor-pointer">
+            <button
+              className="text-[color:var(--color-red)] text-xs w-full text-center cursor-pointer"
+              onClick={handleDeleteGroup}
+            >
               그룹 삭제하기
             </button>
             <Button onClick={handleUpdateGroup} state={buttonState}>

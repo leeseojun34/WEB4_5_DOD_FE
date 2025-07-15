@@ -3,12 +3,12 @@ import { axiosInstance } from "./axiosInstance";
 import { useRouter } from "next/navigation";
 
 export interface CreateGroupRequest {
-  name: string;
+  groupName: string;
   description: string;
 }
 
 export interface UpdateGroupRequest {
-  name: string;
+  groupName: string;
   description: string;
 }
 
@@ -27,7 +27,7 @@ const getGroups = async () => {
 
 // 특정 그룹 정보 조회
 const getGroup = async (id: string) => {
-  const res = await axiosInstance.get(`/groups/${id}`);
+  const res = await axiosInstance.get(`/groups`, { params: { id } });
   return res.data;
 };
 
@@ -37,7 +37,25 @@ const createGroup = async (data: CreateGroupRequest) => {
 };
 
 const updateGroup = async (id: string, data: UpdateGroupRequest) => {
-  const res = await axiosInstance.patch(`/groups/${id}`, data);
+  const res = await axiosInstance.patch(`/groups/${id}`, data, {
+    params: { id },
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+  });
+  return res.data;
+};
+
+const deleteGroup = async (id: string) => {
+  const res = await axiosInstance.delete(`/groups/${id}`, {
+    params: { id },
+    data: {},
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+  });
   return res.data;
 };
 
@@ -95,6 +113,24 @@ export const useUpdateGroup = () => {
     },
     onError: (err) => {
       console.error("그룹 정보 수정 실패 : ", err);
+    },
+  });
+};
+
+export const useDeleteGroup = () => {
+  const router = useRouter();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => deleteGroup(id),
+    onSuccess: (data) => {
+      console.log("그룹 삭제 성공 : ", data);
+      queryClient.invalidateQueries({ queryKey: ["groups"] });
+      //router.push(`/group/${data.id}`);
+      router.push(`/`);
+    },
+    onError: (err) => {
+      console.error("그룹 삭제 실패 : ", err);
     },
   });
 };
