@@ -14,7 +14,7 @@ const CreateGroup = () => {
 
   const handleCreateGroup = () => {
     createGroupMutation.mutate({
-      name: groupName.trim(),
+      groupName: groupName.trim(),
       description: groupDescription.trim(),
     });
   };
