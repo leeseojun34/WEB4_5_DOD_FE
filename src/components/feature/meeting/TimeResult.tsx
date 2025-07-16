@@ -44,6 +44,7 @@ const TimeResult = () => {
               alt="purplerabbit"
               width={120}
               height={180}
+              priority
             />
           </div>
           <div className="flex flex-col gap-2">
