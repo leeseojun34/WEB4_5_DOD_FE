@@ -6,7 +6,7 @@ import { useRouter, useParams } from "next/navigation";
 const ActionMyButton = () => {
   const router = useRouter();
   const { eventId } = useParams();
-  const myScheduleRegistration = () => {
+  const myScheduleRegistration = async () => {
     // TODO: 내 시간표 등록 기능 추가
     router.push(`/meeting/${eventId}/coordinate`);
   };

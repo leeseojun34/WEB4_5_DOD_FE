@@ -54,21 +54,16 @@ interface EventTimeMemberType {
 }
 
 // 개인의 가능한 시간대 생성/수정
-/**
- * {
-  "dailyTimeSlots": [
-    {
-      "date": "2025-07-16",
-      "timeBit": "string"
-    }
-  ],
-  "timezone": "UTC-6"
-}
- */
 interface EventMyTimeType {
   dailyTimeSlots: {
     date: string;
     timeBit: string;
   }[];
   timezone: string;
+}
+
+interface DayInfo {
+  day: string;
+  date?: string;
+  fullDate?: string;
 }

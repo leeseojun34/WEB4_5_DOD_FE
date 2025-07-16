@@ -117,7 +117,20 @@ export const getEventScheduleInfo = async (
  * @param time 개인의 가능한 시간대
  * @returns
  */
-export const setEventMyTime = async (
+// export const useSetEventMyTime = () => {
+//   return useMutation({
+//     mutationFn: (eventId: number, time: EventMyTimeType) =>
+//       setEventMyTime(eventId, time),
+//     onSuccess: (data) => {
+//       console.log("개인의 가능한 시간대 생성/수정 성공: ", data);
+//     },
+//     onError: (err) => {
+//       console.error("개인의 가능한 시간대 생성/수정 실패: ", err);
+//     },
+//   });
+// };
+
+export const setEventMyTimeApi = async (
   eventId: number,
   time: EventMyTimeType
 ) => {
