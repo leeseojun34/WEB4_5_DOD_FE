@@ -3,7 +3,13 @@ import ScheduleTitleText from "@/components/ui/ScheduleTitle";
 import { listVariants, itemVariants } from "./motion";
 import { motion } from "framer-motion";
 
-const ScheduleInfo = () => {
+const ScheduleInfo = ({
+  schedule,
+  setSchedule,
+}: {
+  schedule: ScheduleType;
+  setSchedule: (schedule: ScheduleType) => void;
+}) => {
   return (
     <>
       <div className="flex flex-col gap-4 mt-10">
@@ -20,8 +26,10 @@ const ScheduleInfo = () => {
             label="일정 이름"
             placeholder="일정 이름을 입력해 주세요"
             fullWidth
-            value=""
-            onChange={() => {}}
+            value={schedule.title}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setSchedule({ ...schedule, title: e.target.value })
+            }
           />
         </motion.div>
         <motion.div className="mt-4" variants={itemVariants}>
@@ -30,8 +38,10 @@ const ScheduleInfo = () => {
             placeholder="일정 설명을 입력해 주세요"
             fullWidth
             isTextarea
-            value=""
-            onChange={() => {}}
+            value={schedule.description}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+              setSchedule({ ...schedule, description: e.target.value })
+            }
           />
         </motion.div>
       </motion.div>
