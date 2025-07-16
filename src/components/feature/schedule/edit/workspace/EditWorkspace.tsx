@@ -5,6 +5,7 @@ const EditWorkspace = ({
 }: {
   onEditClick: (data: { type: string; name: string; url: string }) => void;
 }) => {
+  
   return (
     <>
       <div className="space-y-4">
