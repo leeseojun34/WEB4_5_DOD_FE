@@ -2,7 +2,7 @@ import ShareButton from "@/components/ui/ShareButton";
 import MeetingInfo from "../../MeetingInfo";
 import WorkSpace from "../../WorkSpace";
 import KakaoScript from "../../KakaoScript";
-import { useKakaoShare } from "@/hooks/useKakaoShare";
+import { useKakaoShare } from "@/lib/api/useKakaoShare";
 
 type WorkSpaceType =
   | "NOTION"
