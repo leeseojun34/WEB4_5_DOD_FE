@@ -34,6 +34,7 @@ const StartPoint = () => {
 
   const selectStationHandler = (station: kakaoSearch) => {
     setSelectedStation(station);
+    console.log(station);
     //setIsSheetOpen(false);
   };
   return (
