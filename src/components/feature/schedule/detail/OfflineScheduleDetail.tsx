@@ -1,23 +1,36 @@
+"use client";
+import { useParams } from "next/navigation";
 import MeetingLocation from "../../MeetingLocation";
 import ScheduleDetailContent from "./ScheduleDetailContent";
 import ScheduleDetailLayout from "./ScheduleDetailLayout";
+import { useGroupSchedule, Workspace } from "@/lib/api/scheduleApi";
+import GlobalLoading from "@/app/loading";
 
 const OfflineScheduleDetail = () => {
-  const scheduleId = "1";
+  const params = useParams();
+  const scheduleId = params.Id as string;
+
+  const { data: scheduleData } = useGroupSchedule(scheduleId);
+
+  if (!scheduleData || !scheduleData.data) {
+    return <GlobalLoading />;
+  }
 
   return (
     <ScheduleDetailLayout>
       <ScheduleDetailContent
         scheduleId={scheduleId}
-        members={["박준규", "카리나"]}
-        time="7월 5일 (금) 12:00 - 24:00"
-        workspace={[
-          { platform: "NOTION", name: "프론트엔드 기획서" },
-          { platform: "GITHUB", name: "이때 어때 레포지토리" },
-          { platform: "MIRO", name: "이때 어때 미로" },
-        ]}
+        members={scheduleData.data.members}
+        time={scheduleData.data.startTime}
+        workspace={scheduleData.data.workspaces.map((workspace: Workspace) => ({
+          platform: workspace.type,
+          name: workspace.name,
+        }))}
       >
-        <MeetingLocation location="강남역" specificLocation="강남역 스타벅스" />
+        <MeetingLocation
+          location={scheduleData.data.location}
+          specificLocation={scheduleData.data.specificLocation}
+        />
       </ScheduleDetailContent>
     </ScheduleDetailLayout>
   );

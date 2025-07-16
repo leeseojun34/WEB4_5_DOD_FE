@@ -1,6 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "./axiosInstance";
 
+export interface Workspace {
+  type: string;
+  name: string;
+  url: string;
+}
+
 export type WorkSpaceType =
   | "GITHUB"
   | "NOTION"

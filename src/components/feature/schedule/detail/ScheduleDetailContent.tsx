@@ -3,14 +3,7 @@ import MeetingInfo from "../../MeetingInfo";
 import WorkSpace from "../../WorkSpace";
 import KakaoScript from "../../KakaoScript";
 import { useKakaoShare } from "@/lib/api/useKakaoShare";
-
-type WorkSpaceType =
-  | "NOTION"
-  | "GITHUB"
-  | "MIRO"
-  | "FIGMA"
-  | "GOOGLEDOCS"
-  | "CANVA";
+import { WorkSpaceType } from "@/lib/api/scheduleApi";
 
 interface ScheduleDetailContentProps {
   scheduleId: string;
