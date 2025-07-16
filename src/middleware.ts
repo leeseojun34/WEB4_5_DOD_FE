@@ -8,8 +8,6 @@ const authPaths = ["/auth/login"];
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  console.log("모든 쿠키:", req.cookies.getAll());
-
   const token = req.cookies.get("ACCESS_TOKEN")?.value;
   const isAuthenticated = !!token;
   const isPublicPath = publicPaths.some(
