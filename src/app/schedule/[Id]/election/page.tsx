@@ -2,7 +2,7 @@
 import takka from "@/assets/images/rabbit_vote2.png";
 import Image from "next/image";
 import { Station } from "@/types/station";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SubwayCard from "@/components/ui/SubwayCard";
 import PopupMessage from "@/components/ui/PopupMessage";
 import { Button } from "@/components/ui/Button";
@@ -10,12 +10,17 @@ import { motion } from "framer-motion";
 import Header from "@/components/layout/Header";
 import HeaderTop from "@/components/layout/HeaderTop";
 import { useRouter } from "next/navigation";
+import getTotalTravelTime from "@/app/utils/getTotalTravelTime";
+
+const dummyUserData = [
+  { latitude: 37.50578860265, longitude: 126.753192450274 },
+];
 
 const dummyData = [
   {
-    locationName: "동대문역사문화공원역",
-    latitude: 37.4979,
-    longitude: 127.0276,
+    locationName: "기흥역",
+    latitude: 37.2754972009506,
+    longitude: 127.115955078051,
     suggestedMemberId: 1,
     voteCount: 5,
     metroLines: ["2", "4", "5"],
@@ -24,9 +29,9 @@ const dummyData = [
     noVoteCount: 0,
   },
   {
-    locationName: "역삼역",
-    latitude: 37.5008,
-    longitude: 127.0365,
+    locationName: "강남역",
+    latitude: 37.49808633653005,
+    longitude: 127.02800140627488,
     suggestedMemberId: 2,
     voteCount: 2,
     metroLines: ["2", "8"],
@@ -36,8 +41,8 @@ const dummyData = [
   },
   {
     locationName: "홍대입구역",
-    latitude: 37.5572,
-    longitude: 126.9245,
+    latitude: 37.5568707448873,
+    longitude: 126.923778562273,
     suggestedMemberId: 3,
     voteCount: 8,
     metroLines: ["2", "5", "경의중앙", "수인분당"],
@@ -69,9 +74,44 @@ const itemVariants = {
 };
 
 const ElectionSpot = () => {
+  const userPosition = dummyUserData[0];
   const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [staionList, setStationList] = useState(dummyData);
+  // const [loading, setLoading] = useState(true);
+
   const isActive = selectedId !== null;
+
   const router = useRouter();
+
+  useEffect(() => {
+    const fetchTravelTimes = async () => {
+      //setLoading(true);
+
+      const updateStations = await Promise.all(
+        dummyData.map(async (station) => {
+          try {
+            const time = await getTotalTravelTime(
+              {
+                x: userPosition.longitude,
+                y: userPosition.latitude,
+              },
+              {
+                x: station.longitude,
+                y: station.latitude,
+              }
+            );
+            return { ...station, travelTime: time };
+          } catch (err) {
+            console.error("계산 실패", err);
+            return { ...station, travelTime: -1 };
+          }
+        })
+      );
+      setStationList(updateStations);
+      //setLoading(false);
+    };
+    fetchTravelTimes();
+  }, [userPosition]);
 
   return (
     <main className="flex flex-col h-screen w-full mx-auto">
@@ -108,7 +148,7 @@ const ElectionSpot = () => {
             animate="visible"
             className="flex flex-col gap-3"
           >
-            {dummyData.map((station, idx) => (
+            {staionList.map((station, idx) => (
               <motion.div
                 key={idx}
                 variants={itemVariants}
