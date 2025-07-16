@@ -1,39 +1,37 @@
 "use client";
-import { useParams } from "next/navigation";
+import {
+  ScheduleDetailType,
+  WorkspacePlatformType,
+  WorkspaceType,
+} from "@/types/schedule";
 import MeetingLocation from "../../MeetingLocation";
 import ScheduleDetailContent from "./ScheduleDetailContent";
 import ScheduleDetailLayout from "./ScheduleDetailLayout";
-import { useGroupSchedule, Workspace } from "@/lib/api/scheduleApi";
-import GlobalLoading from "@/app/loading";
 import { formatSchedule } from "@/app/utils/dateFormat";
 
-const OfflineScheduleDetail = () => {
-  const params = useParams();
-  const scheduleId = params.Id as string;
+interface OfflineScheduleDetailProps {
+  scheduleId: string;
+  data: ScheduleDetailType;
+}
 
-  const { data: scheduleData } = useGroupSchedule(scheduleId);
-
-  if (!scheduleData || !scheduleData.data) {
-    return <GlobalLoading />;
-  }
-
+const OfflineScheduleDetail = ({
+  scheduleId,
+  data,
+}: OfflineScheduleDetailProps) => {
   return (
     <ScheduleDetailLayout>
       <ScheduleDetailContent
         scheduleId={scheduleId}
-        members={scheduleData.data.members}
-        time={formatSchedule(
-          scheduleData.data.startTime,
-          scheduleData.data.endTime
-        )}
-        workspace={scheduleData.data.workspaces.map((workspace: Workspace) => ({
-          platform: workspace.type,
+        members={data.members}
+        time={formatSchedule(data.startTime, data.endTime)}
+        workspace={data.workspaces.map((workspace: WorkspaceType) => ({
+          platform: workspace.type as WorkspacePlatformType,
           name: workspace.name,
         }))}
       >
         <MeetingLocation
-          location={scheduleData.data.location}
-          specificLocation={scheduleData.data.specificLocation}
+          location={data.location}
+          specificLocation={data.specificLocation}
         />
       </ScheduleDetailContent>
     </ScheduleDetailLayout>
