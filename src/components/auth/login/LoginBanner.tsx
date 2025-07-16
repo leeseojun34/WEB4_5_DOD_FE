@@ -12,7 +12,7 @@ const LoginBanner = () => {
       </p>
 
       <div className="absolute bottom-0 right-0 size-[250px] sm:size-[300px] md:size-[350px] lg:size-[400px]">
-        <Image src={character} alt="로그인 캐릭터 이미지" className="w-full" />
+        <Image src={character} alt="로그인 캐릭터 이미지" priority />
       </div>
     </div>
   );

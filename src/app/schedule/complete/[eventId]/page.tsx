@@ -10,9 +10,34 @@ import {
 } from "@/components/feature/schedule/motion";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { getEventDetail } from "@/lib/api/scheduleApi";
 
 // TODO: 생성된 그룹 명 받아와야 함
 const Complete = () => {
+  const { eventId } = useParams();
+  const [eventInfo, setEventInfo] = useState<EventInfoType | null>(null);
+
+  const getEventInfo = async () => {
+    try {
+      const response = await getEventDetail(Number(eventId));
+      // TODO: 인증 오류 나면 대시보드로 패스
+      if (response.code === "200") {
+        console.log(response.data);
+        setEventInfo(response.data);
+      } else {
+        throw new Error(response.message);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getEventInfo();
+  }, []);
+
   return (
     <div className="relative bg-[var(--color-primary-100)]">
       <motion.div
@@ -29,7 +54,7 @@ const Complete = () => {
         >
           <Bubble>
             <div className="text-base">
-              대나무 행주 모임이 <br /> 생성되었습니다🎉
+              {eventInfo?.title || "대나무 행주"} 모임이 <br /> 생성되었습니다🎉
             </div>
           </Bubble>
         </motion.div>

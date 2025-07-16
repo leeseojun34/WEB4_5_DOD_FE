@@ -1,8 +1,9 @@
 "use client";
 
 import { Sheet, SheetRef } from "react-modal-sheet";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 /**
+ *
  * @param isOpen - 바텀시트 열림 여부 - boolean
  * @param setIsOpen - 바텀시트 열림 여부 설정 - (isOpen 변경 함수)
  * @param children - 바텀시트 내용 - (snapTo 함수를 인자로 받는 함수)
@@ -36,10 +37,17 @@ const BottomSheet = ({
   className = "",
 }: BottomSheetProps) => {
   const sheetRef = useRef<SheetRef>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const snapTo = (i: number) => {
-    if (typeof window === "undefined") return;
     sheetRef.current?.snapTo(i);
   };
+
+  if (!mounted) return null;
 
   return (
     <>
@@ -54,7 +62,7 @@ const BottomSheet = ({
       >
         <Sheet.Container style={{ borderRadius: "20px 20px 0 0" }}>
           <Sheet.Header />
-          <Sheet.Content>{children(snapTo)}</Sheet.Content>
+          <Sheet.Content> {children(snapTo)}</Sheet.Content>
         </Sheet.Container>
         <Sheet.Backdrop />
       </Sheet>

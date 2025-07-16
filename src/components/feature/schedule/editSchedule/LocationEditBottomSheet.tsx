@@ -6,6 +6,7 @@ import { Search } from "lucide-react";
 import useMediaQuery from "../hooks/useMediaQuery";
 import { ChangeEvent, useState } from "react";
 import BottomSheetHeader from "@/components/layout/BottomSheetHeader";
+import { useRouter } from "next/navigation";
 
 interface LocationEditBottomSheetProps {
   isOpen: boolean;
@@ -20,7 +21,13 @@ const LocationEditBottomSheet = ({
   const isMobile = useMediaQuery("(min-height: 935px)");
   const snapPoints = isMobile ? [0.5] : [0.6];
   const midPointStation = "2호선 건대입구역";
+  const router = useRouter();
   // const midPointStation = "";
+
+  const handleClickRouter = () => {
+    router.push("/schedule/1/election/start");
+  };
+
   return (
     <BottomSheet isOpen={isOpen} setIsOpen={setIsOpen} snapPoints={snapPoints}>
       {() => (
@@ -32,6 +39,7 @@ const LocationEditBottomSheet = ({
             mode="help"
             color="var(--color-primary-100)"
             borderColor="var(--color-primary-400)"
+            onClick={handleClickRouter}
           ></ShareButton>
           <Input
             label="모임 장소"
