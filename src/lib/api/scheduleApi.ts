@@ -11,7 +11,7 @@ export type WorkSpaceType =
   | "GITHUB"
   | "NOTION"
   | "FIGMA"
-  | "GOOGLEDOCS"
+  | "GOOGLE_DOS"
   | "MIRO"
   | "CANVA";
 
