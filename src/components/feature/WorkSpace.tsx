@@ -8,7 +8,7 @@ import canvaIcon from "@/assets/icon/canva_icon.svg";
 import Image from "next/image";
 import Link from "next/link";
 
-type Platform = "github" | "notion" | "figma" | "googleDocs" | "miro" | "canva";
+type Platform = "GITHUB" | "NOTION" | "FIGMA" | "GOOGLEDOCS" | "MIRO" | "CANVA";
 interface WorkSpaceProps {
   workspaces:
     | {
@@ -16,19 +16,19 @@ interface WorkSpaceProps {
         name: string;
       }[]
     | null;
+  scheduleId: string;
 }
 
-const WorkSpace = ({ workspaces }: WorkSpaceProps) => {
+const WorkSpace = ({ scheduleId, workspaces }: WorkSpaceProps) => {
   const PLATFORM = {
-    github: githubIcon,
-    notion: notionIcon,
-    figma: figmaIcon,
-    googleDocs: googleDocsIcon,
-    miro: miroIcon,
-    canva: canvaIcon,
+    GITHUB: githubIcon,
+    NOTION: notionIcon,
+    FIGMA: figmaIcon,
+    GOOGLEDOCS: googleDocsIcon,
+    MIRO: miroIcon,
+    CANVA: canvaIcon,
   };
 
-  const scheduleId = 1;
   return (
     <div className="bg-[color:var(--color-white)] px-5 py-4 gap-4 rounded-lg flex flex-col shadow-[var(--shadow-common)]">
       <div className="flex w-full justify-between items-center">
