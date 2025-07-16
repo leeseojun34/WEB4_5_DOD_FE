@@ -6,7 +6,11 @@ import { useEffect } from "react";
 
 const Callback = () => {
   const router = useRouter();
-  const { isSuccess, isError } = useUser();
+  const { isSuccess, isError, refetch } = useUser();
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
 
   useEffect(() => {
     if (isSuccess) {

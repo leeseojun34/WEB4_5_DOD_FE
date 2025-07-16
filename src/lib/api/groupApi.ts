@@ -46,6 +46,57 @@ const deleteGroup = async (id: string) => {
   return res.data;
 };
 
+const getGroupSchedules = async (groupId: string) => {
+  const res = await axiosInstance.get(`/groups/schedule-groups/${groupId}`, {
+    params: { id: groupId },
+  });
+  return res.data;
+};
+
+const getGroupStatistics = async (groupId: string) => {
+  const res = await axiosInstance.get(`/groups/${groupId}/statistics`, {
+    params: { id: groupId },
+  });
+  return res.data;
+};
+
+const getGroupMembers = async (groupId: string) => {
+  const res = await axiosInstance.get(`/groups/${groupId}/member`, {
+    params: { id: groupId },
+  });
+  return res.data;
+};
+
+export const useGroupSchedules = (groupId: string) => {
+  return useQuery({
+    queryKey: ["groupSchedules", groupId],
+    queryFn: () => getGroupSchedules(groupId),
+    enabled: !!groupId,
+    retry: false,
+    refetchOnWindowFocus: false,
+  });
+};
+
+export const useGroupStatistics = (groupId: string) => {
+  return useQuery({
+    queryKey: ["groupStatics", groupId],
+    queryFn: () => getGroupStatistics(groupId),
+    enabled: !!groupId,
+    retry: false,
+    refetchOnWindowFocus: false,
+  });
+};
+
+export const useGroupMembers = (groupId: string) => {
+  return useQuery({
+    queryKey: ["groupMembers", groupId],
+    queryFn: () => getGroupMembers(groupId),
+    enabled: !!groupId,
+    retry: false,
+    refetchOnWindowFocus: false,
+  });
+};
+
 export const useGroup = (id: string) => {
   return useQuery({
     queryKey: ["group", id],
