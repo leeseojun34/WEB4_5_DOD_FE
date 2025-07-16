@@ -12,6 +12,7 @@ export const useUser = () => {
   return useQuery({
     queryKey: ["user"],
     queryFn: getUserInfo,
+    enabled: false,
     retry: false,
     refetchOnWindowFocus: false,
   });
