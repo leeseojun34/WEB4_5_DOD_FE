@@ -32,7 +32,7 @@ const ScheduleDetail = () => {
             members={["박준규", "카리나"]}
             time="7월 5일 (금) 12:00 - 24:00"
           />
-          {isOnline ? (
+          {!isOnline ? (
             <OnlineMeetingRoom platform="zoom" name=" 박준규 팬미팅" />
           ) : (
             <MeetingLocation

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import localFont from "next/font/local";
 import TanstackProvider from "@/providers/TanstackProvider";
+import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
   title: "이때어때",
@@ -26,6 +27,7 @@ export default function RootLayout({
         <div className="max-w-screen-lg mx-auto">
           <TanstackProvider>{children}</TanstackProvider>
         </div>
+        <Toaster />
       </body>
     </html>
   );

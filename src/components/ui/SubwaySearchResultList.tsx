@@ -1,3 +1,4 @@
+"use client";
 import SubwaySearchResultItem from "./SubwaySearchResultItem";
 import { kakaoSearch } from "@/types/kakaoSearch";
 
@@ -14,7 +15,7 @@ const SubwaySearchResultList: React.FC<SubwaySearchResultListProps> = ({
 }) => {
   const needScroll = results.length > 4;
   return (
-    <div className="flex flex-col gap-3.5">
+    <div className="flex flex-col gap-3.5 py-4">
       <div className={needScroll ? "max-h-[232px] overflow-y-auto" : ""}>
         {results.map((station) => (
           <SubwaySearchResultItem

@@ -25,7 +25,7 @@ function NameSheet({
       setIsOpen={setIsOpen}
       initialSnap={0}
       snapPoints={[0.35]}>
-      {(snapTo) => (
+      {() => (
         <div className="w-full flex flex-col  px-5 gap-8 pb-12">
           <div className="flex justify-between items-center px-5">
             <X className="invisible" />
