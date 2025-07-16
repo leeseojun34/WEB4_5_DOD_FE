@@ -3,28 +3,20 @@ import OfflineScheduleDetail from "./OfflineScheduleDetail";
 import OnlineScheduleDetail from "./OnlineScheduleDetail";
 import { useGroupSchedule } from "@/lib/api/scheduleApi";
 import GlobalLoading from "@/app/loading";
-import { useEffect, useState } from "react";
 
 const ScheduleDetail = () => {
   const params = useParams();
-  const scheduleId = params.Id as string;
-  const [isOnline, setIsOnline] = useState<boolean | null>(null);
+  const scheduleId = params.id as string;
 
-  const { data: scheduleData } = useGroupSchedule(scheduleId);
+  const { data: scheduleData, isPending } = useGroupSchedule(scheduleId);
 
-  useEffect(() => {
-    if (scheduleData?.data.meetingType) {
-      setIsOnline(scheduleData.data.meetingType !== "OFFLINE");
-    }
-  }, [scheduleData]);
-
-  if (!scheduleData || !scheduleData.data || isOnline === null) {
+  if (isPending) {
     return <GlobalLoading />;
   }
 
   return (
     <>
-      {isOnline ? (
+      {scheduleData.data.meetingType === "ONLINE" ? (
         <OnlineScheduleDetail
           scheduleId={scheduleId}
           data={scheduleData.data}
