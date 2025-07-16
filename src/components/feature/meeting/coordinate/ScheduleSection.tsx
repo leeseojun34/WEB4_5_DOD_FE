@@ -6,12 +6,19 @@ interface ScheduleSectionProps {
   title: React.ReactNode;
   showLoadButton?: boolean;
   className?: string;
+  eventScheduleInfo?: EventTimeTableType;
 }
 
+/**
+ * TODO: 내 시간표 가져오기 기능 추가
+ *
+ * @returns
+ */
 const ScheduleSection = ({
   title,
   showLoadButton = false,
   className = "",
+  eventScheduleInfo,
 }: ScheduleSectionProps) => {
   return (
     <div className={`flex flex-col gap-6 w-full ${className}`}>
@@ -22,7 +29,7 @@ const ScheduleSection = ({
         {showLoadButton && <LoadButton />}
       </div>
       <div className="flex justify-center w-full">
-        <Schedule />
+        <Schedule eventScheduleInfo={eventScheduleInfo} />
       </div>
     </div>
   );

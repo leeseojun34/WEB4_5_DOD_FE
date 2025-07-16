@@ -19,29 +19,13 @@ import { useState, useRef, useCallback, useEffect } from "react";
 
 interface DayInfo {
   day: string;
-  date: string;
+  date?: string;
 }
-
-// 요일 및 날짜 정의
-const DAYS_OF_WEEK: DayInfo[] = [
-  { day: "MON", date: "07.13" },
-  { day: "TUE", date: "07.14" },
-  { day: "WED", date: "07.15" },
-  { day: "THU", date: "07.16" },
-  { day: "FRI", date: "07.17" },
-  { day: "SAT", date: "07.18" },
-  { day: "SUN", date: "07.19" },
-];
-
-const HOURS_COUNT = 24; // 시간 수
-const TIME_SLOTS_PER_HOUR = 2; // 시간당 슬롯 수
-const TOTAL_TIME_SLOTS = HOURS_COUNT * TIME_SLOTS_PER_HOUR; // 총 시간 슬롯 수
-const DAYS_COUNT = 7; // 요일 수
 
 const STYLES = {
   container: "pl-3 pr-6 w-full",
   header: "sticky top-0 z-10 bg-white",
-  dayGrid: "grid grid-cols-7 gap-1 pl-6",
+  dayGrid: `grid gap-1 pl-6 grid-cols-7`,
   dayCell: "py-2 text-center text-[#9EA6B2] text-[8px] md:text-xl font-bold",
   dayText: "block",
   dateText: "text-[var(--color-primary-400)]",
@@ -49,15 +33,61 @@ const STYLES = {
   timeCell: "h-10 md:h-20 text-right pr-1",
   timeText:
     "block text-[#9EA6B2] text-[8px] md:text-base font-bold translate-y-0",
-  scheduleGrid: "grid flex-1 grid-cols-7 gap-1 md:gap-4",
+  scheduleGrid: `grid flex-1 gap-1 md:gap-4 grid-cols-7`,
   dayColumn: "flex flex-col gap-2 overflow-hidden rounded-lg",
   timeSlot:
     "w-full h-5 md:h-10 border-b border-white last:border-b-0 odd:border-dashed even:border-solid cursor-pointer transition-colors duration-150",
   selectedSlot: "bg-[var(--color-primary-400)]",
   unselectedSlot: "bg-[var(--color-muted)]",
-} as const;
+};
 
-const Schedule = () => {
+const Schedule = ({
+  eventScheduleInfo,
+  isDraggingAndClick = true,
+}: {
+  eventScheduleInfo?: EventTimeTableType;
+  isDraggingAndClick?: boolean;
+}) => {
+  console.log(eventScheduleInfo);
+  console.log(isDraggingAndClick);
+
+  let daysOfWeek: DayInfo[] = [];
+  let hourCount = 24; // 시간 수
+  const timeSlotsPerHour = 2; // 시간당 슬롯 수
+  let totalTimeSlots = hourCount * timeSlotsPerHour; // 총 시간 슬롯 수
+  let dayCount = 7; // 요일 수
+
+  let startTime: string[] = ["00", "00"];
+  let endTime: string[] = ["24", "00"];
+
+  if (!eventScheduleInfo) {
+    daysOfWeek = [
+      { day: "MON" },
+      { day: "TUE" },
+      { day: "WED" },
+      { day: "THU" },
+      { day: "FRI" },
+      { day: "SAT" },
+      { day: "SUN" },
+    ];
+  } else {
+    daysOfWeek = eventScheduleInfo.dates.map((item) => ({
+      day: item.dayOfWeek,
+      date: item.displayDate,
+    }));
+    startTime = eventScheduleInfo.startTime.split(":");
+    endTime = eventScheduleInfo.endTime.split(":");
+    hourCount = Number(endTime[0]) - Number(startTime[0]);
+    totalTimeSlots = hourCount * timeSlotsPerHour;
+    if (startTime[1] !== "00") {
+      hourCount += 1;
+    }
+    if (endTime[1] !== "00") {
+      hourCount += 1;
+    }
+    dayCount = eventScheduleInfo.dates.length;
+  }
+
   const [selectedCells, setSelectedCells] = useState<Set<string>>(new Set());
   const [isDragging, setIsDragging] = useState(false);
   const [dragStartCell, setDragStartCell] = useState<string | null>(null);
@@ -123,6 +153,9 @@ const Schedule = () => {
     (dayIndex: number, timeIndex: number) => {
       if (!isDragging || !dragStartCell) return;
 
+      const [, startDayIndex] = dragStartCell.split("-");
+      if (Number(startDayIndex) !== dayIndex) return;
+
       const cellId = getCellId(dayIndex, timeIndex);
       toggleCellSelection(cellId);
     },
@@ -130,9 +163,11 @@ const Schedule = () => {
   );
 
   // 마우스 클릭 종료 시 드래그 상태 초기화
-  const handleMouseUp = useCallback(() => {
+  const handleMouseUp = useCallback(async () => {
     setIsDragging(false);
     setDragStartCell(null);
+    // TODO: 드래그 종료 시 선택된 셀 값 저장
+    // setEventMyTime
   }, []);
 
   // 마우스가 영역을 벗어나면 드래그 상태 초기화
@@ -167,7 +202,13 @@ const Schedule = () => {
       if (!target) return;
 
       const id = (target as HTMLElement).id;
-      if (id.startsWith("cell-") && lastTouchedCell.current !== id) {
+      if (!id.startsWith("cell-")) return;
+
+      const [, dayIndexStr] = id.split("-");
+      const [, dragStartDayIndex] = dragStartCell.split("-");
+      if (dayIndexStr !== dragStartDayIndex) return;
+
+      if (lastTouchedCell.current !== id) {
         toggleCellSelection(id);
         lastTouchedCell.current = id; // 마지막 셀 ID 저장
       }
@@ -191,9 +232,11 @@ const Schedule = () => {
   const renderTimeColumn = () => (
     <div className={STYLES.timeColumn}>
       <div>
-        {Array.from({ length: HOURS_COUNT }).map((_, index) => (
+        {Array.from({ length: hourCount }).map((_, index) => (
           <div key={index} className={STYLES.timeCell}>
-            <span className={STYLES.timeText}>{index}</span>
+            <span className={STYLES.timeText}>
+              {index + Number(startTime[0])}
+            </span>
           </div>
         ))}
       </div>
@@ -229,7 +272,7 @@ const Schedule = () => {
       id={`schedule-${dayIndex}`}
     >
       <div>
-        {Array.from({ length: TOTAL_TIME_SLOTS }).map((_, timeIndex) =>
+        {Array.from({ length: totalTimeSlots }).map((_, timeIndex) =>
           renderTimeSlot(dayIndex, timeIndex)
         )}
       </div>
@@ -248,14 +291,14 @@ const Schedule = () => {
       <div className="flex flex-col">
         <div className={STYLES.header}>
           <div className={STYLES.dayGrid}>
-            {DAYS_OF_WEEK.map(renderDayHeader)}
+            {daysOfWeek.map(renderDayHeader)}
           </div>
         </div>
 
         <div className="flex flex-1">
           {renderTimeColumn()}
           <div className={STYLES.scheduleGrid}>
-            {Array.from({ length: DAYS_COUNT }).map((_, dayIndex) =>
+            {Array.from({ length: dayCount }).map((_, dayIndex) =>
               renderDayColumn(dayIndex)
             )}
           </div>

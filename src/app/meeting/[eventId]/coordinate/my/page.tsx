@@ -1,6 +1,6 @@
 "use client";
 
-import CoordinateContent from "@/components/feature/meeting/coordinate/CoordinateContent";
+import MySchedule from "@/components/feature/meeting/coordinate/MySchedule";
 import GroupHeader from "@/components/layout/GroupHeader";
 import Header from "@/components/layout/Header";
 import { useParams } from "next/navigation";
@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getEventScheduleInfo } from "@/lib/api/scheduleApi";
 import GlobalLoading from "@/app/loading";
 
-const CoordinatePage = () => {
+const MySchedulePage = () => {
   const { eventId } = useParams();
   const { data: eventScheduleInfo } = useQuery({
     queryKey: ["eventScheduleInfo", eventId],
@@ -20,9 +20,8 @@ const CoordinatePage = () => {
   if (!eventScheduleInfo) {
     return <GlobalLoading />;
   }
-
   return (
-    <section>
+    <>
       <div className="hidden sm:block">
         <Header type="blue" />
       </div>
@@ -33,12 +32,9 @@ const CoordinatePage = () => {
         clickToInvite={() => console.log("초대함")}
       />
       <div className="min-w-[375px] w-full max-w-185 mx-auto relative">
-        <CoordinateContent
-          eventScheduleInfo={eventScheduleInfo.memberSchedules}
-        />
+        <MySchedule eventScheduleInfo={eventScheduleInfo.timeTable} />
       </div>
-    </section>
+    </>
   );
 };
-
-export default CoordinatePage;
+export default MySchedulePage;
