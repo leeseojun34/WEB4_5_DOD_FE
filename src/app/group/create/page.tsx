@@ -3,15 +3,27 @@ import Header from "@/components/layout/Header";
 import HeaderTop from "@/components/layout/HeaderTop";
 import { Button } from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
+import { useCreateGroup } from "@/lib/api/groupApi";
 import { ChangeEvent, useState } from "react";
 
 const CreateGroup = () => {
   const [groupName, setGroupName] = useState("");
   const [groupDescription, setGroupDescription] = useState("");
 
+  const createGroupMutation = useCreateGroup();
+
   const handleCreateGroup = () => {
-    console.log("그룹 생성하기");
+    createGroupMutation.mutate({
+      groupName: groupName.trim(),
+      description: groupDescription.trim(),
+    });
   };
+
+  const isFormValid =
+    groupName.trim().length > 0 && groupDescription.trim().length > 0;
+  const isLoading = createGroupMutation.isPending;
+  const buttonState = !isFormValid || isLoading ? "disabled" : "default";
+
   return (
     <div className="bg-[color:var(--color-white)] min-h-screen">
       <div className="hidden sm:block">
@@ -47,7 +59,9 @@ const CreateGroup = () => {
         </div>
         <div className="fixed w-full left-0 right-0 px-5 bottom-9">
           <div className="max-w-185 mx-auto">
-            <Button onClick={handleCreateGroup}>그룹 생성</Button>
+            <Button onClick={handleCreateGroup} state={buttonState}>
+              {isLoading ? "생성 중.." : "그룹 생성"}
+            </Button>
           </div>
         </div>
       </div>

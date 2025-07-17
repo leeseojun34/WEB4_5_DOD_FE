@@ -1,6 +1,8 @@
-import Home from "@/components/home/Home";
-import { Toaster } from 'react-hot-toast';
+"use client";
 
-export default function Page() {
-  return <div><Home /> <Toaster /></div>;
-}
+import Home from "@/components/home/Home";
+
+const HomePage = () => {
+  return <Home />;
+};
+export default HomePage;

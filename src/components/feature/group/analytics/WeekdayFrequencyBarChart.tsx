@@ -37,10 +37,23 @@ export const options = {
   },
   scales: {
     x: {
-      display: false,
+      display: true,
+      grid: {
+        display: false,
+        drawBorder: false,
+      },
+      ticks: {
+        font: {
+          weight: "bold" as const,
+        },
+      },
     },
     y: {
       display: false,
+      grid: {
+        display: false,
+        drawBorder: false,
+      },
     },
   },
 };
