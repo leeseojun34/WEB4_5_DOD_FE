@@ -1,13 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Calendar } from "../feature/calendar/Calender";
 import { Banner } from "./Banner";
 import { MyGroupSection } from "./MyGroupSection";
 import { MyScheduleSection } from "./MyScheduleSection";
 import Footer from "../layout/Footer";
 import Header from "../layout/Header";
+import { useDashboard } from "@/lib/api/dashboardApi";
+import { formatDate } from "@/app/utils/dateFormat";
 
 const Dashboard = () => {
-  const [selected, setSelected] = useState<Date | undefined>();
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+
+  const { data: dashboardData } = useDashboard(formatDate(selectedDate));
+
+  useEffect(() => {
+    if (dashboardData?.data) {
+      console.log(dashboardData.data);
+    }
+  });
+
   return (
     <section>
       <div className="hidden sm:block">
@@ -18,8 +29,8 @@ const Dashboard = () => {
           <Banner />
           <Calendar
             isCompact={true}
-            selected={selected}
-            setSelected={setSelected}
+            selected={selectedDate}
+            setSelected={setSelectedDate}
           />
           <MyScheduleSection />
           <MyGroupSection />
