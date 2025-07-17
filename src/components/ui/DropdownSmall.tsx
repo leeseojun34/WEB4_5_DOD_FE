@@ -39,7 +39,9 @@ const DropdownSmall = ({
           <div className="min-w-[92px] flex flex-col  bg-[color:var(--color-white)] text-[var(--color-black)] px-5 py-2  rounded-lg gap-4 text-xs font-medium shadow-[box-shadow:var(--shadow-common)]">
             {topChild && (
               <div
-                className="w-full text-center cursor-pointer hover:font-semibold"
+                className={`w-full text-center cursor-pointer hover:font-semibold ${
+                  !bottomChild && "text-[var(--color-red)]"
+                }`}
                 onClick={(e) => {
                   e.stopPropagation();
                   onTopClick();
@@ -51,7 +53,7 @@ const DropdownSmall = ({
             )}
             {bottomChild && onBottomClick && (
               <div
-                className="ww-full text-center text-[var(--color-red)] cursor-pointer hover:font-semibold"
+                className="w-full text-center text-[var(--color-red)] cursor-pointer hover:font-semibold"
                 onClick={(e) => {
                   e.stopPropagation();
                   onBottomClick();
