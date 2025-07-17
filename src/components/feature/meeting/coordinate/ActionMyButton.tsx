@@ -2,13 +2,20 @@
 
 import { Button } from "@/components/ui/Button";
 import { useRouter, useParams } from "next/navigation";
+import { setEventMyTime } from "@/lib/api/scheduleApi";
+import Toast from "@/components/ui/Toast";
 
 const ActionMyButton = () => {
   const router = useRouter();
   const { eventId } = useParams();
   const myScheduleRegistration = async () => {
-    // TODO: 내 시간표 등록 기능 추가
-    router.push(`/meeting/${eventId}/coordinate`);
+    try {
+      await setEventMyTime(Number(eventId));
+      router.push(`/meeting/${eventId}/coordinate`);
+    } catch (error) {
+      Toast("내 시간표 등록에 실패했습니다.");
+      console.error(error);
+    }
   };
 
   return (

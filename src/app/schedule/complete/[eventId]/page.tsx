@@ -13,8 +13,8 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getEventDetail } from "@/lib/api/scheduleApi";
-import { toast } from "react-hot-toast";
 import GlobalLoading from "@/app/loading";
+import Toast from "@/components/ui/Toast";
 
 const Complete = () => {
   const { eventId } = useParams();
@@ -27,15 +27,7 @@ const Complete = () => {
       if (response.code === "200") {
         setEventInfo(response.data);
       } else {
-        toast("모임 생성에 실패했거나 허가되지 않은 접근입니다.", {
-          icon: "😥",
-          style: {
-            borderRadius: "50px",
-            background: "#fff",
-            border: "1px solid var(--color-red)",
-            color: "#000",
-          },
-        });
+        Toast("모임 생성에 실패했거나 허가되지 않은 접근입니다.");
         router.push("/");
       }
     } catch (error) {

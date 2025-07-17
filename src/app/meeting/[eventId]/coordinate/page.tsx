@@ -4,18 +4,12 @@ import CoordinateContent from "@/components/feature/meeting/coordinate/Coordinat
 import GroupHeader from "@/components/layout/GroupHeader";
 import Header from "@/components/layout/Header";
 import { useParams } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
-import { getEventScheduleInfo } from "@/lib/api/scheduleApi";
 import GlobalLoading from "@/app/loading";
+import { useEventScheduleInfo } from "@/lib/api/scheduleApi";
 
 const CoordinatePage = () => {
   const { eventId } = useParams();
-  const { data: eventScheduleInfo } = useQuery({
-    queryKey: ["eventScheduleInfo", eventId],
-    queryFn: () => getEventScheduleInfo(Number(eventId)),
-  });
-
-  console.log(eventScheduleInfo);
+  const { data: eventScheduleInfo } = useEventScheduleInfo(Number(eventId));
 
   if (!eventScheduleInfo) {
     return <GlobalLoading />;
@@ -33,9 +27,7 @@ const CoordinatePage = () => {
         clickToInvite={() => console.log("초대함")}
       />
       <div className="min-w-[375px] w-full max-w-185 mx-auto relative">
-        <CoordinateContent
-          eventScheduleInfo={eventScheduleInfo.memberSchedules}
-        />
+        <CoordinateContent eventScheduleInfo={eventScheduleInfo} />
       </div>
     </section>
   );

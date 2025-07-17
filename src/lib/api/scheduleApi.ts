@@ -104,11 +104,18 @@ export const getEventDetail = async (eventId: number) => {
  * @param eventId 이벤트 ID
  * @returns
  */
-export const getEventScheduleInfo = async (
+const getEventScheduleInfo = async (
   eventId: number
 ): Promise<EventScheduleInfoType> => {
   const response = await axiosInstance.get(`/events/${eventId}/all-time`);
   return response.data.data;
+};
+
+export const useEventScheduleInfo = (eventId: number) => {
+  return useQuery({
+    queryKey: ["eventScheduleInfo", eventId],
+    queryFn: () => getEventScheduleInfo(eventId),
+  });
 };
 
 /**
@@ -117,23 +124,20 @@ export const getEventScheduleInfo = async (
  * @param time 개인의 가능한 시간대
  * @returns
  */
-// export const useSetEventMyTime = () => {
-//   return useMutation({
-//     mutationFn: (eventId: number, time: EventMyTimeType) =>
-//       setEventMyTime(eventId, time),
-//     onSuccess: (data) => {
-//       console.log("개인의 가능한 시간대 생성/수정 성공: ", data);
-//     },
-//     onError: (err) => {
-//       console.error("개인의 가능한 시간대 생성/수정 실패: ", err);
-//     },
-//   });
-// };
-
 export const setEventMyTimeApi = async (
   eventId: number,
   time: EventMyTimeType
 ) => {
   const response = await axiosInstance.post(`/events/${eventId}/my-time`, time);
+  return response.data;
+};
+
+/**
+ * 개인의 이벤트 완료 처리
+ * @param eventId 이벤트 ID
+ * @returns
+ */
+export const setEventMyTime = async (eventId: number) => {
+  const response = await axiosInstance.post(`/events/${eventId}/complete`);
   return response.data;
 };

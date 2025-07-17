@@ -1,13 +1,7 @@
 /**
  * 일정 등록 페이지
  *
- * TODO:
- * data, startTime, endTime, timeBit, dayList, memberCount
- * dayList 로 날짜 및 요일 구성 -> day.js ?
- * 내가 가능한 시간 설정이면 날짜 빼고 진행 요일만 추가 해서 진행
- * 비트 값으로 넘어오는 값으로 색칠 ex) 0000_0000_0000_1111 -> 1 일때 색칠 및 시간 범위 확인
- * 그룹원 모두 가능한 일정은 전체 인원수로 % 줘서 색상 진하게 -> 인원수 확인 필요
- * map 반복 중인 배열 기준으로 연산한 값으로 바꿔주기
+ * @param eventScheduleInfo 이벤트 일정 정보 optional
  *
  * @returns 일정 등록 페이지 컴포넌트
  */
@@ -41,7 +35,6 @@ const Schedule = ({
   eventScheduleInfo?: EventTimeTableType;
 }) => {
   const { eventId } = useParams();
-  console.log(eventScheduleInfo);
 
   let daysOfWeek: DayInfo[] = [];
   let hourCount = 24; // 시간 수
