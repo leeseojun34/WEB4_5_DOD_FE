@@ -26,6 +26,10 @@ const GroupHeaderTop = ({
   const clickEllipsisHandler = () => {
     setIsOpen(true);
   };
+
+  const onTopClick = () => {
+    router.push(`/schedule/${groupId}/edit/detail`);
+  };
   return (
     <div className="w-full flex justify-between items-center">
       <span onClick={handleBack} className="cursor-pointer">
@@ -33,8 +37,23 @@ const GroupHeaderTop = ({
       </span>
       <span className={fontStyleWhite}>{groupName}</span>
 
-      <span onClick={clickEllipsisHandler} className="cursor-pointer">
+      <span onClick={clickEllipsisHandler} className="cursor-pointer relative">
         <Ellipsis color={"var(--color-white)"} size={16} />
+        {isOpen &&
+          (isLeader ? (
+            <div className="absolute top-full right-0 z-50 min-w-27 w-auto">
+              <DropdownSmall
+                isOpen={isOpen}
+                onClose={() => setIsOpen(false)}
+                onTopClick={onTopClick}
+                onBottomClick={() => console.log("bottomclick")}
+              >
+                {["그룹 정보수정", "그룹 나가기"]}
+              </DropdownSmall>
+            </div>
+          ) : (
+            <DropdownSmall />
+          ))}
       </span>
     </div>
   );

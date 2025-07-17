@@ -22,12 +22,13 @@ const GroupHeader = ({
           <GroupHeaderTop
             groupName={groupName}
             groupId={groupId}
-            isLeader={isLeader}
+            isLeader={true}
           />
           <GroupHeaderContent
             groupIntroduction={groupIntroduction}
             groupCount={groupCount}
             groupId={groupId}
+            isLeader={true}
           />
         </div>
       </div>
