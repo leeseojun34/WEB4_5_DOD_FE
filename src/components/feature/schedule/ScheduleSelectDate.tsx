@@ -8,14 +8,8 @@ import Toast from "@/components/ui/Toast";
 const timeOptions: string[] = [];
 
 for (let hour = 0; hour <= 24; hour++) {
-  for (const minute of [0, 30]) {
-    if (hour === 24 && minute > 0) continue;
-
-    const hh = String(hour).padStart(2, "0");
-    const mm = String(minute).padStart(2, "0");
-
-    timeOptions.push(`${hh}:${mm}`);
-  }
+  const hh = String(hour).padStart(2, "0");
+  timeOptions.push(`${hh}:00`);
 }
 
 const ScheduleSelectDate = ({
@@ -49,13 +43,13 @@ const ScheduleSelectDate = ({
         >
           <Dropdown
             options={timeOptions}
-            defaultIndex={18}
+            defaultIndex={9}
             onSelect={(selected) => setStartTime(selected)}
           />
           <span className="">-</span>
           <Dropdown
             options={timeOptions}
-            defaultIndex={36}
+            defaultIndex={18}
             onSelect={(selected) => setEndTime(selected)}
           />
         </motion.div>

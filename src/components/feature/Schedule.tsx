@@ -43,8 +43,8 @@ const Schedule = ({
   let totalTimeSlots = hourCount * timeSlotsPerHour; // 총 시간 슬롯 수
   let dayCount = 7; // 요일 수
 
-  let startTime: string[] = ["00", "00"];
-  let endTime: string[] = ["24", "00"];
+  let startTime: string[] = ["00"];
+  let endTime: string[] = ["23"];
 
   if (!eventScheduleInfo) {
     daysOfWeek = [
@@ -65,14 +65,8 @@ const Schedule = ({
     startTime = eventScheduleInfo.startTime.split(":");
     endTime = eventScheduleInfo.endTime.split(":");
     hourCount = Number(endTime[0]) - Number(startTime[0]);
-    totalTimeSlots = hourCount * timeSlotsPerHour;
-    if (startTime[1] !== "00") {
-      hourCount += 1;
-    }
-    if (endTime[1] !== "00") {
-      hourCount += 1;
-    }
     dayCount = eventScheduleInfo.dates.length;
+    totalTimeSlots = hourCount * timeSlotsPerHour;
   }
 
   const [selectedCells, setSelectedCells] = useState<Set<string>>(new Set());
