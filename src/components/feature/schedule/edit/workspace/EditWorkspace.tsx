@@ -5,7 +5,6 @@ const EditWorkspace = ({
 }: {
   onEditClick: (data: { type: string; name: string; url: string }) => void;
 }) => {
-  
   return (
     <>
       <div className="space-y-4">
@@ -34,7 +33,7 @@ const EditWorkspace = ({
           onClick={onEditClick}
         />
         <WorkspaceItem
-          type="googledocs"
+          type="google_dos"
           name="이때어때 구글 독스"
           url="https://www.notion.so/Team07-21e15a01205480a49fc6d1e73f119a19"
           onClick={onEditClick}

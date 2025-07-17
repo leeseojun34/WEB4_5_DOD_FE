@@ -1,16 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "./axiosInstance";
 
-export type WorkSpaceType =
-  | "GITHUB"
-  | "NOTION"
-  | "FIGMA"
-  | "GOOGLEDOCS"
-  | "MIRO"
-  | "CANVA";
-
 interface CreateWorkSpaceRequest {
-  workspace: WorkSpaceType;
+  workspace: WorkspacePlatformType;
   workspaceName: string;
   url: string;
 }

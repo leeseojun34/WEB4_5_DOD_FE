@@ -13,6 +13,36 @@ interface EventType {
 }
 
 // 이벤트 조회 타입
+interface ScheduleDetailType {
+  eventId: number;
+  startTime: string;
+  endTime: string;
+  location: string;
+  specificLocation: string;
+  scheduleName: string;
+  description: string;
+  meetingType: string;
+  meetingPlatform: string;
+  platformName: string;
+  platformUrl: string;
+  members: string[];
+  workspaces: WorkspaceType[];
+}
+
+type WorkspacePlatformType =
+  | "GITHUB"
+  | "NOTION"
+  | "FIGMA"
+  | "GOOGLE_DOS"
+  | "MIRO"
+  | "CANVA";
+
+interface WorkspaceType {
+  type: string;
+  name: string;
+  url: string;
+}
+
 interface EventInfoType {
   eventId: number;
   title: string;

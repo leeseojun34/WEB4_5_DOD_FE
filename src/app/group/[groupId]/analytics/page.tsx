@@ -1,6 +1,6 @@
 "use client";
 
-import GroupAnalyticsSection from "@/components/feature/group/GroupAnalyticsSection";
+import GroupAnalyticsSection from "@/components/feature/group/analytics/GroupAnalyticsSection";
 import LocationFrequencyItem from "@/components/feature/group/LocationFrequencyItem";
 import MemberParticipationItem from "@/components/feature/group/MemberParticipationItem";
 import PlaceLegendSection from "@/components/feature/group/PlaceLegendSection";
