@@ -30,7 +30,7 @@ export const MyScheduleSection = ({
             나의 일정
           </p>
           <Link href={`/schedule/user/${userId}`}>
-            <button className="font-medium text-xs text-[color:var(--color-gray-placeholder)] cursor-pointer">
+            <button className="hover:font-medium text-xs text-[color:var(--color-gray-placeholder)] cursor-pointer">
               일정 모두 보기
             </button>
           </Link>
@@ -53,7 +53,7 @@ const EmptySchedule = () => {
   return (
     <div className="flex flex-col justify-center items-center gap-3 py-4">
       <div className="text-center text-sm text-[color:var(--color-gray-placeholder)] leading-6">
-        오늘은 일정이 없어요 <br /> 새로운 일정을 만들어 볼까요?
+        이날은 일정이 없어요 <br /> 새로운 일정을 만들어 볼까요?
       </div>
       <button className="flex text-[color:var(--color-primary-400)] gap-[2px] justify-center items-center">
         <span className="font-medium text-xs">일정 만들러 가기</span>

@@ -43,3 +43,17 @@ export const formatScheduleTimeOnly = (
 
   return `${startHour}:${startMinute} - ${endHour}:${endMinute}`;
 };
+
+export const getDDay = (startTime: string): string => {
+  const today = new Date();
+  const eventDate = new Date(startTime);
+
+  today.setHours(0, 0, 0, 0);
+  eventDate.setHours(0, 0, 0, 0);
+
+  const diff = Math.floor(
+    (eventDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+  );
+  if (diff === 0) return "D-DAY";
+  return diff > 0 ? `D-${diff}` : `D+${Math.abs(diff)}`;
+};

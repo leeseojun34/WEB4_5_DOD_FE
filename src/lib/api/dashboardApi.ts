@@ -29,7 +29,7 @@ export const getDashboardDetail = async (date: string) => {
 
 export const useDashboard = (date: string) => {
   return useQuery({
-    queryKey: ["dashboard"],
+    queryKey: ["dashboard", date],
     queryFn: () => getDashboardDetail(date),
     enabled: !!date,
     retry: false,

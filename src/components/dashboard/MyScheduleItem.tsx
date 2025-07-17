@@ -1,4 +1,4 @@
-import { formatScheduleTimeOnly } from "@/app/utils/dateFormat";
+import { formatScheduleTimeOnly, getDDay } from "@/app/utils/dateFormat";
 import { DashboardScheduleType } from "@/lib/api/dashboardApi";
 import { AtSign, MapPin } from "lucide-react";
 import Image from "next/image";
@@ -12,7 +12,7 @@ export const MyScheduleItem = ({ schedule }: MyScheduleItemProps) => {
     <>
       <div className="flex gap-5 w-full items-center">
         <div className="flex items-center justify-center w-18 h-[50px] bg-[color:var(--color-gray-background)] text-[color:var(--color-primary-400)] rounded-lg text-xs">
-          D-DAY
+          {getDDay(schedule.startTime)}
         </div>
         <div className="flex flex-col justify-between">
           <div className="text-[color:var(--color-black)] text-sm font-semibold w-[150px] sm:w-[320px] truncate">
