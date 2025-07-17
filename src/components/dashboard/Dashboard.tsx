@@ -9,9 +9,13 @@ import { useDashboard } from "@/lib/api/dashboardApi";
 import { formatDate } from "@/app/utils/dateFormat";
 
 const Dashboard = () => {
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
+    new Date()
+  );
 
-  const { data: dashboardData } = useDashboard(formatDate(selectedDate));
+  const { data: dashboardData } = useDashboard(
+    formatDate(selectedDate ?? new Date())
+  );
 
   useEffect(() => {
     if (dashboardData?.data) {

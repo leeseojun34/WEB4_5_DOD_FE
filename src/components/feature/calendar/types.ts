@@ -9,7 +9,7 @@ interface CalendarBaseProps {
 
 export interface CalendarPropsCompact extends CalendarBaseProps {
   selected: Date | undefined;
-  setSelected: Dispatch<SetStateAction<Date>>;
+  setSelected: Dispatch<SetStateAction<Date | undefined>>;
   isCompact: true;
 }
 
