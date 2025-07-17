@@ -8,7 +8,7 @@ import canvaIcon from "@/assets/icon/canva_icon.svg";
 import Image from "next/image";
 import Link from "next/link";
 
-type Platform = "GITHUB" | "NOTION" | "FIGMA" | "GOOGLEDOCS" | "MIRO" | "CANVA";
+type Platform = "GITHUB" | "NOTION" | "FIGMA" | "GOOGLE_DOS" | "MIRO" | "CANVA";
 interface WorkSpaceProps {
   workspaces:
     | {
@@ -24,7 +24,7 @@ const WorkSpace = ({ scheduleId, workspaces }: WorkSpaceProps) => {
     GITHUB: githubIcon,
     NOTION: notionIcon,
     FIGMA: figmaIcon,
-    GOOGLEDOCS: googleDocsIcon,
+    GOOGLE_DOS: googleDocsIcon,
     MIRO: miroIcon,
     CANVA: canvaIcon,
   };
