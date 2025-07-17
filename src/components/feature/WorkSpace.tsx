@@ -61,6 +61,7 @@ const WorkSpace = ({ scheduleId, workspaces }: WorkSpaceProps) => {
                   <Image
                     src={PLATFORM[workspace.platform]}
                     alt={`${PLATFORM[workspace.platform]} 아이콘`}
+                    className="w-4 h-4"
                   />
                 </div>
                 <div className="text-[color:var(--color-black)] text-sm">
