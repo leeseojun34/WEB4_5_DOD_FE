@@ -28,3 +28,18 @@ export const formatTime = (date: Date) => {
   const minutes = date.getMinutes();
   return `${hours}:${minutes}`;
 };
+
+export const formatScheduleTimeOnly = (
+  startTime: string,
+  endTime: string
+): string => {
+  const startDate = new Date(startTime);
+  const endDate = new Date(endTime);
+
+  const startHour = String(startDate.getHours()).padStart(2, "0");
+  const startMinute = String(startDate.getMinutes()).padStart(2, "0");
+  const endHour = String(endDate.getHours()).padStart(2, "0");
+  const endMinute = String(endDate.getMinutes()).padStart(2, "0");
+
+  return `${startHour}:${startMinute} - ${endHour}:${endMinute}`;
+};

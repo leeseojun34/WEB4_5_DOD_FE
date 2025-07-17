@@ -1,6 +1,21 @@
 import { useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "./axiosInstance";
 
+export interface DashboardScheduleType {
+  id: number;
+  name: string;
+  description: string;
+  startTime: string;
+  endTime: string;
+  location: string;
+  isGrouped: boolean;
+  groupName: string;
+  meetingType: string;
+  meetingPlatform: string;
+  scheduleStatus: string;
+  source: string;
+}
+
 /**
  * 회원의 그룹리스트, 일정, 캘린더 조회
  * @param date 날짜(2025-07-12)

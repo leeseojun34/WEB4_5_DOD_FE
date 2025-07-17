@@ -1,27 +1,23 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Calendar } from "../feature/calendar/Calender";
 import { Banner } from "./Banner";
-import { MyGroupSection } from "./MyGroupSection";
 import { MyScheduleSection } from "./MyScheduleSection";
 import Footer from "../layout/Footer";
 import Header from "../layout/Header";
 import { useDashboard } from "@/lib/api/dashboardApi";
 import { formatDate } from "@/app/utils/dateFormat";
+import GlobalLoading from "@/app/loading";
 
 const Dashboard = () => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     new Date()
   );
 
-  const { data: dashboardData } = useDashboard(
+  const { data: dashboardData, isPending } = useDashboard(
     formatDate(selectedDate ?? new Date())
   );
 
-  useEffect(() => {
-    if (dashboardData?.data) {
-      console.log(dashboardData.data);
-    }
-  });
+  if (isPending) return <GlobalLoading />;
 
   return (
     <section>
@@ -36,8 +32,11 @@ const Dashboard = () => {
             selected={selectedDate}
             setSelected={setSelectedDate}
           />
-          <MyScheduleSection />
-          <MyGroupSection />
+          <MyScheduleSection
+            selectedDate={selectedDate!}
+            schedules={dashboardData.data.schedules}
+          />
+          {/* <MyGroupSection groups={dashboardData.data.group} /> */}
         </div>
       </div>
       <div className="block sm:hidden">

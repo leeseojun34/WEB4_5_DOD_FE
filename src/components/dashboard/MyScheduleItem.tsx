@@ -1,6 +1,13 @@
-import { AtSign } from "lucide-react";
+import { formatScheduleTimeOnly } from "@/app/utils/dateFormat";
+import { DashboardScheduleType } from "@/lib/api/dashboardApi";
+import { AtSign, MapPin } from "lucide-react";
+import Image from "next/image";
+import googleCalendarIcon from "@/assets/icon/google_calender_icon.svg";
 
-export const MyScheduleItem = () => {
+interface MyScheduleItemProps {
+  schedule: DashboardScheduleType;
+}
+export const MyScheduleItem = ({ schedule }: MyScheduleItemProps) => {
   return (
     <>
       <div className="flex gap-5 w-full items-center">
@@ -9,19 +16,43 @@ export const MyScheduleItem = () => {
         </div>
         <div className="flex flex-col justify-between">
           <div className="text-[color:var(--color-black)] text-sm font-semibold w-[150px] sm:w-[320px] truncate">
-            {/* 일정 이름 */}
-            고양이 정모
+            {schedule.name}
           </div>
           <div className="text-[color:var(--color-gray)] font-regular text-xs">
-            {/* 일정 시간 */}
-            18:00 - 22:00
+            {formatScheduleTimeOnly(schedule.startTime, schedule.endTime)}
           </div>
           <div className="flex items-center gap-1">
-            {/* 온오프라인 장소 정보 */}
-            <AtSign className="w-3 h-[14px] text-[color:var(--color-gray-placeholder)]" />
-            <p className="text-xs text-[color:var(--color-gray-placeholder)]">
-              Google Meet
-            </p>
+            {schedule.source === "SERVICE" ? (
+              <>
+                {schedule.meetingType === "OFFLINE" ? (
+                  <>
+                    <MapPin className="w-3 h-[14px] text-[color:var(--color-gray-placeholder)]" />
+                    <p className="text-xs text-[color:var(--color-gray-placeholder)]">
+                      {schedule.location || "미정"}
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <AtSign className="w-3 h-[14px] text-[color:var(--color-gray-placeholder)]" />
+                    <p className="text-xs text-[color:var(--color-gray-placeholder)]">
+                      {schedule.meetingPlatform || "미정"}
+                    </p>
+                  </>
+                )}
+              </>
+            ) : (
+              <>
+                <Image
+                  src={googleCalendarIcon}
+                  alt="구글 캘린더"
+                  width={16}
+                  height={16}
+                />
+                <p className="text-xs text-[color:var(--color-gray-placeholder)]">
+                  Google Calendar
+                </p>
+              </>
+            )}
           </div>
         </div>
       </div>

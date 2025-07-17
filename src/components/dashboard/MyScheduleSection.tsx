@@ -1,10 +1,27 @@
 import { ArrowRight } from "lucide-react";
 import { MyScheduleItem } from "./MyScheduleItem";
 import Link from "next/link";
+import { DashboardScheduleType } from "@/lib/api/dashboardApi";
 
-export const MyScheduleSection = () => {
-  const userId = 1;
-  const scheduleId = 1;
+interface MyScheduleSectionProps {
+  selectedDate: Date;
+  schedules: DashboardScheduleType[];
+}
+
+export const MyScheduleSection = ({
+  selectedDate,
+  schedules,
+}: MyScheduleSectionProps) => {
+  const userId = "GOOGLE_116827515645165286764";
+
+  const filteredSchedules = schedules.filter((schedule) => {
+    const scheduleDate = new Date(schedule.startTime).toLocaleDateString(
+      "ko-KR"
+    );
+    const selected = selectedDate.toLocaleDateString("ko-KR");
+    return scheduleDate === selected;
+  });
+
   return (
     <>
       <div className="bg-[color:var(--color-white)] p-5 rounded-[20px] w-full gap-2 flex flex-col">
@@ -18,14 +35,15 @@ export const MyScheduleSection = () => {
             </button>
           </Link>
         </div>
-        <Link href={`/schedule/${scheduleId}`}>
-          <MyScheduleItem />
-        </Link>
-        <Link href={`/schedule/${scheduleId}`}>
-          <MyScheduleItem />
-        </Link>
-
-        {/* <EmptySchedule /> */}
+        {filteredSchedules.length > 0 ? (
+          filteredSchedules.map((schedule) => (
+            <Link href={`/schedule/${schedule.id}`} key={schedule.id}>
+              <MyScheduleItem schedule={schedule} />
+            </Link>
+          ))
+        ) : (
+          <EmptySchedule />
+        )}
       </div>
     </>
   );
