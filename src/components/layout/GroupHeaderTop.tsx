@@ -1,23 +1,26 @@
-import { ChevronLeft, Ellipsis, SquarePen } from "lucide-react";
-import Link from "next/link";
+import { ChevronLeft, Ellipsis } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import DropdownSmall from "../ui/DropdownSmall";
+import { useLeaveGroup } from "@/lib/api/groupApi";
 
 interface GroupHeaderTopProps {
   groupName: string;
   groupId: string;
   isLeader: boolean;
+  type: "schedule" | "group";
 }
 
 const GroupHeaderTop = ({
   groupName,
   groupId,
   isLeader,
+  type,
 }: GroupHeaderTopProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const fontStyleWhite = "text-lg text-[color:var(--color-white)]";
   const router = useRouter();
+  const leaveGroup = useLeaveGroup();
 
   const handleBack = () => {
     router.back();
@@ -28,7 +31,21 @@ const GroupHeaderTop = ({
   };
 
   const onTopClick = () => {
-    router.push(`/schedule/${groupId}/edit/detail`);
+    if (!isLeader) {
+      if (type === "group") {
+        leaveGroup.mutate(groupId);
+      } else {
+      }
+    } else {
+      router.push(`/schedule/${groupId}/edit/detail`);
+    }
+  };
+
+  const onBottomClick = () => {
+    if (type === "group") {
+      leaveGroup.mutate(groupId);
+    } else {
+    }
   };
   return (
     <div className="w-full flex justify-between items-center">
@@ -46,13 +63,21 @@ const GroupHeaderTop = ({
                 isOpen={isOpen}
                 onClose={() => setIsOpen(false)}
                 onTopClick={onTopClick}
-                onBottomClick={() => console.log("bottomclick")}
+                onBottomClick={onBottomClick}
               >
-                {["그룹 정보수정", "그룹 나가기"]}
+                {type === "group"
+                  ? ["그룹 정보수정", "그룹 나가기"]
+                  : ["모임 정보수정", "모임 나가기"]}
               </DropdownSmall>
             </div>
           ) : (
-            <DropdownSmall />
+            <DropdownSmall
+              isOpen={isOpen}
+              onClose={() => setIsOpen(false)}
+              onTopClick={onTopClick}
+            >
+              그룹 나가기
+            </DropdownSmall>
           ))}
       </span>
     </div>
