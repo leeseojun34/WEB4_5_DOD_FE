@@ -10,6 +10,7 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import { convertTimesToHexBit } from "@/app/utils/timebitFormat";
 import { setEventMyTimeApi } from "@/lib/api/scheduleApi";
 import { useParams } from "next/navigation";
+import { getGridColsClass } from "@/app/utils/styleFormat";
 
 const STYLES = {
   container: "pl-3 pr-6 w-full",
@@ -361,14 +362,16 @@ const Schedule = ({
     >
       <div className="flex flex-col">
         <div className={STYLES.header}>
-          <div className={`${STYLES.dayGrid} grid-cols-${dayCount}`}>
+          <div className={`${STYLES.dayGrid} ${getGridColsClass(dayCount)}`}>
             {daysOfWeek.map(renderDayHeader)}
           </div>
         </div>
 
         <div className="flex flex-1">
           {renderTimeColumn()}
-          <div className={`${STYLES.scheduleGrid} grid-cols-${dayCount}`}>
+          <div
+            className={`${STYLES.scheduleGrid} ${getGridColsClass(dayCount)}`}
+          >
             {Array.from({ length: dayCount }).map((_, dayIndex) =>
               renderDayColumn(dayIndex)
             )}

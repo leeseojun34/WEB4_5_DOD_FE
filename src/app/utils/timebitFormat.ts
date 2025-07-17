@@ -44,12 +44,3 @@ export const convertTimesToHexBit = (times: string[]) => {
   const hex = decimal.toString(16).toUpperCase().padStart(12, "0");
   return hex;
 };
-
-/**
- * 16진수 비트 값을 시간 테이블로 변환
- * @param timeSlots 시간 슬롯 배열
- * @returns 시간 테이블
- */
-export const convertHexBitToTimeTable = (timeSlots: EventTimeMemberType) => {
-  console.log(timeSlots);
-};

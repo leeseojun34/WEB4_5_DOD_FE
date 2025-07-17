@@ -6,6 +6,8 @@
  * @returns 일정 등록 페이지 컴포넌트
  */
 
+import { getGridColsClass } from "@/app/utils/styleFormat";
+
 const STYLES = {
   container: "pl-3 pr-6 w-full",
   header: "sticky top-0 z-10 bg-white",
@@ -110,14 +112,16 @@ const Schedule = ({
     <div className={STYLES.container}>
       <div className="flex flex-col">
         <div className={STYLES.header}>
-          <div className={`${STYLES.dayGrid} grid-cols-${dayCount}`}>
+          <div className={`${STYLES.dayGrid} ${getGridColsClass(dayCount)}`}>
             {daysOfWeek.map(renderDayHeader)}
           </div>
         </div>
 
         <div className="flex flex-1">
           {renderTimeColumn()}
-          <div className={`${STYLES.scheduleGrid} grid-cols-${dayCount}`}>
+          <div
+            className={`${STYLES.scheduleGrid} ${getGridColsClass(dayCount)}`}
+          >
             {Array.from({ length: dayCount }).map((_, dayIndex) =>
               renderDayColumn(dayIndex)
             )}
