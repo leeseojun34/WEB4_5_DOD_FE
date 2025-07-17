@@ -29,6 +29,9 @@ interface EventScheduleInfoType {
   memberSchedules: EventTimeMemberType[];
   totalMembers: number;
   confirmedMembers: number;
+  participantCounts: {
+    [key: string]: number[]; // key: 날짜, value: 참여자 수 배열
+  };
 }
 
 // 이벤트 시간 테이블 타입

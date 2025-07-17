@@ -115,6 +115,8 @@ export const useEventScheduleInfo = (eventId: number) => {
   return useQuery({
     queryKey: ["eventScheduleInfo", eventId],
     queryFn: () => getEventScheduleInfo(eventId),
+    retry: 2,
+    gcTime: 3 * 60 * 60 * 1000,
   });
 };
 

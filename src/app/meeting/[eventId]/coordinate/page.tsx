@@ -3,13 +3,24 @@
 import CoordinateContent from "@/components/feature/meeting/coordinate/CoordinateContent";
 import GroupHeader from "@/components/layout/GroupHeader";
 import Header from "@/components/layout/Header";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import GlobalLoading from "@/app/loading";
 import { useEventScheduleInfo } from "@/lib/api/scheduleApi";
+import Toast from "@/components/ui/Toast";
+import { AxiosError } from "axios";
 
 const CoordinatePage = () => {
   const { eventId } = useParams();
-  const { data: eventScheduleInfo } = useEventScheduleInfo(Number(eventId));
+  const { data: eventScheduleInfo, error } = useEventScheduleInfo(
+    Number(eventId)
+  );
+  const router = useRouter();
+  if (error) {
+    const axiosError = error as AxiosError<{ message: string }>;
+    Toast(axiosError.response?.data.message || "오류가 발생했습니다.");
+    router.push(`/`);
+    return;
+  }
 
   if (!eventScheduleInfo) {
     return <GlobalLoading />;
