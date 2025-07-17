@@ -5,18 +5,13 @@ import DropdownSmall from "../ui/DropdownSmall";
 import { useLeaveGroup } from "@/lib/api/groupApi";
 
 interface GroupHeaderTopProps {
-  groupName: string;
-  groupId: string;
+  name: string;
+  id: string;
   isLeader: boolean;
   type: "schedule" | "group";
 }
 
-const GroupHeaderTop = ({
-  groupName,
-  groupId,
-  isLeader,
-  type,
-}: GroupHeaderTopProps) => {
+const GroupHeaderTop = ({ name, id, isLeader, type }: GroupHeaderTopProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const fontStyleWhite = "text-lg text-[color:var(--color-white)]";
   const router = useRouter();
@@ -33,17 +28,21 @@ const GroupHeaderTop = ({
   const onTopClick = () => {
     if (!isLeader) {
       if (type === "group") {
-        leaveGroup.mutate(groupId);
+        leaveGroup.mutate(id);
       } else {
       }
     } else {
-      router.push(`/schedule/${groupId}/edit/detail`);
+      if (type === "group") {
+        router.push(`/schedule/${id}/edit/detail`);
+      } else {
+        router.push(`/schedule/${id}/edit/detail`);
+      }
     }
   };
 
   const onBottomClick = () => {
     if (type === "group") {
-      leaveGroup.mutate(groupId);
+      leaveGroup.mutate(id);
     } else {
     }
   };
@@ -52,9 +51,14 @@ const GroupHeaderTop = ({
       <span onClick={handleBack} className="cursor-pointer">
         <ChevronLeft color={"var(--color-white)"} size={20} />
       </span>
-      <span className={fontStyleWhite}>{groupName}</span>
+      <span className={fontStyleWhite}>{name}</span>
 
-      <span onClick={clickEllipsisHandler} className="cursor-pointer relative">
+      <span
+        onClick={clickEllipsisHandler}
+        className={`cursor-pointer relative ${
+          type === "schedule" && !isLeader ? "invisible" : ""
+        }`}
+      >
         <Ellipsis color={"var(--color-white)"} size={16} />
         {isOpen &&
           (isLeader ? (
@@ -67,17 +71,19 @@ const GroupHeaderTop = ({
               >
                 {type === "group"
                   ? ["그룹 정보수정", "그룹 나가기"]
-                  : ["모임 정보수정", "모임 나가기"]}
+                  : ["모임 정보수정"]}
               </DropdownSmall>
             </div>
           ) : (
-            <DropdownSmall
-              isOpen={isOpen}
-              onClose={() => setIsOpen(false)}
-              onTopClick={onTopClick}
-            >
-              그룹 나가기
-            </DropdownSmall>
+            <div className="absolute top-full right-0 z-50 min-w-27 w-auto">
+              <DropdownSmall
+                isOpen={isOpen}
+                onClose={() => setIsOpen(false)}
+                onTopClick={onTopClick}
+              >
+                {["그룹 나가기"]}
+              </DropdownSmall>
+            </div>
           ))}
       </span>
     </div>

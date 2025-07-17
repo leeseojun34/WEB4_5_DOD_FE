@@ -3,37 +3,49 @@ import Link from "next/link";
 import { BiUser } from "react-icons/bi";
 
 interface GroupHeaderContentProps {
-  groupIntroduction: string;
-  groupId: string;
-  groupCount: number;
+  description: string;
+  id: string;
+  count: number;
   isLeader: boolean;
+  type: "schedule" | "group";
 }
 
 export const GroupHeaderContent = ({
-  groupIntroduction,
-  groupId,
-  groupCount,
+  description,
+  id,
+  count,
   isLeader,
+  type,
 }: GroupHeaderContentProps) => {
   const clickToInvite = () => {
     console.log("invited");
   };
 
   const fontStyleIntro = "text-sm text-[color:var(--color-muted)] font-normal";
-  const tagStyle =
-    "flex items-center justify-center gap-1 bg-[color:var(--color-white-30)] rounded-sm pl-2 pr-0.5 py-0.5 text-xs text-white cursor-pointer";
+  const tagStyle = `flex items-center justify-center gap-1 bg-[color:var(--color-white-30)] rounded-sm pl-2 pr-0.5 py-0.5 text-xs text-white ${
+    type === "group" ? "cursor-pointer" : ""
+  }`;
   return (
     <>
-      <p className={fontStyleIntro}>{groupIntroduction}</p>
-      <Link href={`/group/${groupId}/members`} className={tagStyle}>
-        <BiUser color="var(--color-white)" size={14} />
+      <p className={fontStyleIntro}>{description}</p>
+      {type === "group" ? (
+        <Link href={`/group/${id}/members`} className={tagStyle}>
+          <BiUser color="var(--color-white)" size={14} />
 
-        {/* 인원수 */}
-        <span className="pr-1.5">{groupCount}</span>
-      </Link>
-      {isLeader && (
+          {/* 인원수 */}
+          <span className="pr-1.5">{count}</span>
+        </Link>
+      ) : (
+        <div className={tagStyle}>
+          <BiUser color="var(--color-white)" size={14} />
+
+          {/* 인원수 */}
+          <span className="pr-1.5">{count}</span>
+        </div>
+      )}
+      {isLeader && type === "group" && (
         <div className="flex items-center justify-center gap-4">
-          <Link href={`/group/${groupId}/analytics`}>
+          <Link href={`/group/${id}/analytics`}>
             <div className={tagStyle}>
               <ChartNoAxesColumn size={14} strokeWidth={3} />
               <span>통계</span>

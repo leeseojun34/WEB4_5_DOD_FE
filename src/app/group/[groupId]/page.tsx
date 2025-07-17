@@ -14,10 +14,6 @@ const GroupPage = () => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleEllipsisClick = () => {
-    setIsOpen(true);
-  };
-
   const handleEditClick = () => {
     router.push("/group/10001/edit");
   };
@@ -31,12 +27,12 @@ const GroupPage = () => {
         <Header type="blue" />
       </div>
       <GroupHeader
-        groupName="박준규 팬미팅"
-        groupIntroduction="박준규 팬미팅에 오신 것을 환영합니다"
-        groupCount={6000}
-        clickToInvite={() => console.log("초대함")}
-        icon="ellipsis"
-        clickEllipsisHandler={handleEllipsisClick}
+        name="박준규 팬미팅"
+        description="박준규 팬미팅에 오신 것을 환영합니다"
+        count={6000}
+        isLeader={false}
+        type="group"
+        id="71"
       />
       {isOpen && (
         <div className="absolute right-4 top-18">
