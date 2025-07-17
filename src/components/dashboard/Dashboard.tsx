@@ -7,6 +7,7 @@ import Header from "../layout/Header";
 import { useDashboard } from "@/lib/api/dashboardApi";
 import { formatDate } from "@/app/utils/dateFormat";
 import GlobalLoading from "@/app/loading";
+import { MyGroupSection } from "./MyGroupSection";
 
 const Dashboard = () => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
@@ -36,7 +37,7 @@ const Dashboard = () => {
             selectedDate={selectedDate!}
             schedules={dashboardData.data.schedules}
           />
-          {/* <MyGroupSection groups={dashboardData.data.group} /> */}
+          <MyGroupSection groups={dashboardData.data.groups.groupDetails} />
         </div>
       </div>
       <div className="block sm:hidden">

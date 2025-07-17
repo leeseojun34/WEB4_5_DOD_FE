@@ -16,6 +16,13 @@ export interface DashboardScheduleType {
   source: string;
 }
 
+export interface DashboardGroupType {
+  groupId: number;
+  groupName: string;
+  description: string;
+  groupMemberNum: number;
+}
+
 /**
  * 회원의 그룹리스트, 일정, 캘린더 조회
  * @param date 날짜(2025-07-12)
