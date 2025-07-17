@@ -12,7 +12,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getEventDetail } from "@/lib/api/scheduleApi";
+import { useEventDetail } from "@/lib/api/scheduleApi";
 import GlobalLoading from "@/app/loading";
 import Toast from "@/components/ui/Toast";
 
@@ -21,23 +21,16 @@ const Complete = () => {
   const [eventInfo, setEventInfo] = useState<EventInfoType | null>(null);
   const router = useRouter();
 
-  const getEventInfo = async () => {
-    try {
-      const response = await getEventDetail(Number(eventId));
-      if (response.code === "200") {
-        setEventInfo(response.data);
-      } else {
-        Toast("모임 생성에 실패했거나 허가되지 않은 접근입니다.");
-        router.push("/");
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const { data: eventDetail } = useEventDetail(Number(eventId));
 
   useEffect(() => {
-    getEventInfo();
-  }, []);
+    if (eventDetail) {
+      setEventInfo(eventDetail);
+    } else {
+      Toast("모임 생성에 실패했거나 허가되지 않은 접근입니다.");
+      router.push("/");
+    }
+  }, [eventDetail, router]);
 
   if (!eventInfo) {
     return <GlobalLoading />;

@@ -8,6 +8,7 @@ import GlobalLoading from "@/app/loading";
 import { useEventScheduleInfo } from "@/lib/api/scheduleApi";
 import Toast from "@/components/ui/Toast";
 import { AxiosError } from "axios";
+import { useEventDetail } from "@/lib/api/scheduleApi";
 
 const CoordinatePage = () => {
   const { eventId } = useParams();
@@ -15,6 +16,7 @@ const CoordinatePage = () => {
     Number(eventId)
   );
   const router = useRouter();
+  const { data: eventDetail } = useEventDetail(Number(eventId));
   if (error) {
     const axiosError = error as AxiosError<{ message: string }>;
     Toast(axiosError.response?.data.message || "오류가 발생했습니다.");
@@ -32,10 +34,12 @@ const CoordinatePage = () => {
         <Header type="blue" />
       </div>
       <GroupHeader
-        groupName={eventScheduleInfo.eventTitle}
-        groupIntroduction={eventScheduleInfo.description}
-        groupCount={eventScheduleInfo.totalMembers}
-        clickToInvite={() => console.log("초대함")}
+        name={eventScheduleInfo.eventTitle}
+        description={eventScheduleInfo.description}
+        count={eventScheduleInfo.totalMembers}
+        isLeader={eventDetail.data.role === "ROLE_MASTER" ? true : false}
+        type="schedule"
+        id={eventId as string}
       />
       <div className="min-w-[375px] w-full max-w-185 mx-auto relative">
         <CoordinateContent eventScheduleInfo={eventScheduleInfo} />

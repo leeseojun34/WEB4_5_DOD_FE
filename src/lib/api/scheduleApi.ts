@@ -86,9 +86,17 @@ export const createEvent = async (schedule: EventType) => {
  * @param eventId 이벤트 ID
  * @returns
  */
-export const getEventDetail = async (eventId: number) => {
+const getEventDetail = async (eventId: number) => {
   const response = await axiosInstance.get(`/events/${eventId}`);
   return response.data;
+};
+export const useEventDetail = (eventId: number) => {
+  return useQuery({
+    queryKey: ["eventDetail", eventId],
+    queryFn: () => getEventDetail(eventId),
+    retry: 2,
+    gcTime: 3 * 60 * 60 * 1000,
+  });
 };
 
 /**
