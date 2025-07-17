@@ -67,6 +67,27 @@ const getGroupMembers = async (groupId: string) => {
   return res.data;
 };
 
+const leaveGroup = async (groupId: string) => {
+  const res = await axiosInstance.patch(`/goups/${groupId}/leave`);
+  return res.data;
+};
+
+export const useLeaveGroup = () => {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+  return useMutation({
+    mutationFn: leaveGroup,
+    onSuccess: (data) => {
+      console.log("그룹 나가기 성공: ", data);
+      queryClient.invalidateQueries({ queryKey: ["user", "groupSchedule"] });
+      router.push(`/`);
+    },
+    onError: (err) => {
+      console.error("그룹 나가기 실패: ",err)
+    }
+  });
+};
+
 export const useGroupSchedules = (groupId: string) => {
   return useQuery({
     queryKey: ["groupSchedules", groupId],

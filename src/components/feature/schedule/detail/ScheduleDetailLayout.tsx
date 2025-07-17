@@ -17,6 +17,7 @@ const ScheduleDetailLayout = ({ children }: ScheduleDetailLayoutProps) => {
         groupIntroduction="안녕하세요 대나무행주입니다람쥐"
         groupCount={6}
         clickToInvite={() => console.log("초대함")}
+        icon="pen"
       />
       <div className="min-w-[375px] w-full max-w-185 mx-auto pt-6 sm:pt-10">
         <div className="flex flex-col px-5 gap-4">{children}</div>
