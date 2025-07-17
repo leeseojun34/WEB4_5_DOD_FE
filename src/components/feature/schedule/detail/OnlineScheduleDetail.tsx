@@ -1,21 +1,32 @@
+import {
+  ScheduleDetailType,
+  WorkspacePlatformType,
+  WorkspaceType,
+} from "@/types/schedule";
 import OnlineMeetingRoom from "../../OnlineMeetingRoom";
 import ScheduleDetailContent from "./ScheduleDetailContent";
 import ScheduleDetailLayout from "./ScheduleDetailLayout";
+import { formatSchedule } from "@/app/utils/dateFormat";
 
-const OnlineScheduleDetail = () => {
-  const scheduleId = "1";
+interface OnineScheduleDetailProps {
+  scheduleId: string;
+  data: ScheduleDetailType;
+}
 
+const OnlineScheduleDetail = ({
+  scheduleId,
+  data,
+}: OnineScheduleDetailProps) => {
   return (
     <ScheduleDetailLayout>
       <ScheduleDetailContent
         scheduleId={scheduleId}
-        members={["박준규", "카리나"]}
-        time="7월 5일 (금) 12:00 - 24:00"
-        workspace={[
-          { platform: "NOTION", name: "프론트엔드 기획서" },
-          { platform: "GITHUB", name: "이때 어때 레포지토리" },
-          { platform: "MIRO", name: "이때 어때 미로" },
-        ]}
+        members={data.members}
+        time={formatSchedule(data.startTime, data.endTime)}
+        workspace={data.workspaces.map((workspace: WorkspaceType) => ({
+          platform: workspace.type as WorkspacePlatformType,
+          name: workspace.name,
+        }))}
       >
         <OnlineMeetingRoom platform="zoom" name=" 박준규 팬미팅" />
       </ScheduleDetailContent>

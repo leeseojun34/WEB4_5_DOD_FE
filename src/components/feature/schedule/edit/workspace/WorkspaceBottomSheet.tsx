@@ -22,14 +22,14 @@ const workspaceLogos = {
   MIRO: miroIcon,
   FIGMA: figmaIcon,
   CANVA: canvaIcon,
-  GOOGLEDOCS: googledocsIcon,
+  GOOGLE_DOS: googledocsIcon,
 } as const;
 
 const workspaceTypes = [
   "GITHUB",
   "NOTION",
   "FIGMA",
-  "GOOGLEDOCS",
+  "GOOGLE_DOS",
   "CANVA",
   "MIRO",
 ] as const;

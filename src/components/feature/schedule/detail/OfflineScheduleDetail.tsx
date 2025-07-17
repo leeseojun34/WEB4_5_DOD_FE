@@ -1,23 +1,38 @@
+"use client";
+import {
+  ScheduleDetailType,
+  WorkspacePlatformType,
+  WorkspaceType,
+} from "@/types/schedule";
 import MeetingLocation from "../../MeetingLocation";
 import ScheduleDetailContent from "./ScheduleDetailContent";
 import ScheduleDetailLayout from "./ScheduleDetailLayout";
+import { formatSchedule } from "@/app/utils/dateFormat";
 
-const OfflineScheduleDetail = () => {
-  const scheduleId = "1";
+interface OfflineScheduleDetailProps {
+  scheduleId: string;
+  data: ScheduleDetailType;
+}
 
+const OfflineScheduleDetail = ({
+  scheduleId,
+  data,
+}: OfflineScheduleDetailProps) => {
   return (
     <ScheduleDetailLayout>
       <ScheduleDetailContent
         scheduleId={scheduleId}
-        members={["박준규", "카리나"]}
-        time="7월 5일 (금) 12:00 - 24:00"
-        workspace={[
-          { platform: "NOTION", name: "프론트엔드 기획서" },
-          { platform: "GITHUB", name: "이때 어때 레포지토리" },
-          { platform: "MIRO", name: "이때 어때 미로" },
-        ]}
+        members={data.members}
+        time={formatSchedule(data.startTime, data.endTime)}
+        workspace={data.workspaces.map((workspace: WorkspaceType) => ({
+          platform: workspace.type as WorkspacePlatformType,
+          name: workspace.name,
+        }))}
       >
-        <MeetingLocation location="강남역" specificLocation="강남역 스타벅스" />
+        <MeetingLocation
+          location={data.location}
+          specificLocation={data.specificLocation}
+        />
       </ScheduleDetailContent>
     </ScheduleDetailLayout>
   );

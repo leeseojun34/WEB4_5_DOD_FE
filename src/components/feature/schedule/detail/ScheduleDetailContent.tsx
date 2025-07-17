@@ -3,20 +3,13 @@ import MeetingInfo from "../../MeetingInfo";
 import WorkSpace from "../../WorkSpace";
 import KakaoScript from "../../KakaoScript";
 import { useKakaoShare } from "@/lib/api/useKakaoShare";
-
-type WorkSpaceType =
-  | "NOTION"
-  | "GITHUB"
-  | "MIRO"
-  | "FIGMA"
-  | "GOOGLEDOCS"
-  | "CANVA";
+import { WorkspacePlatformType } from "@/types/schedule";
 
 interface ScheduleDetailContentProps {
   scheduleId: string;
   members: string[];
   time: string;
-  workspace: { platform: WorkSpaceType; name: string }[];
+  workspace: { platform: WorkspacePlatformType; name: string }[];
   children: React.ReactNode;
 }
 
