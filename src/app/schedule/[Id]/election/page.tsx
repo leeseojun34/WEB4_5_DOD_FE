@@ -16,6 +16,8 @@ const dummyUserData = [
   { latitude: 37.50578860265, longitude: 126.753192450274 },
 ];
 
+const cache: { [key: string]: number } = {};
+
 const dummyData = [
   {
     locationName: "기흥역",
@@ -86,9 +88,14 @@ const ElectionSpot = () => {
   useEffect(() => {
     const fetchTravelTimes = async () => {
       //setLoading(true);
-
       const updateStations = await Promise.all(
         dummyData.map(async (station) => {
+          const cacheKey = `${userPosition.longitude},${userPosition.latitude}-${station.longitude},${station.latitude}`;
+
+          if (cache[cacheKey]) {
+            return { ...station, travelTime: cache[cacheKey] };
+          }
+
           try {
             const time = await getTotalTravelTime(
               {
@@ -100,6 +107,7 @@ const ElectionSpot = () => {
                 y: station.latitude,
               }
             );
+            cache[cacheKey] = time;
             return { ...station, travelTime: time };
           } catch (err) {
             console.error("계산 실패", err);
@@ -110,8 +118,7 @@ const ElectionSpot = () => {
       setStationList(updateStations);
       //setLoading(false);
     };
-    fetchTravelTimes();
-  }, [userPosition]);
+  }, [userPosition.longitude, userPosition.latitude]);
 
   return (
     <main className="flex flex-col h-screen w-full mx-auto">
