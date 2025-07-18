@@ -9,8 +9,14 @@ import Footer from "@/components/layout/Footer";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import DropdownSmall from "@/components/ui/DropdownSmall";
 import { useState } from "react";
+import { useParams } from "next/navigation";
+import { useScheduleResult } from "@/lib/api/scheduleApi";
 
 const TimeResult = () => {
+  const { eventId } = useParams();
+  const { data: eventDetail } = useScheduleResult(Number(eventId));
+  console.log(eventDetail);
+
   const [isOpen, setIsOpen] = useState(false);
 
   const handleTopClick = () => {

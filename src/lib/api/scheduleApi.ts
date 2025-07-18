@@ -143,3 +143,36 @@ export const setEventMyTime = async (eventId: number) => {
   const response = await axiosInstance.post(`/events/${eventId}/complete`);
   return response.data;
 };
+
+/**
+ * 시간표 결과 설정
+ * @param eventId 이벤트 ID
+ * @returns
+ */
+export const setScheduleResult = async (eventId: number) => {
+  const response = await axiosInstance.post(
+    `/events/${eventId}/schedule-result`
+  );
+  return response.data;
+};
+
+/**
+ * 시간표 결과 조회
+ * @param eventId 이벤트 ID
+ * @returns
+ */
+export const useScheduleResult = (eventId: number) => {
+  return useQuery({
+    queryKey: ["scheduleResult", eventId],
+    queryFn: () => getScheduleResult(eventId),
+    retry: 2,
+    gcTime: 3 * 60 * 60 * 1000,
+  });
+};
+
+const getScheduleResult = async (eventId: number) => {
+  const response = await axiosInstance.get(
+    `/events/${eventId}/all-time/result`
+  );
+  return response.data;
+};
