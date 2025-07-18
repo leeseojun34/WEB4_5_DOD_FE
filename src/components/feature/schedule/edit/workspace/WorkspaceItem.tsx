@@ -8,7 +8,7 @@ import Image from "next/image";
 import { Edit } from "lucide-react";
 
 interface WorkspaceItemProps {
-  type: "github" | "notion" | "miro" | "figma" | "canva" | "googledocs";
+  type: "github" | "notion" | "miro" | "figma" | "canva" | "google_dos";
   name: string;
   url: string;
   onClick?: (data: { type: string; name: string; url: string }) => void;
@@ -20,7 +20,7 @@ const workspaceLogos = {
   miro: miroIcon,
   figma: figmaIcon,
   canva: canvaIcon,
-  googledocs: googledocsIcon,
+  google_dos: googledocsIcon,
 };
 
 const WorkspaceItem = ({ type, name, url, onClick }: WorkspaceItemProps) => {
