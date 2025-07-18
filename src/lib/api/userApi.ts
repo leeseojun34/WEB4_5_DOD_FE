@@ -1,5 +1,7 @@
 import { axiosInstance } from "@/lib/api/axiosInstance";
 import { useQuery } from "@tanstack/react-query";
+import useAuthStore from "@/sotres/authStores";
+import { useEffect } from "react";
 
 const getUserInfo = async () => {
   const res = await axiosInstance.get("/member/me");
@@ -7,13 +9,23 @@ const getUserInfo = async () => {
 };
 
 export const useUser = () => {
-  return useQuery({
+  const { setUser } = useAuthStore();
+
+  const query = useQuery({
     queryKey: ["user"],
     queryFn: getUserInfo,
     enabled: false,
     retry: false,
     refetchOnWindowFocus: false,
   });
+
+  useEffect(() => {
+    if (query.data) {
+      setUser(query.data.data);
+    }
+  }, [query.data, setUser]);
+
+  return query;
 };
 
 export const logout = async () => {

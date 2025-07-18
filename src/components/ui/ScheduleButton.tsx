@@ -14,7 +14,7 @@ const ScheduleButton = ({
 }: {
   level: number;
   setLevel: (level: number) => void;
-  schedule: ScheduleType;
+  schedule: EventType;
   dateList: Date[];
   startTime: string;
   endTime: string;

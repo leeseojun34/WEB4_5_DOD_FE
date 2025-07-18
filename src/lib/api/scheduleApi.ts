@@ -1,6 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "./axiosInstance";
-import { ScheduleType, WorkspacePlatformType } from "@/types/schedule";
 
 interface CreateWorkSpaceRequest {
   workspace: WorkspacePlatformType;
@@ -77,7 +76,7 @@ export const useDeleteWorkspace = () => {
  * @param schedule 이벤트 정보
  * @returns
  */
-export const createSchedule = async (schedule: ScheduleType) => {
+export const createEvent = async (schedule: EventType) => {
   const response = await axiosInstance.post("/events", schedule);
   return response.data;
 };
@@ -89,5 +88,92 @@ export const createSchedule = async (schedule: ScheduleType) => {
  */
 export const getEventDetail = async (eventId: number) => {
   const response = await axiosInstance.get(`/events/${eventId}`);
+  return response.data;
+};
+export const useEventDetail = (eventId: number) => {
+  return useQuery({
+    queryKey: ["eventDetail", eventId],
+    queryFn: () => getEventDetail(eventId),
+    retry: 2,
+    gcTime: 3 * 60 * 60 * 1000,
+  });
+};
+
+/**
+ * 참여자 전원 이벤트 시간표 정보 조회
+ * @param eventId 이벤트 ID
+ * @returns
+ */
+const getEventScheduleInfo = async (
+  eventId: number
+): Promise<EventScheduleInfoType> => {
+  const response = await axiosInstance.get(`/events/${eventId}/all-time`);
+  return response.data.data;
+};
+
+export const useEventScheduleInfo = (eventId: number) => {
+  return useQuery({
+    queryKey: ["eventScheduleInfo", eventId],
+    queryFn: () => getEventScheduleInfo(eventId),
+    retry: 2,
+    gcTime: 3 * 60 * 60 * 1000,
+  });
+};
+
+/**
+ * 개인의 가능한 시간대 생성/수정
+ * @param eventId 이벤트 ID
+ * @param time 개인의 가능한 시간대
+ * @returns
+ */
+export const setEventMyTimeApi = async (
+  eventId: number,
+  time: EventMyTimeType
+) => {
+  const response = await axiosInstance.post(`/events/${eventId}/my-time`, time);
+  return response.data;
+};
+
+/**
+ * 개인의 이벤트 완료 처리
+ * @param eventId 이벤트 ID
+ * @returns
+ */
+export const setEventMyTime = async (eventId: number) => {
+  const response = await axiosInstance.post(`/events/${eventId}/complete`);
+  return response.data;
+};
+
+/**
+ * 시간표 결과 설정
+ * @param eventId 이벤트 ID
+ * @returns
+ */
+export const setScheduleResult = async (eventId: number) => {
+  const response = await axiosInstance.post(
+    `/events/${eventId}/schedule-result`
+  );
+  return response.data;
+};
+
+/**
+ * 시간표 결과 조회
+ * @param eventId 이벤트 ID
+ * @returns
+ */
+export const useScheduleResult = (eventId: number) => {
+  return useQuery({
+    queryKey: ["scheduleResult", eventId],
+    queryFn: () => getScheduleResult(eventId),
+    retry: 2,
+    gcTime: 3 * 60 * 60 * 1000,
+    staleTime: 3 * 60 * 60 * 1000,
+  });
+};
+
+const getScheduleResult = async (eventId: number) => {
+  const response = await axiosInstance.get(
+    `/events/${eventId}/all-time/result`
+  );
   return response.data;
 };

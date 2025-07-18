@@ -1,53 +1,62 @@
+"use client";
+
 import ScheduleSection from "./ScheduleSection";
 import ActionButtons from "./ActionButtons";
 import Tip from "@/components/ui/Tip";
 import TitleWithShare from "./TitleWithShare";
+import useAuthStore from "@/sotres/authStores";
+import { useEffect, useState } from "react";
 
-const CoordinateContent = () => {
+const CoordinateContent = ({
+  eventScheduleInfo,
+}: {
+  eventScheduleInfo: EventScheduleInfoType;
+}) => {
+  const { user } = useAuthStore();
+  const [isConfirmed, setIsConfirmed] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      for (const member of eventScheduleInfo.memberSchedules) {
+        if (member.eventMemberId === user.id) {
+          if (member.isConfirmed) {
+            setIsConfirmed(true);
+            break;
+          }
+        }
+      }
+    }
+  }, [user, eventScheduleInfo]);
+
+  console.log(eventScheduleInfo);
+
   return (
     <div className="pt-6 px-5 pb-9 flex flex-col w-full items-center gap-7 sm:gap-8 sm:pt-10">
       <div className="w-full">
         <TitleWithShare />
       </div>
-      <div className="flex justify-center sm:justify-between w-full sm:gap-5">
-        {/* 내 가능한 시간대 */}
-        <ScheduleSection
-          title={
-            <>
-              <span className="text-[color:var(--color-primary-400)]">나</span>
-              의 가능한 시간대
-            </>
-          }
-          showLoadButton={true}
-        />
-        {/* 함께 가능한 시간대 웹 */}
-        <ScheduleSection
-          title={
-            <>
-              <span className="text-[color:var(--color-primary-400)]">
-                함께
-              </span>{" "}
-              가능한 시간대
-            </>
-          }
-          className="hidden sm:flex"
-        />
-      </div>
       <Tip>
-        가능한 시간을 선택하면, 구성원들과 겹치는 시간대를 자동으로
+        가능한 시간을 입력하면, 구성원들과 겹치는 시간대를 자동으로
         확인해드려요.
       </Tip>
-      {/* 함께 가능한 시간대 - 모바일*/}
       <ScheduleSection
         title={
           <>
-            <span className="text-[color:var(--color-primary-400)]">함께</span>{" "}
+            <span className="text-[color:var(--color-primary-400)]">함께 </span>
             가능한 시간대
           </>
         }
-        className="block sm:hidden"
+        className="block"
+        eventScheduleInfo={eventScheduleInfo}
+        mode="common"
       />
-      <ActionButtons className="sm:mt-2" />
+      <ActionButtons
+        className="sm:mt-2"
+        isConfirmed={isConfirmed}
+        complete={
+          eventScheduleInfo.confirmedMembers === eventScheduleInfo.totalMembers
+        }
+      />
     </div>
   );
 };

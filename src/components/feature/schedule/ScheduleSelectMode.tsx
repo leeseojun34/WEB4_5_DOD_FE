@@ -5,8 +5,8 @@ const ScheduleSelectMode = ({
   schedule,
   setSchedule,
 }: {
-  schedule: ScheduleType;
-  setSchedule: (schedule: ScheduleType) => void;
+  schedule: EventType;
+  setSchedule: (schedule: EventType) => void;
 }) => {
   return (
     <>
