@@ -1,147 +1,153 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { useUser } from "@/lib/api/userApi";
+import { useQuery } from "@tanstack/react-query";
+import { axiosInstance } from "@/lib/api/axiosInstance";
+
+import { kakaoSearch } from "@/types/kakaoSearch";
+
+import Profile from "@/components/mypage/Profile";
 import ListBox from "@/components/mypage/ListBox";
 import NameSheet from "@/components/mypage/NameSheet";
-import Profile from "@/components/mypage/Profile";
-import StationSheet from "@/components/mypage/StationSheet";
 import TimeSheet from "@/components/mypage/TimeSheet";
+import StationSheet from "@/components/mypage/StationSheet";
 import AlertBox from "@/components/ui/AlertBox";
-import { useUser } from "@/hooks/useUser";
-import { useAddFavoriteLocation, useCalendarSync, useDeactiveMutation, useLogoutMutation, useUpdateFavoriteLocation, useUpdateName } from "@/lib/api/authApi";
-import { axiosInstance } from "@/lib/api/axiosInstance";
-import { kakaoSearch } from "@/types/kakaoSearch";
-import { useMutation, useQuery, useQueryClient,  } from "@tanstack/react-query";
-// import { useRouter } from "next/navigation";
-import {  useEffect, useState } from "react";
-import toast from "react-hot-toast";
+
+import {
+  useAddFavoriteLocation,
+  useCalendarSync,
+  useDeactiveMutation,
+  useLogoutMutation,
+  useUpdateFavoriteLocation,
+  useUpdateName,
+  useUpdateProfileImg,
+} from "@/lib/api/authApi";
+// import { profileImages } from "@/lib/profileImages";
 
 type SheetType = "name" | "time" | "station";
 
 function MyPage() {
-  // const router = useRouter();
-  const queryClient = useQueryClient();
-  const { data: user } = useUser();
-  // console.log(user.data)
-  
+  const { data: user, refetch } = useUser();
+  console.log(user);
+  const [name, setName] = useState(user.data.name);
+  const [newName, setNewName] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [sheetType, setSheetType] = useState<SheetType | null>(null);
+  const [calendarSynced, setCalendarSynced] = useState(false);
 
+  // 즐겨찾기 조회
   const favoriteQuery = useQuery({
     queryKey: ["favoriteLocation"],
     queryFn: async () => {
       const res = await axiosInstance.get("/favorite-location");
       const list = res.data.data;
-      return list.length > 0
-        ? list[0]
-        : {stationName : "미등록"}
+      return list.length > 0 ? list[0] : { stationName: "미등록" };
     },
-   
   });
 
-  const [name, setName] = useState<string>(() => user?.data.name ?? "사용자이름");
-  const [newName, setNewName] = useState("")
-  const [email, setEmail] = useState<string>(() => user?.data.email ?? "");
-  const [profile, setProfile] = useState<number>(user?.data.profileImageNumber)
   const [myStation, setMyStation] = useState<string>(
     () => favoriteQuery.data?.stationName
   );
-  const [calendarSynced, setCalendarSynced] = useState(false)
 
-   useEffect(() => {
-    if (user?.data) {
-      setName(user.data.name);
-      setEmail(user.data.email);
-      setProfile(user.data.profileImageNumber)
-    }
-    
-   }, [user]);
-  
-    useEffect(() => {
-    if (favoriteQuery.data) {
-      setMyStation(favoriteQuery.data.stationName);
-      // console.log(favoriteQuery.data)
-    }
-  }, [favoriteQuery.data])
-  
-  
+  useEffect(() => {
+    refetch(); // 마운트 시 user 데이터 패치
+  }, [refetch]);
+
+  // useEffect(() => {
+  //   if (favoriteQuery.data) {
+  //     setMyStation(favoriteQuery.data.stationName);
+  //   }
+  // }, [favoriteQuery.data]);
+
   const openSheet = (type: SheetType) => {
     setSheetType(type);
     setIsOpen(true);
   };
 
-
-
   const updateName = useUpdateName();
   const handleNameSave = () => {
-   updateName.mutate(newName)
-   if (updateName.isSuccess) {
-    setName(newName)
-   }
- }
+    updateName.mutate(newName, {
+      onSuccess: () => {
+        setName(newName);
+        refetch();
+        setIsOpen(false);
+      },
+    });
+  };
+
+  const updateProfileImg = useUpdateProfileImg();
+  const handleRandomProfile = () => {
+    updateProfileImg.mutate(undefined, {
+      onSuccess: () => {
+        refetch(); // 새로운 프로필 반영
+        // setProfile();
+      },
+    });
+  };
 
   const addFavoriteLocation = useAddFavoriteLocation();
   const updateFavoriteLocation = useUpdateFavoriteLocation();
 
-
   const handleStationSave = (station: kakaoSearch) => {
     const stationName = station.place_name;
-    const longitude = Number(station.x)
-    const latitude = Number(station.y)
-    const favoritePlaceId = Number(favoriteQuery.data?.favoriteLocationId)
-  if (favoritePlaceId) {
-    updateFavoriteLocation.mutate(
-      { favoritePlaceId, stationName, latitude, longitude },
-      {
-        onSuccess: (res) => {
-          const updated = res.data?.stationName || stationName;
-          setMyStation(updated);
-        },
-      }
-    );
-  } 
-  else {
-    addFavoriteLocation.mutate(
-      { stationName, latitude, longitude },
-      {
-        onSuccess: (res) => {
-          const createdName = res.data?.stationName || stationName;
-          setMyStation(createdName);
-        },
-      }
-    );
-  }
-  setIsOpen(false);
+    const longitude = Number(station.x);
+    const latitude = Number(station.y);
+    const favoritePlaceId = Number(favoriteQuery.data?.favoriteLocationId);
+
+    if (favoritePlaceId) {
+      updateFavoriteLocation.mutate(
+        { favoritePlaceId, stationName, latitude, longitude },
+        {
+          onSuccess: (res) => {
+            const updated = res.data?.stationName || stationName;
+            setMyStation(updated);
+          },
+        }
+      );
+    } else {
+      addFavoriteLocation.mutate(
+        { stationName, latitude, longitude },
+        {
+          onSuccess: (res) => {
+            const createdName = res.data?.stationName || stationName;
+            setMyStation(createdName);
+          },
+        }
+      );
+    }
+    setIsOpen(false);
   };
 
   const calendarMutation = useCalendarSync();
   const handleGoogleCalendar = () => {
     calendarMutation.mutate();
-    setCalendarSynced((prev) => !prev)
-    
-  }
-  
-    //로그아웃
+    setCalendarSynced((prev) => !prev);
+  };
+
   const logoutMutation = useLogoutMutation();
   const handleLogout = () => {
-    console.log("로그아웃누름");
     logoutMutation.mutate();
   };
-  //회원탈퇴
+
   const deactivateMutation = useDeactiveMutation();
   const handleLeave = () => {
-    console.log("탈퇴누름");
     deactivateMutation.mutate();
   };
-
-
-  
-
 
   return (
     <div className="w-full flex flex-col py-8">
       <div className="flex flex-1 flex-col justify-between gap-[4vh]">
         <div className="flex flex-col gap-8">
-        <Profile name={name} email={email} profile={profile} editHandler={() => openSheet("name")} />
+          {user?.data && (
+            <Profile
+              name={name}
+              email={user.data.email}
+              profile={user.data.profileImageNumber}
+              editHandler={() => openSheet("name")}
+              onChangeProfile={handleRandomProfile}
+            />
+          )}
 
           <div className="flex flex-col gap-4">
             <ListBox buttonText="수정" clickHandler={() => openSheet("time")}>
@@ -153,7 +159,9 @@ function MyPage() {
               clickHandler={() => openSheet("station")}>
               내 주변역
             </ListBox>
-            <ListBox onConnect={handleGoogleCalendar} isConnected={calendarSynced} >
+            <ListBox
+              onConnect={handleGoogleCalendar}
+              isConnected={calendarSynced}>
               캘린더 연동
             </ListBox>
           </div>
@@ -180,29 +188,33 @@ function MyPage() {
           </AlertBox>
         </div>
       </div>
-      {/* 이름 수정하기 */}
+
+      {/* 이름 수정 */}
       {sheetType === "name" && (
         <NameSheet
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           text={newName}
-          onChange={e => setNewName(e.target.value)}
+          onChange={(e) => setNewName(e.target.value)}
           onSave={handleNameSave}
         />
       )}
 
-      {/* 나의 가능한 시간 설정하기 */}
+      {/* 시간 설정 */}
       {sheetType === "time" && (
-         <TimeSheet
+        <TimeSheet
           isOpen={isOpen}
           setIsOpen={setIsOpen}
-          onSave={() => {/* 시간 저장 로직 */ setIsOpen(false);}}
+          onSave={() => {
+            // 시간 저장 로직
+            setIsOpen(false);
+          }}
         />
       )}
 
-      {/* 주변역 등록하기 */}
+      {/* 주변역 등록 */}
       {sheetType === "station" && (
-       <StationSheet
+        <StationSheet
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           onSave={handleStationSave}
@@ -211,4 +223,5 @@ function MyPage() {
     </div>
   );
 }
+
 export default MyPage;
