@@ -30,7 +30,6 @@ const Profile = ({
           alt="사용자 프로필 이미지"
           fill
           sizes="76px, 84px"
-          priority
           className="rounded-full object-cover"
         />
         <button
