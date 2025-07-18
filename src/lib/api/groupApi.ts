@@ -47,29 +47,42 @@ const deleteGroup = async (id: string) => {
 };
 
 const getGroupSchedules = async (groupId: string) => {
-  const res = await axiosInstance.get(`/groups/schedule-groups/${groupId}`, {
-    params: { id: groupId },
-  });
+  const res = await axiosInstance.get(`/groups/schedule-groups/${groupId}`);
   return res.data;
 };
 
 const getGroupStatistics = async (groupId: string) => {
-  const res = await axiosInstance.get(`/groups/${groupId}/statistics`, {
-    params: { id: groupId },
-  });
+  const res = await axiosInstance.get(`/groups/${groupId}/statistics`);
   return res.data;
 };
 
 const getGroupMembers = async (groupId: string) => {
-  const res = await axiosInstance.get(`/groups/${groupId}/member`, {
-    params: { id: groupId },
-  });
+  const res = await axiosInstance.get(`/groups/${groupId}/member`);
   return res.data;
 };
 
 const leaveGroup = async (groupId: string) => {
   const res = await axiosInstance.patch(`/goups/${groupId}/leave`);
   return res.data;
+};
+
+const removeGroupMember = async (groupId: string, userId: string) => {
+  const res = await axiosInstance.patch(`/groups/${groupId}/members/${userId}`);
+  return res.data;
+};
+
+export const useRemoveGroupMember = (groupId: string, userId: string) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: () => removeGroupMember(groupId, userId),
+    onSuccess: (data) => {
+      console.log("그룹 멤버 내보내기 성공: ", data);
+      queryClient.invalidateQueries({ queryKey: ["groupMembers", groupId] });
+    },
+    onError: (err) => {
+      console.error("그룹 멤버 내보내기 실패: ", err);
+    },
+  });
 };
 
 export const useLeaveGroup = () => {
