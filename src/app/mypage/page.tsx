@@ -29,8 +29,8 @@ type SheetType = "name" | "time" | "station";
 
 function MyPage() {
   const { data: user, refetch } = useUser();
-  console.log(user);
-  const [name, setName] = useState(user.data.name);
+  // console.log(user.data);
+  const [name, setName] = useState(user?.data.name);
   const [newName, setNewName] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [sheetType, setSheetType] = useState<SheetType | null>(null);
