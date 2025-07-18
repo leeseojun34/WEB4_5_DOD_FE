@@ -3,19 +3,13 @@ import Dropdown from "@/components/ui/Dropdown";
 import { Calendar } from "@/components/feature/calendar/Calender";
 import { listVariants, itemVariants } from "./motion";
 import { motion } from "framer-motion";
-import toast from "react-hot-toast";
+import Toast from "@/components/ui/Toast";
 
 const timeOptions: string[] = [];
 
 for (let hour = 0; hour <= 24; hour++) {
-  for (const minute of [0, 30]) {
-    if (hour === 24 && minute > 0) continue;
-
-    const hh = String(hour).padStart(2, "0");
-    const mm = String(minute).padStart(2, "0");
-
-    timeOptions.push(`${hh}:${mm}`);
-  }
+  const hh = String(hour).padStart(2, "0");
+  timeOptions.push(`${hh}:00`);
 }
 
 const ScheduleSelectDate = ({
@@ -49,13 +43,13 @@ const ScheduleSelectDate = ({
         >
           <Dropdown
             options={timeOptions}
-            defaultIndex={18}
+            defaultIndex={9}
             onSelect={(selected) => setStartTime(selected)}
           />
           <span className="">-</span>
           <Dropdown
             options={timeOptions}
-            defaultIndex={36}
+            defaultIndex={18}
             onSelect={(selected) => setEndTime(selected)}
           />
         </motion.div>
@@ -67,15 +61,7 @@ const ScheduleSelectDate = ({
               selected={dateList}
               setSelected={(dates) => {
                 if (dates!.length > 7) {
-                  toast("최대 7일까지 선택 가능해요!", {
-                    icon: "😥",
-                    style: {
-                      borderRadius: "50px",
-                      background: "#fff",
-                      border: "1px solid var(--color-red)",
-                      color: "#000",
-                    },
-                  });
+                  Toast("최대 7일까지 선택 가능해요!");
                   return;
                 }
                 setDateList(dates as Date[]);

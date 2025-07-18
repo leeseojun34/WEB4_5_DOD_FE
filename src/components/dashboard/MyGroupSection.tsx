@@ -1,8 +1,12 @@
 import Link from "next/link";
 import { MyGroupItem } from "./MyGroupItem";
+import { DashboardGroupType } from "@/lib/api/dashboardApi";
 
-export const MyGroupSection = () => {
-  const groupId = 1;
+interface MyGroupSectionProps {
+  groups: DashboardGroupType[];
+}
+
+export const MyGroupSection = ({ groups }: MyGroupSectionProps) => {
   return (
     <>
       <div className="bg-[color:var(--color-white)] p-5 rounded-[20px] w-full gap-2 flex flex-col">
@@ -11,14 +15,17 @@ export const MyGroupSection = () => {
             나의 모임
           </p>
         </div>
-        <Link href={`/group/${groupId}`}>
-          <MyGroupItem />
-        </Link>
-        <Link href={`/group/${groupId}`}>
-          <MyGroupItem />
-        </Link>
-
-        {/* <EmptyGroup /> */}
+        {groups.length > 0 ? (
+          <>
+            {groups.map((group) => (
+              <Link href={`/group/${group.groupId}`} key={group.groupId}>
+                <MyGroupItem group={group} />
+              </Link>
+            ))}
+          </>
+        ) : (
+          <EmptyGroup />
+        )}
       </div>
     </>
   );
