@@ -4,7 +4,7 @@ import MySchedule from "@/components/feature/meeting/coordinate/MySchedule";
 import GroupHeader from "@/components/layout/GroupHeader";
 import Header from "@/components/layout/Header";
 import { useParams, useRouter } from "next/navigation";
-import { useEventScheduleInfo } from "@/lib/api/scheduleApi";
+import { useEventDetail, useEventScheduleInfo } from "@/lib/api/scheduleApi";
 import GlobalLoading from "@/app/loading";
 import useAuthStore from "@/sotres/authStores";
 import Toast from "@/components/ui/Toast";
@@ -15,6 +15,7 @@ const MySchedulePage = () => {
   const router = useRouter();
 
   const { data: eventScheduleInfo } = useEventScheduleInfo(Number(eventId));
+  const { data: eventDetail } = useEventDetail(Number(eventId));
 
   useEffect(() => {
     if (user) {
@@ -42,10 +43,12 @@ const MySchedulePage = () => {
         <Header type="blue" />
       </div>
       <GroupHeader
-        groupName={eventScheduleInfo.eventTitle}
-        groupIntroduction={eventScheduleInfo.description}
-        groupCount={eventScheduleInfo.totalMembers}
-        clickToInvite={() => console.log("초대함")}
+        name={eventScheduleInfo.eventTitle}
+        description={eventScheduleInfo.description}
+        count={eventScheduleInfo.totalMembers}
+        isLeader={eventDetail.data.role === "ROLE_MASTER" ? true : false}
+        type="schedule"
+        id={eventId as string}
       />
       <div className="min-w-[375px] w-full max-w-185 mx-auto relative">
         <MySchedule eventScheduleInfo={eventScheduleInfo} />

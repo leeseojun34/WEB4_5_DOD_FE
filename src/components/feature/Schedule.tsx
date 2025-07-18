@@ -13,7 +13,7 @@ import { useParams } from "next/navigation";
 import { getGridColsClass } from "@/app/utils/styleFormat";
 
 const STYLES = {
-  container: "pl-3 pr-6 w-full",
+  container: "w-full",
   header: "sticky top-0 z-10 bg-white",
   dayGrid: "grid gap-1 pl-6",
   dayCell: "py-2 text-center text-[#9EA6B2] text-[8px] md:text-xl font-bold",
