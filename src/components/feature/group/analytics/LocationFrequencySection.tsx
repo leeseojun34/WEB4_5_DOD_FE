@@ -10,7 +10,7 @@ interface LocationFrequencySectionProps {
 const LocationFrequencySection = ({ locations, counts }: LocationFrequencySectionProps) => {
   return (
     <GroupAnalyticsSection color="red" title="장소별 모임 빈도">
-      <div className="flex w-full justify-center gap-10">
+      <div className="flex w-full justify-center gap-10 mb-5">
         <div className="w-45 h-45">
           <LocationFrequencyItem locationFrequencyData={counts} />
         </div>

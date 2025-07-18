@@ -36,12 +36,12 @@ const GroupAnalyticsPage = () => {
   if (data.data.scheduleNumber === 0)
     return (
       <AnalyticsLayout>
-        <EmptyGroupAnalytics />
+        <EmptyGroupAnalytics groupId={groupId}/>
       </AnalyticsLayout>
     );
 
   return (
-    <AnalyticsLayout>
+    <AnalyticsLayout isData={true}>
       <MemberParticipationSection
         memberData={memberParticipationData}
         totalScheduleNum={totalScheduleNum}
