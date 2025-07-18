@@ -1,6 +1,6 @@
 import Image from "next/image";
 import EmptyGroupAnalyticsCard from "./EmptyGroupAnalyticsCard";
-import sadRabbitImg from "@/assets/images/banner_crying.png";
+import sadRabbitImg from "@/assets/images/rabbit_noschedule_sad.png";
 
 const EmptyGroupAnalytics = () => {
   return (
@@ -11,6 +11,7 @@ const EmptyGroupAnalytics = () => {
         priority
         width={222}
         height={183}
+        className="w-55 h-55 sm:w-90 sm:h-90"
       />
       <EmptyGroupAnalyticsCard />
     </div>
