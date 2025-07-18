@@ -83,8 +83,8 @@ export const useLeaveGroup = () => {
       router.push(`/`);
     },
     onError: (err) => {
-      console.error("그룹 나가기 실패: ",err)
-    }
+      console.error("그룹 나가기 실패: ", err);
+    },
   });
 };
 

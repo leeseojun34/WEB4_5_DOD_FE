@@ -13,8 +13,8 @@ const ScheduleModeList = ({
   schedule,
   setSchedule,
 }: {
-  schedule: ScheduleType;
-  setSchedule: (schedule: ScheduleType) => void;
+  schedule: EventType;
+  setSchedule: (schedule: EventType) => void;
 }) => {
   const handleModeChange = (mode: "ONLINE" | "OFFLINE") => {
     setSchedule({

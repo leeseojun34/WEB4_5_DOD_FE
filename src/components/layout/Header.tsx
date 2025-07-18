@@ -1,21 +1,25 @@
 "use client";
 import Image from "next/image";
 import LogoWebHeader from "../ui/LogoWebHeader";
-import profile from "@/assets/images/profile_pastel_orange.png";
 import calendarBlue from "@/assets/images/calendar_blue.png";
 import calendarWhite from "@/assets/images/calendar_white.png";
 import { useRouter } from "next/navigation";
+import { useUser } from "@/lib/api/userApi";
+import { profileImages } from "@/lib/profileImages";
 
 const Header = ({ type = "" }: { type?: "" | "blue" }) => {
   const router = useRouter();
+  const { data: user } = useUser();
+
+  const profile = profileImages[user?.data.profileImageNumber];
+
   return (
     <div
       className={`w-full max-w-5xl fixed flex justify-between items-center px-10 md:px-20 py-6 z-50 ${
         type === "blue"
           ? "bg-[color:var(--color-primary-400)]"
           : "bg-transparent"
-      }`}
-    >
+      }`}>
       <LogoWebHeader type={type} handleLogoClick={() => router.push("/")} />
       <div className="flex justify-between items-center gap-8">
         <div className="flex justify-between items-center gap-8">
@@ -37,17 +41,18 @@ const Header = ({ type = "" }: { type?: "" | "blue" }) => {
           />
         </div>
 
-        {/* <button
+        {!user && (
+          <button
             onClick={() => router.push("/auth/login")}
             className={`flex items-center px-4 py-2 rounded-[50px] border border-x 
             ${
               type === "blue"
                 ? "border-[color:var(--color-white)] text-[color:var(--color-white)] hover:bg-[color:var(--color-white)] hover:text-[color:var(--color-primary-400)]"
                 : "border-[color:var(--color-primary-400)] text-[color:var(--color-primary-400)] hover:bg-[color:var(--color-primary-400)] hover:text-[color:var(--color-white)]"
-            } text-xs font-medium cursor-pointer `}
-          >
+            } text-xs font-medium cursor-pointer `}>
             로그인
-          </button> */}
+          </button>
+        )}
       </div>
     </div>
   );

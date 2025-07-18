@@ -2,24 +2,41 @@
 import Tip from "@/components/ui/Tip";
 import Image from "next/image";
 import purplerabbit from "@/assets/images/rabbit_walking_backpack.png";
-import ScheduleCard from "@/components/ui/ScheduleCard";
 import Header from "@/components/layout/Header";
 import HeaderTop from "@/components/layout/HeaderTop";
 import Footer from "@/components/layout/Footer";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import DropdownSmall from "@/components/ui/DropdownSmall";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import { useScheduleResult } from "@/lib/api/scheduleApi";
+import GlobalLoading from "@/app/loading";
+import TimeResultScheduleCard from "./TimeResultScheduleCard";
 
 const TimeResult = () => {
+  const { eventId } = useParams();
+  const { data: eventDetail } = useScheduleResult(Number(eventId));
+  const [list, setList] = useState<MeetingTimeType[]>([]);
+
   const [isOpen, setIsOpen] = useState(false);
 
   const handleTopClick = () => {
-    console.log("상단 정렬 클릭");
+    setList(eventDetail.data.recommendation.earliestMeetingTimes);
   };
 
   const handleBottomClick = () => {
-    console.log("하단 정렬 클릭");
+    setList(eventDetail.data.recommendation.longestMeetingTimes);
   };
+
+  useEffect(() => {
+    if (eventDetail) {
+      setList(eventDetail.data.recommendation.earliestMeetingTimes);
+    }
+  }, [eventDetail]);
+
+  if (!eventDetail) {
+    return <GlobalLoading />;
+  }
 
   return (
     <section>
@@ -32,11 +49,13 @@ const TimeResult = () => {
           <div className="flex justify-between items-center">
             <div className="flex flex-col gap-2 pt-7.5 ">
               <h2 className="font-medium sm:text-2xl text-xl text-[var(--color-gray)]">
-                카츠오모이 가는 날
+                {eventDetail.data.eventTitle}
               </h2>
               <h1 className="font-medium text-xl sm:text-2xl text-[var(--color-black)]">
-                <span className="text-[var(--color-primary-400)]">6명</span>의
-                시간 조율 결과
+                <span className="text-[var(--color-primary-400)]">
+                  {eventDetail.data.totalParticipants}명
+                </span>
+                의 시간 조율 결과
               </h1>
             </div>
             <Image
@@ -69,20 +88,10 @@ const TimeResult = () => {
               )}
             </div>
             <div className="flex flex-col gap-5">
-              <div className="flex flex-col gap-4">
-                <ScheduleCard
-                  variant="attendance"
-                  totalCount={6}
-                  members={["박은서", "현혜주"]}
-                  time="7월 4일 (금) 18:00 - 22:00"
-                />
-                <ScheduleCard
-                  variant="attendance"
-                  totalCount={6}
-                  members={["박상윤", "박은서", "황수지", "현혜주", "박준규"]}
-                  time="7월 4일 (금) 18:00 - 22:00"
-                />
-              </div>
+              <TimeResultScheduleCard
+                list={list}
+                totalParticipants={eventDetail.data.totalParticipants}
+              />
               <Tip>
                 일정을 선택하면 모임 리더가 되어 일정이 확정돼요.
                 <br />

@@ -5,19 +5,34 @@ import { Button } from "@/components/ui/Button";
 import Image from "next/image";
 import rabbit from "@/assets/images/rabbit_vote.png";
 import { useRouter } from "next/navigation";
+import { useSchedule } from "@/lib/api/ElectionApi";
 
-const ElectionStart = () => {
+interface Props {
+  scheduleId: string;
+}
+//API 연결 테스트용 ID
+const TEMP_SCHEDULE_ID = "25";
+
+const ElectionStart = ({ scheduleId }: Props) => {
   const router = useRouter();
-  // 임시 라우트
+  const { data: schedule, isLoading } = useSchedule(TEMP_SCHEDULE_ID);
+
   const clickHandler = () => {
-    router.push("/schedule/1/election/start-point");
+    router.push(`/schedule/${TEMP_SCHEDULE_ID}/election/start-point`);
   };
+
+  console.log(schedule);
   return (
     <main className="flex flex-col  min-h-screen relative pb-32 pt-8 max-w-[740px] mx-auto overflow-hidden">
       <div className="flex flex-col gap-2 px-5 pt-7.5 ">
-        <h2 className="font-semibold sm:text-2xl text-xl text-[var(--color-gray)]">
-          카츠오모이 가는 날
-        </h2>
+        {isLoading ? (
+          <div className="h-7 w-1/3 bg-[var(--color-gray-100)] rounded animate-pulse" />
+        ) : (
+          <h2 className="font-semibold sm:text-2xl text-xl text-[var(--color-gray)]">
+            {schedule?.scheduleName || "내 일정 1"}
+          </h2>
+        )}
+
         <h1 className="font-semibold text-xl sm:text-2xl text-[var(--color-black)]">
           <span className="text-[var(--color-primary-400)]">중간 지점</span>{" "}
           찾으러 가기
