@@ -3,8 +3,9 @@ import sadRabbitImg from "@/assets/images/rabbit_noschedule_sad.png";
 import { Button } from "@/components/ui/Button";
 import EmptyGroupAnalyticsCard from "./EmptyGroupAnalyticsCard";
 import Link from "next/link";
+import { ParamValue } from "next/dist/server/request/params";
 
-const EmptyGroupAnalytics = ({ groupId }: { groupId: string }) => {
+const EmptyGroupAnalytics = ({ groupId }: { groupId: ParamValue }) => {
   return (
     <div className="w-full flex flex-col items-center gap-10 sm:gap-15 relative min-h-[calc(100vh-100px)] sm:min-h-[calc(100vh-160px)] ">
       <div className="w-full flex flex-col justify-center items-center gap-5">
