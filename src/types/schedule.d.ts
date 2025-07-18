@@ -100,3 +100,26 @@ interface DayInfo {
   date?: string;
   fullDate?: string;
 }
+
+type EventDetailType = {
+  eventTitle: string;
+  totalParticipants: number;
+  recommendation: {
+    earliestMeetingTimes: MeetingTimeType[];
+    longestMeetingTimes: MeetingTimeType[];
+  };
+};
+
+type MeetingTimeType = {
+  endTime: string;
+  isSelected: boolean;
+  participantCount: number;
+  participants: ParticipantsType[];
+  startTime: string;
+  timeSlotId: string;
+};
+
+type ParticipantsType = {
+  memberId: string;
+  memberName: string;
+};

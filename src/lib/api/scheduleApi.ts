@@ -167,6 +167,7 @@ export const useScheduleResult = (eventId: number) => {
     queryFn: () => getScheduleResult(eventId),
     retry: 2,
     gcTime: 3 * 60 * 60 * 1000,
+    staleTime: 3 * 60 * 60 * 1000,
   });
 };
 
