@@ -19,6 +19,17 @@ export interface GroupResponse {
   id: string;
 }
 
+export interface UpdateMemberPermissionsReqeust {
+  groupId: string;
+  userId: string;
+  groupRole: string;
+}
+
+export interface RemoveGroupMemberRequest {
+  groupId: string;
+  userId: string;
+}
+
 // 전체 그룹 조회
 const getGroups = async () => {
   const res = await axiosInstance.get("/groups");
@@ -66,18 +77,49 @@ const leaveGroup = async (groupId: string) => {
   return res.data;
 };
 
-const removeGroupMember = async (groupId: string, userId: string) => {
-  const res = await axiosInstance.patch(`/groups/${groupId}/members/${userId}`);
+const removeGroupMember = async (data: RemoveGroupMemberRequest) => {
+  const res = await axiosInstance.patch(
+    `/groups/${data.groupId}/members/${data.userId}`
+  );
   return res.data;
 };
 
-export const useRemoveGroupMember = (groupId: string, userId: string) => {
+const updateMemberPermissions = async (
+  data: UpdateMemberPermissionsReqeust
+) => {
+  const res = await axiosInstance.patch(
+    `/groups/${data.groupId}/members`,
+    data
+  );
+  return res.data;
+};
+
+export const useUpdateMemberPermissions = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: () => removeGroupMember(groupId, userId),
-    onSuccess: (data) => {
+    mutationFn: (data: UpdateMemberPermissionsReqeust) =>
+      updateMemberPermissions(data),
+    onSuccess: (data, variables) => {
+      console.log("권한 변경 성공: ", data);
+      queryClient.invalidateQueries({
+        queryKey: ["groupMembers", variables.groupId],
+      });
+    },
+    onError: (err) => {
+      console.error("권한 변경 실패: ", err);
+    },
+  });
+};
+
+export const useRemoveGroupMember = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: RemoveGroupMemberRequest) => removeGroupMember(data),
+    onSuccess: (data, variables) => {
       console.log("그룹 멤버 내보내기 성공: ", data);
-      queryClient.invalidateQueries({ queryKey: ["groupMembers", groupId] });
+      queryClient.invalidateQueries({
+        queryKey: ["groupMembers", variables.groupId],
+      });
     },
     onError: (err) => {
       console.error("그룹 멤버 내보내기 실패: ", err);

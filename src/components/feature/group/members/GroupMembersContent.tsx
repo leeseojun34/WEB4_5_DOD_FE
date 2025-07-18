@@ -13,12 +13,14 @@ interface GroupMembersContentProps {
   members: MemberDataType[];
   myId: string;
   isLeader: boolean;
+  groupId: string
 }
 
 const GroupMembersContent = ({
   members,
   myId,
   isLeader,
+  groupId
 }: GroupMembersContentProps) => {
   console.log(members);
   return (
@@ -29,6 +31,7 @@ const GroupMembersContent = ({
         members={members}
         myId={myId}
         isLeader={isLeader}
+        groupId={groupId}
       />
     </div>
   );

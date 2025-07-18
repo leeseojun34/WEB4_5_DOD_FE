@@ -11,9 +11,10 @@ interface MemberListProps {
   members: MemberDataType[];
   myId: string;
   isLeader: boolean;
+  groupId: string
 }
 
-const MemberList = ({ members, myId, isLeader }: MemberListProps) => {
+const MemberList = ({ members, myId, isLeader,groupId }: MemberListProps) => {
   return (
     <div className="flex flex-col gap-4">
       {members.map((member: MemberDataType, index: number) => (
@@ -25,6 +26,7 @@ const MemberList = ({ members, myId, isLeader }: MemberListProps) => {
           myId={myId}
           memberId={member.userId}
           isLeader={isLeader}
+          groupId={groupId}
         />
       ))}
     </div>

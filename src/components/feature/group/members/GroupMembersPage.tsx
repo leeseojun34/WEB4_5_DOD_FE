@@ -26,6 +26,7 @@ const GroupMembersPage = () => {
         members={groupMemberData}
         myId={myId}
         isLeader={amILeader}
+        groupId={groupId}
       />
 
       <div className="sm:hidden">
