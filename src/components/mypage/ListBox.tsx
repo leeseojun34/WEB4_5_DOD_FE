@@ -12,7 +12,7 @@ type ListBoxProps = {
   station?: string;
   isConnected?: boolean;
   onConnect?: () => void;
-  clickHandler: () => void;
+  clickHandler?: () => void;
 };
 
 const ListBox = ({
