@@ -18,7 +18,6 @@ const EmptyGroupAnalytics = () => {
         />
         <EmptyGroupAnalyticsCard />
       </div>
-      <Button>일정 만들러 가기</Button>
     </div>
   );
 };
