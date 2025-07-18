@@ -1,13 +1,25 @@
 import { useState } from "react";
 import { Calendar } from "../feature/calendar/Calender";
 import { Banner } from "./Banner";
-import { MyGroupSection } from "./MyGroupSection";
 import { MyScheduleSection } from "./MyScheduleSection";
 import Footer from "../layout/Footer";
 import Header from "../layout/Header";
+import { useDashboard } from "@/lib/api/dashboardApi";
+import { formatDate } from "@/app/utils/dateFormat";
+import GlobalLoading from "@/app/loading";
+import { MyGroupSection } from "./MyGroupSection";
 
 const Dashboard = () => {
-  const [selected, setSelected] = useState<Date | undefined>();
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
+    new Date()
+  );
+
+  const { data: dashboardData, isPending } = useDashboard(
+    formatDate(selectedDate ?? new Date())
+  );
+
+  if (isPending) return <GlobalLoading />;
+
   return (
     <section>
       <div className="hidden sm:block">
@@ -18,11 +30,14 @@ const Dashboard = () => {
           <Banner />
           <Calendar
             isCompact={true}
-            selected={selected}
-            setSelected={setSelected}
+            selected={selectedDate}
+            setSelected={setSelectedDate}
           />
-          <MyScheduleSection />
-          <MyGroupSection />
+          <MyScheduleSection
+            selectedDate={selectedDate!}
+            schedules={dashboardData.data.schedules}
+          />
+          <MyGroupSection groups={dashboardData.data.groups.groupDetails} />
         </div>
       </div>
       <div className="block sm:hidden">
