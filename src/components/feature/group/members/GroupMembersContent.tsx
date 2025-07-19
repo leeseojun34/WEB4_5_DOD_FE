@@ -13,16 +13,15 @@ interface GroupMembersContentProps {
   members: MemberDataType[];
   myId: string;
   isLeader: boolean;
-  groupId: string
+  groupId: string;
 }
 
 const GroupMembersContent = ({
   members,
   myId,
   isLeader,
-  groupId
+  groupId,
 }: GroupMembersContentProps) => {
-  console.log(members);
   return (
     <div className="pt-25 sm:pt-40 min-w-[375px] w-full max-w-185 flex flex-col justify-center bg-[color:var(--color-white)] mx-auto px-5 gap-5">
       <HeaderTop>그룹원</HeaderTop>
