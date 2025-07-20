@@ -38,7 +38,7 @@ const UserSchedule = () => {
         )}
         <UserScheduleList
           schedules={scheduleData.data.schedules}
-          groupId={groupId ?? undefined}
+          groupId={Number(groupId) ?? undefined}
         />
       </div>
       <div className="sm:hidden">

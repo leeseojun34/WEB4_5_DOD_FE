@@ -31,12 +31,10 @@ const getGroup = async (id: string) => {
   return res.data;
 };
 
-export const moveSchedule = async (scheduleId: number, groupId: string) => {
+export const moveSchedule = async (scheduleId: number, groupId: number) => {
   const response = await axiosInstance.patch(`/groups/move-schedule`, {
-    params: {
-      groupId: groupId,
-      scheduleId: scheduleId,
-    },
+    groupId,
+    scheduleId,
   });
   return response.data;
 };

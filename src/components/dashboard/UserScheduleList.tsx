@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { moveSchedule } from "@/lib/api/groupApi";
 interface UserScheduleListProps {
   schedules: DashboardScheduleType[];
-  groupId?: string;
+  groupId?: number;
 }
 
 const UserScheduleList = ({ schedules, groupId }: UserScheduleListProps) => {
@@ -17,7 +17,7 @@ const UserScheduleList = ({ schedules, groupId }: UserScheduleListProps) => {
   const groupMembers = ["박은서", "현혜주", "황수지", "박준규", "박상윤"];
   const router = useRouter();
 
-  const handleMoveSchedule = async (scheduleId: number, groupId: string) => {
+  const handleMoveSchedule = async (scheduleId: number, groupId: number) => {
     try {
       const response = await moveSchedule(scheduleId, groupId);
       if (response.code === "200") {
