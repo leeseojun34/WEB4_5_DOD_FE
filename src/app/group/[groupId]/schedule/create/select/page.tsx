@@ -8,16 +8,22 @@ import Tip from "@/components/ui/Tip";
 import { Button } from "@/components/ui/Button";
 import HeaderTop from "@/components/layout/HeaderTop";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Header from "@/components/layout/Header";
 
 const GroupScheduleCreateSelectPage = () => {
-  const [selected, setSelected] = useState("/schedule/create");
+  const [selected, setSelected] = useState("create");
+  const params = useParams();
+  const groupId = params?.groupId;
   const router = useRouter();
   const userId = "GOOGLE_116827515645165286764";
 
   const handleNavigate = () => {
-    router.push(`${selected}`);
+    if (selected === "create") {
+      router.push(`/schedule/create?groupId=${groupId}`);
+    } else {
+      router.push(`/schedule/user/${userId}`);
+    }
   };
 
   return (
@@ -33,11 +39,8 @@ const GroupScheduleCreateSelectPage = () => {
               일정 추가 방법을 선택해주세요
             </p>
             <div className="w-full flex gap-5">
-              <div
-                className="w-full"
-                onClick={() => setSelected("/schedule/create")}
-              >
-                <OptionBox isSelected={selected === "/schedule/create"}>
+              <div className="w-full" onClick={() => setSelected("create")}>
+                <OptionBox isSelected={selected === "create"}>
                   <Image
                     height={52}
                     width={52}
@@ -50,10 +53,7 @@ const GroupScheduleCreateSelectPage = () => {
                   </p>
                 </OptionBox>
               </div>
-              <div
-                className="w-full"
-                onClick={() => setSelected(`/schedule/user/${userId}`)}
-              >
+              <div className="w-full" onClick={() => setSelected("load")}>
                 <OptionBox isSelected={selected === "load"}>
                   <Image
                     height={52}
@@ -69,7 +69,7 @@ const GroupScheduleCreateSelectPage = () => {
               </div>
             </div>
           </div>
-          {selected === "/schedule/create" ? (
+          {selected === "create" ? (
             <Tip>새로운 만남, 여기서부터 시작해요! 🗓️</Tip>
           ) : (
             <Tip>전에 만든 일정이 있다면 불러와서 바로 써보세요! 🙌</Tip>
