@@ -1,6 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "./axiosInstance";
 import { useRouter } from "next/navigation";
+import Toast from "@/components/ui/Toast";
+import toast from "react-hot-toast";
 
 export interface CreateGroupRequest {
   groupName: string;
@@ -99,13 +101,14 @@ export const useUpdateMemberPermissions = () => {
   return useMutation({
     mutationFn: (data: UpdateMemberPermissionsReqeust) =>
       updateMemberPermissions(data),
-    onSuccess: (data, variables) => {
-      console.log("권한 변경 성공: ", data);
+    onSuccess: (_, variables) => {
+      toast("권한 변경에 성공했습니다");
       queryClient.invalidateQueries({
         queryKey: ["groupMembers", variables.groupId],
       });
     },
     onError: (err) => {
+      Toast("권한 변경에 실패했습니다");
       console.error("권한 변경 실패: ", err);
     },
   });
@@ -115,13 +118,14 @@ export const useRemoveGroupMember = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (data: RemoveGroupMemberRequest) => removeGroupMember(data),
-    onSuccess: (data, variables) => {
-      console.log("그룹 멤버 내보내기 성공: ", data);
+    onSuccess: (_, variables) => {
+      toast("그룹 멤버를 내보냈습니다");
       queryClient.invalidateQueries({
         queryKey: ["groupMembers", variables.groupId],
       });
     },
     onError: (err) => {
+      Toast("그룹 멤버 내보내기에 실패했습니다");
       console.error("그룹 멤버 내보내기 실패: ", err);
     },
   });

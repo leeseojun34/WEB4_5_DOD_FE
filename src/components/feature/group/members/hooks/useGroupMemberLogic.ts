@@ -68,7 +68,6 @@ export const useGroupMemberActions = (groupId: string) => {
   const handleAlertAction = (memberId: string) => {
     switch (alertAction) {
       case "kick":
-        console.log("멤버 내보내기");
         removeMember.mutate({
           groupId,
           userId: memberId,
@@ -82,7 +81,6 @@ export const useGroupMemberActions = (groupId: string) => {
         });
         break;
       case "take":
-        console.log("방장 권한 뺏기");
         updateMemberPermissions.mutate({
           groupId,
           userId: memberId,
