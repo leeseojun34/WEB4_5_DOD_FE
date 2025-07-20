@@ -8,7 +8,7 @@ interface GroupHeaderTopProps {
   name: string;
   id: string;
   isLeader: boolean;
-  type: "schedule" | "group";
+  type?: "schedule" | "group";
 }
 
 const GroupHeaderTop = ({ name, id, isLeader, type }: GroupHeaderTopProps) => {

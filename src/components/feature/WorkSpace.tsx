@@ -45,7 +45,7 @@ const WorkSpace = ({ scheduleId, workspaces }: WorkSpaceProps) => {
         </Link>
       </div>
       <div className="flex flex-col gap-3 w-full">
-        {!workspaces && (
+        {(!workspaces || workspaces.length === 0) && (
           <div className="flex w-full justify-center items-center py-4 text-xs text-[color:var(--color-gray)]">
             연동된 워크스페이스가 없습니다.
           </div>

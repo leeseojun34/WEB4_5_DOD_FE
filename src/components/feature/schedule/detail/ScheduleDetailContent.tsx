@@ -3,7 +3,6 @@ import MeetingInfo from "../../MeetingInfo";
 import WorkSpace from "../../WorkSpace";
 import KakaoScript from "../../KakaoScript";
 import { useKakaoShare } from "@/lib/api/useKakaoShare";
-import { WorkspacePlatformType } from "@/types/schedule";
 
 interface ScheduleDetailContentProps {
   scheduleId: string;
