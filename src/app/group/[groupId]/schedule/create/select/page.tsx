@@ -22,7 +22,7 @@ const GroupScheduleCreateSelectPage = () => {
     if (selected === "create") {
       router.push(`/schedule/create?groupId=${groupId}`);
     } else {
-      router.push(`/schedule/user/${userId}?mode=load`);
+      router.push(`/schedule/user/${userId}?groupId=${groupId}`);
     }
   };
 
@@ -77,7 +77,9 @@ const GroupScheduleCreateSelectPage = () => {
 
           <div className="fixed w-full left-0 right-0 px-5 bottom-9">
             <div className="max-w-185 mx-auto">
-              <Button onClick={handleNavigate}>다음</Button>
+              <div className="w-full flex justify-center">
+                <Button onClick={handleNavigate}>그룹 일정으로 불러오기</Button>
+              </div>
             </div>
           </div>
         </div>

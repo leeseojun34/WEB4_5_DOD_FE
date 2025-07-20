@@ -15,7 +15,7 @@ const UserSchedule = () => {
     formatDate(new Date())
   );
   const searchParams = useSearchParams();
-  const isLoadMode = searchParams?.get("mode") === "load";
+  const groupId = searchParams?.get("groupId");
   if (isPending) return <GlobalLoading />;
 
   return (
@@ -25,11 +25,11 @@ const UserSchedule = () => {
       </div>
       <div className="min-w-[375px] w-full max-w-185 bg-[color:var(--color-gray-background)] mx-auto pt-8 sm:pt-30">
         <HeaderTop>
-          {isLoadMode ? "불러올 일정 선택" : "나의 이때어때 일정"}
+          {groupId ? "불러올 일정 선택" : "나의 이때어때 일정"}
         </HeaderTop>
       </div>
-      <div className="min-w-[375px] w-full max-w-185 min-h-screen px-5 mx-auto pt-10">
-        {!isLoadMode && (
+      <div className="min-w-[375px] w-full max-w-185 min-h-screen px-5 mx-auto pt-25 sm:pt-10">
+        {!groupId && (
           <Image
             src={rabbitWriting}
             alt="글쓰는 토끼 이미지"
@@ -38,7 +38,7 @@ const UserSchedule = () => {
         )}
         <UserScheduleList
           schedules={scheduleData.data.schedules}
-          isLoadMode={isLoadMode}
+          groupId={groupId ?? undefined}
         />
       </div>
       <div className="sm:hidden">
