@@ -31,6 +31,14 @@ const getGroup = async (id: string) => {
   return res.data;
 };
 
+export const moveSchedule = async (scheduleId: number, groupId: number) => {
+  const response = await axiosInstance.patch(`/groups/move-schedule`, {
+    groupId,
+    scheduleId,
+  });
+  return response.data;
+};
+
 const createGroup = async (data: CreateGroupRequest) => {
   const res = await axiosInstance.post("/groups/create", data);
   return res.data;
