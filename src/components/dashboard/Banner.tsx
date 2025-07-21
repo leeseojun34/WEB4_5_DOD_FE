@@ -7,7 +7,7 @@ export const Banner = () => {
   return (
     <Link
       href={"/meeting"}
-      className="flex w-full h-30 md:h-[178px] bg-gradient-to-r from-[#8AB6FF] to-[#5291F4] rounded-[20px] px-6 md:px-10 justify-between items-center"
+      className="flex w-full h-35 sm:h-40 md:h-50 bg-gradient-to-r from-[#8AB6FF] to-[#5291F4] rounded-[20px] px-6 md:px-10 justify-between items-center"
     >
       <Image
         src={bannerImg}

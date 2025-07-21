@@ -19,8 +19,8 @@ export const MyGroupItem = ({ group }: MyGroupItemProps) => {
             className="w-[34px] h-[34px]"
           />
         </div>
-        <div className="flex-1 flex flex-col justify-center gap-1 w-full">
-          <div className="flex items-center justify-between w-full">
+        <div className="flex-1 flex flex-col justify-center gap-1 w-full min-w-0">
+          <div className="flex items-center justify-between w-full min-w-0">
             <div className="text-[color:var(--color-black)] text-sm font-semibold w-[130px] sm:w-[380px] truncate">
               {group.groupName}
             </div>
@@ -31,7 +31,7 @@ export const MyGroupItem = ({ group }: MyGroupItemProps) => {
               </span>
             </div>
           </div>
-          <p className="text-xs font-regular text-[color:var(--color-gray-placeholder)] w-[150px] sm:w-[380px] truncate ">
+          <p className="text-xs font-regular text-[color:var(--color-gray-placeholder)] w-full sm:w-[380px] truncate whitespace-nowrap overflow-hidden">
             {group.description}
           </p>
         </div>
