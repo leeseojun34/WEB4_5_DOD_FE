@@ -24,7 +24,7 @@ export const MyScheduleSection = ({
 
   return (
     <>
-      <div className="bg-[color:var(--color-white)] p-5 rounded-[20px] w-full gap-2 flex flex-col">
+      <div className="bg-[color:var(--color-white)] p-6 rounded-[20px] w-full gap-2 flex flex-col">
         <div className="flex justify-between">
           <p className="font-semibold text-base text-[color:var(--color-black)]">
             나의 일정
@@ -42,7 +42,9 @@ export const MyScheduleSection = ({
             </Link>
           ))
         ) : (
-          <EmptySchedule />
+          <div className="flex flex-1 justify-center items-center py-4">
+            <EmptySchedule />
+          </div>
         )}
       </div>
     </>
@@ -55,9 +57,9 @@ const EmptySchedule = () => {
       <div className="text-center text-sm text-[color:var(--color-gray-placeholder)] leading-6">
         이날은 일정이 없어요 <br /> 새로운 일정을 만들어 볼까요?
       </div>
-      <button className="flex text-[color:var(--color-primary-400)] gap-[2px] justify-center items-center">
-        <span className="font-medium text-xs">일정 만들러 가기</span>
-        <ArrowRight className="w-4 h-4" />
+      <button className="flex text-[color:var(--color-primary-400)] gap-[2px] justify-center items-center cursor-pointer">
+        <span className="hover:font-medium text-xs">일정 만들러 가기</span>
+        <ArrowRight className="w-3 h-3" />
       </button>
     </div>
   );
