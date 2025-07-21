@@ -30,13 +30,29 @@ export interface DashboardDetailResponse {
   };
 }
 
+export interface UserScheduleResponse {
+  [date: string]: DashboardScheduleType[];
+}
+
 /**
  * 회원의 그룹리스트, 일정, 캘린더 조회
  * @param date 날짜(2025-07-12)
  * @returns
  */
-
 export const getDashboardDetail = async (date: string) => {
   const response = await axiosInstance.get(`/main-page`, { params: { date } });
+  return response.data;
+};
+
+/**
+ * 회원의 모든 일정 조회
+ * @param startDate 날짜(2025-07-12)
+ * @param endDate 날짜(2025-07-12)
+ * @returns
+ */
+export const getUserSchedules = async (startDate: string, endDate: string) => {
+  const response = await axiosInstance.get(`/main-page/calendar`, {
+    params: { startDate, endDate },
+  });
   return response.data;
 };

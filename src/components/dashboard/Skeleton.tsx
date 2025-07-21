@@ -67,3 +67,54 @@ export const MyGroupSkeleton = () => {
     </div>
   );
 };
+
+export const UserScheduleListSkeleton = () => {
+  return (
+    <div className="flex flex-col gap-4 w-full">
+      {[...Array(3)].map((_, idx) => (
+        <div
+          key={idx}
+          className="animate-pulse w-full h-[100px] bg-[color:var(--color-gray-light)] rounded-xl"
+        ></div>
+      ))}
+    </div>
+  );
+};
+
+export const ScheduleCardSkeleton = () => {
+  return (
+    <div
+      className="min-w-[335px] max-w-185 w-full h-auto p-4 rounded-lg bg-white animate-pulse"
+      style={{ boxShadow: "var(--shadow-common)" }}
+    >
+      <div className="flex flex-col gap-3">
+        <div className="flex justify-between">
+          <div className="flex gap-2">
+            <div className="w-20 h-4 bg-gray-200 rounded" />
+            <div className="w-12 h-4 bg-primary-200 rounded" />
+          </div>
+        </div>
+        <div className="w-36 h-4 bg-gray-200 rounded" />
+        <div className="flex gap-2">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="w-10 h-5 bg-gray-200 rounded-sm" />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const OptionBoxSkeleton = () => {
+  return (
+    <div className="flex flex-col items-center p-4 gap-2 w-full rounded-lg border border-gray-200 bg-white animate-pulse">
+      <div className="w-full h-4 bg-gray-200 rounded" />
+      <div className="w-32 h-4 bg-gray-200 rounded" />
+      <div className="flex gap-2 mt-2 w-full">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="w-12 h-6 bg-gray-200 rounded-full" />
+        ))}
+      </div>
+    </div>
+  );
+};
