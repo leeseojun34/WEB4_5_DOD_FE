@@ -8,11 +8,14 @@ import UserScheduleList from "./UserScheduleList";
 import { useDashboard } from "@/lib/api/dashboardApi";
 import { formatDate } from "@/app/utils/dateFormat";
 import GlobalLoading from "@/app/loading";
+import { useSearchParams } from "next/navigation";
 
 const UserSchedule = () => {
   const { data: scheduleData, isPending } = useDashboard(
     formatDate(new Date())
   );
+  const searchParams = useSearchParams();
+  const groupId = searchParams?.get("groupId");
   if (isPending) return <GlobalLoading />;
 
   return (
@@ -21,15 +24,22 @@ const UserSchedule = () => {
         <Header />
       </div>
       <div className="min-w-[375px] w-full max-w-185 bg-[color:var(--color-gray-background)] mx-auto pt-8 sm:pt-30">
-        <HeaderTop>나의 이때어때 일정</HeaderTop>
+        <HeaderTop>
+          {groupId ? "불러올 일정 선택" : "나의 이때어때 일정"}
+        </HeaderTop>
       </div>
-      <div className="min-w-[375px] w-full max-w-185 min-h-screen px-5 mx-auto pt-10">
-        <Image
-          src={rabbitWriting}
-          alt="글쓰는 토끼 이미지"
-          className="w-[178px] h-[178px] ml-auto"
+      <div className="min-w-[375px] w-full max-w-185 min-h-screen px-5 mx-auto pt-25 sm:pt-10">
+        {!groupId && (
+          <Image
+            src={rabbitWriting}
+            alt="글쓰는 토끼 이미지"
+            className="w-[178px] h-[178px] ml-auto"
+          />
+        )}
+        <UserScheduleList
+          schedules={scheduleData.data.schedules}
+          groupId={Number(groupId) ?? undefined}
         />
-        <UserScheduleList schedules={scheduleData.data.schedules} />
       </div>
       <div className="sm:hidden">
         <Footer />
