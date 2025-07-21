@@ -157,7 +157,7 @@ export const useLeaveGroup = () => {
 
 export const useGroupSchedules = (groupId: string) => {
   return useQuery({
-    queryKey: ["groupSchedules", groupId],
+    queryKey: ["groupSchedule", groupId],
     queryFn: () => getGroupSchedules(groupId),
     enabled: !!groupId,
     retry: false,

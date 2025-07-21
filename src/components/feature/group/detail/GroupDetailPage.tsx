@@ -10,11 +10,10 @@ import { useParams } from "next/navigation";
 const GroupDetailPage = () => {
   const params = useParams();
   const groupId = params.groupId as string;
-  console.log(groupId);
 
   const { data: groupData, isPending } = useGroupSchedules(groupId);
 
-  console.log(groupData);
+  console.log(groupData?.data.groupRole);
   if (isPending && !groupData) return <GlobalLoading />;
 
   return (
@@ -30,6 +29,7 @@ const GroupDetailPage = () => {
       <GroupContent
         groupId={groupId}
         schedules={groupData.data.scheduleDetails}
+        groupRole={groupData.data.groupRole}
       />
 
       <div className="sm:hidden">

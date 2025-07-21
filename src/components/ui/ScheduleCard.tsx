@@ -3,9 +3,9 @@
 import { ArrowRight, EllipsisVertical } from "lucide-react";
 import NameTag from "./NameTag";
 import Link from "next/link";
-import { useState } from "react";
 import DropdownSmall from "./DropdownSmall";
-import { useDeleteSchedule } from "@/lib/api/scheduleApi";
+import ControlledAlertBox from "./ControlledAlertBox";
+import { useGroupScheduleActions } from "../feature/group/detail/hooks/useGroupDetailLogic";
 
 interface BaseProps {
   variant: "event" | "attendance";
@@ -18,6 +18,7 @@ interface EventProps extends BaseProps {
   title: string;
   meetingType: "ONLINE" | "OFFLINE";
   scheduleId: string;
+  groupRole: boolean;
 }
 
 interface AttendanceProps extends BaseProps {
@@ -28,14 +29,26 @@ interface AttendanceProps extends BaseProps {
 type ScheduleCardProps = EventProps | AttendanceProps;
 
 const ScheduleCard = (props: ScheduleCardProps) => {
-  const { time, members, variant, scheduleId } = props;
-  const [isOpen, setIsOpen] = useState(false);
-  const deleteSchedule = useDeleteSchedule();
+  const { time, members, variant } = props;
+  const {
+    isOpen,
+    setIsOpen,
+    isAlertOpen,
+    setIsAlertOpen,
+    handleAlertAction,
+    handleTopClick,
+    handleBottomClick,
+  } = useGroupScheduleActions();
 
-  const onTopClick = () => {};
+  const scheduleId = props.variant === "event" ? props.scheduleId : "";
+  const groupRole = props.variant === "event" ? props.groupRole : "";
+
+  const onTopClick = () => {
+    handleTopClick(scheduleId);
+  };
 
   const onBottomClick = () => {
-    deleteSchedule.mutate(scheduleId);
+    handleBottomClick();
   };
 
   return (
@@ -80,7 +93,7 @@ const ScheduleCard = (props: ScheduleCardProps) => {
         </div>
       </Link>
 
-      {variant === "event" ? (
+      {variant === "event" && groupRole && (
         <div className="relative">
           <button onClick={() => setIsOpen(true)}>
             <EllipsisVertical className="w-[18px] h-[18px] text-[color:var(--color-black)] cursor-pointer" />
@@ -98,11 +111,21 @@ const ScheduleCard = (props: ScheduleCardProps) => {
             </div>
           )}
         </div>
-      ) : (
+      )}
+      {variant === "attendance" && (
         <button onClick={() => console.log("hi")}>
           <ArrowRight className="w-[18px] h-[18px] text-[color:var(--color-black)]" />
         </button>
       )}
+
+      <ControlledAlertBox
+        content={"정말 삭제하시겠습니까?"}
+        cancel="취소"
+        action="확인"
+        isOpen={isAlertOpen}
+        onClose={() => setIsAlertOpen(false)}
+        actionHandler={() => handleAlertAction(scheduleId)}
+      />
     </div>
   );
 };

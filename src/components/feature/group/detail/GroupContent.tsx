@@ -18,9 +18,10 @@ interface Schedule {
 interface GroupContentProps {
   groupId: string;
   schedules: Schedule[];
+  groupRole: boolean;
 }
 
-const GroupContent = ({ groupId, schedules }: GroupContentProps) => {
+const GroupContent = ({ groupId, schedules, groupRole }: GroupContentProps) => {
   return (
     <div className="min-w-[375px] w-full max-w-185 flex flex-col min-h-screen mx-auto">
       <div className="flex flex-col p-5 pt-4 w-full gap-4 flex-1">
@@ -41,6 +42,8 @@ const GroupContent = ({ groupId, schedules }: GroupContentProps) => {
               time={formatSchedule(schedule.startTime, schedule.endTime)}
               members={schedule.memberNames}
               scheduleId={schedule.scheduleId}
+              groupRole={groupRole}
+              
             />
           ))}
         </div>

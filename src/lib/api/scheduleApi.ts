@@ -37,10 +37,13 @@ export const useDeleteSchedule = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (scheduleId: string) => deleteSchedule(scheduleId),
-    onSuccess: (data, scheduleId) => {
+    onSuccess: (data) => {
       console.log("일정 삭제 성공: ", data);
       queryClient.invalidateQueries({
-        queryKey: ["groupSchedules", scheduleId],
+        queryKey: ["groupSchedules"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["groupSchedule"],
       });
     },
     onError: (err) => {
