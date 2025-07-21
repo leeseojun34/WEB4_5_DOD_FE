@@ -4,7 +4,7 @@ interface EventType {
   description: string;
   meetingType: string;
   maxMember: number;
-  groupId: null;
+  groupId: string | null;
   dateList: {
     dates: date[];
     startTime: string;
