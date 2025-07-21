@@ -1,6 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "./axiosInstance";
 import { useRouter } from "next/navigation";
+import Toast from "@/components/ui/Toast";
+import toast from "react-hot-toast";
 
 export interface CreateGroupRequest {
   groupName: string;
@@ -19,6 +21,17 @@ export interface GroupResponse {
   id: string;
 }
 
+export interface UpdateMemberPermissionsReqeust {
+  groupId: string;
+  userId: string;
+  groupRole: string;
+}
+
+export interface RemoveGroupMemberRequest {
+  groupId: string;
+  userId: string;
+}
+
 // 전체 그룹 조회
 const getGroups = async () => {
   const res = await axiosInstance.get("/groups");
@@ -29,6 +42,14 @@ const getGroups = async () => {
 const getGroup = async (id: string) => {
   const res = await axiosInstance.get(`/groups`, { params: { id } });
   return res.data;
+};
+
+export const moveSchedule = async (scheduleId: number, groupId: number) => {
+  const response = await axiosInstance.patch(`/groups/move-schedule`, {
+    groupId,
+    scheduleId,
+  });
+  return response.data;
 };
 
 const createGroup = async (data: CreateGroupRequest) => {
@@ -47,29 +68,75 @@ const deleteGroup = async (id: string) => {
 };
 
 const getGroupSchedules = async (groupId: string) => {
-  const res = await axiosInstance.get(`/groups/schedule-groups/${groupId}`, {
-    params: { id: groupId },
-  });
+  const res = await axiosInstance.get(`/groups/schedule-groups/${groupId}`);
   return res.data;
 };
 
 const getGroupStatistics = async (groupId: string) => {
-  const res = await axiosInstance.get(`/groups/${groupId}/statistics`, {
-    params: { id: groupId },
-  });
+  const res = await axiosInstance.get(`/groups/${groupId}/statistics`);
   return res.data;
 };
 
 const getGroupMembers = async (groupId: string) => {
-  const res = await axiosInstance.get(`/groups/${groupId}/member`, {
-    params: { id: groupId },
-  });
+  const res = await axiosInstance.get(`/groups/${groupId}/member`);
   return res.data;
 };
 
 const leaveGroup = async (groupId: string) => {
   const res = await axiosInstance.patch(`/goups/${groupId}/leave`);
   return res.data;
+};
+
+const removeGroupMember = async (data: RemoveGroupMemberRequest) => {
+  const res = await axiosInstance.patch(
+    `/groups/${data.groupId}/members/${data.userId}`
+  );
+  return res.data;
+};
+
+const updateMemberPermissions = async (
+  data: UpdateMemberPermissionsReqeust
+) => {
+  const res = await axiosInstance.patch(
+    `/groups/${data.groupId}/members`,
+    data
+  );
+  return res.data;
+};
+
+export const useUpdateMemberPermissions = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: UpdateMemberPermissionsReqeust) =>
+      updateMemberPermissions(data),
+    onSuccess: (_, variables) => {
+      toast("권한 변경에 성공했습니다");
+      queryClient.invalidateQueries({
+        queryKey: ["groupMembers", variables.groupId],
+      });
+    },
+    onError: (err) => {
+      Toast("권한 변경에 실패했습니다");
+      console.error("권한 변경 실패: ", err);
+    },
+  });
+};
+
+export const useRemoveGroupMember = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: RemoveGroupMemberRequest) => removeGroupMember(data),
+    onSuccess: (_, variables) => {
+      toast("그룹 멤버를 내보냈습니다");
+      queryClient.invalidateQueries({
+        queryKey: ["groupMembers", variables.groupId],
+      });
+    },
+    onError: (err) => {
+      Toast("그룹 멤버 내보내기에 실패했습니다");
+      console.error("그룹 멤버 내보내기 실패: ", err);
+    },
+  });
 };
 
 export const useLeaveGroup = () => {

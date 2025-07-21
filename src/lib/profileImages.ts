@@ -7,7 +7,6 @@ import pastel_purple from "@/assets/images/profile_pastel_purple.png";
 import pastel_red from "@/assets/images/profile_pastel_red.png";
 import pastel_skyblue from "@/assets/images/profile_pastel_skyblue.png";
 
-
 export const profileImages = [
   pastel_black,
   pastel_blue,
