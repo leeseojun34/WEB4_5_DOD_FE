@@ -1,9 +1,10 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { axiosInstance } from "./axiosInstance";
 import { useRouter } from "next/navigation";
 import { logout } from "./userApi";
 
+// 프로필 이름 업데이트
 const updateName = async (newName: string) => {
   const res = await axiosInstance.patch("/member/me", null, {
     params: { username: newName },
@@ -33,6 +34,7 @@ export const useUpdateName = () => {
   });
 };
 
+// 프로필 이미지 업데이트
 export const useUpdateProfileImg = () => {
   return useMutation({
     mutationFn: () => axiosInstance.patch("/member/profile"),
@@ -45,6 +47,23 @@ export const useUpdateProfileImg = () => {
           color: "var(--color-primary-400)",
         },
       });
+    },
+  });
+};
+
+// 즐겨찾는 역 등록
+interface FavoriteLocation {
+  favoriteLocationId?: number;
+  stationName: string;
+}
+
+export const useFavoriteLocation = () => {
+  return useQuery<FavoriteLocation>({
+    queryKey: ["favoriteLocation"],
+    queryFn: async () => {
+      const res = await axiosInstance.get("/favorite-location");
+      const list = res.data.data;
+      return list.length > 0 ? list[0] : { stationName: "미등록" };
     },
   });
 };
@@ -80,7 +99,7 @@ export const useAddFavoriteLocation = () => {
   });
 };
 
-//즐겨찾기 장소 등록
+// 즐겨찾기 역 수정
 
 interface FavoritePayload {
   favoritePlaceId: number;
@@ -113,6 +132,7 @@ export const useUpdateFavoriteLocation = () => {
   });
 };
 
+// 로그아웃
 export const useLogoutMutation = () => {
   const router = useRouter();
   return useMutation({
@@ -134,6 +154,7 @@ export const useLogoutMutation = () => {
   });
 };
 
+// 회원 탈퇴
 export const useDeactiveMutation = () => {
   const router = useRouter();
   return useMutation({
@@ -155,6 +176,7 @@ export const useDeactiveMutation = () => {
   });
 };
 
+// 구글 캘런더 sync (post)
 export const useCalendarSync = () => {
   return useMutation({
     mutationFn: () => axiosInstance.post("/calendar/sync"),
@@ -168,5 +190,17 @@ export const useCalendarSync = () => {
         },
       });
     },
+  });
+};
+
+// 즐겨찾는 시간대
+export const useFavoriteTime = () => {
+  return useQuery({
+    queryKey: ["favoriteTime"],
+    queryFn: async () => {
+      const res = await axiosInstance.get("/favorite-timetable");
+      return res.data;
+    },
+    retry: 0,
   });
 };

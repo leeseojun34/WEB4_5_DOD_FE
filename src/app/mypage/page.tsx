@@ -18,6 +18,8 @@ import {
   useAddFavoriteLocation,
   useCalendarSync,
   useDeactiveMutation,
+  useFavoriteLocation,
+  useFavoriteTime,
   useLogoutMutation,
   useUpdateFavoriteLocation,
   useUpdateName,
@@ -36,29 +38,22 @@ function MyPage() {
   const [sheetType, setSheetType] = useState<SheetType | null>(null);
   const [calendarSynced, setCalendarSynced] = useState(false);
 
-  // 즐겨찾기 조회
-  const favoriteQuery = useQuery({
-    queryKey: ["favoriteLocation"],
-    queryFn: async () => {
-      const res = await axiosInstance.get("/favorite-location");
-      const list = res.data.data;
-      return list.length > 0 ? list[0] : { stationName: "미등록" };
-    },
-  });
-
-  const [myStation, setMyStation] = useState<string>(
-    () => favoriteQuery.data?.stationName
-  );
+  console.log(user);
 
   useEffect(() => {
     refetch(); // 마운트 시 user 데이터 패치
   }, [refetch]);
 
-  // useEffect(() => {
-  //   if (favoriteQuery.data) {
-  //     setMyStation(favoriteQuery.data.stationName);
-  //   }
-  // }, [favoriteQuery.data]);
+  // 즐겨찾는 시간 조회
+  const favoriteTime = useFavoriteTime();
+  console.log(favoriteTime.data);
+  // const [time, setTime] = useState(()=> favoriteTime);
+
+  // 즐겨찾기 장소 조회
+  const favoriteQuery = useFavoriteLocation();
+  const [myStation, setMyStation] = useState<string>(
+    () => favoriteQuery.data?.stationName ?? "미등록"
+  );
 
   const openSheet = (type: SheetType) => {
     setSheetType(type);
@@ -80,8 +75,7 @@ function MyPage() {
   const handleRandomProfile = () => {
     updateProfileImg.mutate(undefined, {
       onSuccess: () => {
-        refetch(); // 새로운 프로필 반영
-        // setProfile();
+        refetch();
       },
     });
   };
@@ -119,6 +113,9 @@ function MyPage() {
     setIsOpen(false);
   };
 
+  // 캘린더 연동
+  // 구글 로그인이 되어 있지 않을 경우 ? -> 구글 로그인 시키기 (자동..?)
+  // 구글 캘린더 연결 새로고침 (?) post 만 있어도 되나 ? get ..은 ?
   const calendarMutation = useCalendarSync();
   const handleGoogleCalendar = () => {
     calendarMutation.mutate();
