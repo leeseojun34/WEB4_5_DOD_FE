@@ -22,10 +22,6 @@ const GroupHeaderSection = ({
   const router = useRouter();
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const handleEllipsisClick = (): void => {
-    setIsOpen(true);
-  };
-
   const handleEditClick = (): void => {
     router.push(`/group/${groupId}/edit`);
   };
@@ -40,12 +36,11 @@ const GroupHeaderSection = ({
         <Header type="blue" />
       </div>
       <GroupHeader
-        groupName={groupName}
-        groupIntroduction={groupIntroduction}
-        groupCount={groupCount}
-        clickToInvite={() => console.log("초대함")}
-        icon="ellipsis"
-        clickEllipsisHandler={handleEllipsisClick}
+        name={groupName}
+        description={groupIntroduction}
+        count={groupCount}
+        isLeader={true}
+        type="group"
       />
       {isOpen && (
         <div className="absolute right-4 top-18">

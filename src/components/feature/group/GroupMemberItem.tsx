@@ -2,38 +2,60 @@
 
 import DropdownSmall from "@/components/ui/DropdownSmall";
 import { EllipsisVertical } from "lucide-react";
-import Image, { StaticImageData } from "next/image";
-import { useState } from "react";
+import Image from "next/image";
+import crownIcon from "@/assets/icon/crown_icon.svg";
+import ControlledAlertBox from "@/components/ui/ControlledAlertBox";
+import { profileImages } from "@/lib/profileImages";
+import { useGroupMemberActions } from "./members/hooks/useGroupMemberLogic";
 
 interface GroupMemberItemProps {
-  isLeader?: boolean;
-  character: StaticImageData;
+  profileNum: number;
   name: string;
+  role: string;
+  myId: string;
+  memberId: string;
+  isLeader: boolean;
+  groupId: string;
 }
 
 const GroupMemberItem = ({
-  isLeader = false,
-  character,
+  profileNum,
   name,
+  role,
+  myId,
+  memberId,
+  isLeader,
+  groupId,
 }: GroupMemberItemProps) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const handleTopClick = () => {
-    console.log("상단 메뉴 클릭");
-  };
-
-  const handleBottomClick = () => {
-    console.log("상단 메뉴 클릭");
-  };
+  const {
+    isOpen,
+    setIsOpen,
+    isAlertOpen,
+    setIsAlertOpen,
+    handleTopClick,
+    handleBottomClick,
+    getAlertContent,
+    handleAlertAction,
+  } = useGroupMemberActions(groupId);
+  const profileImage = profileImages[profileNum];
   return (
     <div className="flex items-center justify-between w-full">
       <div className="flex gap-3 items-center">
-        <Image src={character} alt="유저 캐릭터" className="w-6 h-7" />
+        <div className="relative">
+          <Image src={profileImage} alt="유저 캐릭터" className="w-6 h-7" />
+          {role === "GROUP_LEADER" && (
+            <Image
+              src={crownIcon}
+              alt="왕관 아이콘"
+              className="absolute top-[2px] left-1/2 -translate-x-1/2 w-[9px] h-[7px]"
+            />
+          )}
+        </div>
         <div className="text-sm font-medium text-[color:var(--color-black)]">
           {name}
         </div>
       </div>
-      {isLeader && (
+      {isLeader && myId !== memberId && (
         <div className="relative">
           <button className="cursor-pointer" onClick={() => setIsOpen(true)}>
             <EllipsisVertical className="w-[18px] h-[18px] text-[color:var(--color-gray)]" />
@@ -43,13 +65,23 @@ const GroupMemberItem = ({
               <DropdownSmall
                 isOpen={isOpen}
                 onClose={() => setIsOpen(false)}
-                onTopClick={handleTopClick}
+                onTopClick={() => handleTopClick(role)}
                 onBottomClick={handleBottomClick}
               >
-                {["내보내기", "방장뺏기"]}
+                {role === "GROUP_LEADER"
+                  ? ["방장뺏기", "내보내기"]
+                  : ["방장주기", "내보내기"]}
               </DropdownSmall>
             </div>
           )}
+          <ControlledAlertBox
+            content={getAlertContent(name)}
+            cancel="취소"
+            action="확인"
+            isOpen={isAlertOpen}
+            onClose={() => setIsAlertOpen(false)}
+            actionHandler={() => handleAlertAction(memberId)}
+          />
         </div>
       )}
     </div>

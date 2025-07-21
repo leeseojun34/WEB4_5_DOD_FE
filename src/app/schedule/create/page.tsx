@@ -7,7 +7,7 @@ import ScheduleRabbit from "@/components/ui/ScheduleRabbit";
 import ScheduleSelectDate from "@/components/feature/schedule/ScheduleSelectDate";
 import ScheduleSelectMode from "@/components/feature/schedule/ScheduleSelectMode";
 import { ChevronLeft } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { formatDate } from "@/app/utils/dateFormat";
 import { createEvent } from "@/lib/api/scheduleApi";
 
@@ -15,13 +15,14 @@ import { createEvent } from "@/lib/api/scheduleApi";
 const CreateSchedule = () => {
   const router = useRouter();
   const [level, setLevel] = useState(0);
+  const groupId = useSearchParams().get("groupId");
 
   const [schedule, setSchedule] = useState<EventType>({
     title: "",
     description: "",
     meetingType: "ONLINE",
     maxMember: 0,
-    groupId: null,
+    groupId: groupId ?? null,
     dateList: [
       {
         dates: [],
