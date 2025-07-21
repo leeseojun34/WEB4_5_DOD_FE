@@ -1,6 +1,6 @@
 import { axiosInstance } from "@/lib/api/axiosInstance";
 import { useQuery } from "@tanstack/react-query";
-import useAuthStore from "@/sotres/authStores";
+import useAuthStore from "@/stores/authStores";
 import { useEffect } from "react";
 
 const getUserInfo = async () => {

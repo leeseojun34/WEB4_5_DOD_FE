@@ -6,7 +6,7 @@ import Header from "@/components/layout/Header";
 import { useParams, useRouter } from "next/navigation";
 import { useEventDetail, useEventScheduleInfo } from "@/lib/api/scheduleApi";
 import GlobalLoading from "@/app/loading";
-import useAuthStore from "@/sotres/authStores";
+import useAuthStore from "@/stores/authStores";
 import Toast from "@/components/ui/Toast";
 import { useEffect } from "react";
 const MySchedulePage = () => {
