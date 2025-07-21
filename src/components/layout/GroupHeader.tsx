@@ -8,7 +8,7 @@ type GroupHeaderProps = {
   isLeader: boolean;
   type: "schedule" | "group";
   id?: string;
-  clickToInvite: () => void;
+  clickToInvite?: () => void;
 };
 
 const GroupHeader = ({
