@@ -107,13 +107,20 @@ export const ScheduleCardSkeleton = () => {
 
 export const OptionBoxSkeleton = () => {
   return (
-    <div className="flex flex-col items-center p-4 gap-2 w-full rounded-lg border border-gray-200 bg-white animate-pulse">
-      <div className="w-full h-4 bg-gray-200 rounded" />
-      <div className="w-32 h-4 bg-gray-200 rounded" />
-      <div className="flex gap-2 mt-2 w-full">
-        {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="w-12 h-6 bg-gray-200 rounded-full" />
-        ))}
+    <div className="w-full animate-pulse">
+      <div className="border border-gray-200 rounded-lg bg-white px-2 py-3 flex flex-col gap-2 min-w-[335px] max-w-185 w-full">
+        <div className="flex gap-3">
+          <div className="w-24 h-4 bg-gray-200 rounded" />
+          <div className="w-12 h-4 bg-gray-200 rounded" />
+        </div>
+
+        <div className="w-36 h-4 bg-gray-200 rounded" />
+
+        <div className="flex gap-1 mt-1">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="w-10 h-5 bg-gray-200 rounded-sm" />
+          ))}
+        </div>
       </div>
     </div>
   );

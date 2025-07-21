@@ -8,6 +8,12 @@ import { Button } from "../ui/Button";
 import { useRouter } from "next/navigation";
 import { moveSchedule } from "@/lib/api/groupApi";
 import { OptionBoxSkeleton, ScheduleCardSkeleton } from "./Skeleton";
+import { motion } from "framer-motion";
+import {
+  listVariants,
+  itemVariants,
+} from "@/components/feature/schedule/motion";
+
 interface UserScheduleListProps {
   schedules: DashboardScheduleType[];
   groupId?: number;
@@ -43,11 +49,20 @@ const UserScheduleList = ({
   };
 
   return (
-    <div className="flex flex-col items-center gap-4 w-full">
+    <motion.div
+      className="flex flex-col items-center gap-4 w-full"
+      variants={listVariants}
+      initial="hidden"
+      animate="visible"
+    >
       {isLoading
         ? renderSkeletons()
         : schedules.map((schedule) => (
-            <div key={schedule.id} className="w-full">
+            <motion.div
+              key={schedule.id}
+              className="w-full"
+              variants={itemVariants}
+            >
               {!groupId ? (
                 <ScheduleCard
                   variant="event"
@@ -87,7 +102,7 @@ const UserScheduleList = ({
                   </div>
                 </OptionBox>
               )}
-            </div>
+            </motion.div>
           ))}
       {groupId && (
         <div className="fixed w-full left-0 right-0 px-5 bottom-9">
@@ -106,7 +121,7 @@ const UserScheduleList = ({
           </div>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 };
 export default UserScheduleList;
