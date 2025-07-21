@@ -5,6 +5,7 @@ import NameTag from "./NameTag";
 import Link from "next/link";
 import { useState } from "react";
 import DropdownSmall from "./DropdownSmall";
+import { useDeleteSchedule } from "@/lib/api/scheduleApi";
 
 interface BaseProps {
   variant: "event" | "attendance";
@@ -15,7 +16,8 @@ interface BaseProps {
 interface EventProps extends BaseProps {
   variant: "event";
   title: string;
-  meetingType: "온라인" | "오프라인";
+  meetingType: "ONLINE" | "OFFLINE";
+  scheduleId: string;
 }
 
 interface AttendanceProps extends BaseProps {
@@ -26,9 +28,15 @@ interface AttendanceProps extends BaseProps {
 type ScheduleCardProps = EventProps | AttendanceProps;
 
 const ScheduleCard = (props: ScheduleCardProps) => {
-  const { time, members, variant } = props;
+  const { time, members, variant, scheduleId } = props;
   const [isOpen, setIsOpen] = useState(false);
-  const scheduleId = 1;
+  const deleteSchedule = useDeleteSchedule();
+
+  const onTopClick = () => {};
+
+  const onBottomClick = () => {
+    deleteSchedule.mutate(scheduleId);
+  };
 
   return (
     <div
@@ -47,7 +55,7 @@ const ScheduleCard = (props: ScheduleCardProps) => {
                   {props.title}
                 </p>
                 <p className="text-[color:var(--color-primary-400)] text-xs font-regular">
-                  {props.meetingType}
+                  {props.meetingType === "OFFLINE" ? "오프라인" : "온라인"}
                 </p>
               </>
             ) : (
@@ -82,10 +90,10 @@ const ScheduleCard = (props: ScheduleCardProps) => {
               <DropdownSmall
                 isOpen={isOpen}
                 onClose={() => setIsOpen(false)}
-                onTopClick={() => console.log("click")}
-                onBottomClick={() => console.log("click")}
+                onTopClick={onTopClick}
+                onBottomClick={onBottomClick}
               >
-                {["일정 삭제", "링크 복사"]}
+                {["링크 복사", "일정 삭제"]}
               </DropdownSmall>
             </div>
           )}

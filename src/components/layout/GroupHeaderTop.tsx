@@ -33,7 +33,7 @@ const GroupHeaderTop = ({ name, id, isLeader, type }: GroupHeaderTopProps) => {
       }
     } else {
       if (type === "group") {
-        router.push(`/schedule/${id}/edit/detail`);
+        router.push(`/group/${id}/edit`);
       } else {
         router.push(`/schedule/${id}/edit/detail`);
       }

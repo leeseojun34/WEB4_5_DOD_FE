@@ -3,13 +3,16 @@
 import Link from "next/link";
 import ShareButton from "@/components/ui/ShareButton";
 import ScheduleCard from "@/components/ui/ScheduleCard";
+import { formatSchedule } from "@/app/utils/dateFormat";
 
 interface Schedule {
-  variant: "event";
-  title: string;
-  meetingType: "온라인" | "오프라인";
+  scheduleName: string;
+  meetingType: "ONLINE" | "OFFLINE";
   time: string;
-  members: string[];
+  startTime: string;
+  endTime: string;
+  memberNames: string[];
+  scheduleId: string;
 }
 
 interface GroupContentProps {
@@ -25,17 +28,19 @@ const GroupContent = ({ groupId, schedules }: GroupContentProps) => {
           <ShareButton
             title="그룹 일정 생성하기"
             description="그룹 내 멤버들과 새로운 일정 생성하기"
+            mode="group"
           />
         </Link>
         <div className="flex flex-col gap-4">
           {schedules.map((schedule, index) => (
             <ScheduleCard
               key={index}
-              variant={schedule.variant}
-              title={schedule.title}
+              variant="event"
+              title={schedule.scheduleName}
               meetingType={schedule.meetingType}
-              time={schedule.time}
-              members={schedule.members}
+              time={formatSchedule(schedule.startTime, schedule.endTime)}
+              members={schedule.memberNames}
+              scheduleId={schedule.scheduleId}
             />
           ))}
         </div>
