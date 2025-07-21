@@ -83,7 +83,7 @@ const getGroupMembers = async (groupId: string) => {
 };
 
 const leaveGroup = async (groupId: string) => {
-  const res = await axiosInstance.patch(`/goups/${groupId}/leave`);
+  const res = await axiosInstance.patch(`/groups/${groupId}/leave`);
   return res.data;
 };
 
