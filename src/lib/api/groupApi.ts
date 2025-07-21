@@ -145,7 +145,7 @@ export const useLeaveGroup = () => {
   return useMutation({
     mutationFn: leaveGroup,
     onSuccess: () => {
-      toast("그룹을 나갔습니다");
+      toast("그룹에서 나갔습니다");
       queryClient.invalidateQueries({ queryKey: ["user", "groupSchedule"] });
       router.push(`/`);
     },
