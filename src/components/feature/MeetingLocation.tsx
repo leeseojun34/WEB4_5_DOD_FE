@@ -37,16 +37,30 @@ const MeetingLocation = ({
             <div className="text-xs text-[color:var(--color-gray)] font-medium">
               모임 장소
             </div>
-            <div className="text-[color:var(--color-black)] text-sm">
-              {specificLocation ? specificLocation : "없음"}
+            <div className=" text-sm">
+              {specificLocation ? (
+                <p className="text-[color:var(--color-black)]">
+                  {specificLocation}
+                </p>
+              ) : (
+                <p className="text-[color:var(--color-gray-placeholder)] font-extralight">
+                  미지정
+                </p>
+              )}
             </div>
           </div>
           <div className="flex gap-4 items-center justify-between">
             <div className="text-xs text-[color:var(--color-gray)] font-medium">
               중간 장소 (역)
             </div>
-            <div className="text-[color:var(--color-black)] text-sm">
-              {location ? location : "없음"}
+            <div className="text-[color:var(--color-gray-placeholder)] text-sm">
+              {location ? (
+                <p className="text-[color:var(--color-black)]">{location}</p>
+              ) : (
+                <p className="text-[color:var(--color-gray-placeholder)] font-extralight">
+                  미지정
+                </p>
+              )}
             </div>
           </div>
         </div>

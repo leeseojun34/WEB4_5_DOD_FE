@@ -1,6 +1,6 @@
 import { BiUser } from "react-icons/bi";
 import { useRouter } from "next/navigation";
-import { ChevronLeft, Ellipsis } from "lucide-react";
+import { Ellipsis } from "lucide-react";
 import DropdownSmall from "../ui/DropdownSmall";
 import { useState } from "react";
 
@@ -21,9 +21,6 @@ const GroupHeaderMap = ({
 }: GroupHeaderProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
-  const handleBack = () => {
-    router.back();
-  };
 
   const clickEllipsisHandler = () => {
     setIsOpen(true);
@@ -41,15 +38,13 @@ const GroupHeaderMap = ({
       <div className="w-full bg-[color:var(--color-white)] flex justify-center items-center min-w-[375px]">
         <div className="flex flex-col w-full max-w-[740px]  items-center justify-center gap-4 pb-5 pt-8 sm:pt-10 px-5">
           <div className="w-full flex justify-between items-center">
-            <span onClick={handleBack} className="cursor-pointer">
-              <ChevronLeft size={20} />
-            </span>
+            <div></div>
             <span className="text-lg">{name}</span>
 
             <span
               onClick={clickEllipsisHandler}
               className={`cursor-pointer relative ${
-                isLeader ? "invisible" : ""
+                isLeader ? "" : "invisible"
               }`}
             >
               <Ellipsis size={16} />
@@ -61,7 +56,7 @@ const GroupHeaderMap = ({
                       onClose={() => setIsOpen(false)}
                       onTopClick={onTopClick}
                     >
-                      {["모임 정보수정"]}
+                      {["정보 수정"]}
                     </DropdownSmall>
                   </div>
                 ) : (
@@ -78,8 +73,10 @@ const GroupHeaderMap = ({
             </span>
           </div>
 
-          <p className="text-sm font-normal">{description}</p>
-          <div className="flex items-center justify-center gap-1 rounded-sm pl-2 pr-0.5 py-0.5 text-xs">
+          <p className="text-sm font-normal text-[color:var(--color-gray)]">
+            {description}
+          </p>
+          <div className="flex items-center justify-center gap-1 rounded-sm pl-2 pr-0.5 py-0.5 text-xs bg-[color:var(--color-gray-background)] text-[color:var(--color-gray)]">
             <BiUser size={14} />
             {/* 인원수 */}
             <span className="pr-1.5">{count}</span>

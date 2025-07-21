@@ -19,6 +19,8 @@ interface ScheduleDetailType {
   endTime: string;
   location: string;
   specificLocation: string;
+  specificLatitude: number;
+  specificLongitude: number;
   scheduleName: string;
   description: string;
   meetingType: string;

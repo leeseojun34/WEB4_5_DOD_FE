@@ -6,6 +6,7 @@ import ScheduleDetailLayout from "./ScheduleDetailLayout";
 import { formatSchedule } from "@/app/utils/dateFormat";
 import Map from "@/components/feature/kakaoMap/Map";
 import OfflineBottomSheet from "./OfflineBottomSheet";
+import BlurredChevronHeader from "@/components/layout/BlurredChevronHeader";
 
 interface OfflineScheduleDetailProps {
   scheduleId: string;
@@ -21,8 +22,12 @@ const OfflineScheduleDetail = ({
       <div className="hidden sm:block">
         <Header />
       </div>
+      <BlurredChevronHeader />
       <div className="flex-1">
-        <Map longitude={127.0106459} latitude={37.4849424} />
+        <Map
+          longitude={data.specificLongitude}
+          latitude={data.specificLatitude}
+        />
       </div>
       <OfflineBottomSheet data={data} scheduleId={scheduleId} />
     </div>

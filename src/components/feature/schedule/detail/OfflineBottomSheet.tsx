@@ -31,15 +31,16 @@ const OfflineBottomSheet = ({ scheduleId, data }: OfflineBottomSheetProps) => {
       snapPoints={snapPoints}
       initialSnap={1}
       className="px-4"
+      hideBackdrop={true}
     >
       {() => (
         <>
           <GroupHeaderMap
-            name="대나무 행주"
-            description="안녕하세요 대나무행주입니다람쥐"
-            count={6}
-            isLeader={false}
-            id=""
+            name={data.scheduleName}
+            description={data.description}
+            count={data.members.length}
+            isLeader={true}
+            id={String(data.eventId)}
           />
           <div className="min-w-[375px] w-full max-w-185 mx-auto pt-6 sm:pt-10">
             <div className="flex flex-col px-5 gap-4">
