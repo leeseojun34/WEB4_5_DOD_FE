@@ -144,13 +144,14 @@ export const useLeaveGroup = () => {
   const router = useRouter();
   return useMutation({
     mutationFn: leaveGroup,
-    onSuccess: (data) => {
-      console.log("그룹 나가기 성공: ", data);
+    onSuccess: () => {
+      toast("그룹을 나갔습니다");
       queryClient.invalidateQueries({ queryKey: ["user", "groupSchedule"] });
       router.push(`/`);
     },
     onError: (err) => {
       console.error("그룹 나가기 실패: ", err);
+      Toast("그룹 나가기에 실패했습니다");
     },
   });
 };
