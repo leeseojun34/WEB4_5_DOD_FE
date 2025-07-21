@@ -4,23 +4,6 @@ import { useRouter } from "next/navigation";
 import Toast from "@/components/ui/Toast";
 import toast from "react-hot-toast";
 
-export interface CreateGroupRequest {
-  groupName: string;
-  description: string;
-}
-
-export interface UpdateGroupRequest {
-  groupName: string;
-  description: string;
-}
-
-export interface GroupResponse {
-  code: string;
-  message: string;
-  data: null;
-  id: string;
-}
-
 export interface UpdateMemberPermissionsReqeust {
   groupId: string;
   userId: string;
@@ -38,33 +21,61 @@ const getGroups = async () => {
   return res.data;
 };
 
-// 특정 그룹 정보 조회
-const getGroup = async (id: string) => {
-  const res = await axiosInstance.get(`/groups`, { params: { id } });
+/**
+ * 그룹 정보 조회
+ * @param groupId 그룹 이름
+ * @returns
+ */
+export const getGroup = async (groupId: string) => {
+  const res = await axiosInstance.get(`/groups/schedule-groups/${groupId}`);
   return res.data;
 };
 
+/**
+ * 그룹 생성
+ * @param groupName 그룹 이름
+ * @param description 그룹 설명
+ * @returns
+ */
+export const createGroup = async (groupInfo: GroupInfoType) => {
+  const response = await axiosInstance.post("/groups/create", groupInfo);
+  return response.data;
+};
+
+/**
+ * 그룹 정보 수정
+ * @param groupId 그룹 ID
+ * @param groupName 그룹 이름
+ * @param description 그룹 설명
+ * @returns
+ */
+export const updateGroup = async (groupId: string, data: GroupInfoType) => {
+  const response = await axiosInstance.patch(`/groups/${groupId}`, data);
+  return response.data;
+};
+
+/**
+ * 그룹 삭제
+ * @param groupId 그룹 ID
+ * @returns
+ */
+export const deleteGroup = async (groupId: string) => {
+  const res = await axiosInstance.delete(`/groups/${groupId}`, { data: {} });
+  return res.data;
+};
+
+/**
+ * 일회성 일정으로 그룹 일정으로 편입
+ * @param scheduleId 스케줄 ID
+ * @param groupId 그룹 ID
+ * @returns
+ */
 export const moveSchedule = async (scheduleId: number, groupId: number) => {
   const response = await axiosInstance.patch(`/groups/move-schedule`, {
     groupId,
     scheduleId,
   });
   return response.data;
-};
-
-const createGroup = async (data: CreateGroupRequest) => {
-  const res = await axiosInstance.post("/groups/create", data);
-  return res.data;
-};
-
-const updateGroup = async (id: string, data: UpdateGroupRequest) => {
-  const res = await axiosInstance.patch(`/groups/${id}`, data);
-  return res.data;
-};
-
-const deleteGroup = async (id: string) => {
-  const res = await axiosInstance.delete(`/groups/${id}`, { data: {} });
-  return res.data;
 };
 
 const getGroupSchedules = async (groupId: string) => {
@@ -185,78 +196,11 @@ export const useGroupMembers = (groupId: string) => {
   });
 };
 
-export const useGroup = (id: string) => {
-  return useQuery({
-    queryKey: ["group", id],
-    queryFn: () => getGroup(id),
-    enabled: !!id,
-    retry: false,
-    refetchOnWindowFocus: false,
-  });
-};
-
 export const useGroups = () => {
   return useQuery({
     queryKey: ["groups"],
     queryFn: getGroups,
     retry: false,
     refetchOnWindowFocus: false,
-  });
-};
-
-export const useCreateGroup = () => {
-  const router = useRouter();
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: createGroup,
-    onSuccess: (data) => {
-      console.log("그룹 생성 성공 : ", data);
-      queryClient.invalidateQueries({ queryKey: ["groups"] });
-      //router.push(`/group/${data.id}`);
-      router.push(`/group/10001`);
-    },
-    onError: (err) => {
-      console.error("그룹 생성 실패 : ", err);
-    },
-  });
-};
-
-export const useUpdateGroup = () => {
-  const router = useRouter();
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: UpdateGroupRequest }) =>
-      updateGroup(id, data),
-    onSuccess: (data) => {
-      console.log("그룹 정보 수정 성공 : ", data);
-      queryClient.invalidateQueries({ queryKey: ["groups"] });
-      queryClient.invalidateQueries({ queryKey: ["group", data.id] });
-
-      //router.push(`/group/${data.id}`);
-      router.push(`/group/10001`);
-    },
-    onError: (err) => {
-      console.error("그룹 정보 수정 실패 : ", err);
-    },
-  });
-};
-
-export const useDeleteGroup = () => {
-  const router = useRouter();
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: (id: string) => deleteGroup(id),
-    onSuccess: (data) => {
-      console.log("그룹 삭제 성공 : ", data);
-      queryClient.invalidateQueries({ queryKey: ["groups"] });
-      //router.push(`/group/${data.id}`);
-      router.push(`/`);
-    },
-    onError: (err) => {
-      console.error("그룹 삭제 실패 : ", err);
-    },
   });
 };
