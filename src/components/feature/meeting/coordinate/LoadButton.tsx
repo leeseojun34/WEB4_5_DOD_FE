@@ -7,12 +7,12 @@ const LoadButton = ({
 }) => {
   return (
     <AlertBox
-      title="내 시간표 로드"
+      title="내 시간표 불러오기"
       content={`내 시간표를 불러오시겠습니까?
           불러온 내용은 즉시 적용되며,
           이미 선택된 칸과 겹치면 해제됩니다.`}
       cancel="취소"
-      action="로드"
+      action="불러오기"
       actionHandler={handleLoadMySchedule}
     >
       <div className="flex items-center gap-1 cursor-pointer">
