@@ -4,7 +4,7 @@ import ScheduleSection from "./ScheduleSection";
 import ActionButtons from "./ActionButtons";
 import Tip from "@/components/ui/Tip";
 import TitleWithShare from "./TitleWithShare";
-import useAuthStore from "@/sotres/authStores";
+import useAuthStore from "@/stores/authStores";
 import { useEffect, useState } from "react";
 
 const CoordinateContent = ({

@@ -4,47 +4,65 @@ import Header from "@/components/layout/Header";
 import HeaderTop from "@/components/layout/HeaderTop";
 import { Button } from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
-import { useDeleteGroup, useGroup, useUpdateGroup } from "@/lib/api/groupApi";
-import { useParams } from "next/navigation";
+import { deleteGroup, getGroup, updateGroup } from "@/lib/api/groupApi";
+import { useParams, useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
 
 const EditGroup = () => {
+  const router = useRouter();
   const params = useParams();
   const groupId = params.groupId as string;
 
   const [groupName, setGroupName] = useState("");
   const [groupDescription, setGroupDescription] = useState("");
 
-  const updateGroupMutation = useUpdateGroup();
-  const deleteGroupMutatuon = useDeleteGroup();
-
-  const { data: groupData } = useGroup(groupId);
-
   useEffect(() => {
-    if (groupData?.data) {
-      setGroupName(groupData.data.name || "");
-      setGroupDescription(groupData.data.description || "");
-    }
-  }, [groupData]);
+    const fetchGroup = async () => {
+      try {
+        const res = await getGroup(groupId);
+        if (res.data) {
+          setGroupName(res.data.groupName);
+          setGroupDescription(res.data.groupDescription);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    fetchGroup();
+  }, [groupId]);
 
-  const handleUpdateGroup = () => {
-    updateGroupMutation.mutate({
-      id: groupId,
-      data: {
+  const handleUpdateGroup = async () => {
+    try {
+      const response = await updateGroup(groupId, {
         groupName: groupName.trim(),
         description: groupDescription.trim(),
-      },
-    });
+      });
+      if (response.code === "200") {
+        router.push(`/group/${response.data.groupId}`);
+      } else {
+        throw new Error(response.message);
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  const handleDeleteGroup = () => {
-    deleteGroupMutatuon.mutate(groupId);
+  const handleDeleteGroup = async () => {
+    try {
+      const response = await deleteGroup(groupId);
+      if (response.code === "200") {
+        router.push("/");
+      } else {
+        throw new Error(response.message);
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const isFormValid =
     groupName.trim().length > 0 && groupDescription.trim().length > 0;
-  const isLoading = updateGroupMutation.isPending;
-  const buttonState = !isFormValid || isLoading ? "disabled" : "default";
+  const buttonState = !isFormValid ? "disabled" : "default";
 
   return (
     <div className="w-full">
@@ -86,7 +104,7 @@ const EditGroup = () => {
               그룹 삭제하기
             </button>
             <Button onClick={handleUpdateGroup} state={buttonState}>
-              {isLoading ? "수정 중.." : "수정 완료"}
+              수정 완료
             </Button>
           </div>
         </div>

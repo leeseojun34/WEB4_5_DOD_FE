@@ -3,26 +3,35 @@ import Header from "@/components/layout/Header";
 import HeaderTop from "@/components/layout/HeaderTop";
 import { Button } from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
-import { useCreateGroup } from "@/lib/api/groupApi";
+import { createGroup } from "@/lib/api/groupApi";
+import { useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
 
 const CreateGroup = () => {
+  const router = useRouter();
   const [groupName, setGroupName] = useState("");
-  const [groupDescription, setGroupDescription] = useState("");
+  const [description, setDescription] = useState("");
 
-  const createGroupMutation = useCreateGroup();
-
-  const handleCreateGroup = () => {
-    createGroupMutation.mutate({
-      groupName: groupName.trim(),
-      description: groupDescription.trim(),
-    });
+  const handleCreateGroup = async () => {
+    try {
+      const response = await createGroup({ groupName, description });
+      if (response.code === "200") {
+        if (response.data.groupId) {
+          router.push(`/group/${response.data.groupId}`);
+        } else {
+          throw new Error(response.message);
+        }
+      } else {
+        throw new Error(response.message);
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const isFormValid =
-    groupName.trim().length > 0 && groupDescription.trim().length > 0;
-  const isLoading = createGroupMutation.isPending;
-  const buttonState = !isFormValid || isLoading ? "disabled" : "default";
+    groupName.trim().length > 0 && description.trim().length > 0;
+  const buttonState = !isFormValid ? "disabled" : "default";
 
   return (
     <div className="bg-[color:var(--color-white)] min-h-screen">
@@ -49,9 +58,9 @@ const CreateGroup = () => {
             label="그룹 설명"
             placeholder="그룹 설명을 입력하세요"
             maxLength={50}
-            value={groupDescription}
+            value={description}
             onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
-              setGroupDescription(e.target.value)
+              setDescription(e.target.value)
             }
             fullWidth={true}
             isTextarea
@@ -60,7 +69,7 @@ const CreateGroup = () => {
         <div className="fixed w-full left-0 right-0 px-5 bottom-9">
           <div className="max-w-185 mx-auto">
             <Button onClick={handleCreateGroup} state={buttonState}>
-              {isLoading ? "생성 중.." : "그룹 생성"}
+              그룹 생성
             </Button>
           </div>
         </div>

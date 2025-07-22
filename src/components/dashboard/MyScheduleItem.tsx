@@ -10,11 +10,11 @@ interface MyScheduleItemProps {
 export const MyScheduleItem = ({ schedule }: MyScheduleItemProps) => {
   return (
     <>
-      <div className="flex gap-5 w-full items-center">
+      <div className="flex gap-5 w-full items-center py-2 rounded-md hover:bg-[color:var(--color-gray-background)] hover:shadow-sm transition-all duration-200 ease-in-out">
         <div className="flex items-center justify-center w-18 h-[50px] bg-[color:var(--color-gray-background)] text-[color:var(--color-primary-400)] rounded-lg text-xs">
           {getDDay(schedule.startTime)}
         </div>
-        <div className="flex flex-col justify-between">
+        <div className="space-y-1">
           <div className="text-[color:var(--color-black)] text-sm font-semibold w-[150px] sm:w-[320px] truncate">
             {schedule.name}
           </div>
@@ -28,7 +28,7 @@ export const MyScheduleItem = ({ schedule }: MyScheduleItemProps) => {
                   <>
                     <MapPin className="w-3 h-[14px] text-[color:var(--color-gray-placeholder)]" />
                     <p className="text-xs text-[color:var(--color-gray-placeholder)]">
-                      {schedule.location || "미정"}
+                      {schedule.specificLocation || "미정"}
                     </p>
                   </>
                 ) : (

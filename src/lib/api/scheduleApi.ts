@@ -96,6 +96,7 @@ export const useEventDetail = (eventId: number) => {
     queryFn: () => getEventDetail(eventId),
     retry: 2,
     gcTime: 3 * 60 * 60 * 1000,
+    staleTime: 3 * 60 * 60 * 1000,
   });
 };
 
@@ -174,6 +175,19 @@ export const useScheduleResult = (eventId: number) => {
 const getScheduleResult = async (eventId: number) => {
   const response = await axiosInstance.get(
     `/events/${eventId}/all-time/result`
+  );
+  return response.data;
+};
+
+/**
+ * 이벤트 초대
+ * @param eventId 이벤트 ID
+ * @param groupId 그룹 ID
+ * @returns
+ */
+export const setInviteEvent = async (eventId: number, groupId: number) => {
+  const response = await axiosInstance.post(
+    `/events/${eventId}/join/${groupId}`
   );
   return response.data;
 };
