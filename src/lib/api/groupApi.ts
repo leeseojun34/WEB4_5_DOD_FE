@@ -111,16 +111,19 @@ const addGroupMember = async (groupId: string) => {
 
 export const useAddGroupMember = (setIsMember: (bool: boolean) => void) => {
   const queryClient = useQueryClient();
+  const router = useRouter();
   return useMutation({
     mutationFn: (groupId: string) => addGroupMember(groupId),
     onSuccess: (_, groupId) => {
       toast("그룹에 참여했습니다");
       setIsMember(true);
+      router.push(`/group/${groupId}`);
       queryClient.invalidateQueries({ queryKey: ["group", groupId] });
       queryClient.invalidateQueries({ queryKey: ["groupMembers", groupId] });
     },
-    onError: (err: Error) => {
+    onError: (err: Error, groupId) => {
       setIsMember(true);
+      router.push(`/group/${groupId}`);
       console.log(err);
     },
   });
