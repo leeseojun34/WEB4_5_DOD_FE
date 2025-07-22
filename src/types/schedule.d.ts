@@ -123,3 +123,13 @@ type ParticipantsType = {
   memberId: string;
   memberName: string;
 };
+
+interface MyScheduleType {
+  timeBitFri: string;
+  timeBitMon: string;
+  timeBitSat: string;
+  timeBitSun: string;
+  timeBitThu: string;
+  timeBitTue: string;
+  timeBitWed: string;
+}

@@ -7,7 +7,10 @@
  */
 "use client";
 import { useState, useRef, useCallback, useEffect } from "react";
-import { convertTimesToHexBit } from "@/app/utils/timebitFormat";
+import {
+  convertTimesToHexBit,
+  convertHexBitToTimes,
+} from "@/app/utils/timebitFormat";
 import { setEventMyTimeApi } from "@/lib/api/scheduleApi";
 import { useParams } from "next/navigation";
 import { getGridColsClass } from "@/app/utils/styleFormat";
@@ -16,24 +19,26 @@ const STYLES = {
   container: "w-full",
   header: "sticky top-0 z-10 bg-white",
   dayGrid: "grid gap-1 pl-6",
-  dayCell: "py-2 text-center text-[#9EA6B2] text-[8px] md:text-xl font-bold",
+  dayCell: "py-2 text-center text-[#9EA6B2] text-[8px] sm:text-xl font-bold",
   dayText: "block",
   dateText: "text-[var(--color-primary-400)]",
   timeColumn: "flex w-6 flex-col items-end gap-1 pr-1",
-  timeCell: "h-10 md:h-20 text-right pr-1",
+  timeCell: "h-10 sm:h-20 text-right pr-1",
   timeText:
-    "block text-[#9EA6B2] text-[8px] md:text-base font-bold translate-y-0",
-  scheduleGrid: `grid flex-1 gap-1 md:gap-4`,
+    "block text-[#9EA6B2] text-[8px] sm:text-base font-bold translate-y-0",
+  scheduleGrid: `grid flex-1 gap-1 sm:gap-4`,
   dayColumn: "flex flex-col gap-2 overflow-hidden rounded-lg",
   timeSlot:
-    "w-full h-5 md:h-10 border-b border-white last:border-b-0 odd:border-dashed even:border-solid cursor-pointer transition-colors duration-150",
+    "w-full h-5 sm:h-10 border-b border-white last:border-b-0 odd:border-dashed even:border-solid cursor-pointer transition-colors duration-150",
   unselectedSlot: "bg-[var(--color-muted)]",
 };
 
 const Schedule = ({
   eventScheduleInfo,
+  mySchedule,
 }: {
   eventScheduleInfo?: EventTimeTableType;
+  mySchedule: MyScheduleType | null;
 }) => {
   const { eventId } = useParams();
 
@@ -85,7 +90,57 @@ const Schedule = ({
     return `${String(hour).padStart(2, "0")}:${minute}`;
   };
 
+  useEffect(() => {
+    if (!mySchedule) return;
+
+    const timeBitArray = {
+      FRI: "",
+      MON: "",
+      SAT: "",
+      SUN: "",
+      THU: "",
+      TUE: "",
+      WED: "",
+    };
+
+    Object.entries(mySchedule).forEach(([day, timeBit]) => {
+      if (day.includes("Fri")) timeBitArray.FRI = timeBit;
+      else if (day.includes("Mon")) timeBitArray.MON = timeBit;
+      else if (day.includes("Sat")) timeBitArray.SAT = timeBit;
+      else if (day.includes("Sun")) timeBitArray.SUN = timeBit;
+      else if (day.includes("Thu")) timeBitArray.THU = timeBit;
+      else if (day.includes("Tue")) timeBitArray.TUE = timeBit;
+      else if (day.includes("Wed")) timeBitArray.WED = timeBit;
+    });
+
+    const allCellIds = new Set<string>();
+
+    for (const day of daysOfWeek) {
+      const timeBit = timeBitArray[day.day as keyof typeof timeBitArray];
+      const times = convertHexBitToTimes(timeBit);
+      const date = day.fullDate!;
+      if (!date) continue;
+
+      times.forEach((time) => {
+        const dayIndex = daysOfWeek.findIndex((d) => d.fullDate === date);
+        const cellId = `cell-${dayIndex}-${time}`;
+        allCellIds.add(cellId);
+      });
+    }
+
+    setSelectedCells(allCellIds);
+    // applyXorToggle는 selectedCells 상태가 바뀐 이후에만 작동하도록 selectedCells에 대한 useEffect로 이동함
+  }, [mySchedule]);
+
+  useEffect(() => {
+    if (selectedCells.size > 0 && !isDragging) {
+      applyXorToggle();
+    }
+  }, [selectedCells]);
+
   const applyXorToggle = async () => {
+    console.log(selectedCells.size);
+
     if (selectedCells.size === 0) return;
     setIsDraggingAndClick(false);
 
