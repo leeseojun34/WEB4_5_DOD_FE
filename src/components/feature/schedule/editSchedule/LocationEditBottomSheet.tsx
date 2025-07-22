@@ -29,7 +29,12 @@ const LocationEditBottomSheet = ({
   };
 
   return (
-    <BottomSheet isOpen={isOpen} setIsOpen={setIsOpen} snapPoints={snapPoints}>
+    <BottomSheet
+      isOpen={isOpen}
+      setIsOpen={setIsOpen}
+      snapPoints={snapPoints}
+      hideBackdrop={true}
+    >
       {() => (
         <div className="min-w-[375px] w-full max-w-185 flex flex-col items-center px-5 mx-auto pt-3 gap-8">
           <BottomSheetHeader setIsOpen={setIsOpen} title="모임 장소 정하기" />
