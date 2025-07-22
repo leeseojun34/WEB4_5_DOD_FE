@@ -104,6 +104,28 @@ const updateMemberPermissions = async (
   return res.data;
 };
 
+const addGroupMember = async (groupId: string) => {
+  const res = await axiosInstance.post(`/groups/${groupId}/member`);
+  return res.data;
+};
+
+export const useAddGroupMember = (setIsMember: (bool: boolean) => void) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (groupId: string) => addGroupMember(groupId),
+    onSuccess: (_, groupId) => {
+      toast("그룹에 참여했습니다");
+      setIsMember(true);
+      queryClient.invalidateQueries({ queryKey: ["group", groupId] });
+      queryClient.invalidateQueries({ queryKey: ["groupMembers", groupId] });
+    },
+    onError: (err: Error) => {
+      setIsMember(true);
+      console.log(err);
+    },
+  });
+};
+
 export const useUpdateMemberPermissions = () => {
   const queryClient = useQueryClient();
   return useMutation({
@@ -156,11 +178,11 @@ export const useLeaveGroup = () => {
   });
 };
 
-export const useGroupSchedules = (groupId: string) => {
+export const useGroupSchedules = (groupId: string, isMember: boolean) => {
   return useQuery({
     queryKey: ["groupSchedule", groupId],
     queryFn: () => getGroupSchedules(groupId),
-    enabled: !!groupId,
+    enabled: !!groupId && isMember,
     retry: false,
     refetchOnWindowFocus: false,
   });
