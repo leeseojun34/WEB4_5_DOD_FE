@@ -5,16 +5,18 @@ import GroupContent from "@/components/feature/group/detail/GroupContent";
 import GroupHeaderSection from "@/components/feature/group/detail/GroupHeaderSection";
 import Footer from "@/components/layout/Footer";
 import { useGroupSchedules } from "@/lib/api/groupApi";
-import { useParams } from "next/navigation";
+import { useGroupDetailPage } from "./hooks/useGroupDetailLogic";
 
 const GroupDetailPage = () => {
-  const params = useParams();
-  const groupId = params.groupId as string;
+  const { groupId, userPending, isMember } = useGroupDetailPage();
+  const { data: groupData, isPending: groupPending } = useGroupSchedules(
+    groupId,
+    isMember
+  );
 
-  const { data: groupData, isPending } = useGroupSchedules(groupId);
-
-  console.log(groupData?.data.groupRole);
-  if (isPending && !groupData) return <GlobalLoading />;
+  if (userPending || groupPending || !groupData) {
+    return <GlobalLoading />;
+  }
 
   return (
     <div className="w-full min-h-screen bg-[color:var(--color-gray-background)]">
