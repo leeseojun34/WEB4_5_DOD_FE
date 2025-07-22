@@ -8,8 +8,8 @@ import { Frown } from "lucide-react";
  * @param description - 버튼 설명
  * @param mode - 버튼 모드 (share: 공유, vote: 투표)
  * @param color - 버튼 색상
- *
- * 카카오톡 공유 api 연결 필요
+ * @param borderColor - 버튼 테두리 색상
+ * @param onClick - 버튼 클릭 시 실행할 함수
  *
  * @returns 공유 버튼 컴포넌트
  */
