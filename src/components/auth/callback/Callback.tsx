@@ -14,7 +14,13 @@ const Callback = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      router.push("/");
+      const url = localStorage.getItem("redirect");
+      if (url) {
+        router.push(url);
+        localStorage.removeItem("redirect");
+      } else {
+        router.push("/");
+      }
     } else if (isError) {
       console.error("No User");
       router.push("/auth/login");
