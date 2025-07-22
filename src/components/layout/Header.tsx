@@ -11,8 +11,7 @@ const Header = ({ type = "" }: { type?: "" | "blue" }) => {
   const router = useRouter();
   const { data: user } = useUser();
 
-  const profile =
-    profileImages[user?.data.profileImageNumber] || profileImages[7];
+  const profile = profileImages[user?.data.profileImageNumber];
 
   return (
     <div
@@ -20,28 +19,29 @@ const Header = ({ type = "" }: { type?: "" | "blue" }) => {
         type === "blue"
           ? "bg-[color:var(--color-primary-400)]"
           : "bg-transparent"
-      }`}
-    >
+      }`}>
       <LogoWebHeader type={type} handleLogoClick={() => router.push("/")} />
       <div className="flex justify-between items-center gap-8">
-        <div className="flex justify-between items-center gap-8">
-          <Image
-            src={type === "blue" ? calendarWhite : calendarBlue}
-            alt="달력"
-            width={24}
-            height={24}
-            className="cursor-pointer"
-            onClick={() => router.push("/schedule/create")}
-          />
-          <Image
-            src={profile}
-            alt="프로필이미지"
-            width={20}
-            height={20}
-            className="cursor-pointer"
-            onClick={() => router.push("/mypage")}
-          />
-        </div>
+        {user && (
+          <div className="flex justify-between items-center gap-8">
+            <Image
+              src={type === "blue" ? calendarWhite : calendarBlue}
+              alt="달력"
+              width={24}
+              height={24}
+              className="cursor-pointer"
+              onClick={() => router.push("/schedule/create")}
+            />
+            <Image
+              src={profile}
+              alt="프로필이미지"
+              width={20}
+              height={20}
+              className="cursor-pointer"
+              onClick={() => router.push("/mypage")}
+            />
+          </div>
+        )}
 
         {!user && (
           <button
@@ -51,8 +51,7 @@ const Header = ({ type = "" }: { type?: "" | "blue" }) => {
               type === "blue"
                 ? "border-[color:var(--color-white)] text-[color:var(--color-white)] hover:bg-[color:var(--color-white)] hover:text-[color:var(--color-primary-400)]"
                 : "border-[color:var(--color-primary-400)] text-[color:var(--color-primary-400)] hover:bg-[color:var(--color-primary-400)] hover:text-[color:var(--color-white)]"
-            } text-xs font-medium cursor-pointer `}
-          >
+            } text-xs font-medium cursor-pointer `}>
             로그인
           </button>
         )}
