@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import Header from "@/components/layout/Header";
 import GroupHeader from "@/components/layout/GroupHeader";
 import DropdownSmall from "@/components/ui/DropdownSmall";
+import KakaoScript from "../../KakaoScript";
+import { useKakaoShare } from "@/lib/api/useKakaoShare";
 
 interface GroupHeaderSectionProps {
   groupId: string;
@@ -32,11 +34,19 @@ const GroupHeaderSection = ({
     console.log("나가기 버튼 클릭");
   };
 
+  const { shareWithTemplate } = useKakaoShare();
+  const handleKakaoShare = () => {
+    shareWithTemplate(
+      "지금 바로 그룹에 들어와서 일정을 확인하고, 필요한 시간도 추가해보세요."
+    );
+  };
+
   return (
     <>
-      {/* <div className="hidden sm:block">
+      <div className="hidden sm:block">
         <Header type="blue" />
-      </div> */}
+        
+      </div>
       <GroupHeader
         name={groupName}
         description={groupIntroduction}
@@ -44,6 +54,7 @@ const GroupHeaderSection = ({
         isLeader={groupRole === "GROUP_LEADER"}
         type="group"
         id={groupId}
+        clickToInvite={handleKakaoShare}
       />
       {isOpen && (
         <div className="absolute right-4 top-18">
@@ -57,6 +68,7 @@ const GroupHeaderSection = ({
           </DropdownSmall>
         </div>
       )}
+      <KakaoScript />
     </>
   );
 };
