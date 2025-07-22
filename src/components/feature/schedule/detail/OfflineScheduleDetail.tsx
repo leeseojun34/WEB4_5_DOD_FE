@@ -27,6 +27,7 @@ const OfflineScheduleDetail = ({
         <Map
           longitude={data.specificLongitude}
           latitude={data.specificLatitude}
+          offsetY={150}
         />
       </div>
       <OfflineBottomSheet data={data} scheduleId={scheduleId} />

@@ -10,3 +10,10 @@ interface UserType {
   provider: string;
   role: string;
 }
+
+namespace kakao.maps {
+  interface Map {
+    panBy(x: number, y: number): void;
+    setCenter(position: LatLng): void;
+  }
+}
