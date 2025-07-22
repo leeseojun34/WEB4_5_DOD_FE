@@ -5,18 +5,30 @@ import HeaderTop from "../layout/HeaderTop";
 import { Footer } from "react-day-picker";
 import rabbitWriting from "@/assets/images/rabbit_writing.png";
 import UserScheduleList from "./UserScheduleList";
-import { useDashboard } from "@/lib/api/dashboardApi";
-import { formatDate } from "@/app/utils/dateFormat";
-import GlobalLoading from "@/app/loading";
 import { useSearchParams } from "next/navigation";
+import { getUserSchedules, UserScheduleResponse } from "@/lib/api/dashboardApi";
+import { useEffect, useState } from "react";
 
 const UserSchedule = () => {
-  const { data: scheduleData, isPending } = useDashboard(
-    formatDate(new Date())
-  );
+  const [schedules, setSchedules] = useState<UserScheduleResponse>({});
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const fetchSchedules = async () => {
+      try {
+        const res = await getUserSchedules("2025-07-01", "2025-08-01");
+        setSchedules(res.data);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchSchedules();
+  }, []);
+
   const searchParams = useSearchParams();
   const groupId = searchParams?.get("groupId");
-  if (isPending) return <GlobalLoading />;
 
   return (
     <div className="w-full min-h-screen bg-[color:var(--color-gray-background)]">
@@ -37,8 +49,9 @@ const UserSchedule = () => {
           />
         )}
         <UserScheduleList
-          schedules={scheduleData.data.schedules}
+          schedules={Object.values(schedules).flat()}
           groupId={Number(groupId) ?? undefined}
+          isLoading={isLoading}
         />
       </div>
       <div className="sm:hidden">

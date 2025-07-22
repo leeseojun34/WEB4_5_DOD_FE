@@ -8,7 +8,7 @@ import HeaderTop from "@/components/layout/HeaderTop";
 import GroupHeader from "@/components/layout/GroupHeader";
 import BottomSheet from "@/components/ui/BottomSheet";
 //import Header from "@/components/layout/Header";
-import useAuthStore from "@/sotres/authStores";
+import useAuthStore from "@/stores/authStores";
 import { useParams } from "next/navigation";
 import { useGroupSchedule } from "@/lib/api/scheduleApi";
 import GlobalLoading from "@/app/loading";

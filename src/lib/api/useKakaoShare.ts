@@ -1,12 +1,11 @@
 export const useKakaoShare = () => {
-  const shareWithTemplate = (description: string) => {
+  const shareWithTemplate = (description: string, url = "") => {
     window.Kakao.Share.sendCustom({
       templateId: 122456,
       templateArgs: {
         description,
-        url: window.location.href,
+        url,
       },
-      
     });
   };
 

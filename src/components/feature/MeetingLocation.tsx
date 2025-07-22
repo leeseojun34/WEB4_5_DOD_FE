@@ -27,27 +27,40 @@ const MeetingLocation = ({
           <Pen className="w-3 h-3 text-[color:var(--color-gray)] cursor-pointer" />
         </div>
       </div>
-      {!location && !specificLocation && (
+      {!location && !specificLocation ? (
         <div className="flex w-full justify-center items-center py-4 text-xs text-[color:var(--color-gray)]">
           등록된 모임장소가 없습니다.
         </div>
-      )}
-      {location && specificLocation && (
+      ) : (
         <div className="flex flex-col w-full gap-3">
           <div className="flex gap-4 items-center justify-between">
             <div className="text-xs text-[color:var(--color-gray)] font-medium">
               모임 장소
             </div>
-            <div className="text-[color:var(--color-black)] text-sm">
-              {specificLocation}
+            <div className=" text-sm">
+              {specificLocation ? (
+                <p className="text-[color:var(--color-black)]">
+                  {specificLocation}
+                </p>
+              ) : (
+                <p className="text-[color:var(--color-gray-placeholder)] font-extralight">
+                  미지정
+                </p>
+              )}
             </div>
           </div>
           <div className="flex gap-4 items-center justify-between">
             <div className="text-xs text-[color:var(--color-gray)] font-medium">
               중간 장소 (역)
             </div>
-            <div className="text-[color:var(--color-black)] text-sm">
-              {location}
+            <div className="text-[color:var(--color-gray-placeholder)] text-sm">
+              {location ? (
+                <p className="text-[color:var(--color-black)]">{location}</p>
+              ) : (
+                <p className="text-[color:var(--color-gray-placeholder)] font-extralight">
+                  미지정
+                </p>
+              )}
             </div>
           </div>
         </div>

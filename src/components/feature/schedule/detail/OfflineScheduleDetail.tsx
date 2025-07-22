@@ -1,13 +1,12 @@
 "use client";
-import {
-  ScheduleDetailType,
-  WorkspacePlatformType,
-  WorkspaceType,
-} from "@/types/schedule";
+import Header from "@/components/layout/Header";
 import MeetingLocation from "../../MeetingLocation";
 import ScheduleDetailContent from "./ScheduleDetailContent";
 import ScheduleDetailLayout from "./ScheduleDetailLayout";
 import { formatSchedule } from "@/app/utils/dateFormat";
+import Map from "@/components/feature/kakaoMap/Map";
+import OfflineBottomSheet from "./OfflineBottomSheet";
+import BlurredChevronHeader from "@/components/layout/BlurredChevronHeader";
 
 interface OfflineScheduleDetailProps {
   scheduleId: string;
@@ -18,7 +17,21 @@ const OfflineScheduleDetail = ({
   scheduleId,
   data,
 }: OfflineScheduleDetailProps) => {
-  return (
+  return data.specificLocation ? (
+    <div className="flex flex-col h-screen relative w-full mx-auto ">
+      <div className="hidden sm:block">
+        <Header />
+      </div>
+      <BlurredChevronHeader />
+      <div className="flex-1">
+        <Map
+          longitude={data.specificLongitude}
+          latitude={data.specificLatitude}
+        />
+      </div>
+      <OfflineBottomSheet data={data} scheduleId={scheduleId} />
+    </div>
+  ) : (
     <ScheduleDetailLayout>
       <ScheduleDetailContent
         scheduleId={scheduleId}
