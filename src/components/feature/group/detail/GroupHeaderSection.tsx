@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Header from "@/components/layout/Header";
 import GroupHeader from "@/components/layout/GroupHeader";
 import DropdownSmall from "@/components/ui/DropdownSmall";
@@ -25,6 +25,10 @@ const GroupHeaderSection = ({
 }: GroupHeaderSectionProps) => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const pathname = usePathname();
+  // const baseUrl = process.env.NEXT_PUBLIC_SERVER_BASE_URL;
+  const baseUrl = `https://localhost:3000`;
+  const url = `${baseUrl}${pathname}?fromInvite=true`;
 
   const handleEditClick = (): void => {
     router.push(`/group/${groupId}/edit`);
@@ -37,7 +41,8 @@ const GroupHeaderSection = ({
   const { shareWithTemplate } = useKakaoShare();
   const handleKakaoShare = () => {
     shareWithTemplate(
-      "지금 바로 그룹에 들어와서 일정을 확인하고, 필요한 시간도 추가해보세요."
+      "지금 바로 그룹에 들어와서 일정을 확인하고, 필요한 시간도 추가해보세요.",
+      url
     );
   };
 
@@ -45,7 +50,6 @@ const GroupHeaderSection = ({
     <>
       <div className="hidden sm:block">
         <Header type="blue" />
-        
       </div>
       <GroupHeader
         name={groupName}
