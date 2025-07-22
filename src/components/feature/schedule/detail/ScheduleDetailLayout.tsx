@@ -1,6 +1,8 @@
 import Header from "@/components/layout/Header";
 import GroupHeader from "@/components/layout/GroupHeader";
 import Footer from "@/components/layout/Footer";
+import { useEffect, useState } from "react";
+import useAuthStore from "@/stores/authStores";
 
 interface ScheduleDetailLayoutProps {
   children: React.ReactNode;
@@ -11,6 +13,17 @@ const ScheduleDetailLayout = ({
   children,
   data,
 }: ScheduleDetailLayoutProps) => {
+  const { user } = useAuthStore();
+  const [isLeader, setIsLeader] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      if (data.members.includes(user.id)) {
+        setIsLeader(true);
+      }
+    }
+  }, [user, data]);
+
   return (
     <div className="w-full bg-[color:var(--color-gray-background)] min-h-screen">
       <div className="hidden sm:block">
@@ -20,7 +33,7 @@ const ScheduleDetailLayout = ({
         name={data.scheduleName}
         description={data.description}
         count={data.members.length}
-        isLeader={true}
+        isLeader={isLeader}
         type="schedule"
         id={String(data.eventId)}
       />
