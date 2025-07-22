@@ -33,7 +33,7 @@ const OfflineScheduleDetail = ({
       <OfflineBottomSheet data={data} scheduleId={scheduleId} />
     </div>
   ) : (
-    <ScheduleDetailLayout>
+    <ScheduleDetailLayout data={data}>
       <ScheduleDetailContent
         scheduleId={scheduleId}
         members={data.members}
