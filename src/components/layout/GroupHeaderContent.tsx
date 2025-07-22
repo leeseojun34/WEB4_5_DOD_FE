@@ -7,7 +7,7 @@ interface GroupHeaderContentProps {
   id: string;
   count: number;
   isLeader: boolean;
-  type: "schedule" | "group";
+  type?: "schedule" | "group";
 }
 
 export const GroupHeaderContent = ({
