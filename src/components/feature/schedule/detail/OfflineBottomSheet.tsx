@@ -19,7 +19,7 @@ const OfflineBottomSheet = ({ scheduleId, data }: OfflineBottomSheetProps) => {
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
-      setSnapPoints(width >= 640 ? [0.4, 0.22, 0.16] : [0.9, 0.6, 0.05]);
+      setSnapPoints(width >= 640 ? [0.4, 0.22, 0.16] : [0.9, 0.7, 0.05]);
     };
     handleResize();
     window.addEventListener("resize", handleResize);
