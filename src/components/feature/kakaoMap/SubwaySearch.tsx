@@ -128,7 +128,7 @@ const SubwaySearch = ({
                 },
                 {
                   onSuccess: () => {
-                    route.push(`/schdule/${scheduleId}/election/wait`);
+                    route.push(`/schedule/${scheduleId}/election/wait`);
                   },
                   onError: (err) => {
                     console.error("출발지 등록 실패", err);
