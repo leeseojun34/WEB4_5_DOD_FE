@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "./axiosInstance";
 import { useRouter } from "next/navigation";
 import Toast from "@/components/ui/Toast";
-import toast from "react-hot-toast";
+import ToastWell from "@/components/ui/ToastWell";
 
 export interface UpdateMemberPermissionsReqeust {
   groupId: string;
@@ -126,7 +126,7 @@ export const useAddGroupMember = (setIsMember: (bool: boolean) => void) => {
   return useMutation({
     mutationFn: (groupId: string) => addGroupMember(groupId),
     onSuccess: (_, groupId) => {
-      toast("그룹에 참여했습니다");
+      ToastWell("🎉", "그룹에 참여했습니다");
       setIsMember(true);
       router.push(`/group/${groupId}`);
       queryClient.invalidateQueries({ queryKey: ["group", groupId] });
@@ -146,7 +146,7 @@ export const useUpdateMemberPermissions = () => {
     mutationFn: (data: UpdateMemberPermissionsReqeust) =>
       updateMemberPermissions(data),
     onSuccess: (_, variables) => {
-      toast("권한 변경에 성공했습니다");
+      ToastWell("✅", "권한 변경에 성공했습니다");
       queryClient.invalidateQueries({
         queryKey: ["groupMembers", variables.groupId],
       });
@@ -163,13 +163,13 @@ export const useRemoveGroupMember = () => {
   return useMutation({
     mutationFn: (data: RemoveGroupMemberRequest) => removeGroupMember(data),
     onSuccess: (_, variables) => {
-      toast("그룹 멤버를 내보냈습니다");
+      ToastWell("✅", "그룹 멤버를 내보냈습니다");
       queryClient.invalidateQueries({
         queryKey: ["groupMembers", variables.groupId],
       });
     },
     onError: (err) => {
-      Toast("그룹 멤버 내보내기에 실패했습니다");
+      Toast("그룹짱은 내보낼 수가 없습니다");
       console.error("그룹 멤버 내보내기 실패: ", err);
     },
   });
@@ -181,7 +181,7 @@ export const useLeaveGroup = () => {
   return useMutation({
     mutationFn: leaveGroup,
     onSuccess: () => {
-      toast("그룹에서 나갔습니다");
+      ToastWell("✅", "그룹에서 나갔습니다");
       queryClient.invalidateQueries({ queryKey: ["user", "groupSchedule"] });
       router.push(`/`);
     },
