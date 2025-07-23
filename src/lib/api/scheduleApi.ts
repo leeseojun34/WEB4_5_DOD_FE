@@ -9,6 +9,27 @@ interface CreateWorkSpaceRequest {
   url: string;
 }
 
+interface UpdateScheduleInfoReqeust {
+  description?: string;
+  endTime?: string;
+  eventId?: number;
+  location?: string;
+  meetingPlatform?: PlatformType;
+  meetingType?: string;
+  members?: string[];
+  platformName?: string;
+  platformUrl?: string;
+  scheduleName?: string;
+  scheduleStatus?: string;
+  specificLatitude?: string;
+  specificLocation?: string;
+  specificLongitude?: string;
+  startTime?: string;
+  workspaces?: string[];
+}
+
+type PlatformType = "ZOOM" | "GOOGLE_MEET" | "DISCORD" | "ZEP";
+
 const getGroupSchedule = async (scheduleId: string) => {
   const res = await axiosInstance.get(`/schedules/show/${scheduleId}`, {
     params: { id: scheduleId },
@@ -36,17 +57,35 @@ const deleteWorkspace = async (id: string, workspaceId: string) => {
   return res.data;
 };
 
-const updateScheduleInfo = async (scheduleId: string) => {
-  const res = await axiosInstance.patch(`/schedules/modify/${scheduleId}`);
+const updateScheduleInfo = async (
+  scheduleId: string,
+  data: UpdateScheduleInfoReqeust
+) => {
+  const res = await axiosInstance.patch(
+    `/schedules/modify/${scheduleId}`,
+    data
+  );
   return res.data;
 };
 
 export const useUpdateScheduleInfo = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (scheduleId: string) => updateScheduleInfo(scheduleId),
-    onSuccess: () => {
-      ToastWell("✅", "일정 정보를 수정했습니다");
+    mutationFn: ({
+      scheduleId,
+      data,
+    }: {
+      scheduleId: string;
+      data: UpdateScheduleInfoReqeust;
+    }) => updateScheduleInfo(scheduleId, data),
+    onSuccess: (_, variables) => {
+      ToastWell("✅", "일정 수정 완료!");
+      queryClient.invalidateQueries({
+        queryKey: ["groupSchedule", variables.scheduleId],
+      });
+    },
+    onError: () => {
+      Toast("앗, 일정 수정에 실패했어요");
     },
   });
 };

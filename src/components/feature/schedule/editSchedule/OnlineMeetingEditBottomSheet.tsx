@@ -10,7 +10,10 @@ import Image from "next/image";
 import { ChangeEvent, useState } from "react";
 import useMediaQuery from "../hooks/useMediaQuery";
 import BottomSheetHeader from "@/components/layout/BottomSheetHeader";
-import { useCreateMeetingRoom } from "@/lib/api/scheduleApi";
+import {
+  useCreateMeetingRoom,
+  useUpdateScheduleInfo,
+} from "@/lib/api/scheduleApi";
 
 interface OnlineMeetingEditBottomSheetProps {
   isOpen: boolean;
@@ -18,7 +21,7 @@ interface OnlineMeetingEditBottomSheetProps {
   scheduleId: string;
 }
 
-type PlatformType = "zoom" | "googleMeet" | "discord" | "zep";
+type PlatformType = "ZOOM" | "GOOGLE_MEET" | "DISCORD" | "ZEP";
 
 const OnlineMeetingEditBottomSheet = ({
   isOpen,
@@ -32,12 +35,13 @@ const OnlineMeetingEditBottomSheet = ({
   const isMobile = useMediaQuery("(min-width: 640px)");
   const snapPoints = isMobile ? [0.5] : [0.8];
   const createMeetingRoom = useCreateMeetingRoom();
+  const updateScheduleInfo = useUpdateScheduleInfo();
 
   const ICONMAP: Record<PlatformType, string> = {
-    zoom: zoomIcon,
-    googleMeet: googleMeetIcon,
-    discord: discordIcon,
-    zep: zepIcon,
+    ZOOM: zoomIcon,
+    GOOGLE_MEET: googleMeetIcon,
+    DISCORD: discordIcon,
+    ZEP: zepIcon,
   };
 
   const handleChangePlatform = (p: PlatformType) => {
@@ -48,6 +52,20 @@ const OnlineMeetingEditBottomSheet = ({
     createMeetingRoom.mutate(scheduleId);
     setIsOpen(false);
   };
+
+  console.log(typeof scheduleId);
+
+  const handleUpdateMeetingRoom = () => {
+    updateScheduleInfo.mutate({
+      scheduleId,
+      data: {
+        meetingPlatform: selectedPlatform as PlatformType,
+        platformUrl: inputValue,
+      },
+    });
+    setIsOpen(false);
+  };
+
   return (
     <BottomSheet isOpen={isOpen} setIsOpen={setIsOpen} snapPoints={snapPoints}>
       {() => (
@@ -103,7 +121,7 @@ const OnlineMeetingEditBottomSheet = ({
               삭제하기
             </button>
           </div>
-          <Button>저장하기</Button>
+          <Button onClick={handleUpdateMeetingRoom}>저장하기</Button>
         </div>
       )}
     </BottomSheet>

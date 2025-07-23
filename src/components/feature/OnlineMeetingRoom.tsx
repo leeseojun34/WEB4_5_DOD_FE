@@ -14,7 +14,7 @@ interface OnlineMeetingRoomProps {
   url?: string;
 }
 
-type PlatformType = "ZOOM" | "GOOGLEMEET" | "DISCORD" | "ZEP";
+type PlatformType = "ZOOM" | "GOOGLE_MEET" | "DISCORD" | "ZEP";
 
 const OnlineMeetingRoom = ({
   scheduleId,
@@ -24,7 +24,7 @@ const OnlineMeetingRoom = ({
   const [isOpen, setIsOpen] = useState(false);
   const PLATFORM = {
     ZOOM: zoomIcon,
-    GOOGLEMEET: googleMeetIcon,
+    GOOGLE_MEET: googleMeetIcon,
     DISCORD: discordIcon,
     ZEP: zepIcon,
   };
