@@ -7,6 +7,8 @@ import Image from "next/image";
 import OnlineMeetingEditBottomSheet from "./schedule/editSchedule/OnlineMeetingEditBottomSheet";
 import { useState } from "react";
 import Link from "next/link";
+import { motion } from "framer-motion";
+import { itemVariants } from "./schedule/motion";
 
 interface OnlineMeetingRoomProps {
   scheduleId: string;
@@ -30,7 +32,10 @@ const OnlineMeetingRoom = ({
   };
 
   return (
-    <div className="bg-[color:var(--color-white)] px-5 py-4 gap-4 rounded-lg flex flex-col shadow-[var(--shadow-common)]">
+    <motion.div
+      variants={itemVariants}
+      className="bg-[color:var(--color-white)] px-5 py-4 gap-4 rounded-lg flex flex-col shadow-[var(--shadow-common)]"
+    >
       <div className="flex w-full justify-between items-center">
         <div className="flex gap-4 items-center">
           <div>
@@ -73,7 +78,7 @@ const OnlineMeetingRoom = ({
         setIsOpen={setIsOpen}
         scheduleId={scheduleId}
       />
-    </div>
+    </motion.div>
   );
 };
 
