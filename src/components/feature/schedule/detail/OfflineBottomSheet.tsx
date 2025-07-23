@@ -52,7 +52,6 @@ const OfflineBottomSheet = ({
             />
             <div className="min-w-[375px] w-full max-w-185 mx-auto pt-6 sm:pt-10">
               <div className="flex flex-col px-5 gap-4">
-                {" "}
                 <ScheduleDetailContent
                   scheduleId={scheduleId}
                   members={data.members}

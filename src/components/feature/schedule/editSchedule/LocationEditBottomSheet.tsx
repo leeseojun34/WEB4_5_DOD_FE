@@ -58,7 +58,7 @@ const LocationEditBottomSheet = ({
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
-      setSnapPoints(width >= 640 ? [0.4, 0.22, 0.16] : [0.9, 0.7, 0.5]);
+      setSnapPoints(width >= 640 ? [0.4, 0.22, 0.16] : [0.9, 0.8, 0.5]);
     };
     handleResize();
     window.addEventListener("resize", handleResize);
@@ -86,24 +86,26 @@ const LocationEditBottomSheet = ({
               onClick={handleClickRouter}
             ></ShareButton>
 
-            <FinalDestinationSearch
-              destination={destination}
-              setDestination={setDestination}
-              setDestinationLatitude={setDestinationLatitude}
-              setDestinationLongitude={setDestinationLongitude}
-            />
+            <div className="space-y-4 w-full">
+              <FinalDestinationSearch
+                destination={destination}
+                setDestination={setDestination}
+                setDestinationLatitude={setDestinationLatitude}
+                setDestinationLongitude={setDestinationLongitude}
+              />
 
-            {location && (
-              <div className="w-full flex flex-col gap-2">
-                <Input
-                  label="중간 장소"
-                  fullWidth={true}
-                  value={location}
-                  readOnly
-                  disabled
-                />
-              </div>
-            )}
+              {location && (
+                <div className="w-full flex flex-col gap-2">
+                  <Input
+                    label="중간 장소"
+                    fullWidth={true}
+                    value={location}
+                    readOnly
+                    disabled
+                  />
+                </div>
+              )}
+            </div>
             <div className="h-20"></div>
           </div>
         )}
