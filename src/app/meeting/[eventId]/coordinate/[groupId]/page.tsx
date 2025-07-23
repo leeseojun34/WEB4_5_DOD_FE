@@ -59,6 +59,12 @@ const InvitePage = () => {
     setInviteEventMember();
   }, []);
 
+  if (!eventId || !groupId) {
+    Toast("잘못된 접근입니다.");
+    router.push("/");
+    return null;
+  }
+
   return <GlobalLoading />;
 };
 export default InvitePage;
