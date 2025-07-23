@@ -18,7 +18,7 @@ interface UpdateScheduleInfoReqeust {
   meetingType?: string;
   members?: string[];
   platformName?: string;
-  platformUrl?: string;
+  platformUrl?: string | null;
   scheduleName?: string;
   scheduleStatus?: string;
   specificLatitude?: string;
@@ -28,7 +28,7 @@ interface UpdateScheduleInfoReqeust {
   workspaces?: string[];
 }
 
-type PlatformType = "ZOOM" | "GOOGLE_MEET" | "DISCORD" | "ZEP";
+type PlatformType = "ZOOM" | "GOOGLE_MEET" | "DISCORD" | "ZEP" | "NONE";
 
 const getGroupSchedule = async (scheduleId: string) => {
   const res = await axiosInstance.get(`/schedules/show/${scheduleId}`, {

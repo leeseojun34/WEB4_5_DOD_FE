@@ -37,7 +37,7 @@ const OnlineMeetingEditBottomSheet = ({
   const createMeetingRoom = useCreateMeetingRoom();
   const updateScheduleInfo = useUpdateScheduleInfo();
 
-  const ICONMAP: Record<PlatformType, string> = {
+  const ICONMAP: Record<PlatformType, string | null> = {
     ZOOM: zoomIcon,
     GOOGLE_MEET: googleMeetIcon,
     DISCORD: discordIcon,
@@ -61,6 +61,17 @@ const OnlineMeetingEditBottomSheet = ({
       data: {
         meetingPlatform: selectedPlatform as PlatformType,
         platformUrl: inputValue,
+      },
+    });
+    setIsOpen(false);
+  };
+
+  const handleDeleteMeetingRoom = () => {
+    updateScheduleInfo.mutate({
+      scheduleId,
+      data: {
+        meetingPlatform: "NONE",
+        platformUrl: null,
       },
     });
     setIsOpen(false);
@@ -101,7 +112,7 @@ const OnlineMeetingEditBottomSheet = ({
                     onClick={() => handleChangePlatform(p)}
                   >
                     <Image
-                      src={ICONMAP[p]}
+                      src={ICONMAP[p]!}
                       alt={`${p} 아이콘`}
                       className="w-6 h-6"
                     />
@@ -117,7 +128,10 @@ const OnlineMeetingEditBottomSheet = ({
                 setInputValue(e.target.value)
               }
             />
-            <button className="cursor-pointer text-[color:var(--color-red)] text-xs font-semibold">
+            <button
+              className="cursor-pointer text-[color:var(--color-red)] text-xs font-semibold"
+              onClick={handleDeleteMeetingRoom}
+            >
               삭제하기
             </button>
           </div>
