@@ -1,5 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "./axiosInstance";
+import ToastWell from "@/components/ui/ToastWell";
+import Toast from "@/components/ui/Toast";
 
 interface CreateWorkSpaceRequest {
   workspace: WorkspacePlatformType;
@@ -14,6 +16,13 @@ const getGroupSchedule = async (scheduleId: string) => {
   return res.data;
 };
 
+const createMeetingRoom = async (scheduleId: string) => {
+  const res = await axiosInstance.post(
+    `/schedules/create-online-meeting/${scheduleId}`
+  );
+  return res.data;
+};
+
 const createWorkspace = async (id: string, data: CreateWorkSpaceRequest) => {
   const res = await axiosInstance.post(`/schedules/add-workspace/${id}`, data);
   return res.data;
@@ -25,6 +34,37 @@ const deleteWorkspace = async (id: string, workspaceId: string) => {
     workspaceId
   );
   return res.data;
+};
+
+const updateScheduleInfo = async (scheduleId: string) => {
+  const res = await axiosInstance.patch(`/schedules/modify/${scheduleId}`);
+  return res.data;
+};
+
+export const useUpdateScheduleInfo = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (scheduleId: string) => updateScheduleInfo(scheduleId),
+    onSuccess: () => {
+      ToastWell("✅", "일정 정보를 수정했습니다");
+    },
+  });
+};
+
+export const useCreateMeetingRoom = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (scheduleId: string) => createMeetingRoom(scheduleId),
+    onSuccess: (_, scheduleId) => {
+      ToastWell("🎉", "온라인 회의장을 생성해드렸어요!");
+      queryClient.invalidateQueries({
+        queryKey: ["groupSchedule", scheduleId],
+      });
+    },
+    onError: () => {
+      Toast("온라인 회의장 생성에 실패했어요");
+    },
+  });
 };
 
 export const useGroupSchedule = (scheduleId: string) => {

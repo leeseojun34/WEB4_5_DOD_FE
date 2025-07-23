@@ -10,9 +10,11 @@ const ScheduleDetail = () => {
 
   const { data: scheduleData, isPending } = useGroupSchedule(scheduleId);
 
-  if (isPending) {
+  if (isPending || !scheduleData) {
     return <GlobalLoading />;
   }
+
+  console.log(scheduleData.data);
 
   return (
     <>

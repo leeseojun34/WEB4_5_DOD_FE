@@ -10,10 +10,12 @@ import Image from "next/image";
 import { ChangeEvent, useState } from "react";
 import useMediaQuery from "../hooks/useMediaQuery";
 import BottomSheetHeader from "@/components/layout/BottomSheetHeader";
+import { useCreateMeetingRoom } from "@/lib/api/scheduleApi";
 
 interface OnlineMeetingEditBottomSheetProps {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
+  scheduleId: string;
 }
 
 type PlatformType = "zoom" | "googleMeet" | "discord" | "zep";
@@ -21,6 +23,7 @@ type PlatformType = "zoom" | "googleMeet" | "discord" | "zep";
 const OnlineMeetingEditBottomSheet = ({
   isOpen,
   setIsOpen,
+  scheduleId,
 }: OnlineMeetingEditBottomSheetProps) => {
   const [selectedPlatform, setSelectedPlatform] = useState<PlatformType | null>(
     null
@@ -28,6 +31,7 @@ const OnlineMeetingEditBottomSheet = ({
   const [inputValue, setInputValue] = useState("");
   const isMobile = useMediaQuery("(min-width: 640px)");
   const snapPoints = isMobile ? [0.5] : [0.8];
+  const createMeetingRoom = useCreateMeetingRoom();
 
   const ICONMAP: Record<PlatformType, string> = {
     zoom: zoomIcon,
@@ -38,6 +42,11 @@ const OnlineMeetingEditBottomSheet = ({
 
   const handleChangePlatform = (p: PlatformType) => {
     setSelectedPlatform(p);
+  };
+
+  const handleCreateMeetingRoom = () => {
+    createMeetingRoom.mutate(scheduleId);
+    setIsOpen(false);
   };
   return (
     <BottomSheet isOpen={isOpen} setIsOpen={setIsOpen} snapPoints={snapPoints}>
@@ -53,6 +62,7 @@ const OnlineMeetingEditBottomSheet = ({
             mode="help"
             color="var(--color-primary-100)"
             borderColor="var(--color-primary-400)"
+            onClick={handleCreateMeetingRoom}
           ></ShareButton>
           <div className="flex flex-col gap-4 w-full">
             <div className="flex flex-col gap-5">
