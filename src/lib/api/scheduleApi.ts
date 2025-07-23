@@ -1,11 +1,34 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "./axiosInstance";
+import ToastWell from "@/components/ui/ToastWell";
+import Toast from "@/components/ui/Toast";
 
 interface CreateWorkSpaceRequest {
   workspace: WorkspacePlatformType;
   workspaceName: string;
   url: string;
 }
+
+interface UpdateScheduleInfoReqeust {
+  description?: string;
+  endTime?: string;
+  eventId?: number;
+  location?: string;
+  meetingPlatform?: PlatformType;
+  meetingType?: string;
+  members?: string[];
+  platformName?: string;
+  platformUrl?: string;
+  scheduleName?: string;
+  scheduleStatus?: string;
+  specificLatitude?: number;
+  specificLocation?: string;
+  specificLongitude?: number;
+  startTime?: string;
+  workspaces?: string[];
+}
+
+type PlatformType = "ZOOM" | "GOOGLE_MEET" | "DISCORD" | "ZEP";
 
 const getGroupSchedule = async (scheduleId: string) => {
   const res = await axiosInstance.get(`/schedules/show/${scheduleId}`, {
@@ -17,6 +40,39 @@ const getGroupSchedule = async (scheduleId: string) => {
 const createWorkspace = async (id: string, data: CreateWorkSpaceRequest) => {
   const res = await axiosInstance.post(`/schedules/add-workspace/${id}`, data);
   return res.data;
+};
+
+const updateScheduleInfo = async (
+  scheduleId: string,
+  data: UpdateScheduleInfoReqeust
+) => {
+  const res = await axiosInstance.patch(
+    `/schedules/modify/${scheduleId}`,
+    data
+  );
+  return res.data;
+};
+
+export const useUpdateScheduleInfo = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      scheduleId,
+      data,
+    }: {
+      scheduleId: string;
+      data: UpdateScheduleInfoReqeust;
+    }) => updateScheduleInfo(scheduleId, data),
+    onSuccess: (_, variables) => {
+      ToastWell("✅", "일정 수정 완료!");
+      queryClient.invalidateQueries({
+        queryKey: ["groupSchedule", variables.scheduleId],
+      });
+    },
+    onError: () => {
+      Toast("앗, 일정 수정에 실패했어요");
+    },
+  });
 };
 
 const deleteWorkspace = async (id: string, workspaceId: string) => {

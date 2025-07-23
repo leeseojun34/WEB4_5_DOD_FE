@@ -11,7 +11,7 @@ const FinalDestSearchResult = ({
   onSelect,
   keyword,
 }: FinalDestSearchResultProps) => {
-  return (
+  return searchResults.length ? (
     <div className="w-full flex flex-col gap-3 py-4">
       <div className="max-h-50 overflow-y-auto">
         {searchResults.map((searchResult) => (
@@ -23,6 +23,10 @@ const FinalDestSearchResult = ({
           />
         ))}
       </div>
+    </div>
+  ) : (
+    <div className="h-50 flex justify-center items-center text-xs text-[color:var(--color-gray)]">
+      검색 결과가 없습니다.
     </div>
   );
 };

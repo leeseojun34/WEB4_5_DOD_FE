@@ -6,22 +6,52 @@ import { useEffect, useState } from "react";
 import BottomSheetHeader from "@/components/layout/BottomSheetHeader";
 import { useRouter } from "next/navigation";
 import FinalDestinationSearch from "./FinalDestinationSearch";
+import { useUpdateScheduleInfo } from "@/lib/api/scheduleApi";
 
 interface LocationEditBottomSheetProps {
+  location?: string;
+  specificLocation?: string;
+  specificLatitude: number;
+  specificLongitude: number;
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
+  scheduleId: string;
 }
 
 const LocationEditBottomSheet = ({
+  location,
+  specificLocation,
+  specificLatitude,
+  specificLongitude,
   isOpen,
   setIsOpen,
+  scheduleId,
 }: LocationEditBottomSheetProps) => {
-  const [snapPoints, setSnapPoints] = useState([0.6, 0.33, 0.25]);
-  const midPointStation = "2호선 건대입구역";
   const router = useRouter();
+  const [snapPoints, setSnapPoints] = useState([0.6, 0.33, 0.25]);
+  const { mutate: updateScheduleInfo } = useUpdateScheduleInfo();
+
+  const [destination, setDestination] = useState(specificLocation ?? "");
+  const [destinationLatitude, setDestinationLatitude] = useState(
+    specificLatitude ?? null
+  );
+  const [destinationLongitude, setDestinationLongitude] = useState(
+    specificLongitude ?? null
+  );
 
   const handleClickRouter = () => {
     router.push("/schedule/1/election/start");
+  };
+
+  const handleSaveSpecificLocation = () => {
+    updateScheduleInfo({
+      scheduleId,
+      data: {
+        specificLocation: destination,
+        specificLatitude: destinationLatitude,
+        specificLongitude: destinationLongitude,
+      },
+    });
   };
 
   useEffect(() => {
@@ -55,14 +85,19 @@ const LocationEditBottomSheet = ({
               onClick={handleClickRouter}
             ></ShareButton>
 
-            <FinalDestinationSearch />
+            <FinalDestinationSearch
+              destination={destination}
+              setDestination={setDestination}
+              setDestinationLatitude={setDestinationLatitude}
+              setDestinationLongitude={setDestinationLongitude}
+            />
 
-            {midPointStation && (
+            {location && (
               <div className="w-full flex flex-col gap-2">
                 <Input
                   label="중간 장소"
                   fullWidth={true}
-                  value={midPointStation}
+                  value={location}
                   readOnly
                   disabled
                 />
@@ -76,7 +111,7 @@ const LocationEditBottomSheet = ({
       {isOpen && (
         <div className="fixed bottom-9 left-0 right-0 px-5 z-[99999]">
           <div className="min-w-[375px] w-full max-w-185 mx-auto">
-            <Button>저장하기</Button>
+            <Button onClick={handleSaveSpecificLocation}>저장하기</Button>
           </div>
         </div>
       )}

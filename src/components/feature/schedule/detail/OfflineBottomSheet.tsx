@@ -5,16 +5,21 @@ import { formatSchedule } from "@/app/utils/dateFormat";
 import BottomSheet from "@/components/ui/BottomSheet";
 import GroupHeaderMap from "@/components/layout/GroupHeaderMap";
 import { useEffect, useState } from "react";
-import LocationEditBottomSheet from "../editSchedule/LocationEditBottomSheet";
 
 interface OfflineBottomSheetProps {
   scheduleId: string;
   data: ScheduleDetailType;
+  isLocationEditOpen: boolean;
+  setIsLocationEditOpen: (isOpen: boolean) => void;
 }
 
-const OfflineBottomSheet = ({ scheduleId, data }: OfflineBottomSheetProps) => {
+const OfflineBottomSheet = ({
+  scheduleId,
+  data,
+  isLocationEditOpen,
+  setIsLocationEditOpen,
+}: OfflineBottomSheetProps) => {
   const [snapPoints, setSnapPoints] = useState([0.6, 0.33, 0.25]);
-  const [isLocationEditOpen, setIsLocationEditOpen] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -71,11 +76,6 @@ const OfflineBottomSheet = ({ scheduleId, data }: OfflineBottomSheetProps) => {
           </>
         )}
       </BottomSheet>
-
-      <LocationEditBottomSheet
-        isOpen={isLocationEditOpen ?? false}
-        setIsOpen={setIsLocationEditOpen || (() => {})}
-      />
     </>
   );
 };
