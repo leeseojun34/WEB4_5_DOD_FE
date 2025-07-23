@@ -52,6 +52,7 @@ const LocationEditBottomSheet = ({
         specificLongitude: destinationLongitude,
       },
     });
+    setIsOpen(false);
   };
 
   useEffect(() => {

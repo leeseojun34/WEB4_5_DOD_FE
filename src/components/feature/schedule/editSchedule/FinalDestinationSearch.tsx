@@ -22,6 +22,8 @@ const FinalDestinationSearch = ({
   const [searchResults, setSearchResults] = useState<kakaoSearch[]>([]);
 
   const selectHandler = ({ destination }: { destination: kakaoSearch }) => {
+    setSearchResults([destination]);
+    setInputValue(destination.place_name);
     setDestination(destination.place_name);
     setDestinationLongitude(Number(destination.x));
     setDestinationLatitude(Number(destination.y));
@@ -32,7 +34,6 @@ const FinalDestinationSearch = ({
     try {
       const data = await searchDestination(inputValue);
       setSearchResults(data.documents);
-      console.log(data.documents);
     } catch (e) {
       console.error(e);
     }
