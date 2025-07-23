@@ -5,6 +5,7 @@ import KakaoScript from "../../KakaoScript";
 import { useKakaoShare } from "@/lib/api/useKakaoShare";
 import { motion } from "framer-motion";
 import { itemVariants, listVariants } from "../motion";
+import { usePathname } from "next/navigation";
 
 interface ScheduleDetailContentProps {
   scheduleId: string;
@@ -22,9 +23,13 @@ const ScheduleDetailContent = ({
   children,
 }: ScheduleDetailContentProps) => {
   const { shareWithTemplate } = useKakaoShare();
+  const pathname = usePathname();
+  const url = `https://localhost:3000/${pathname}`;
+  console.log(url);
   const handleKakaoShare = () => {
     shareWithTemplate(
-      "가장 잘 맞는 시간이 정리되었어요. 아래에서 확인해 주세요."
+      "가장 잘 맞는 시간이 정리되었어요. 아래에서 확인해 주세요.",
+      url
     );
   };
   return (
