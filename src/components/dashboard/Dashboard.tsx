@@ -11,6 +11,7 @@ import {
   getDashboardDetail,
 } from "@/lib/api/dashboardApi";
 import { MyGroupSkeleton, MyScheduleSkeleton } from "./Skeleton";
+import useAuthStore from "@/stores/authStores";
 
 const Dashboard = () => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
@@ -19,6 +20,7 @@ const Dashboard = () => {
   const [dashboardData, setDashboardData] =
     useState<DashboardDetailResponse | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { user } = useAuthStore();
 
   useEffect(() => {
     const fetchDashboard = async () => {
@@ -58,6 +60,7 @@ const Dashboard = () => {
               <MyScheduleSection
                 selectedDate={selectedDate!}
                 schedules={dashboardData!.schedules}
+                userId={user!.id}
               />
               <MyGroupSection groups={dashboardData!.groups.groupDetails} />
             </>
