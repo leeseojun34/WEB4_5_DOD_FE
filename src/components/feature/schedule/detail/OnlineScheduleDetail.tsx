@@ -12,8 +12,6 @@ const OnlineScheduleDetail = ({
   scheduleId,
   data,
 }: OnineScheduleDetailProps) => {
-  console.log(data);
-
   return (
     <ScheduleDetailLayout data={data}>
       <ScheduleDetailContent
