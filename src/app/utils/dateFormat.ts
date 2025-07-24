@@ -134,9 +134,11 @@ export const toISOStringWithTime = (
 ): string | null => {
   const [hours, minutes] = time.split(":").map(Number);
 
-  const isoDate = new Date(date);
-  isoDate.setHours(hours);
-  isoDate.setMinutes(minutes);
+  const local = new Date(date);
+  local.setHours(hours);
+  local.setMinutes(minutes);
 
-  return isoDate.toISOString();
+  const corrected = new Date(local.getTime() + 1000 * 60 * 60 * 9);
+
+  return corrected.toISOString();
 };

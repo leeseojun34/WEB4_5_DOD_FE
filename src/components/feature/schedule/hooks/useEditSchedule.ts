@@ -52,6 +52,7 @@ export const useEditSchedule = (id: string) => {
         scheduleId: id,
         data: { startTime: startISOTime!, endTime: endISOTime! },
       });
+      setIsOpen(false);
     }
   };
 
