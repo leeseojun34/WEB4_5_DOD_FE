@@ -64,7 +64,7 @@ const ScheduleCard = (props: ScheduleCardProps) => {
       style={{ boxShadow: "var(--shadow-common)" }}
     >
       <Link
-        href={`/schedule/${scheduleId}`}
+        href={`${isFuture ? "/schedule/${scheduleId}" : "#"}`}
         className="flex flex-col flex-1 gap-2"
       >
         <div className="flex justify-between">
@@ -137,7 +137,7 @@ const ScheduleCard = (props: ScheduleCardProps) => {
                 onTopClick={onTopClick}
                 onBottomClick={onBottomClick}
               >
-                {["링크 복사", "일정 삭제"]}
+                {isFuture ? ["링크 복사", "일정 삭제"] : ["일정 삭제"]}
               </DropdownSmall>
             </div>
           )}
