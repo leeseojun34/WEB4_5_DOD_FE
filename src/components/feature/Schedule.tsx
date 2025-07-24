@@ -227,6 +227,7 @@ const Schedule = ({
 
       if (isMyScheduleChanged) {
         await setMySchedule(newMySchedule);
+        setIsMyScheduleChanged(false);
       }
     }
 
