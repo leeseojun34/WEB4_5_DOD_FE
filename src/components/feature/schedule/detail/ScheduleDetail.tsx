@@ -14,8 +14,6 @@ const ScheduleDetail = () => {
     return <GlobalLoading />;
   }
 
-  console.log(scheduleData.data);
-
   return (
     <>
       {scheduleData.data.meetingType === "ONLINE" ? (
