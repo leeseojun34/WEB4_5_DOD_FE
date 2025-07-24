@@ -9,7 +9,7 @@ import { usePathname } from "next/navigation";
 
 interface ScheduleDetailContentProps {
   scheduleId: string;
-  members: string[];
+  members: { name: string; scheduleRole: string }[];
   time: string;
   workspace: { platform: WorkspacePlatformType; name: string }[];
   children: React.ReactNode;
@@ -25,7 +25,6 @@ const ScheduleDetailContent = ({
   const { shareWithTemplate } = useKakaoShare();
   const pathname = usePathname();
   const url = `https://localhost:3000/${pathname}`;
-  console.log(url);
   const handleKakaoShare = () => {
     shareWithTemplate(
       "가장 잘 맞는 시간이 정리되었어요. 아래에서 확인해 주세요.",
