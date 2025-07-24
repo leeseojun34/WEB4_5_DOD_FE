@@ -116,3 +116,27 @@ export function isFutureDate(dateStr: string): boolean {
 
   return targetDate > now;
 }
+
+export const getHourlyTimeOptions = (): string[] => {
+  return Array.from({ length: 25 }, (_, i) => {
+    const hour = String(i).padStart(2, "0");
+    return `${hour}:00`;
+  });
+};
+
+// 2025-07-24T16:32:57.881Z
+// "11:00"
+// Sat Jul 12 2025 00:00:00 GMT+0900 (Korean Standard Time) {}
+
+export const toISOStringWithTime = (
+  date: Date,
+  time: string
+): string | null => {
+  const [hours, minutes] = time.split(":").map(Number);
+
+  const isoDate = new Date(date);
+  isoDate.setHours(hours);
+  isoDate.setMinutes(minutes);
+
+  return isoDate.toISOString();
+};
