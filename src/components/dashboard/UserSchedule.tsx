@@ -16,7 +16,7 @@ const UserSchedule = () => {
   useEffect(() => {
     const fetchSchedules = async () => {
       try {
-        const res = await getUserSchedules("2025-07-01", "2025-08-01");
+        const res = await getUserSchedules("2025-07-01", "2026-07-01");
         setSchedules(res.data);
       } catch (e) {
         console.error(e);
@@ -40,7 +40,7 @@ const UserSchedule = () => {
           {groupId ? "불러올 일정 선택" : "나의 이때어때 일정"}
         </HeaderTop>
       </div>
-      <div className="min-w-[375px] w-full max-w-185 min-h-screen px-5 mx-auto pt-25 sm:pt-10">
+      <div className="min-w-[375px] w-full max-w-185 min-h-screen px-5 mx-auto pt-10 sm:pt-0">
         {!groupId && (
           <Image
             src={rabbitWriting}

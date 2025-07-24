@@ -20,17 +20,17 @@ export const Banner = () => {
           src={bannerImg}
           alt="배너 이미지"
           priority
-          className="absolute bottom-0 w-34 h-28 md:w-[170px] md:h-[170px]"
+          className="absolute bottom-0 w-34 h-28 sm:w-44 sm:h-36 md:w-48 md:h-40"
         />
-        <div className="flex flex-col w-full h-full justify-between items-end py-6 ">
-          <div className="font-[TTTogether] text-[color:var(--color-white)] font-regular leading-8 text-[30px] md:text-[40px] text-end">
+        <div className="flex flex-col w-full h-full justify-between items-end py-5 ">
+          <div className="font-[TTTogether] text-[color:var(--color-white)] font-regular leading-9 text-3xl sm:text-4xl sm:leading-10 md:leading-14 md:text-5xl text-end">
             보고싶다 친구야
             <br />
             우리 이때어때!
           </div>
 
-          <div className="w-full flex text-xs md:text-xl text-[color:var(--color-white)] justify-end items-center cursor-pointer">
-            일정 만들러 가기 <ArrowRight className="ml-2 w-[12px] h-4" />
+          <div className="w-full flex text-xs md:text-lg text-[color:var(--color-white)] justify-end items-center cursor-pointer">
+            일정 만들러 가기 <ArrowRight className="ml-2 size-3 md:size-4" />
           </div>
         </div>
       </Link>
