@@ -21,6 +21,7 @@ export interface DashboardGroupType {
   groupName: string;
   description: string;
   groupMemberNum: number;
+  leaderProfileImage: number;
 }
 
 export interface DashboardDetailResponse {

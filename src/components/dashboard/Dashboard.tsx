@@ -40,7 +40,7 @@ const Dashboard = () => {
       <div className="hidden sm:block">
         <Header />
       </div>
-      <div className="w-full flex min-h-screen justify-center bg-[color:var(--color-gray-background)] py-4 px-5 pt-10 sm:pt-18">
+      <div className="w-full flex min-h-screen justify-center bg-[color:var(--color-gray-background)] pt-10 pb-30 px-5 sm:pt-18">
         <div className="w-full max-w-185 flex flex-col items-center gap-5">
           <Banner />
           <Calendar
