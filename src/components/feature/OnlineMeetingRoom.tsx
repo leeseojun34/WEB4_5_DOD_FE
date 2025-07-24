@@ -49,13 +49,12 @@ const OnlineMeetingRoom = ({
           <Pen className="w-3 h-3 text-[color:var(--color-gray)] cursor-pointer" />
         </div>
       </div>
-      {(!platform && !url) ||
-        (platform == "NONE" && (
-          <div className="flex w-full justify-center items-center py-4 text-xs text-[color:var(--color-gray)]">
-            연동된 온라인 회의장이 없습니다.
-          </div>
-        ))}
-      {platform && url && platform !== "NONE" && (
+      {!url && (
+        <div className="flex w-full justify-center items-center py-4 text-xs text-[color:var(--color-gray)]">
+          연동된 온라인 회의장이 없습니다.
+        </div>
+      )}
+      {url && (
         <div className="flex w-full justify-between items-center">
           <div className="flex gap-4 items-center">
             <div>
