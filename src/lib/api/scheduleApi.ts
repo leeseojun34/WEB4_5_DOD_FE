@@ -25,7 +25,14 @@ interface UpdateScheduleInfoReqeust {
   specificLocation?: string;
   specificLongitude?: string;
   startTime?: string;
-  workspaces?: string[];
+  workspaceId?: number;
+  workspace: [
+    {
+      type: string;
+      name: string;
+      url: string;
+    }
+  ];
 }
 
 type PlatformType = "ZOOM" | "GOOGLE_MEET" | "DISCORD" | "ZEP" | "NONE";

@@ -7,6 +7,7 @@ import WorkspaceSkeletonItem from "./WorkspaceSkeletonItem";
 import { motion } from "framer-motion";
 import WorkspaceBottomSheet from "./WorkspaceBottomSheet";
 import { useWorkspaceModal } from "./hooks/useWorkspaceModal";
+import { itemVariants, listVariants } from "../../motion";
 
 type WorkspacePlatformType =
   | "GITHUB"
@@ -34,14 +35,19 @@ const EditWorkspace = () => {
 
   return (
     <>
-      <div className="space-y-4">
+      <motion.div
+        variants={listVariants}
+        initial="hidden"
+        animate="visible"
+        className="space-y-4"
+      >
         {isPending &&
           Array.from({ length: 4 }).map((_, i) => (
             <WorkspaceSkeletonItem key={i} />
           ))}
 
         {workspaces?.map((workspace: WorkspaceType) => (
-          <motion.div key={workspace.workspaceId}>
+          <motion.div variants={itemVariants} key={workspace.workspaceId}>
             <WorkspaceItem
               type={workspace.type}
               name={workspace.name}
@@ -50,7 +56,7 @@ const EditWorkspace = () => {
             />
           </motion.div>
         ))}
-      </div>
+      </motion.div>
 
       {isOpen && selectedWorkspace && (
         <WorkspaceBottomSheet

@@ -43,6 +43,7 @@ export const useWorkspaceForm = ({
   });
   const updateWorkspace = useUpdateScheduleInfo();
 
+  console.log(workspaceId);
   const handleCreateOrUpdate = () => {
     if (!type) return;
 
@@ -50,9 +51,14 @@ export const useWorkspaceForm = ({
       updateWorkspace.mutate({
         scheduleId,
         data: {
-          workspaceType: type,
-          workspaceName: name,
-          url,
+          workspaceId: Number(workspaceId),
+          workspace: [
+            {
+              type,
+              name,
+              url,
+            },
+          ],
         },
       });
     } else {
