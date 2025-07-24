@@ -26,7 +26,6 @@ const UserScheduleList = ({
   isLoading,
 }: UserScheduleListProps) => {
   const [selectedSchedule, setSelectedSchedule] = useState<number | null>(null);
-  const groupMembers = ["박은서", "현혜주", "황수지", "박준규", "박상윤"];
   const router = useRouter();
 
   const handleMoveSchedule = async (scheduleId: number, groupId: number) => {
@@ -67,11 +66,11 @@ const UserScheduleList = ({
                 <ScheduleCard
                   variant="event"
                   title={schedule.name}
-                  meetingType={
-                    schedule.meetingType === "ONLINE" ? "온라인" : "오프라인"
-                  }
+                  meetingType={schedule.meetingType as "ONLINE" | "OFFLINE"}
                   time={formatSchedule(schedule.startTime, schedule.endTime)}
-                  members={groupMembers}
+                  members={schedule.participantNames.split(", ")}
+                  scheduleId={String(schedule.id)}
+                  groupRole={true}
                 />
               ) : (
                 <OptionBox isSelected={schedule.id === selectedSchedule}>
@@ -95,9 +94,11 @@ const UserScheduleList = ({
                       {formatSchedule(schedule.startTime, schedule.endTime)}
                     </div>
                     <div className="flex gap-1">
-                      {groupMembers.map((member, i) => (
-                        <NameTag name={member} key={`${member}-${i}`} />
-                      ))}
+                      {schedule.participantNames
+                        .split(", ")
+                        .map((member, i) => (
+                          <NameTag name={member} key={`${member}-${i}`} />
+                        ))}
                     </div>
                   </div>
                 </OptionBox>

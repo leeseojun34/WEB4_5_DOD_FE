@@ -14,6 +14,7 @@ export interface DashboardScheduleType {
   meetingPlatform: string;
   scheduleStatus: string;
   source: string;
+  participantNames: string;
 }
 
 export interface DashboardGroupType {
