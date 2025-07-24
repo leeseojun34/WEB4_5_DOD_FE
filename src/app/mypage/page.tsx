@@ -2,9 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useUser } from "@/lib/api/userApi";
-import { useQuery } from "@tanstack/react-query";
-import { axiosInstance } from "@/lib/api/axiosInstance";
-
 import { kakaoSearch } from "@/types/kakaoSearch";
 
 import Profile from "@/components/mypage/Profile";
@@ -16,18 +13,18 @@ import AlertBox from "@/components/ui/AlertBox";
 
 import {
   useAddFavoriteLocation,
-  useCalendarSync,
   useDeactiveMutation,
   useFavoriteLocation,
   useFavoriteTime,
   useLogoutMutation,
+  useResgisterCalendarId,
   useUpdateFavoriteLocation,
   useUpdateName,
   useUpdateProfileImg,
 } from "@/lib/api/authApi";
-// import { profileImages } from "@/lib/profileImages";
+import GoogleCalenaderSheet from "@/components/mypage/GoogleCalendarSheet";
 
-type SheetType = "name" | "time" | "station";
+type SheetType = "name" | "time" | "station" | "calendar";
 
 function MyPage() {
   const { data: user, refetch } = useUser();
@@ -37,27 +34,32 @@ function MyPage() {
   const [isOpen, setIsOpen] = useState(false);
   const [sheetType, setSheetType] = useState<SheetType | null>(null);
   const [calendarSynced, setCalendarSynced] = useState(false);
-
-  console.log(user);
+  // 즐겨찾기 장소 조회
+  const { data: favoriteQuery } = useFavoriteLocation();
+  const [myStation, setMyStation] = useState(favoriteQuery?.stationName);
+  const [calendarId, setCalendarId] = useState("");
 
   useEffect(() => {
     refetch(); // 마운트 시 user 데이터 패치
-  }, [refetch]);
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      setName(user.data.name);
+      setMyStation(favoriteQuery?.stationName);
+      console.log("my station :", favoriteQuery?.stationName);
+    }
+  }, [user, favoriteQuery]);
 
   // 즐겨찾는 시간 조회
-  const favoriteTime = useFavoriteTime();
-  console.log(favoriteTime.data);
+  // const favoriteTime = useFavoriteTime();
+  // console.log(favoriteTime.data);
   // const [time, setTime] = useState(()=> favoriteTime);
-
-  // 즐겨찾기 장소 조회
-  const favoriteQuery = useFavoriteLocation();
-  const [myStation, setMyStation] = useState<string>(
-    () => favoriteQuery.data?.stationName ?? "미등록"
-  );
 
   const openSheet = (type: SheetType) => {
     setSheetType(type);
     setIsOpen(true);
+    // console.log("bottomsheet:", type);
   };
 
   const updateName = useUpdateName();
@@ -87,7 +89,7 @@ function MyPage() {
     const stationName = station.place_name;
     const longitude = Number(station.x);
     const latitude = Number(station.y);
-    const favoritePlaceId = Number(favoriteQuery.data?.favoriteLocationId);
+    const favoritePlaceId = Number(favoriteQuery?.favoriteLocationId);
 
     if (favoritePlaceId) {
       updateFavoriteLocation.mutate(
@@ -114,12 +116,11 @@ function MyPage() {
   };
 
   // 캘린더 연동
-  // 구글 로그인이 되어 있지 않을 경우 ? -> 구글 로그인 시키기 (자동..?)
-  // 구글 캘린더 연결 새로고침 (?) post 만 있어도 되나 ? get ..은 ?
-  const calendarMutation = useCalendarSync();
+  const calendarMutation = useResgisterCalendarId();
   const handleGoogleCalendar = () => {
-    calendarMutation.mutate();
+    calendarMutation.mutate(calendarId);
     setCalendarSynced((prev) => !prev);
+    setIsOpen(false);
   };
 
   const logoutMutation = useLogoutMutation();
@@ -147,17 +148,19 @@ function MyPage() {
           )}
 
           <div className="flex flex-col gap-4">
-            <ListBox buttonText="수정" clickHandler={() => openSheet("time")}>
+            <ListBox
+              buttonText="수정하기"
+              clickHandler={() => openSheet("time")}>
               가능한 시간
             </ListBox>
             <ListBox
-              buttonText="등록"
+              buttonText="등록하기"
               station={myStation || "미등록"}
               clickHandler={() => openSheet("station")}>
               내 주변역
             </ListBox>
             <ListBox
-              onConnect={handleGoogleCalendar}
+              clickHandler={() => openSheet("calendar")}
               isConnected={calendarSynced}>
               캘린더 연동
             </ListBox>
@@ -215,6 +218,15 @@ function MyPage() {
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           onSave={handleStationSave}
+        />
+      )}
+      {sheetType === "calendar" && (
+        <GoogleCalenaderSheet
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          onSave={handleGoogleCalendar}
+          onChange={(e) => setCalendarId(e.target.value)}
+          text={calendarId}
         />
       )}
     </div>
