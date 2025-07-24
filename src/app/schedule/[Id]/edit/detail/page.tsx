@@ -26,9 +26,10 @@ const EditScheduleInfo = () => {
     handleTimeClick,
     handleEditComplete,
     handleDelete,
+    setStartTime,
+    setEndTime,
   } = useEditSchedule(id);
 
-  // console.log(scheduleName, "22");
   return (
     <div className="w-full">
       <div className="hidden sm:block">
@@ -53,6 +54,8 @@ const EditScheduleInfo = () => {
           selectedDate={selectedDate}
           setSelectedDate={setSelectedDate}
           onComplete={handleEditComplete}
+          setStartTime={setStartTime}
+          setEndTime={setEndTime}
         />
 
         <ActionButtons

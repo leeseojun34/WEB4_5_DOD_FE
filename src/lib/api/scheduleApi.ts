@@ -26,7 +26,7 @@ interface UpdateScheduleInfoReqeust {
   specificLongitude?: string;
   startTime?: string;
   workspaceId?: number;
-  workspace: [
+  workspace?: [
     {
       type: string;
       name: string;
@@ -64,6 +64,11 @@ const deleteWorkspace = async (workspaceId: string) => {
   return res.data;
 };
 
+const deleteSchedule = async (scheduleId: string) => {
+  const res = await axiosInstance.delete(`/schedules/delete/${scheduleId}`);
+  return res.data;
+};
+
 const updateScheduleInfo = async (
   scheduleId: string,
   data: UpdateScheduleInfoReqeust
@@ -73,6 +78,22 @@ const updateScheduleInfo = async (
     data
   );
   return res.data;
+};
+
+export const useDeleteSchedule = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (scheduleId: string) => deleteSchedule(scheduleId),
+    onSuccess: (_, scheduleId) => {
+      ToastWell("🗑️", "일정이 성공적으로 삭제되었습니다!");
+      queryClient.invalidateQueries({
+        queryKey: ["groupSchedule", scheduleId],
+      });
+    },
+    onError: () => {
+      Toast("앗, 일정 삭제에 실패했어요");
+    },
+  });
 };
 
 export const useUpdateScheduleInfo = () => {

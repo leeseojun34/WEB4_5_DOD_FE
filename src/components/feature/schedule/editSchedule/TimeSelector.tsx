@@ -2,39 +2,40 @@ import { Calendar } from "@/components/feature/calendar/Calender";
 import { Button } from "@/components/ui/Button";
 import Dropdown from "@/components/ui/Dropdown";
 import { Dispatch, SetStateAction } from "react";
+import { getHourlyTimeOptions } from "@/app/utils/dateFormat";
 
 interface TimeSelectorProps {
   selectedDate: Date | undefined;
-  setSelectedDate: Dispatch<SetStateAction<Date | undefined>>
+  setSelectedDate: Dispatch<SetStateAction<Date | undefined>>;
   onComplete: () => void;
+  setStartTime: (str: string) => void;
+  setEndTime: (str: string) => void;
 }
 
 const TimeSelector = ({
   selectedDate,
   setSelectedDate,
   onComplete,
+  setStartTime,
+  setEndTime,
 }: TimeSelectorProps) => {
+  const timeOptions = getHourlyTimeOptions();
   return (
     <div className="flex flex-col w-full gap-4 items-center">
       <div className="flex justify-center items-center gap-4">
         <div className="w-30">
           <Dropdown
-            options={["09:00", "10:00", "11:00", "12:00", "13:00"]}
+            options={timeOptions}
             defaultIndex={0}
+            onSelect={setStartTime}
           />
         </div>
         <div>-</div>
         <div className="w-30">
           <Dropdown
-            options={[
-              "19:00",
-              "20:00",
-              "21:00",
-              "22:00",
-              "23:00",
-              "24:00",
-            ]}
-            defaultIndex={5}
+            options={timeOptions}
+            defaultIndex={24}
+            onSelect={setEndTime}
           />
         </div>
       </div>

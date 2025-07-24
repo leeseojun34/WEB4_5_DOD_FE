@@ -10,6 +10,8 @@ interface TimeEditBottomSheetProps {
   selectedDate: Date | undefined;
   setSelectedDate: Dispatch<SetStateAction<Date | undefined>>;
   onComplete: () => void;
+  setStartTime: (str: string) => void;
+  setEndTime: (str: string) => void;
 }
 
 const TimeEditBottomSheet = ({
@@ -18,6 +20,8 @@ const TimeEditBottomSheet = ({
   selectedDate,
   setSelectedDate,
   onComplete,
+  setStartTime,
+  setEndTime,
 }: TimeEditBottomSheetProps) => {
   const isMobile = useMediaQuery("(min-width: 640px)");
   const snapPoints = isMobile ? [0.55] : [0.9];
@@ -29,6 +33,8 @@ const TimeEditBottomSheet = ({
           <TimeSelector
             selectedDate={selectedDate}
             setSelectedDate={setSelectedDate}
+            setStartTime={setStartTime}
+            setEndTime={setEndTime}
             onComplete={onComplete}
           />
         </div>

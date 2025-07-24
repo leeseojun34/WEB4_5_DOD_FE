@@ -1,6 +1,10 @@
 "use client";
-import { formatSchedule } from "@/app/utils/dateFormat";
-import { useGroupSchedule } from "@/lib/api/scheduleApi";
+import { formatSchedule, toISOStringWithTime } from "@/app/utils/dateFormat";
+import {
+  useDeleteSchedule,
+  useGroupSchedule,
+  useUpdateScheduleInfo,
+} from "@/lib/api/scheduleApi";
 import { ChangeEvent, useEffect, useState } from "react";
 
 export const useEditSchedule = (id: string) => {
@@ -8,11 +12,15 @@ export const useEditSchedule = (id: string) => {
   const [scheduleName, setScheduleName] = useState("");
   const [scheduleDescription, setScheduleDescription] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
   const meetingType = scheduleData ? scheduleData.data.meetingType : "";
   const scheduleTime = scheduleData
     ? formatSchedule(scheduleData.data.startTime, scheduleData.data.endTime)
     : "";
+  const deleteSchedule = useDeleteSchedule();
+  const updateSchedule = useUpdateScheduleInfo();
 
   useEffect(() => {
     if (scheduleData) {
@@ -36,15 +44,19 @@ export const useEditSchedule = (id: string) => {
   };
 
   const handleEditComplete = () => {
-    console.log("수정 완료", {
-      scheduleName,
-      scheduleDescription,
-      selectedDate,
-    });
+    if (selectedDate) {
+      const startISOTime = toISOStringWithTime(selectedDate, startTime);
+      const endISOTime = toISOStringWithTime(selectedDate, endTime);
+
+      updateSchedule.mutate({
+        scheduleId: id,
+        data: { startTime: startISOTime!, endTime: endISOTime! },
+      });
+    }
   };
 
   const handleDelete = () => {
-    console.log("모임 삭제");
+    deleteSchedule.mutate(id);
   };
 
   return {
@@ -61,5 +73,9 @@ export const useEditSchedule = (id: string) => {
     handleTimeClick,
     handleEditComplete,
     handleDelete,
+    startTime,
+    endTime,
+    setStartTime,
+    setEndTime,
   };
 };
