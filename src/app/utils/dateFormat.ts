@@ -123,6 +123,7 @@ export function isFutureDate(dateStr: string): boolean {
 
   const targetDate = new Date(year, month - 1, day, hour, minute);
   const now = new Date();
+  now.setHours(0, 0, 0, 0);
 
   return targetDate > now;
 }
@@ -133,7 +134,6 @@ export const getHourlyTimeOptions = (): string[] => {
     return `${hour}:00`;
   });
 };
-
 
 export const toISOStringWithTime = (
   date: Date,
