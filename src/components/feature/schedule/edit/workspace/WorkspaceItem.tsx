@@ -8,19 +8,19 @@ import Image from "next/image";
 import { Edit } from "lucide-react";
 
 interface WorkspaceItemProps {
-  type: "github" | "notion" | "miro" | "figma" | "canva" | "google_dos";
+  type: "GITHUB" | "NOTION" | "MIRO" | "FIGMA" | "CANVA" | "GOOGLE_DOCS";
   name: string;
   url: string;
   onClick?: (data: { type: string; name: string; url: string }) => void;
 }
 
 const workspaceLogos = {
-  github: githubIcon,
-  notion: notionIcon,
-  miro: miroIcon,
-  figma: figmaIcon,
-  canva: canvaIcon,
-  google_dos: googledocsIcon,
+  GITHUB: githubIcon,
+  NOTION: notionIcon,
+  MIRO: miroIcon,
+  FIGMA: figmaIcon,
+  CANVA: canvaIcon,
+  GOOGLE_DOCS: googledocsIcon,
 };
 
 const WorkspaceItem = ({ type, name, url, onClick }: WorkspaceItemProps) => {
