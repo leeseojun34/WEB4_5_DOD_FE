@@ -15,7 +15,6 @@ import {
   useAddFavoriteLocation,
   useDeactiveMutation,
   useFavoriteLocation,
-  useFavoriteTime,
   useLogoutMutation,
   useResgisterCalendarId,
   useUpdateFavoriteLocation,
@@ -41,7 +40,7 @@ function MyPage() {
 
   useEffect(() => {
     refetch(); // 마운트 시 user 데이터 패치
-  }, []);
+  }, [refetch]);
 
   useEffect(() => {
     if (user) {
