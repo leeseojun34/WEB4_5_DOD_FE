@@ -1,19 +1,33 @@
 "use client";
-import { ChangeEvent, useState } from "react";
+import { formatSchedule } from "@/app/utils/dateFormat";
+import { useGroupSchedule } from "@/lib/api/scheduleApi";
+import { ChangeEvent, useEffect, useState } from "react";
 
-export const useEditSchedule = () => {
+export const useEditSchedule = (id: string) => {
+  const { data: scheduleData } = useGroupSchedule(id);
   const [scheduleName, setScheduleName] = useState("");
   const [scheduleDescription, setScheduleDescription] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
-  
-  const scheduleTime = "2025년 07월 05일 17:36";
+  const meetingType = scheduleData ? scheduleData.data.meetingType : "";
+  const scheduleTime = scheduleData
+    ? formatSchedule(scheduleData.data.startTime, scheduleData.data.endTime)
+    : "";
+
+  useEffect(() => {
+    if (scheduleData) {
+      setScheduleName(scheduleData.data.scheduleName);
+      setScheduleDescription(scheduleData.data.description);
+    }
+  }, [scheduleData]);
 
   const handleScheduleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setScheduleName(e.target.value);
   };
 
-  const handleScheduleDescriptionChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+  const handleScheduleDescriptionChange = (
+    e: ChangeEvent<HTMLTextAreaElement>
+  ) => {
     setScheduleDescription(e.target.value);
   };
 
@@ -22,7 +36,11 @@ export const useEditSchedule = () => {
   };
 
   const handleEditComplete = () => {
-    console.log("수정 완료", { scheduleName, scheduleDescription, selectedDate });
+    console.log("수정 완료", {
+      scheduleName,
+      scheduleDescription,
+      selectedDate,
+    });
   };
 
   const handleDelete = () => {
@@ -32,6 +50,7 @@ export const useEditSchedule = () => {
   return {
     scheduleName,
     scheduleDescription,
+    meetingType,
     isOpen,
     selectedDate,
     scheduleTime,

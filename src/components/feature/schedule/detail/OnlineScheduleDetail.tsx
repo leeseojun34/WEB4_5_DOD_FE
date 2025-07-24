@@ -13,7 +13,7 @@ const OnlineScheduleDetail = ({
   data,
 }: OnineScheduleDetailProps) => {
   return (
-    <ScheduleDetailLayout data={data}>
+    <ScheduleDetailLayout data={data} scheduleId={scheduleId}>
       <ScheduleDetailContent
         scheduleId={scheduleId}
         members={data.members}
