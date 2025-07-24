@@ -7,11 +7,13 @@ import useAuthStore from "@/stores/authStores";
 interface ScheduleDetailLayoutProps {
   children: React.ReactNode;
   data: ScheduleDetailType;
+  scheduleId: string;
 }
 
 const ScheduleDetailLayout = ({
   children,
   data,
+  scheduleId,
 }: ScheduleDetailLayoutProps) => {
   const { user } = useAuthStore();
   const [isLeader, setIsLeader] = useState(false);
@@ -37,7 +39,7 @@ const ScheduleDetailLayout = ({
         count={data?.members.length}
         isLeader={isLeader}
         type="schedule"
-        id={String(data?.eventId)}
+        id={scheduleId}
       />
       <div className="min-w-[375px] w-full max-w-185 mx-auto pt-6 sm:pt-10">
         <div className="flex flex-col px-5 gap-4">{children}</div>
