@@ -17,10 +17,12 @@ const ScheduleDetailLayout = ({
   const [isLeader, setIsLeader] = useState(false);
 
   useEffect(() => {
-    if (user) {
-      if (data?.members.includes(user.id)) {
-        setIsLeader(true);
-      }
+    if (user && data?.members) {
+      const isMaster = data.members.some(
+        (member) =>
+          member.name === user.name && member.scheduleRole === "ROLE_MASTER"
+      );
+      setIsLeader(isMaster);
     }
   }, [user, data]);
 
