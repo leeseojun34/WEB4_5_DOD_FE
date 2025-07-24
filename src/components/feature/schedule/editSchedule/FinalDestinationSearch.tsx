@@ -2,7 +2,7 @@ import searchDestination from "@/app/utils/searchDestination";
 import Input from "@/components/ui/Input";
 import { kakaoSearch } from "@/types/kakaoSearch";
 import { Search } from "lucide-react";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import FinalDestSearchResult from "./FinalDestSearchResult";
 
 interface FinalDestinationSearchProps {
@@ -18,49 +18,66 @@ const FinalDestinationSearch = ({
   setDestinationLatitude,
   setDestinationLongitude,
 }: FinalDestinationSearchProps) => {
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState(destination ?? "");
   const [searchResults, setSearchResults] = useState<kakaoSearch[]>([]);
+  const [showResults, setShowResults] = useState(false);
+  const isSelectedRef = useRef(false);
 
   const selectHandler = ({ destination }: { destination: kakaoSearch }) => {
-    setSearchResults([destination]);
+    isSelectedRef.current = true;
+    setShowResults(false);
     setInputValue(destination.place_name);
     setDestination(destination.place_name);
     setDestinationLongitude(Number(destination.x));
     setDestinationLatitude(Number(destination.y));
   };
 
-  const handleSearchDestination = async () => {
-    if (!inputValue.trim()) return;
-    try {
-      const data = await searchDestination(inputValue);
-      setSearchResults(data.documents);
-    } catch (e) {
-      console.error(e);
+  useEffect(() => {
+    if (isSelectedRef.current) {
+      isSelectedRef.current = false;
+      return;
     }
-  };
+
+    if (!inputValue.trim()) {
+      setShowResults(false);
+      setSearchResults([]);
+      return;
+    }
+
+    const debounceTimer = setTimeout(async () => {
+      try {
+        const data = await searchDestination(inputValue);
+        setSearchResults(data.documents);
+        setShowResults(true);
+      } catch (e) {
+        console.error(e);
+      }
+    }, 300);
+    return () => clearTimeout(debounceTimer);
+  }, [inputValue]);
 
   return (
     <div className="w-full gap-2">
       <Input
         label="모임 장소"
         icon={
-          <Search
-            className="w-4 h-4 text-[color:var(--color-gray-placeholder)]"
-            onClick={handleSearchDestination}
-          />
+          <Search className="w-4 h-4 text-[color:var(--color-gray-placeholder)]" />
         }
         fullWidth={true}
         placeholder="장소를 검색하세요"
-        value={inputValue || destination}
-        onChange={(e: ChangeEvent<HTMLInputElement>) =>
-          setInputValue(e.target.value)
-        }
+        value={inputValue}
+        onChange={(e: ChangeEvent<HTMLInputElement>) => {
+          setInputValue(e.target.value);
+          if (e.target.value === "") {
+            setShowResults(false);
+          }
+        }}
         onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-          if (e.key === "Enter") handleSearchDestination();
+          if (e.key === "Enter") e.preventDefault();
         }}
       />
 
-      {inputValue && (
+      {showResults && (
         <FinalDestSearchResult
           searchResults={searchResults}
           onSelect={selectHandler}

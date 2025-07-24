@@ -78,8 +78,8 @@ const LocationEditBottomSheet = ({
           <div className="min-w-[375px] w-full max-w-185 flex flex-col items-center px-5 mx-auto pt-3 gap-8">
             <BottomSheetHeader setIsOpen={setIsOpen} title="모임 장소 정하기" />
             <ShareButton
-              title="만남 장소 정하기 어려우신가요?"
-              description="모임인원들의 중간 지점을 찾아드려요"
+              title="어디서 만날지 고민이라면?"
+              description="여러분의 중간 위치를 똑똑하게 찾아드려요!"
               mode="help"
               color="var(--color-primary-100)"
               borderColor="var(--color-primary-400)"

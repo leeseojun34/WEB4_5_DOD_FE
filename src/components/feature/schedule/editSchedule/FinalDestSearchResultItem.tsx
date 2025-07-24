@@ -27,7 +27,7 @@ const FinalDestSearchResultItem = ({
   return (
     <>
       <button
-        className="w-full flex flex-col items-start rounded-lg hover:bg-[var(--color-muted)] transition duration-300 py-2 px-3 gap-2.5
+        className="w-full flex flex-col items-start rounded-lg hover:bg-[var(--color-muted)] transition duration-300 py-2 px-3 gap-2.5 cursor-pointer
     "
         onClick={() => onClick({ destination })}
       >
