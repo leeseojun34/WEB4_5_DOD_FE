@@ -13,7 +13,7 @@ const FinalDestSearchResult = ({
 }: FinalDestSearchResultProps) => {
   return searchResults.length ? (
     <div className="w-full flex flex-col gap-3 py-1">
-      <div className="max-h-50 overflow-y-auto">
+      <div className="max-h-82 overflow-y-auto">
         {searchResults.map((searchResult) => (
           <FinalDestSearchResultItem
             key={searchResult.id}

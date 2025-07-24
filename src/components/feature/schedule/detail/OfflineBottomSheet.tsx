@@ -4,7 +4,6 @@ import ScheduleDetailContent from "./ScheduleDetailContent";
 import { formatSchedule } from "@/app/utils/dateFormat";
 import BottomSheet from "@/components/ui/BottomSheet";
 import GroupHeaderMap from "@/components/layout/GroupHeaderMap";
-import { useEffect, useState } from "react";
 
 interface OfflineBottomSheetProps {
   scheduleId: string;
@@ -19,17 +18,7 @@ const OfflineBottomSheet = ({
   isLocationEditOpen,
   setIsLocationEditOpen,
 }: OfflineBottomSheetProps) => {
-  const [snapPoints, setSnapPoints] = useState([0.6, 0.33, 0.25]);
-
-  useEffect(() => {
-    const handleResize = () => {
-      const width = window.innerWidth;
-      setSnapPoints(width >= 640 ? [0.4, 0.22, 0.16] : [0.9, 0.7, 0.05]);
-    };
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  const snapPoints = [0.9, 0.7, 0.05];
 
   return (
     <>

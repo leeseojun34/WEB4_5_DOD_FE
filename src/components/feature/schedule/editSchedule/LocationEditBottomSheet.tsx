@@ -2,7 +2,7 @@ import BottomSheet from "@/components/ui/BottomSheet";
 import { Button } from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import ShareButton from "@/components/ui/ShareButton";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import BottomSheetHeader from "@/components/layout/BottomSheetHeader";
 import { useRouter } from "next/navigation";
 import FinalDestinationSearch from "./FinalDestinationSearch";
@@ -28,7 +28,7 @@ const LocationEditBottomSheet = ({
   scheduleId,
 }: LocationEditBottomSheetProps) => {
   const router = useRouter();
-  const [snapPoints, setSnapPoints] = useState([0.6, 0.33, 0.25]);
+  const snapPoints = [0.95, 0.9, 0.5];
   const { mutate: updateScheduleInfo } = useUpdateScheduleInfo();
 
   const [destination, setDestination] = useState(specificLocation ?? "");
@@ -54,16 +54,6 @@ const LocationEditBottomSheet = ({
     });
     setIsOpen(false);
   };
-
-  useEffect(() => {
-    const handleResize = () => {
-      const width = window.innerWidth;
-      setSnapPoints(width >= 640 ? [0.4, 0.22, 0.16] : [0.9, 0.8, 0.5]);
-    };
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   return (
     <>
