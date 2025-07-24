@@ -1,16 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Header from "@/components/layout/Header";
 import GroupHeader from "@/components/layout/GroupHeader";
 import DropdownSmall from "@/components/ui/DropdownSmall";
+import KakaoScript from "../../KakaoScript";
+import { useKakaoShare } from "@/lib/api/useKakaoShare";
 
 interface GroupHeaderSectionProps {
   groupId: string;
   groupName: string;
   groupIntroduction: string;
   groupCount: number;
+  groupRole: string;
 }
 
 const GroupHeaderSection = ({
@@ -18,9 +21,14 @@ const GroupHeaderSection = ({
   groupName,
   groupIntroduction,
   groupCount,
+  groupRole,
 }: GroupHeaderSectionProps) => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const pathname = usePathname();
+  // const baseUrl = process.env.NEXT_PUBLIC_SERVER_BASE_URL;
+  const baseUrl = `https://localhost:3000`;
+  const url = `${baseUrl}${pathname}?fromInvite=true`;
 
   const handleEditClick = (): void => {
     router.push(`/group/${groupId}/edit`);
@@ -28,6 +36,14 @@ const GroupHeaderSection = ({
 
   const handleQuitClick = (): void => {
     console.log("나가기 버튼 클릭");
+  };
+
+  const { shareWithTemplate } = useKakaoShare();
+  const handleKakaoShare = () => {
+    shareWithTemplate(
+      "지금 바로 그룹에 들어와서 일정을 확인하고, 필요한 시간도 추가해보세요.",
+      url
+    );
   };
 
   return (
@@ -39,8 +55,10 @@ const GroupHeaderSection = ({
         name={groupName}
         description={groupIntroduction}
         count={groupCount}
-        isLeader={true}
+        isLeader={groupRole === "GROUP_LEADER"}
         type="group"
+        id={groupId}
+        clickToInvite={handleKakaoShare}
       />
       {isOpen && (
         <div className="absolute right-4 top-18">
@@ -54,6 +72,7 @@ const GroupHeaderSection = ({
           </DropdownSmall>
         </div>
       )}
+      <KakaoScript />
     </>
   );
 };

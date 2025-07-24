@@ -3,8 +3,9 @@
 import { ArrowRight, EllipsisVertical } from "lucide-react";
 import NameTag from "./NameTag";
 import Link from "next/link";
-import { useState } from "react";
 import DropdownSmall from "./DropdownSmall";
+import ControlledAlertBox from "./ControlledAlertBox";
+import { useGroupScheduleActions } from "../feature/group/detail/hooks/useGroupDetailLogic";
 
 interface BaseProps {
   variant: "event" | "attendance";
@@ -15,7 +16,9 @@ interface BaseProps {
 interface EventProps extends BaseProps {
   variant: "event";
   title: string;
-  meetingType: "온라인" | "오프라인";
+  meetingType: "ONLINE" | "OFFLINE";
+  scheduleId: string;
+  groupRole: boolean;
 }
 
 interface AttendanceProps extends BaseProps {
@@ -27,8 +30,26 @@ type ScheduleCardProps = EventProps | AttendanceProps;
 
 const ScheduleCard = (props: ScheduleCardProps) => {
   const { time, members, variant } = props;
-  const [isOpen, setIsOpen] = useState(false);
-  const scheduleId = 1;
+  const {
+    isOpen,
+    setIsOpen,
+    isAlertOpen,
+    setIsAlertOpen,
+    handleAlertAction,
+    handleTopClick,
+    handleBottomClick,
+  } = useGroupScheduleActions();
+
+  const scheduleId = props.variant === "event" ? props.scheduleId : "";
+  const groupRole = props.variant === "event" ? props.groupRole : "";
+
+  const onTopClick = () => {
+    handleTopClick(scheduleId);
+  };
+
+  const onBottomClick = () => {
+    handleBottomClick();
+  };
 
   return (
     <div
@@ -47,7 +68,7 @@ const ScheduleCard = (props: ScheduleCardProps) => {
                   {props.title}
                 </p>
                 <p className="text-[color:var(--color-primary-400)] text-xs font-regular">
-                  {props.meetingType}
+                  {props.meetingType === "OFFLINE" ? "오프라인" : "온라인"}
                 </p>
               </>
             ) : (
@@ -72,7 +93,7 @@ const ScheduleCard = (props: ScheduleCardProps) => {
         </div>
       </Link>
 
-      {variant === "event" ? (
+      {variant === "event" && groupRole && (
         <div className="relative">
           <button onClick={() => setIsOpen(true)}>
             <EllipsisVertical className="w-[18px] h-[18px] text-[color:var(--color-black)] cursor-pointer" />
@@ -82,19 +103,29 @@ const ScheduleCard = (props: ScheduleCardProps) => {
               <DropdownSmall
                 isOpen={isOpen}
                 onClose={() => setIsOpen(false)}
-                onTopClick={() => console.log("click")}
-                onBottomClick={() => console.log("click")}
+                onTopClick={onTopClick}
+                onBottomClick={onBottomClick}
               >
-                {["일정 삭제", "링크 복사"]}
+                {["링크 복사", "일정 삭제"]}
               </DropdownSmall>
             </div>
           )}
         </div>
-      ) : (
+      )}
+      {variant === "attendance" && (
         <button onClick={() => console.log("hi")}>
           <ArrowRight className="w-[18px] h-[18px] text-[color:var(--color-black)]" />
         </button>
       )}
+
+      <ControlledAlertBox
+        content={"정말 삭제하시겠습니까?"}
+        cancel="취소"
+        action="확인"
+        isOpen={isAlertOpen}
+        onClose={() => setIsAlertOpen(false)}
+        actionHandler={() => handleAlertAction(scheduleId)}
+      />
     </div>
   );
 };

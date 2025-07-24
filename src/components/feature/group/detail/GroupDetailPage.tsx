@@ -1,73 +1,38 @@
 "use client";
 
+import GlobalLoading from "@/app/loading";
 import GroupContent from "@/components/feature/group/detail/GroupContent";
 import GroupHeaderSection from "@/components/feature/group/detail/GroupHeaderSection";
 import Footer from "@/components/layout/Footer";
-
-interface GroupData {
-  groupId: string;
-  name: string;
-  description: string;
-  groupMemberNum: number;
-}
-
-interface Schedule {
-  variant: "event";
-  title: string;
-  meetingType: "온라인" | "오프라인";
-  time: string;
-  members: string[];
-}
+import { useGroupSchedules } from "@/lib/api/groupApi";
+import { useGroupDetailPage } from "./hooks/useGroupDetailLogic";
 
 const GroupDetailPage = () => {
-  const groupData: GroupData = {
-    groupId: "10001",
-    name: "박준규 팬미팅",
-    description: "박준규 팬미팅에 오신 것을 환영합니다",
-    groupMemberNum: 6000,
-  };
+  const { groupId, userPending, isMember } = useGroupDetailPage();
+  const { data: groupData, isPending: groupPending } = useGroupSchedules(
+    groupId,
+    isMember
+  );
 
-  const schedules: Schedule[] = [
-    {
-      variant: "event",
-      title: "카츠오모이 가는 날",
-      meetingType: "온라인",
-      time: "7월 4일 (금) 18:00 - 22:00",
-      members: ["박준규", "박은서", "현혜주", "박상윤", "황수지"],
-    },
-    {
-      variant: "event",
-      title: "카츠오모이 가는 날",
-      meetingType: "온라인",
-      time: "7월 4일 (금) 18:00 - 22:00",
-      members: ["박은서", "현혜주"],
-    },
-    {
-      variant: "event",
-      title: "카츠오모이 가는 날",
-      meetingType: "온라인",
-      time: "7월 4일 (금) 18:00 - 22:00",
-      members: ["박은서", "현혜주"],
-    },
-    {
-      variant: "event",
-      title: "카츠오모이 가는 날",
-      meetingType: "온라인",
-      time: "7월 4일 (금) 18:00 - 22:00",
-      members: ["박은서", "현혜주"],
-    },
-  ];
+  if (userPending || groupPending || !groupData) {
+    return <GlobalLoading />;
+  }
 
   return (
     <div className="w-full min-h-screen bg-[color:var(--color-gray-background)]">
       <GroupHeaderSection
-        groupId={groupData.groupId}
-        groupName={groupData.name}
-        groupIntroduction={groupData.description}
-        groupCount={groupData.groupMemberNum}
+        groupId={groupData.data.groupId}
+        groupName={groupData.data.groupName}
+        groupIntroduction={groupData.data.groupDescription}
+        groupCount={groupData.data.groupMemberNumbers}
+        groupRole={groupData.data.groupRole}
       />
 
-      <GroupContent groupId={groupData.groupId} schedules={schedules} />
+      <GroupContent
+        groupId={groupId}
+        schedules={groupData.data.scheduleDetails}
+        groupRole={groupData.data.groupRole}
+      />
 
       <div className="sm:hidden">
         <Footer />
