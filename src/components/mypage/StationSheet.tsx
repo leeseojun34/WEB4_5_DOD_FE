@@ -87,10 +87,13 @@ const StationSheet = ({ isOpen, setIsOpen, onSave }: StationSheetType) => {
                     stationName={station.place_name}
                     stationAddress={station.road_address_name}
                     onClick={() => setSelectedStation(station)}
+                    isSelected={
+                      selectedStation?.place_name === station.place_name
+                    }
                   />
                 ))}
                 {hasSearched && results.length === 0 && (
-                  <div className="w-full text-center text-[var(--color-gray-border)] text-xs font-light py-4">
+                  <div className="w-full text-center text-[var(--color-gray-placeholder)] text-xs font-light py-4">
                     해당 역 검색 내용이 없습니다.
                   </div>
                 )}
