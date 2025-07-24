@@ -83,6 +83,31 @@ const deleteWorkspace = async (id: string, workspaceId: string) => {
   return res.data;
 };
 
+const deleteSchedule = async (scheduleId: string) => {
+  const res = await axiosInstance.delete(`/schedules/delete/${scheduleId}`);
+  return res.data;
+};
+
+export const useDeleteSchedule = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (scheduleId: string) => deleteSchedule(scheduleId),
+    onSuccess: (data) => {
+      console.log("일정 삭제 성공: ", data);
+      queryClient.invalidateQueries({
+        queryKey: ["groupSchedules"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["groupSchedule"],
+      });
+    },
+    onError: (err) => {
+      console.error("일정 삭제 실패: ", err);
+      Toast("일정 삭제에 실패했습니다");
+    },
+  });
+};
+
 export const useGroupSchedule = (scheduleId: string) => {
   return useQuery({
     queryKey: ["groupSchedule", scheduleId],
@@ -245,5 +270,24 @@ export const setInviteEvent = async (eventId: number, groupId: number) => {
   const response = await axiosInstance.post(
     `/events/${eventId}/join/${groupId}`
   );
+  return response.data;
+};
+
+/**
+ * 내 시간표 조회
+ * @returns
+ */
+export const getMySchedule = async () => {
+  const response = await axiosInstance.get("/favorite-timetable");
+  return response.data;
+};
+
+/**
+ * 내 시간표 설정
+ * @param mySchedule 내 시간표
+ * @returns
+ */
+export const setMySchedule = async (mySchedule: Record<string, string>) => {
+  const response = await axiosInstance.post("/favorite-timetable", mySchedule);
   return response.data;
 };

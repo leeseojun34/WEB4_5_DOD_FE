@@ -12,17 +12,17 @@ const STYLES = {
   container: "w-full",
   header: "sticky top-0 z-10 bg-white",
   dayGrid: "grid gap-1 pl-6",
-  dayCell: "py-2 text-center text-[#9EA6B2] text-[8px] md:text-xl font-bold",
+  dayCell: "py-2 text-center text-[#9EA6B2] text-[8px] sm:text-xl font-bold",
   dayText: "block",
   dateText: "text-[var(--color-primary-400)]",
   timeColumn: "flex w-6 flex-col items-end gap-1 pr-1",
-  timeCell: "h-10 md:h-20 text-right pr-1",
+  timeCell: "h-10 sm:h-20 text-right pr-1",
   timeText:
-    "block text-[#9EA6B2] text-[8px] md:text-base font-bold translate-y-0",
-  scheduleGrid: `grid flex-1 gap-1 md:gap-4`,
+    "block text-[#9EA6B2] text-[8px] sm:text-base font-bold translate-y-0",
+  scheduleGrid: `grid flex-1 gap-1 sm:gap-4`,
   dayColumn: "flex flex-col gap-2 overflow-hidden rounded-lg",
   timeSlot:
-    "w-full h-5 md:h-10 border-b border-white last:border-b-0 odd:border-dashed even:border-solid transition-colors duration-150",
+    "w-full h-5 sm:h-10 border-b border-white last:border-b-0 odd:border-dashed even:border-solid transition-colors duration-150",
   unselectedSlot: "bg-[var(--color-muted)]",
 };
 
