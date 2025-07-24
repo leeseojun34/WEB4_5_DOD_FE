@@ -2,9 +2,10 @@
 
 import Image from "next/image";
 import googleLogo from "@/assets/icon/google_login_icon.svg";
-import { FaToggleOff } from "react-icons/fa6";
-import { FaToggleOn } from "react-icons/fa6";
+// import { FaToggleOff } from "react-icons/fa6";
+// import { FaToggleOn } from "react-icons/fa6";
 import React from "react";
+import MyButton from "./MyButton";
 
 type ListBoxProps = {
   children: React.ReactNode;
@@ -19,15 +20,11 @@ const ListBox = ({
   children,
   station,
   buttonText = "",
-  isConnected,
-  onConnect,
   clickHandler,
 }: ListBoxProps) => {
-    
-
   return (
     <div className="flex flex-col gap-4">
-      <div className="w-full flex flex-col justify-between p-5 bg-[color:var(--color-white)] text-[color:var(--color-black)] rounded-lg gap-4">
+      <div className="w-full flex flex-col justify-between px-5 py-3 bg-[color:var(--color-white)] text-[color:var(--color-black)] rounded-lg gap-4">
         <div className="flex justify-between items-center">
           <div className="flex justify-between items-center gap-3">
             <span className="text-sm font-medium text-[color:var(--color-black)]">
@@ -39,11 +36,14 @@ const ListBox = ({
               </span>
             )}
           </div>
-          <span
+          {/* <span
             onClick={clickHandler}
             className="text-xs font-medium cursor-pointer text-[var(--color-black)] hover:text-[var(--color-primary-400)]">
             {buttonText}
-          </span>
+          </span> */}
+          {buttonText && (
+            <MyButton buttonClickHandler={clickHandler}>{buttonText}</MyButton>
+          )}
         </div>
         {children === "캘린더 연동" && (
           <div className="flex justify-between items-center">
@@ -57,9 +57,10 @@ const ListBox = ({
                   }}
                 />
               </div>
-              <span className="text-xs font-normal">구글 로그인</span>
+              {/* <span className="text-xs font-normal">구글 로그인</span> */}
+              <span className="text-xs font-normal">구글 캘린더ID</span>
             </div>
-            <button onClick={onConnect} className="relative cursor-pointer">
+            {/* <button onClick={onConnect} className="relative cursor-pointer">
               <FaToggleOff
                 size={24}
                 color="var(--color-gray-100)"
@@ -70,7 +71,8 @@ const ListBox = ({
                 color="var(--color-primary-400)"
                 className={isConnected ? "block" : "hidden"}
               />
-            </button>
+            </button> */}
+            <MyButton buttonClickHandler={clickHandler}>등록하기</MyButton>
           </div>
         )}
       </div>

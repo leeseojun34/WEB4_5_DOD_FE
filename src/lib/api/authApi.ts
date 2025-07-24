@@ -1,8 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import toast from "react-hot-toast";
 import { axiosInstance } from "./axiosInstance";
 import { useRouter } from "next/navigation";
 import { logout } from "./userApi";
+import ToastWell from "@/components/ui/ToastWell";
+import Toast from "@/components/ui/Toast";
 
 // 프로필 이름 업데이트
 const updateName = async (newName: string) => {
@@ -19,14 +20,7 @@ export const useUpdateName = () => {
     onSuccess: (data) => {
       console.log("이름 변경 성공: ", data);
       queryClient.invalidateQueries({ queryKey: ["user"] });
-      toast("이름 수정 완료! 🎉", {
-        style: {
-          borderRadius: "50px",
-          background: "var(--color-white)",
-          border: "1px solid var(--color-primary-400)",
-          color: "var(--color-primary-400)",
-        },
-      });
+      ToastWell("🎉", "이름 수정 완료!");
     },
     onError: (err) => {
       console.error("이름 변경 실패: ", err);
@@ -39,14 +33,7 @@ export const useUpdateProfileImg = () => {
   return useMutation({
     mutationFn: () => axiosInstance.patch("/member/profile"),
     onSuccess: () => {
-      toast("프로필 랜덤 수정 완료! 🎉", {
-        style: {
-          borderRadius: "50px",
-          background: "var(--color-white)",
-          border: "1px solid var(--color-primary-400)",
-          color: "var(--color-primary-400)",
-        },
-      });
+      ToastWell("🎉", "프로필 랜덤 수정 완료!");
     },
   });
 };
@@ -63,6 +50,7 @@ export const useFavoriteLocation = () => {
     queryFn: async () => {
       const res = await axiosInstance.get("/favorite-location");
       const list = res.data.data;
+      console.log("list:", list[0].stationName);
       return list.length > 0 ? list[0] : { stationName: "미등록" };
     },
   });
@@ -84,17 +72,11 @@ export const useAddFavoriteLocation = () => {
     mutationFn: addFavoriteLocation,
     onSuccess: () => {
       console.log("주변역 등록 완료");
-      toast("내 주변역 등록 완료! 📍", {
-        style: {
-          borderRadius: "50px",
-          background: "var(--color-white)",
-          border: "1px solid var(--color-primary-400)",
-          color: "var(--color-primary-400)",
-        },
-      });
+      ToastWell("🎉", "주변역 등록 완료!");
     },
     onError: (error) => {
       console.error("주변역 등록 실패", error);
+      Toast("주변역 등록 실패");
     },
   });
 };
@@ -117,14 +99,7 @@ export const useUpdateFavoriteLocation = () => {
     mutationFn: updateFavoriteLocation,
     onSuccess: () => {
       console.log("주변역 수정 완료");
-      toast("내 주변역 등록 완료! 📍", {
-        style: {
-          borderRadius: "50px",
-          background: "var(--color-white)",
-          border: "1px solid var(--color-primary-400)",
-          color: "var(--color-primary-400)",
-        },
-      });
+      ToastWell("🎉", "주변역 수정 완료!");
     },
     onError: (err) => {
       console.error("주변역 등록 실패", err);
@@ -138,14 +113,7 @@ export const useLogoutMutation = () => {
   return useMutation({
     mutationFn: logout,
     onSuccess: () => {
-      toast("로그아웃되었습니다. 🫥", {
-        style: {
-          borderRadius: "50px",
-          background: "var(--color-white)",
-          border: "1px solid var(--color-primary-400)",
-          color: "var(--color-primary-400)",
-        },
-      });
+      ToastWell("👻", "로그아웃되었습니다!");
       router.push("/");
     },
     onError: (err) => {
@@ -160,14 +128,8 @@ export const useDeactiveMutation = () => {
   return useMutation({
     mutationFn: () => axiosInstance.delete("/member/withdraw"),
     onSuccess: () => {
-      toast("탈퇴되었습니다. 🫥", {
-        style: {
-          borderRadius: "50px",
-          background: "var(--color-white)",
-          border: "1px solid var(--color-primary-400)",
-          color: "var(--color-primary-400)",
-        },
-      });
+      ToastWell("👻", "탈퇴되었습니다!");
+
       router.push("/");
     },
     onError: (err) => {
@@ -176,19 +138,16 @@ export const useDeactiveMutation = () => {
   });
 };
 
-// 구글 캘런더 sync (post)
-export const useCalendarSync = () => {
+const registerCalendarId = async (publicCalendarId: string) => {
+  return await axiosInstance.post("/calendar/public-id", publicCalendarId);
+};
+
+// 구글 캘런더 Id 등록 (post)
+export const useResgisterCalendarId = () => {
   return useMutation({
-    mutationFn: () => axiosInstance.post("/calendar/sync"),
+    mutationFn: registerCalendarId,
     onSuccess: () => {
-      toast("구글 캘린더 연동 완료! 🎉", {
-        style: {
-          borderRadius: "50px",
-          background: "var(--color-white)",
-          border: "1px solid var(--color-primary-400)",
-          color: "var(--color-primary-400)",
-        },
-      });
+      ToastWell("🎉", "구글 캘린더 등록 완료!");
     },
   });
 };
@@ -202,5 +161,18 @@ export const useFavoriteTime = () => {
       return res.data;
     },
     retry: 0,
+  });
+};
+
+const editFavoriteTime = async () => {
+  return await axiosInstance.post("/favorite-timetable");
+};
+
+export const useUpdateFavoriteTime = () => {
+  return useMutation({
+    mutationFn: editFavoriteTime,
+    onSuccess: () => {
+      ToastWell("🎉", "즐겨찾는 시간 수정 완료!");
+    },
   });
 };
