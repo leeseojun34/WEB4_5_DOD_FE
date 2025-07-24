@@ -4,7 +4,7 @@ import ToastWell from "@/components/ui/ToastWell";
 import Toast from "@/components/ui/Toast";
 
 interface CreateWorkSpaceRequest {
-  workspace: WorkspacePlatformType;
+  workspaceType: WorkspacePlatformType;
   workspaceName: string;
   url: string;
 }
@@ -18,7 +18,7 @@ interface UpdateScheduleInfoReqeust {
   meetingType?: string;
   members?: string[];
   platformName?: string;
-  platformUrl?: string | null;
+  platformURL?: string | null;
   scheduleName?: string;
   scheduleStatus?: string;
   specificLatitude?: string;
@@ -49,9 +49,9 @@ const createWorkspace = async (id: string, data: CreateWorkSpaceRequest) => {
   return res.data;
 };
 
-const deleteWorkspace = async (id: string, workspaceId: string) => {
+const deleteWorkspace = async (workspaceId: string) => {
   const res = await axiosInstance.post(
-    `/schedules/delete-workspace/${id}`,
+    `/schedules/delete-workspace/${workspaceId}`,
     workspaceId
   );
   return res.data;
@@ -122,30 +122,35 @@ export const useCreateWorkspace = () => {
     mutationFn: ({ id, data }: { id: string; data: CreateWorkSpaceRequest }) =>
       createWorkspace(id, data),
     onSuccess: (data, variables) => {
-      console.log("워크스페이스 등록 성공: ", data);
+      ToastWell("🎉", "워크스페이스가 등록되었어요!");
       queryClient.invalidateQueries({
         queryKey: ["groupSchedule", variables.id],
       });
     },
-    onError: (err) => {
-      console.error("워크스페이스 등록 실패: ", err);
+    onError: () => {
+      Toast("워크스페이스 등록에 실패했어요.");
     },
   });
 };
 
-export const useDeleteWorkspace = () => {
+export const useDeleteWorkspace = ({
+  workspaceId,
+  scheduleId,
+}: {
+  workspaceId: string;
+  scheduleId: string;
+}) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, workspaceId }: { id: string; workspaceId: string }) =>
-      deleteWorkspace(id, workspaceId),
-    onSuccess: (data, id) => {
-      console.log("워크스페이스 삭제 성공: ", data);
+    mutationFn: () => deleteWorkspace(workspaceId),
+    onSuccess: () => {
+      ToastWell("🗑️", "워크스페이스가 삭제되었습니다.");
       queryClient.invalidateQueries({
-        queryKey: ["groupSchedule", id],
+        queryKey: ["groupSchedule", scheduleId],
       });
     },
-    onError: (err) => {
-      console.error("워크스페이스 삭제 실패: ", err);
+    onError: () => {
+      Toast("워크스페이스 삭제에 실패했어요.");
     },
   });
 };
