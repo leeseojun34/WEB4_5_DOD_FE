@@ -5,6 +5,7 @@ import NameTag from "./NameTag";
 import Link from "next/link";
 import { useState } from "react";
 import DropdownSmall from "./DropdownSmall";
+import { isFutureDate } from "@/app/utils/dateFormat";
 
 interface BaseProps {
   variant: "event" | "attendance";
@@ -30,9 +31,15 @@ const ScheduleCard = (props: ScheduleCardProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const scheduleId = 1;
 
+  const isFuture = isFutureDate(time);
+
   return (
     <div
-      className="min-w-[335px] max-w-185 w-full h-auto p-4 rounded-lg bg-[color:var(--color-white)]  flex cursor-pointer transition-all duration-100 hover:-translate-y-0.5"
+      className={`min-w-[335px] max-w-185 w-full h-auto p-4 rounded-lg ${
+        isFuture
+          ? "bg-[color:var(--color-white)]"
+          : "bg-[color:var(--color-muted)]"
+      }  flex cursor-pointer transition-all duration-100 hover:-translate-y-0.5`}
       style={{ boxShadow: "var(--shadow-common)" }}
     >
       <Link
@@ -43,10 +50,22 @@ const ScheduleCard = (props: ScheduleCardProps) => {
           <div className="flex gap-3">
             {variant === "event" ? (
               <>
-                <p className="text-[color:var(--color-gray)] text-xs">
+                <p
+                  className={` ${
+                    isFuture
+                      ? "text-[color:var(--color-gray)]"
+                      : "text-[color:var(--color-gray-placeholder)]"
+                  } text-xs`}
+                >
                   {props.title}
                 </p>
-                <p className="text-[color:var(--color-primary-400)] text-xs font-regular">
+                <p
+                  className={` ${
+                    isFuture
+                      ? "text-[color:var(--color-primary-400)]"
+                      : "text-[color:var(--color-gray-placeholder)]"
+                  }  text-xs font-regular`}
+                >
                   {props.meetingType}
                 </p>
               </>
@@ -62,12 +81,18 @@ const ScheduleCard = (props: ScheduleCardProps) => {
             )}
           </div>
         </div>
-        <div className="text-sm font-medium text-[color:var(--color-black)]">
+        <div
+          className={`text-sm font-medium ${
+            isFuture
+              ? "text-[color:var(--color-black)]"
+              : "text-[color:var(--color-gray-placeholder)]"
+          } `}
+        >
           {time}
         </div>
         <div className="flex gap-1">
           {members.map((member, i) => (
-            <NameTag name={member} key={`${member}-${i}`} />
+            <NameTag name={member} key={`${member}-${i}`} isFuture={isFuture} />
           ))}
         </div>
       </Link>
@@ -75,7 +100,13 @@ const ScheduleCard = (props: ScheduleCardProps) => {
       {variant === "event" ? (
         <div className="relative">
           <button onClick={() => setIsOpen(true)}>
-            <EllipsisVertical className="w-[18px] h-[18px] text-[color:var(--color-black)] cursor-pointer" />
+            <EllipsisVertical
+              className={`w-[18px] h-[18px] ${
+                isFuture
+                  ? "text-[color:var(--color-black)]"
+                  : "text-[color:var(--color-gray-placeholder)]"
+              } cursor-pointer`}
+            />
           </button>
           {isOpen && (
             <div className="absolute right-0 top-6">
