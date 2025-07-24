@@ -303,3 +303,22 @@ export const setInviteEvent = async (eventId: number, groupId: number) => {
   );
   return response.data;
 };
+
+/**
+ * 내 시간표 조회
+ * @returns
+ */
+export const getMySchedule = async () => {
+  const response = await axiosInstance.get("/favorite-timetable");
+  return response.data;
+};
+
+/**
+ * 내 시간표 설정
+ * @param mySchedule 내 시간표
+ * @returns
+ */
+export const setMySchedule = async (mySchedule: Record<string, string>) => {
+  const response = await axiosInstance.post("/favorite-timetable", mySchedule);
+  return response.data;
+};

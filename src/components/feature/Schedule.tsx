@@ -7,8 +7,11 @@
  */
 "use client";
 import { useState, useRef, useCallback, useEffect } from "react";
-import { convertTimesToHexBit } from "@/app/utils/timebitFormat";
-import { setEventMyTimeApi } from "@/lib/api/scheduleApi";
+import {
+  convertTimesToHexBit,
+  convertHexBitToTimes,
+} from "@/app/utils/timebitFormat";
+import { setEventMyTimeApi, setMySchedule } from "@/lib/api/scheduleApi";
 import { useParams } from "next/navigation";
 import { getGridColsClass } from "@/app/utils/styleFormat";
 
@@ -16,24 +19,28 @@ const STYLES = {
   container: "w-full",
   header: "sticky top-0 z-10 bg-white",
   dayGrid: "grid gap-1 pl-6",
-  dayCell: "py-2 text-center text-[#9EA6B2] text-[8px] md:text-xl font-bold",
+  dayCell: "py-2 text-center text-[#9EA6B2] text-[8px] sm:text-xl font-bold",
   dayText: "block",
   dateText: "text-[var(--color-primary-400)]",
   timeColumn: "flex w-6 flex-col items-end gap-1 pr-1",
-  timeCell: "h-10 md:h-20 text-right pr-1",
+  timeCell: "h-10 sm:h-20 text-right pr-1",
   timeText:
-    "block text-[#9EA6B2] text-[8px] md:text-base font-bold translate-y-0",
-  scheduleGrid: `grid flex-1 gap-1 md:gap-4`,
+    "block text-[#9EA6B2] text-[8px] sm:text-base font-bold translate-y-0",
+  scheduleGrid: `grid flex-1 gap-1 sm:gap-4`,
   dayColumn: "flex flex-col gap-2 overflow-hidden rounded-lg",
   timeSlot:
-    "w-full h-5 md:h-10 border-b border-white last:border-b-0 odd:border-dashed even:border-solid cursor-pointer transition-colors duration-150",
+    "w-full h-5 sm:h-10 border-b border-white last:border-b-0 odd:border-dashed even:border-solid cursor-pointer transition-colors duration-150",
   unselectedSlot: "bg-[var(--color-muted)]",
 };
 
 const Schedule = ({
   eventScheduleInfo,
+  mySchedule,
+  mode = "default",
 }: {
   eventScheduleInfo?: EventTimeTableType;
+  mySchedule: MyScheduleType | null;
+  mode?: "default" | "mypage";
 }) => {
   const { eventId } = useParams();
 
@@ -85,6 +92,63 @@ const Schedule = ({
     return `${String(hour).padStart(2, "0")}:${minute}`;
   };
 
+  const [isMyScheduleChanged, setIsMyScheduleChanged] = useState(true);
+
+  useEffect(() => {
+    if (!mySchedule) return;
+    setIsMyScheduleChanged(false);
+    const timeBitArray = {
+      FRI: "",
+      MON: "",
+      SAT: "",
+      SUN: "",
+      THU: "",
+      TUE: "",
+      WED: "",
+    };
+
+    Object.entries(mySchedule).forEach(([day, timeBit]) => {
+      if (day.includes("Fri")) timeBitArray.FRI = timeBit;
+      else if (day.includes("Mon")) timeBitArray.MON = timeBit;
+      else if (day.includes("Sat")) timeBitArray.SAT = timeBit;
+      else if (day.includes("Sun")) timeBitArray.SUN = timeBit;
+      else if (day.includes("Thu")) timeBitArray.THU = timeBit;
+      else if (day.includes("Tue")) timeBitArray.TUE = timeBit;
+      else if (day.includes("Wed")) timeBitArray.WED = timeBit;
+    });
+
+    const allCellIds = new Set<string>();
+
+    for (let i = 0; i < daysOfWeek.length; i++) {
+      const day = daysOfWeek[i];
+      const timeBit = timeBitArray[day.day as keyof typeof timeBitArray];
+      const times = convertHexBitToTimes(timeBit);
+      const date = mode === "default" ? day.fullDate! : i;
+
+      if (!date) continue;
+
+      times.forEach((time) => {
+        if (mode === "default") {
+          const dayIndex = daysOfWeek.findIndex((d) => d.fullDate === date);
+          const cellId = `cell-${dayIndex}-${time}`;
+          allCellIds.add(cellId);
+        } else {
+          const cellId = `cell-${i}-${time}`;
+          allCellIds.add(cellId);
+        }
+      });
+    }
+
+    setSelectedCells(allCellIds);
+    // applyXorToggle는 selectedCells 상태가 바뀐 이후에만 작동하도록 selectedCells에 대한 useEffect로 이동함
+  }, [mySchedule]);
+
+  useEffect(() => {
+    if (selectedCells.size > 0 && !isDragging) {
+      applyXorToggle();
+    }
+  }, [selectedCells]);
+
   const applyXorToggle = async () => {
     if (selectedCells.size === 0) return;
     setIsDraggingAndClick(false);
@@ -95,8 +159,33 @@ const Schedule = ({
     for (const cellId of selectedCells) {
       const [, dayIndexStr, time] = cellId.split("-");
       const dayIndex = Number(dayIndexStr);
-      const date = daysOfWeek[dayIndex].fullDate!;
-      const dateSet = updatedCheckedCells.get(date) ?? new Set();
+      let date = "";
+      if (mode === "mypage") {
+        if (dayIndexStr === "0") {
+          date = "timeBitMon";
+        } else if (dayIndexStr === "1") {
+          date = "timeBitTue";
+        } else if (dayIndexStr === "2") {
+          date = "timeBitWed";
+        } else if (dayIndexStr === "3") {
+          date = "timeBitThu";
+        } else if (dayIndexStr === "4") {
+          date = "timeBitFri";
+        } else if (dayIndexStr === "5") {
+          date = "timeBitSat";
+        } else if (dayIndexStr === "6") {
+          date = "timeBitSun";
+        }
+      } else {
+        date = daysOfWeek[dayIndex].fullDate!;
+      }
+
+      let dateSet: Set<string>;
+      if (mode === "mypage") {
+        dateSet = updatedCheckedCells.get(dayIndexStr) ?? new Set();
+      } else {
+        dateSet = updatedCheckedCells.get(date) ?? new Set();
+      }
 
       if (dateSet.has(time)) {
         dateSet.delete(time);
@@ -104,7 +193,11 @@ const Schedule = ({
         dateSet.add(time);
       }
 
-      updatedCheckedCells.set(date, dateSet);
+      if (mode === "mypage") {
+        updatedCheckedCells.set(dayIndexStr, dateSet);
+      } else {
+        updatedCheckedCells.set(date, dateSet);
+      }
 
       if (!groupedByDate[date]) {
         groupedByDate[date] = [];
@@ -112,18 +205,30 @@ const Schedule = ({
       groupedByDate[date].push(time);
     }
 
-    const dailyTimeSlots = Object.entries(groupedByDate)
-      .filter(([, times]) => times.length > 0)
-      .map(([date, times]) => ({
-        date,
-        timeBit: convertTimesToHexBit(times),
-      }));
+    if (mode !== "mypage") {
+      const dailyTimeSlots = Object.entries(groupedByDate)
+        .filter(([, times]) => times.length > 0)
+        .map(([date, times]) => ({
+          date,
+          timeBit: convertTimesToHexBit(times),
+        }));
 
-    if (dailyTimeSlots.length > 0) {
-      await setEventMyTimeApi(+eventId!, {
-        dailyTimeSlots,
-        timezone: "Asia/Seoul",
-      });
+      if (dailyTimeSlots.length > 0) {
+        await setEventMyTimeApi(+eventId!, {
+          dailyTimeSlots,
+          timezone: "Asia/Seoul",
+        });
+      }
+    } else {
+      const newMySchedule: Record<string, string> = {};
+      for (const date in groupedByDate) {
+        newMySchedule[date] = convertTimesToHexBit(groupedByDate[date]);
+      }
+
+      if (isMyScheduleChanged) {
+        await setMySchedule(newMySchedule);
+        setIsMyScheduleChanged(false);
+      }
     }
 
     setCheckedCells(updatedCheckedCells);
@@ -141,6 +246,7 @@ const Schedule = ({
   }, [isDragging]);
 
   useEffect(() => {
+    setIsMyScheduleChanged(true);
     const container = containerRef.current;
     if (!container) return;
 
@@ -305,9 +411,15 @@ const Schedule = ({
   const renderTimeSlot = (dayIndex: number, timeIndex: number) => {
     const cellId = getCellId(dayIndex, timeIndex);
     const timeStr = getTimeString(Number(startTime[0]), timeIndex);
-    const isChecked =
-      checkedCells.get(daysOfWeek[dayIndex]?.fullDate || "")?.has(timeStr) ??
-      false;
+    let isChecked = false;
+
+    if (mode === "mypage") {
+      isChecked = checkedCells.get(dayIndex.toString())?.has(timeStr) ?? false;
+    } else {
+      isChecked =
+        checkedCells.get(daysOfWeek[dayIndex]?.fullDate || "")?.has(timeStr) ??
+        false;
+    }
     const isSelected = selectedCells.has(cellId);
     let slotClass = STYLES.unselectedSlot;
     if (isSelected) {
