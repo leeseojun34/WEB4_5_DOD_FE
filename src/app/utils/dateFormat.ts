@@ -1,3 +1,13 @@
+interface Schedule {
+  scheduleName: string;
+  meetingType: "ONLINE" | "OFFLINE";
+  time: string;
+  startTime: string;
+  endTime: string;
+  memberNames: string[];
+  scheduleId: string;
+}
+
 /**
  * 날짜 포맷팅
  * @param date 날짜
@@ -124,9 +134,6 @@ export const getHourlyTimeOptions = (): string[] => {
   });
 };
 
-// 2025-07-24T16:32:57.881Z
-// "11:00"
-// Sat Jul 12 2025 00:00:00 GMT+0900 (Korean Standard Time) {}
 
 export const toISOStringWithTime = (
   date: Date,
@@ -141,4 +148,65 @@ export const toISOStringWithTime = (
   const corrected = new Date(local.getTime() + 1000 * 60 * 60 * 9);
 
   return corrected.toISOString();
+};
+
+export const splitByDate = (schedules: Schedule[]) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const past: Schedule[] = [];
+  const future: Schedule[] = [];
+
+  schedules.forEach((schedule) => {
+    const scheduleDate = new Date(schedule.startTime);
+    const scheduleOnlyDate = new Date(
+      scheduleDate.getFullYear(),
+      scheduleDate.getMonth(),
+      scheduleDate.getDate()
+    );
+
+    if (scheduleOnlyDate < today) {
+      past.push(schedule);
+    } else {
+      future.push(schedule);
+    }
+  });
+
+  const sortedFuture = [...future].sort((a, b) => {
+    const dateA = new Date(a.startTime);
+    const dateB = new Date(b.startTime);
+
+    const onlyDateA = new Date(
+      dateA.getFullYear(),
+      dateA.getMonth(),
+      dateA.getDate()
+    );
+    const onlyDateB = new Date(
+      dateB.getFullYear(),
+      dateB.getMonth(),
+      dateB.getDate()
+    );
+
+    return onlyDateA.getTime() - onlyDateB.getTime();
+  });
+
+  const sortedPast = [...past].sort((a, b) => {
+    const dateA = new Date(a.startTime);
+    const dateB = new Date(b.startTime);
+
+    const onlyDateA = new Date(
+      dateA.getFullYear(),
+      dateA.getMonth(),
+      dateA.getDate()
+    );
+    const onlyDateB = new Date(
+      dateB.getFullYear(),
+      dateB.getMonth(),
+      dateB.getDate()
+    );
+
+    return onlyDateB.getTime() - onlyDateA.getTime();
+  });
+
+  return { past: sortedPast, future: sortedFuture };
 };

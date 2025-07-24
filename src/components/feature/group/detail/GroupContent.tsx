@@ -3,7 +3,7 @@
 import Link from "next/link";
 import ShareButton from "@/components/ui/ShareButton";
 import ScheduleCard from "@/components/ui/ScheduleCard";
-import { formatSchedule } from "@/app/utils/dateFormat";
+import { formatSchedule, splitByDate } from "@/app/utils/dateFormat";
 import { itemVariants, listVariants } from "../../schedule/motion";
 import { motion } from "framer-motion";
 
@@ -24,6 +24,10 @@ interface GroupContentProps {
 }
 
 const GroupContent = ({ groupId, schedules, groupRole }: GroupContentProps) => {
+  const { past, future } = splitByDate(schedules);
+
+  console.log(future);
+
   return (
     <motion.div
       variants={listVariants}
@@ -43,7 +47,23 @@ const GroupContent = ({ groupId, schedules, groupRole }: GroupContentProps) => {
           />
         </Link>
         <div className="flex flex-col gap-4">
-          {schedules.map((schedule, index) => (
+          {future.map((schedule, index) => (
+            <motion.div
+              variants={itemVariants}
+              key={`${schedule.scheduleId}-${index}`}
+            >
+              <ScheduleCard
+                variant="event"
+                title={schedule.scheduleName}
+                meetingType={schedule.meetingType}
+                time={formatSchedule(schedule.startTime, schedule.endTime)}
+                members={schedule.memberNames}
+                scheduleId={schedule.scheduleId}
+                groupRole={groupRole}
+              />
+            </motion.div>
+          ))}
+          {past.map((schedule, index) => (
             <motion.div
               variants={itemVariants}
               key={`${schedule.scheduleId}-${index}`}
