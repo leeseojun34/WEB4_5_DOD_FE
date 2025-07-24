@@ -1,7 +1,11 @@
+"use client";
+
 import { X } from "lucide-react";
 import BottomSheet from "../ui/BottomSheet";
 import { Button } from "../ui/Button";
 import Schedule from "../feature/Schedule";
+import { getMySchedule } from "@/lib/api/scheduleApi";
+import { useQuery } from "@tanstack/react-query";
 
 type TimeSheetType = {
   isOpen: boolean;
@@ -10,6 +14,12 @@ type TimeSheetType = {
 };
 
 function TimeSheet({ isOpen, setIsOpen, onSave }: TimeSheetType) {
+  const { data: mySchedule } = useQuery({
+    queryKey: ["mySchedule"],
+    queryFn: getMySchedule,
+    retry: false,
+  });
+
   return (
     <BottomSheet
       isOpen={isOpen}
@@ -30,7 +40,7 @@ function TimeSheet({ isOpen, setIsOpen, onSave }: TimeSheetType) {
             />
           </div>
           <div className="w-full flex-1 flex justify-center overflow-y-auto ">
-            <Schedule />
+            <Schedule mode="mypage" mySchedule={mySchedule?.data || null} />
           </div>
           <div className="flex justify-center">
             <Button onClick={onSave}>저장하기</Button>
