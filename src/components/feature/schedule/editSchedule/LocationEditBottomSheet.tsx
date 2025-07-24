@@ -40,7 +40,7 @@ const LocationEditBottomSheet = ({
   );
 
   const handleClickRouter = () => {
-    router.push("/schedule/1/election/start");
+    router.push(`/schedule/${scheduleId}/election/start`);
   };
 
   const handleSaveSpecificLocation = () => {
