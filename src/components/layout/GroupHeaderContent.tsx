@@ -7,7 +7,8 @@ interface GroupHeaderContentProps {
   id: string;
   count: number;
   isLeader: boolean;
-  type?: "schedule" | "group";
+  type: "schedule" | "group";
+  clickToInvite?: () => void;
 }
 
 export const GroupHeaderContent = ({
@@ -16,11 +17,8 @@ export const GroupHeaderContent = ({
   count,
   isLeader,
   type,
+  clickToInvite,
 }: GroupHeaderContentProps) => {
-  const clickToInvite = () => {
-    console.log("invited");
-  };
-
   const fontStyleIntro = "text-sm text-[color:var(--color-muted)] font-normal";
   const tagStyle = `flex items-center justify-center gap-1 bg-[color:var(--color-white-30)] rounded-sm pl-2 pr-0.5 py-0.5 text-xs text-white ${
     type === "group" ? "cursor-pointer" : ""
