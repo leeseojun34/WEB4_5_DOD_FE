@@ -101,3 +101,18 @@ export const getDDay = (startTime: string): string => {
   if (diff === 0) return "D-DAY";
   return diff > 0 ? `D-${diff}` : `D+${Math.abs(diff)}`;
 };
+
+export function isFutureDate(dateStr: string): boolean {
+  const match = dateStr.match(
+    /(\d{4})년\s+(\d{1,2})월\s+(\d{1,2})일.*?(\d{2}):(\d{2})/
+  );
+
+  if (!match) return false;
+
+  const [, year, month, day, hour, minute] = match.map(Number);
+
+  const targetDate = new Date(year, month - 1, day, hour, minute);
+  const now = new Date();
+
+  return targetDate > now;
+}
