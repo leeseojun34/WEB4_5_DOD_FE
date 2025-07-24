@@ -5,9 +5,11 @@ import {
   useGroupSchedule,
   useUpdateScheduleInfo,
 } from "@/lib/api/scheduleApi";
+import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
 
 export const useEditSchedule = (id: string) => {
+  const router = useRouter();
   const { data: scheduleData } = useGroupSchedule(id);
   const [scheduleName, setScheduleName] = useState("");
   const [scheduleDescription, setScheduleDescription] = useState("");
@@ -43,7 +45,7 @@ export const useEditSchedule = (id: string) => {
     setIsOpen(!isOpen);
   };
 
-  const handleEditComplete = () => {
+  const handleEditTime = () => {
     if (selectedDate) {
       const startISOTime = toISOStringWithTime(selectedDate, startTime);
       const endISOTime = toISOStringWithTime(selectedDate, endTime);
@@ -56,8 +58,20 @@ export const useEditSchedule = (id: string) => {
     }
   };
 
+  const handleEditInfo = () => {
+    updateSchedule.mutate({
+      scheduleId: id,
+      data: {
+        scheduleName,
+        description: scheduleDescription,
+      },
+    });
+    router.push(`/schedule/${id}`);
+  };
+
   const handleDelete = () => {
     deleteSchedule.mutate(id);
+    router.push("/");
   };
 
   return {
@@ -72,11 +86,12 @@ export const useEditSchedule = (id: string) => {
     handleScheduleNameChange,
     handleScheduleDescriptionChange,
     handleTimeClick,
-    handleEditComplete,
+    handleEditTime,
     handleDelete,
     startTime,
     endTime,
     setStartTime,
     setEndTime,
+    handleEditInfo,
   };
 };
