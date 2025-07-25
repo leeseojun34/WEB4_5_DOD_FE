@@ -1,8 +1,3 @@
-import {
-  ScheduleDetailType,
-  WorkspacePlatformType,
-  WorkspaceType,
-} from "@/types/schedule";
 import OnlineMeetingRoom from "../../OnlineMeetingRoom";
 import ScheduleDetailContent from "./ScheduleDetailContent";
 import ScheduleDetailLayout from "./ScheduleDetailLayout";
@@ -18,7 +13,7 @@ const OnlineScheduleDetail = ({
   data,
 }: OnineScheduleDetailProps) => {
   return (
-    <ScheduleDetailLayout>
+    <ScheduleDetailLayout data={data}>
       <ScheduleDetailContent
         scheduleId={scheduleId}
         members={data.members}

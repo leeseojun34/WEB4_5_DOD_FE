@@ -28,7 +28,8 @@ const UserSchedule = () => {
   }, []);
 
   const searchParams = useSearchParams();
-  const groupId = searchParams?.get("groupId");
+  const groupIdParam = searchParams?.get("groupId");
+  const groupId = groupIdParam ? Number(groupIdParam) : undefined;
 
   return (
     <div className="w-full min-h-screen bg-[color:var(--color-gray-background)]">
@@ -50,7 +51,7 @@ const UserSchedule = () => {
         )}
         <UserScheduleList
           schedules={Object.values(schedules).flat()}
-          groupId={Number(groupId) ?? undefined}
+          groupId={groupId}
           isLoading={isLoading}
         />
       </div>
