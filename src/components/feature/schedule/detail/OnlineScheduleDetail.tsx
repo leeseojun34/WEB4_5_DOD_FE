@@ -13,7 +13,7 @@ const OnlineScheduleDetail = ({
   data,
 }: OnineScheduleDetailProps) => {
   return (
-    <ScheduleDetailLayout data={data}>
+    <ScheduleDetailLayout data={data} scheduleId={scheduleId}>
       <ScheduleDetailContent
         scheduleId={scheduleId}
         members={data.members}
@@ -23,7 +23,11 @@ const OnlineScheduleDetail = ({
           name: workspace.name,
         }))}
       >
-        <OnlineMeetingRoom platform="zoom" name=" 박준규 팬미팅" />
+        <OnlineMeetingRoom
+          scheduleId={scheduleId}
+          platform={data.meetingPlatform}
+          url={data.platformUrl}
+        />
       </ScheduleDetailContent>
     </ScheduleDetailLayout>
   );

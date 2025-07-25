@@ -1,3 +1,13 @@
+interface Schedule {
+  scheduleName: string;
+  meetingType: "ONLINE" | "OFFLINE";
+  time: string;
+  startTime: string;
+  endTime: string;
+  memberNames: string[];
+  scheduleId: string;
+}
+
 /**
  * 날짜 포맷팅
  * @param date 날짜
@@ -100,4 +110,104 @@ export const getDDay = (startTime: string): string => {
   );
   if (diff === 0) return "D-DAY";
   return diff > 0 ? `D-${diff}` : `D+${Math.abs(diff)}`;
+};
+
+export function isFutureDate(dateStr: string): boolean {
+  const match = dateStr.match(
+    /(\d{4})년\s+(\d{1,2})월\s+(\d{1,2})일.*?(\d{2}):(\d{2})/
+  );
+
+  if (!match) return false;
+
+  const [, year, month, day, hour, minute] = match.map(Number);
+
+  const targetDate = new Date(year, month - 1, day, hour, minute);
+  const now = new Date();
+  now.setHours(0, 0, 0, 0);
+
+  return targetDate > now;
+}
+
+export const getHourlyTimeOptions = (): string[] => {
+  return Array.from({ length: 25 }, (_, i) => {
+    const hour = String(i).padStart(2, "0");
+    return `${hour}:00`;
+  });
+};
+
+export const toISOStringWithTime = (
+  date: Date,
+  time: string
+): string | null => {
+  if (!date || !time) return null;
+  const [hours, minutes] = time.split(":").map(Number);
+
+  const local = new Date(date);
+  local.setHours(hours);
+  local.setMinutes(minutes);
+
+  const corrected = new Date(local.getTime() + 1000 * 60 * 60 * 9);
+
+  return corrected.toISOString();
+};
+
+export const splitByDate = (schedules: Schedule[]) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const past: Schedule[] = [];
+  const future: Schedule[] = [];
+
+  schedules.forEach((schedule) => {
+    const scheduleDate = new Date(schedule.startTime);
+    const scheduleOnlyDate = new Date(
+      scheduleDate.getFullYear(),
+      scheduleDate.getMonth(),
+      scheduleDate.getDate()
+    );
+
+    if (scheduleOnlyDate < today) {
+      past.push(schedule);
+    } else {
+      future.push(schedule);
+    }
+  });
+
+  const sortedFuture = [...future].sort((a, b) => {
+    const dateA = new Date(a.startTime);
+    const dateB = new Date(b.startTime);
+
+    const onlyDateA = new Date(
+      dateA.getFullYear(),
+      dateA.getMonth(),
+      dateA.getDate()
+    );
+    const onlyDateB = new Date(
+      dateB.getFullYear(),
+      dateB.getMonth(),
+      dateB.getDate()
+    );
+
+    return onlyDateA.getTime() - onlyDateB.getTime();
+  });
+
+  const sortedPast = [...past].sort((a, b) => {
+    const dateA = new Date(a.startTime);
+    const dateB = new Date(b.startTime);
+
+    const onlyDateA = new Date(
+      dateA.getFullYear(),
+      dateA.getMonth(),
+      dateA.getDate()
+    );
+    const onlyDateB = new Date(
+      dateB.getFullYear(),
+      dateB.getMonth(),
+      dateB.getDate()
+    );
+
+    return onlyDateB.getTime() - onlyDateA.getTime();
+  });
+
+  return { past: sortedPast, future: sortedFuture };
 };
