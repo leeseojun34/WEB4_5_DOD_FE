@@ -26,8 +26,6 @@ interface GroupContentProps {
 const GroupContent = ({ groupId, schedules, groupRole }: GroupContentProps) => {
   const { past, future } = splitByDate(schedules);
 
-  console.log(future);
-
   return (
     <motion.div
       variants={listVariants}

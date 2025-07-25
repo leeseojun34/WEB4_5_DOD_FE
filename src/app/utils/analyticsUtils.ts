@@ -1,5 +1,6 @@
 export const calculateParticipantion = (num: number, total: number) => {
-  return (num / total) * 100;
+  const calc = (num / total) * 100;
+  return calc.toFixed(0);
 };
 
 export const getLocationFrequencies = (
@@ -8,7 +9,7 @@ export const getLocationFrequencies = (
   const sortedData = groupSchedules
     .sort((a, b) => b.count - a.count)
     .slice(0, 4);
-  
+
   return mapLocationData(sortedData);
 };
 
