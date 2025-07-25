@@ -40,6 +40,8 @@ const StationSheet = ({ isOpen, setIsOpen, onSave }: StationSheetType) => {
 
   const saveHandler = () => {
     if (selectedStation) onSave(selectedStation);
+    setIsOpen(false);
+    setQuery("");
   };
   const cancelHandler = () => {
     setIsOpen(false);
