@@ -52,8 +52,9 @@ const GroupScheduleCreateSelectPage = () => {
               <div className="w-full" onClick={() => setSelected("create")}>
                 <OptionBox isSelected={selected === "create"}>
                   <Image
-                    height={52}
-                    width={52}
+                    unoptimized
+                    height={51}
+                    width={50}
                     src={newScheduleImg}
                     alt="새로운 일정 추가 이미지"
                   />
