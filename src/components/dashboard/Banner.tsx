@@ -14,13 +14,13 @@ export const Banner = () => {
       </div>
       <Link
         href={"/meeting"}
-        className="relative flex w-full h-35 sm:h-40 md:h-50 bg-gradient-to-r from-[#8AB6FF] to-[#5291F4] rounded-[20px] px-5 md:px-10 justify-between items-center"
+        className="relative flex w-full h-35 sm:h-40 md:h-50 bg-gradient-to-r from-[rgb(138,182,255)] to-[#5291F4] rounded-[20px] px-5 md:px-10 justify-between items-center group"
       >
         <Image
           src={bannerImg}
           alt="배너 이미지"
           priority
-          className="absolute bottom-0 w-34 h-28 sm:w-44 sm:h-36 md:w-48 md:h-40"
+          className="absolute bottom-0 left-10 w-38 h-32 sm:w-44 sm:h-36 md:w-48 md:h-40 group-hover:scale-110 transition-transform duration-300 ease-in-out origin-bottom"
         />
         <div className="flex flex-col w-full h-full justify-between items-end py-5 ">
           <div className="font-[TTTogether] text-[color:var(--color-white)] font-regular leading-9 text-3xl sm:text-4xl sm:leading-10 md:leading-14 md:text-5xl text-end">
