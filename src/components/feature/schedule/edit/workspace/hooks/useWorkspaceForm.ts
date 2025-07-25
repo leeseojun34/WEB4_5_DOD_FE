@@ -43,7 +43,6 @@ export const useWorkspaceForm = ({
   });
   const updateWorkspace = useUpdateScheduleInfo();
 
-  console.log(workspaceId);
   const handleCreateOrUpdate = () => {
     if (!type) return;
 
