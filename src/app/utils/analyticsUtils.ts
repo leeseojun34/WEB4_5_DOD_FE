@@ -1,6 +1,6 @@
 export const calculateParticipantion = (num: number, total: number) => {
   const calc = (num / total) * 100;
-  return calc.toFixed(0);
+  return Number(calc.toFixed(0));
 };
 
 export const getLocationFrequencies = (
