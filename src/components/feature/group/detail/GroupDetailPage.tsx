@@ -19,7 +19,11 @@ const GroupDetailPage = () => {
   }
 
   return (
-    <div className="w-full min-h-screen bg-[color:var(--color-gray-background)]">
+    <div
+      className={`w-full min-h-screen bg-[color:var(--color-gray-background)] ${
+        groupData.data.scheduleDetails.length >= 3 && "pb-30"
+      }`}
+    >
       <GroupHeaderSection
         groupId={groupData.data.groupId}
         groupName={groupData.data.groupName}
