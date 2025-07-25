@@ -11,9 +11,9 @@ export const useOnlineMeetingForm = (scheduleId: string, close: () => void) => {
     null
   );
   const [inputValue, setInputValue] = useState("");
-
   const createMeetingRoom = useCreateMeetingRoom();
   const updateScheduleInfo = useUpdateScheduleInfo();
+  const [isError, setIsError] = useState(false);
 
   const handleChangePlatform = (p: PlatformType) => {
     setSelectedPlatform(p);
@@ -25,14 +25,19 @@ export const useOnlineMeetingForm = (scheduleId: string, close: () => void) => {
   };
 
   const handleUpdateMeetingRoom = () => {
-    updateScheduleInfo.mutate({
-      scheduleId,
-      data: {
-        meetingPlatform: selectedPlatform as PlatformType,
-        platformURL: inputValue,
-      },
-    });
-    close();
+    if (!selectedPlatform || !inputValue) {
+      setIsError(true);
+    } else {
+      setIsError(false);
+      updateScheduleInfo.mutate({
+        scheduleId,
+        data: {
+          meetingPlatform: selectedPlatform as PlatformType,
+          platformURL: inputValue,
+        },
+      });
+      close();
+    }
   };
 
   const handleDeleteMeetingRoom = () => {
@@ -54,5 +59,6 @@ export const useOnlineMeetingForm = (scheduleId: string, close: () => void) => {
     handleUpdateMeetingRoom,
     handleDeleteMeetingRoom,
     setInputValue,
+    isError,
   };
 };

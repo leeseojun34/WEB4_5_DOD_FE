@@ -10,7 +10,10 @@ import Image from "next/image";
 import { ChangeEvent } from "react";
 import useMediaQuery from "../hooks/useMediaQuery";
 import BottomSheetHeader from "@/components/layout/BottomSheetHeader";
-import { PlatformType, useOnlineMeetingForm } from "./hooks/useOnlineMeetingForm";
+import {
+  PlatformType,
+  useOnlineMeetingForm,
+} from "./hooks/useOnlineMeetingForm";
 
 interface OnlineMeetingEditBottomSheetProps {
   isOpen: boolean;
@@ -41,6 +44,7 @@ const OnlineMeetingEditBottomSheet = ({
     handleUpdateMeetingRoom,
     handleDeleteMeetingRoom,
     setInputValue,
+    isError,
   } = useOnlineMeetingForm(scheduleId, () => setIsOpen(false));
 
   return (
@@ -94,6 +98,12 @@ const OnlineMeetingEditBottomSheet = ({
                 setInputValue(e.target.value)
               }
             />
+            {isError && (
+              <p className="text-[color:var(--color-red)] text-xs ml-2">
+                회의장 종류와 링크를 모두 입력해주세요!
+              </p>
+            )}
+
             <button
               className="cursor-pointer text-[color:var(--color-red)] text-xs font-semibold"
               onClick={handleDeleteMeetingRoom}
