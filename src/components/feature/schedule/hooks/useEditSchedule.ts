@@ -52,7 +52,12 @@ export const useEditSchedule = (id: string) => {
 
       updateSchedule.mutate({
         scheduleId: id,
-        data: { startTime: startISOTime!, endTime: endISOTime! },
+        data: {
+          scheduleName,
+          description: scheduleDescription,
+          startTime: startISOTime!,
+          endTime: endISOTime!,
+        },
       });
       setIsOpen(false);
     }
