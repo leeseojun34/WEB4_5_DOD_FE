@@ -31,6 +31,7 @@ const WorkspaceBottomSheet = ({
     setType,
     handleCreateOrUpdate,
     handleDelete,
+    isError,
   } = useWorkspaceForm({
     scheduleId,
     workspaceId,
@@ -96,6 +97,11 @@ const WorkspaceBottomSheet = ({
                 setUrl(e.target.value)
               }
             />
+            {isError && (
+              <p className="text-[color:var(--color-red)] text-xs ml-2">
+                빠진 항목이 있어요! 종류, 이름, URL을 모두 입력해주세요.
+              </p>
+            )}
           </div>
 
           <div className="w-full flex justify-center items-center flex-col gap-4 mt-8">

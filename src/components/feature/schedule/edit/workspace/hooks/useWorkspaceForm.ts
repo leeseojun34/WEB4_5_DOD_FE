@@ -35,7 +35,7 @@ export const useWorkspaceForm = ({
   const [type, setType] = useState<WorkspacePlatformType | "">(
     (defaultValue?.type as WorkspacePlatformType) ?? ""
   );
-
+  const [isError, setIsError] = useState(false);
   const { mutate: createWorkspace } = useCreateWorkspace();
   const { mutate: deleteWorkspace } = useDeleteWorkspace({
     workspaceId,
@@ -44,9 +44,13 @@ export const useWorkspaceForm = ({
   const updateWorkspace = useUpdateScheduleInfo();
 
   const handleCreateOrUpdate = () => {
-    if (!type) return;
+    if (!type || !url || !name) {
+      setIsError(true);
+      return;
+    }
 
     if (defaultValue) {
+      setIsError(false);
       updateWorkspace.mutate({
         scheduleId,
         data: {
@@ -61,6 +65,7 @@ export const useWorkspaceForm = ({
         },
       });
     } else {
+      setIsError(false);
       createWorkspace({
         id: scheduleId,
         data: {
@@ -89,5 +94,7 @@ export const useWorkspaceForm = ({
     setType,
     handleCreateOrUpdate,
     handleDelete,
+    isError,
+    setIsError,
   };
 };
