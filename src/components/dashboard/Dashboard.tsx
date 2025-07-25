@@ -1,14 +1,13 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Calendar } from "../feature/calendar/Calender";
 import { Banner } from "./Banner";
 import { MyScheduleSection } from "./MyScheduleSection";
 import Footer from "../layout/Footer";
 import Header from "../layout/Header";
-import { formatDate } from "@/app/utils/dateFormat";
 import { MyGroupSection } from "./MyGroupSection";
 import {
-  DashboardDetailResponse,
-  getDashboardDetail,
+  useDashboardGroups,
+  useDashboardSchedules,
 } from "@/lib/api/dashboardApi";
 import { MyGroupSkeleton, MyScheduleSkeleton } from "./Skeleton";
 import useAuthStore from "@/stores/authStores";
@@ -17,25 +16,11 @@ const Dashboard = () => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     new Date()
   );
-  const [dashboardData, setDashboardData] =
-    useState<DashboardDetailResponse | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const { user } = useAuthStore();
 
-  useEffect(() => {
-    const fetchDashboard = async () => {
-      setIsLoading(true);
-      try {
-        const res = await getDashboardDetail(formatDate(selectedDate!));
-        setDashboardData(res.data);
-      } catch (e) {
-        console.error(e);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchDashboard();
-  }, [selectedDate]);
+  const { data: schedules, isPending: isScheduleLoading } =
+    useDashboardSchedules(selectedDate!);
+  const { data: groups, isPending: isGroupLoading } = useDashboardGroups();
 
   return (
     <section>
@@ -50,19 +35,23 @@ const Dashboard = () => {
             selected={selectedDate}
             setSelected={setSelectedDate}
           />
-          {isLoading || !dashboardData ? (
+          {isScheduleLoading ? (
+            <MyScheduleSkeleton />
+          ) : (
+            <MyScheduleSection
+              selectedDate={selectedDate!}
+              schedules={schedules}
+              userId={user!.id}
+            />
+          )}
+
+          {isGroupLoading ? (
             <>
-              <MyScheduleSkeleton />
               <MyGroupSkeleton />
             </>
           ) : (
             <>
-              <MyScheduleSection
-                selectedDate={selectedDate!}
-                schedules={dashboardData.schedules}
-                userId={user!.id}
-              />
-              <MyGroupSection groups={dashboardData!.groups.groupDetails} />
+              <MyGroupSection groups={groups} />
             </>
           )}
         </div>
