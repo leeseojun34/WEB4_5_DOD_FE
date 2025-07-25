@@ -9,8 +9,13 @@ import { Button } from "@/components/ui/Button";
 import { motion } from "framer-motion";
 import Header from "@/components/layout/Header";
 import HeaderTop from "@/components/layout/HeaderTop";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import getTotalTravelTime from "@/app/utils/getTotalTravelTime";
+import {
+  getSuggestedLocations,
+  useSuggestedLocations,
+} from "@/lib/api/ElectionApi";
+import useAuthStore from "@/stores/authStores";
 
 const dummyUserData = [
   { latitude: 37.50578860265, longitude: 126.753192450274 },
@@ -18,41 +23,41 @@ const dummyUserData = [
 
 const cache: { [key: string]: number } = {};
 
-const dummyData = [
-  {
-    locationName: "기흥역",
-    latitude: 37.2754972009506,
-    longitude: 127.115955078051,
-    suggestedMemberId: 1,
-    voteCount: 5,
-    metroLines: ["2", "4", "5"],
-    stationColors: ["#00A84D", "#0052A4", "#996CAC"],
-    travelTime: 47,
-    noVoteCount: 0,
-  },
-  {
-    locationName: "강남역",
-    latitude: 37.49808633653005,
-    longitude: 127.02800140627488,
-    suggestedMemberId: 2,
-    voteCount: 2,
-    metroLines: ["2", "8"],
-    stationColors: ["#00A84D", "#E6186C"],
-    travelTime: 47,
-    noVoteCount: 0,
-  },
-  {
-    locationName: "홍대입구역",
-    latitude: 37.5568707448873,
-    longitude: 126.923778562273,
-    suggestedMemberId: 3,
-    voteCount: 8,
-    metroLines: ["2", "5", "경의중앙", "수인분당"],
-    stationColors: ["#00A84D", "#996CAC", "#77C4A3", "#FABE00"],
-    travelTime: 47,
-    noVoteCount: 0,
-  },
-];
+// const dummyData = [
+//   {
+//     locationName: "기흥역",
+//     latitude: 37.2754972009506,
+//     longitude: 127.115955078051,
+//     suggestedMemberId: 1,
+//     voteCount: 5,
+//     metroLines: ["2", "4", "5"],
+//     stationColors: ["#00A84D", "#0052A4", "#996CAC"],
+//     travelTime: 47,
+//     noVoteCount: 0,
+//   },
+//   {
+//     locationName: "강남역",
+//     latitude: 37.49808633653005,
+//     longitude: 127.02800140627488,
+//     suggestedMemberId: 2,
+//     voteCount: 2,
+//     metroLines: ["2", "8"],
+//     stationColors: ["#00A84D", "#E6186C"],
+//     travelTime: 47,
+//     noVoteCount: 0,
+//   },
+//   {
+//     locationName: "홍대입구역",
+//     latitude: 37.5568707448873,
+//     longitude: 126.923778562273,
+//     suggestedMemberId: 3,
+//     voteCount: 8,
+//     metroLines: ["2", "5", "경의중앙", "수인분당"],
+//     stationColors: ["#00A84D", "#996CAC", "#77C4A3", "#FABE00"],
+//     travelTime: 47,
+//     noVoteCount: 0,
+//   },
+// ];
 
 const listVariants = {
   visible: {
@@ -77,9 +82,20 @@ const itemVariants = {
 
 const ElectionSpot = () => {
   const userPosition = dummyUserData[0];
+  // const { user } = useAuthStore();
+  // const userId = user?.id;
+  const params = useParams();
+  const scheduleId = params.Id as string;
   const [selectedId, setSelectedId] = useState<number | null>(null);
-  const [staionList, setStationList] = useState(dummyData);
+  const [staionList, setStationList] = useState<Station[]>([]);
+  const { data: voteData } = useSuggestedLocations(scheduleId);
+
   // const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    if (voteData && voteData.data && voteData.data.suggestedLocations) {
+      setStationList(voteData.data.suggestedLocations);
+    }
+  }, [voteData]);
 
   const isActive = selectedId !== null;
 
@@ -89,7 +105,7 @@ const ElectionSpot = () => {
     const fetchTravelTimes = async () => {
       //setLoading(true);
       const updateStations = await Promise.all(
-        dummyData.map(async (station) => {
+        voteData.suggestedLocation.map(async (station) => {
           const cacheKey = `${userPosition.longitude},${userPosition.latitude}-${station.longitude},${station.latitude}`;
 
           if (cache[cacheKey]) {

@@ -22,7 +22,7 @@ const SubwayCard: React.FC<SubwayCardProps> = ({
     <>
       <OptionBox isSelected={isSelected} isPointer={isPointer}>
         <div className="flex gap-2 items-center justify-center">
-          {station.metroLines.map((line, idx) => {
+          {station.metroTransfer.map(transfer, idx) => {
             const isSingleChar = line.length === 1;
             const widthClass = isSingleChar ? "w-5 h-5" : "px-2 py-1 rounded";
             const bgColor = station.stationColors[idx] || "#353535";
