@@ -40,7 +40,7 @@ const DropdownSmall = ({
             {topChild && (
               <div
                 className={`w-full text-center cursor-pointer hover:font-semibold ${
-                  !bottomChild && "text-[var(--color-red)]"
+                  !bottomChild && "text-[var(--color-black)]"
                 }`}
                 onClick={(e) => {
                   e.stopPropagation();
