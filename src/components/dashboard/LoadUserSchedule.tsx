@@ -1,14 +1,16 @@
 "use client";
-import Image from "next/image";
 import Header from "../layout/Header";
 import HeaderTop from "../layout/HeaderTop";
 import { Footer } from "react-day-picker";
-import rabbitWriting from "@/assets/images/rabbit_writing.png";
 import UserScheduleList from "./UserScheduleList";
-import { getUserSchedules, UserScheduleResponse } from "@/lib/api/dashboardApi";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { getUserSchedules, UserScheduleResponse } from "@/lib/api/dashboardApi";
 
-const UserSchedule = () => {
+const LoadUserSchedule = () => {
+  const params = useParams();
+  const groupId = params.groupId;
+
   const [schedules, setSchedules] = useState<UserScheduleResponse>({});
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -32,16 +34,12 @@ const UserSchedule = () => {
         <Header />
       </div>
       <div className="min-w-[375px] w-full max-w-185 bg-[color:var(--color-gray-background)] mx-auto pt-8 sm:pt-30">
-        <HeaderTop>나의 이때어때 일정</HeaderTop>
+        <HeaderTop>불러올 일정 선택</HeaderTop>
       </div>
-      <div className="min-w-[375px] w-full max-w-185 min-h-screen px-5 mx-auto pt-10 sm:pt-0 pb-20">
-        <Image
-          src={rabbitWriting}
-          alt="글쓰는 토끼 이미지"
-          className="w-[178px] h-[178px] ml-auto"
-        />
+      <div className="min-w-[375px] w-full max-w-185 min-h-screen px-5 mx-auto pt-15 sm:pt-0 pb-30">
         <UserScheduleList
           schedules={Object.values(schedules).flat()}
+          groupId={Number(groupId) ?? undefined}
           isLoading={isLoading}
         />
       </div>
@@ -51,4 +49,5 @@ const UserSchedule = () => {
     </div>
   );
 };
-export default UserSchedule;
+
+export default LoadUserSchedule;

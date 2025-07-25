@@ -80,7 +80,7 @@ const UserScheduleList = ({
               ) : (
                 <OptionBox isSelected={schedule.id === selectedSchedule}>
                   <div
-                    className=" flex flex-col flex-1 gap-2 min-w-[335px] max-w-185 w-full px-2"
+                    className=" flex flex-col flex-1 gap-2 min-w-[335px] max-w-185 w-full px-4"
                     onClick={() => setSelectedSchedule(schedule.id)}
                   >
                     <div className="flex justify-between">

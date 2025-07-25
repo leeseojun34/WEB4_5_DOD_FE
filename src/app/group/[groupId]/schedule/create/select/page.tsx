@@ -27,7 +27,7 @@ const GroupScheduleCreateSelectPage = () => {
     if (selected === "create") {
       router.push(`/schedule/create?groupId=${groupId}`);
     } else {
-      router.push(`/schedule/user/${userId}?groupId=${groupId}`);
+      router.push(`/group/${groupId}/user/${userId}/load`);
     }
   };
 
