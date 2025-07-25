@@ -11,8 +11,7 @@ type ListBoxProps = {
   children: React.ReactNode;
   buttonText?: string;
   station?: string;
-  isConnected?: boolean;
-  onConnect?: () => void;
+  hasGoogleCalendarId?: boolean;
   clickHandler?: () => void;
 };
 
@@ -20,6 +19,7 @@ const ListBox = ({
   children,
   station,
   buttonText = "",
+  hasGoogleCalendarId,
   clickHandler,
 }: ListBoxProps) => {
   return (
@@ -33,6 +33,11 @@ const ListBox = ({
             {station && (
               <span className="text-xs font-normal text-[color:var(--color-gray-placeholder)]">
                 {station}
+              </span>
+            )}
+            {children === "캘린더 연동" && hasGoogleCalendarId && (
+              <span className="text-xs font-normal text-[color:var(--color-gray-placeholder)]">
+                등록됨
               </span>
             )}
           </div>

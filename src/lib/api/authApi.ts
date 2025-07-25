@@ -50,7 +50,6 @@ export const useFavoriteLocation = () => {
     queryFn: async () => {
       const res = await axiosInstance.get("/favorite-location");
       const list = res.data.data;
-      console.log("list:", list[0].stationName);
       return list.length > 0 ? list[0] : { stationName: "미등록" };
     },
   });
@@ -140,6 +139,18 @@ export const useDeactiveMutation = () => {
 
 const registerCalendarId = async (publicCalendarId: string) => {
   return await axiosInstance.post("/calendar/public-id", publicCalendarId);
+};
+
+//구글 캘린더 Id 조회
+export const useGoogleCalendarId = () => {
+  return useQuery({
+    queryKey: ["calendarId"],
+    queryFn: async () => {
+      const res = await axiosInstance.get("/calendar/public-id");
+      return res.data.data;
+    },
+    retry: 0,
+  });
 };
 
 // 구글 캘런더 Id 등록 (post)

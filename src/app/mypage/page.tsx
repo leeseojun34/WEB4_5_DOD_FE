@@ -15,6 +15,7 @@ import {
   useAddFavoriteLocation,
   useDeactiveMutation,
   useFavoriteLocation,
+  useGoogleCalendarId,
   useLogoutMutation,
   useResgisterCalendarId,
   useUpdateFavoriteLocation,
@@ -32,11 +33,13 @@ function MyPage() {
   const [newName, setNewName] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [sheetType, setSheetType] = useState<SheetType | null>(null);
-  const [calendarSynced, setCalendarSynced] = useState(false);
+  // const [calendarSynced, setCalendarSynced] = useState(false);
   // 즐겨찾기 장소 조회
   const { data: favoriteQuery } = useFavoriteLocation();
   const [myStation, setMyStation] = useState(favoriteQuery?.stationName);
   const [calendarId, setCalendarId] = useState("");
+  const { data: googleCalendar } = useGoogleCalendarId();
+  const [hasGoogleCalendarId, setHasGoogleCalendarId] = useState(false);
 
   useEffect(() => {
     refetch(); // 마운트 시 user 데이터 패치
@@ -46,10 +49,14 @@ function MyPage() {
     if (user) {
       setName(user.data.name);
       setMyStation(favoriteQuery?.stationName);
-      console.log("my station :", favoriteQuery?.stationName);
     }
   }, [user, favoriteQuery]);
-
+  useEffect(() => {
+    if (googleCalendar) {
+      setHasGoogleCalendarId(googleCalendar.calendarId ? true : false);
+      setCalendarId(googleCalendar.calendarId || "");
+    }
+  }, [googleCalendar]);
   // 즐겨찾는 시간 조회
   // const favoriteTime = useFavoriteTime();
   // console.log(favoriteTime.data);
@@ -58,7 +65,6 @@ function MyPage() {
   const openSheet = (type: SheetType) => {
     setSheetType(type);
     setIsOpen(true);
-    // console.log("bottomsheet:", type);
   };
 
   const updateName = useUpdateName();
@@ -114,12 +120,12 @@ function MyPage() {
     setIsOpen(false);
   };
 
-  // 캘린더 연동
+  // 캘린더 등록
   const calendarMutation = useResgisterCalendarId();
   const handleGoogleCalendar = () => {
     calendarMutation.mutate(calendarId);
-    setCalendarSynced((prev) => !prev);
     setIsOpen(false);
+    setCalendarId(calendarId);
   };
 
   const logoutMutation = useLogoutMutation();
@@ -154,13 +160,13 @@ function MyPage() {
             </ListBox>
             <ListBox
               buttonText="등록하기"
-              station={myStation || "미등록"}
+              station={myStation}
               clickHandler={() => openSheet("station")}>
               내 주변역
             </ListBox>
             <ListBox
               clickHandler={() => openSheet("calendar")}
-              isConnected={calendarSynced}>
+              hasGoogleCalendarId={hasGoogleCalendarId}>
               캘린더 연동
             </ListBox>
           </div>
@@ -205,7 +211,6 @@ function MyPage() {
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           onSave={() => {
-            // 시간 저장 로직
             setIsOpen(false);
           }}
         />
