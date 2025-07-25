@@ -1,5 +1,5 @@
 import Image from "next/image";
-import sadRabbitImg from "@/assets/images/rabbit_noschedule_sad.png";
+import sadRabbitImg from "@/assets/images/pupple_rabbit_noschedule_sad.png";
 import { Button } from "@/components/ui/Button";
 import Link from "next/link";
 import FeatureListCard from "../feature/group/analytics/FeatureListCard";
