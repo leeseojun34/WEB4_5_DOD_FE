@@ -3,6 +3,7 @@ import GroupHeader from "@/components/layout/GroupHeader";
 import Footer from "@/components/layout/Footer";
 import { useEffect, useState } from "react";
 import useAuthStore from "@/stores/authStores";
+import useMediaQuery from "../hooks/useMediaQuery";
 
 interface ScheduleDetailLayoutProps {
   children: React.ReactNode;
@@ -17,6 +18,7 @@ const ScheduleDetailLayout = ({
 }: ScheduleDetailLayoutProps) => {
   const { user } = useAuthStore();
   const [isLeader, setIsLeader] = useState(false);
+  const isSE = useMediaQuery("(min-height: 667px)");
 
   useEffect(() => {
     if (user && data?.members) {
@@ -29,7 +31,11 @@ const ScheduleDetailLayout = ({
   }, [user, data]);
 
   return (
-    <div className="w-full bg-[color:var(--color-gray-background)] min-h-screen">
+    <div
+      className={`w-full bg-[color:var(--color-gray-background)] min-h-screen ${
+        isSE && "pb-30"
+      }`}
+    >
       <div className="hidden sm:block">
         <Header type="blue" />
       </div>
