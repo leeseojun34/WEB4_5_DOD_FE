@@ -31,7 +31,7 @@ const OfflineBottomSheet = ({
         hideBackdrop={true}
       >
         {() => (
-          <>
+          <div className="flex flex-col h-full overflow-y-auto pb-70">
             <GroupHeaderMap
               name={data.scheduleName}
               description={data.description}
@@ -61,7 +61,7 @@ const OfflineBottomSheet = ({
                 </ScheduleDetailContent>
               </div>
             </div>
-          </>
+          </div>
         )}
       </BottomSheet>
     </>
