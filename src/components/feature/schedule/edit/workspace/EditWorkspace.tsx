@@ -45,6 +45,17 @@ const EditWorkspace = () => {
           Array.from({ length: 4 }).map((_, i) => (
             <WorkspaceSkeletonItem key={i} />
           ))}
+        {workspaces?.length === 0 && !isPending && (
+          <div>
+            <motion.div
+              variants={itemVariants}
+              className="w-full flex justify-center items-center text-center text-sm text-[color:var(--color-gray-placeholder)] h-50 leading-6"
+            >
+              워크스페이스가 없어요 <br />
+              새로운 워크스페이스를 등록해 봐요! 🫡
+            </motion.div>
+          </div>
+        )}
 
         {workspaces?.map((workspace: WorkspaceType) => (
           <motion.div variants={itemVariants} key={workspace.workspaceId}>
