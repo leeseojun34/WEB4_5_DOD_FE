@@ -118,7 +118,7 @@ const WorkspaceBottomSheet = ({
             </div>
 
             <Input
-              maxLength={10}
+              maxLength={15}
               label="워크스페이스 이름"
               placeholder="워크스페이스 이름을 입력해주세요"
               value={name}
