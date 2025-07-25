@@ -61,13 +61,17 @@ const OnlineMeetingRoom = ({
               <Image
                 src={PLATFORM[platform as PlatformType]}
                 alt={`${platform} 아이콘`}
+                className="w-4 h-4"
               />
             </div>
             <div className="text-[color:var(--color-black)] text-sm">
               {platform}
             </div>
           </div>
-          <Link href={url} target="blank">
+          <Link
+            href={url.startsWith("http") ? url : `https://${url}`}
+            target="blank"
+          >
             <ChevronRight className="w-[14px] h-[14px] text-[color:var(--color-gray)]" />
           </Link>
         </div>
