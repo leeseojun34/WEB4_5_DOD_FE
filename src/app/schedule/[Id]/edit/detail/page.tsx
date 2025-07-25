@@ -1,5 +1,6 @@
 "use client";
 
+import GlobalLoading from "@/app/loading";
 import ActionButtons from "@/components/feature/schedule/editSchedule/ActionButtons";
 import ScheduleForm from "@/components/feature/schedule/editSchedule/ScheduleForm";
 import TimeEditBottomSheet from "@/components/feature/schedule/editSchedule/TimeEditBottomSheet";
@@ -31,7 +32,10 @@ const EditScheduleInfo = () => {
     handleEditInfo,
     startTime,
     endTime,
+    schedulePending,
   } = useEditSchedule(id);
+
+  if (schedulePending) return <GlobalLoading />;
 
   return (
     <div className="w-full">

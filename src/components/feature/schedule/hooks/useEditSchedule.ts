@@ -10,7 +10,8 @@ import { ChangeEvent, useEffect, useState } from "react";
 
 export const useEditSchedule = (id: string) => {
   const router = useRouter();
-  const { data: scheduleData } = useGroupSchedule(id);
+  const { data: scheduleData, isPending: schedulePending } =
+    useGroupSchedule(id);
   const [scheduleName, setScheduleName] = useState("");
   const [scheduleDescription, setScheduleDescription] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -98,5 +99,6 @@ export const useEditSchedule = (id: string) => {
     setStartTime,
     setEndTime,
     handleEditInfo,
+    schedulePending,
   };
 };
