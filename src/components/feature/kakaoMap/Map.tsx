@@ -12,6 +12,7 @@ type MapProps = {
   latitude?: number;
   longitude?: number;
   showMarker?: boolean;
+  offsetY?: number;
 };
 
 declare global {
@@ -38,7 +39,8 @@ const initializeMap = (
   mapRef: React.RefObject<HTMLDivElement | null>,
   latitude: number,
   longitude: number,
-  showMarker: boolean
+  showMarker: boolean,
+  offsetY?: number
 ) => {
   if (!mapRef.current) return;
 
@@ -47,7 +49,16 @@ const initializeMap = (
     center: new window.kakao.maps.LatLng(latitude, longitude),
     level: 3,
   };
-  const map = new window.kakao.maps.Map(mapContainer, mapOption);
+  const map = new window.kakao.maps.Map(
+    mapContainer,
+    mapOption
+  ) as kakao.maps.Map;
+
+  if (offsetY) {
+    setTimeout(() => {
+      map.panBy(0, offsetY);
+    }, 100);
+  }
 
   if (showMarker) {
     const imageSize = new window.kakao.maps.Size(40, 56);
@@ -70,6 +81,7 @@ const Map = ({
   latitude = 37.4849424,
   longitude = 127.0106459,
   showMarker = true,
+  offsetY,
 }: MapProps) => {
   const mapRef = useRef<HTMLDivElement>(null);
 
@@ -79,7 +91,7 @@ const Map = ({
 
     if (document.getElementById("kakao-map-script")) {
       if (window.kakao && window.kakao.maps) {
-        initializeMap(mapRef, latitude, longitude, showMarker);
+        initializeMap(mapRef, latitude, longitude, showMarker, offsetY);
       }
       return;
     }
@@ -90,11 +102,11 @@ const Map = ({
     script.async = true;
     script.onload = () => {
       window.kakao.maps.load(() => {
-        initializeMap(mapRef, latitude, longitude, showMarker);
+        initializeMap(mapRef, latitude, longitude, showMarker, offsetY);
       });
     };
     document.head.appendChild(script);
-  }, [latitude, longitude, showMarker]);
+  }, [latitude, longitude, showMarker, offsetY]);
 
   return <div ref={mapRef} style={{ width: "100%", height: "100%" }} />;
 };

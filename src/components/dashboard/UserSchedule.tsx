@@ -25,7 +25,6 @@ const UserSchedule = () => {
     };
     fetchSchedules();
   }, []);
-
   return (
     <div className="w-full min-h-screen bg-[color:var(--color-gray-background)]">
       <div className="hidden sm:block">
