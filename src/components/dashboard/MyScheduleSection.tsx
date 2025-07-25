@@ -6,14 +6,14 @@ import { DashboardScheduleType } from "@/lib/api/dashboardApi";
 interface MyScheduleSectionProps {
   selectedDate: Date;
   schedules: DashboardScheduleType[];
+  userId: string;
 }
 
 export const MyScheduleSection = ({
   selectedDate,
   schedules,
+  userId,
 }: MyScheduleSectionProps) => {
-  const userId = "GOOGLE_116827515645165286764";
-
   const filteredSchedules = schedules.filter((schedule) => {
     const scheduleDate = new Date(schedule.startTime).toLocaleDateString(
       "ko-KR"
@@ -24,7 +24,7 @@ export const MyScheduleSection = ({
 
   return (
     <>
-      <div className="bg-[color:var(--color-white)] p-6 rounded-[20px] w-full gap-2 flex flex-col  min-w-[375px]">
+      <div className="bg-[color:var(--color-white)] p-6 rounded-[20px] w-full gap-2 flex flex-col  min-w-[335px]">
         <div className="flex justify-between">
           <p className="font-semibold text-base text-[color:var(--color-black)]">
             나의 일정

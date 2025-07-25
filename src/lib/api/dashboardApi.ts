@@ -1,4 +1,6 @@
+import { useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "./axiosInstance";
+import { formatDate } from "@/app/utils/dateFormat";
 
 export interface DashboardScheduleType {
   id: number;
@@ -14,6 +16,7 @@ export interface DashboardScheduleType {
   meetingPlatform: string;
   scheduleStatus: string;
   source: string;
+  participantNames: string;
 }
 
 export interface DashboardGroupType {
@@ -21,6 +24,7 @@ export interface DashboardGroupType {
   groupName: string;
   description: string;
   groupMemberNum: number;
+  leaderProfileImage: number;
 }
 
 export interface DashboardDetailResponse {
@@ -42,6 +46,23 @@ export interface UserScheduleResponse {
 export const getDashboardDetail = async (date: string) => {
   const response = await axiosInstance.get(`/main-page`, { params: { date } });
   return response.data;
+};
+
+export const useDashboardSchedules = (selectedDate: Date) => {
+  return useQuery({
+    queryKey: ["dashboard", "schedules", formatDate(selectedDate)],
+    queryFn: () => getDashboardDetail(formatDate(selectedDate)),
+    select: (data) => data.data.schedules,
+  });
+};
+
+export const useDashboardGroups = () => {
+  return useQuery({
+    queryKey: ["dashboard", "groups"],
+    queryFn: () => getDashboardDetail(formatDate(new Date())),
+    select: (data) => data.data.groups.groupDetails,
+    staleTime: Infinity,
+  });
 };
 
 /**

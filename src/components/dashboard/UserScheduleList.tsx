@@ -26,7 +26,6 @@ const UserScheduleList = ({
   isLoading,
 }: UserScheduleListProps) => {
   const [selectedSchedule, setSelectedSchedule] = useState<number | null>(null);
-  const groupMembers = ["박은서", "현혜주", "황수지", "박준규", "박상윤"];
   const router = useRouter();
 
   const handleMoveSchedule = async (scheduleId: number, groupId: number) => {
@@ -48,6 +47,10 @@ const UserScheduleList = ({
     );
   };
 
+  const handleCustomDelete = (scheduleId: string) => {
+    console.log("사용자 리스트에서 일정 제거", scheduleId);
+  };
+
   return (
     <motion.div
       className="flex flex-col items-center gap-4 w-full"
@@ -67,16 +70,17 @@ const UserScheduleList = ({
                 <ScheduleCard
                   variant="event"
                   title={schedule.name}
-                  meetingType={
-                    schedule.meetingType === "ONLINE" ? "온라인" : "오프라인"
-                  }
+                  meetingType={schedule.meetingType as "ONLINE" | "OFFLINE"}
                   time={formatSchedule(schedule.startTime, schedule.endTime)}
-                  members={groupMembers}
+                  members={schedule.participantNames.split(", ")}
+                  scheduleId={String(schedule.id)}
+                  groupRole={true}
+                  onCustomDelete={handleCustomDelete}
                 />
               ) : (
                 <OptionBox isSelected={schedule.id === selectedSchedule}>
                   <div
-                    className=" flex flex-col flex-1 gap-2 min-w-[335px] max-w-185 w-full px-2"
+                    className=" flex flex-col flex-1 gap-2 min-w-[335px] max-w-185 w-full px-4"
                     onClick={() => setSelectedSchedule(schedule.id)}
                   >
                     <div className="flex justify-between">
@@ -95,9 +99,11 @@ const UserScheduleList = ({
                       {formatSchedule(schedule.startTime, schedule.endTime)}
                     </div>
                     <div className="flex gap-1">
-                      {groupMembers.map((member, i) => (
-                        <NameTag name={member} key={`${member}-${i}`} />
-                      ))}
+                      {schedule.participantNames
+                        .split(", ")
+                        .map((member, i) => (
+                          <NameTag name={member} key={`${member}-${i}`} />
+                        ))}
                     </div>
                   </div>
                 </OptionBox>
