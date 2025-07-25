@@ -47,6 +47,10 @@ const UserScheduleList = ({
     );
   };
 
+  const handleCustomDelete = (scheduleId: string) => {
+    console.log("사용자 리스트에서 일정 제거", scheduleId);
+  };
+
   return (
     <motion.div
       className="flex flex-col items-center gap-4 w-full"
@@ -71,6 +75,7 @@ const UserScheduleList = ({
                   members={schedule.participantNames.split(", ")}
                   scheduleId={String(schedule.id)}
                   groupRole={true}
+                  onCustomDelete={handleCustomDelete}
                 />
               ) : (
                 <OptionBox isSelected={schedule.id === selectedSchedule}>
