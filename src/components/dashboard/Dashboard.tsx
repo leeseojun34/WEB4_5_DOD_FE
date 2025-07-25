@@ -50,7 +50,7 @@ const Dashboard = () => {
             selected={selectedDate}
             setSelected={setSelectedDate}
           />
-          {isLoading ? (
+          {isLoading || !dashboardData ? (
             <>
               <MyScheduleSkeleton />
               <MyGroupSkeleton />
@@ -59,7 +59,7 @@ const Dashboard = () => {
             <>
               <MyScheduleSection
                 selectedDate={selectedDate!}
-                schedules={dashboardData!.schedules}
+                schedules={dashboardData.schedules}
                 userId={user!.id}
               />
               <MyGroupSection groups={dashboardData!.groups.groupDetails} />
