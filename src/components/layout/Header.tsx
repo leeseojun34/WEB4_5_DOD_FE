@@ -6,11 +6,15 @@ import calendarWhite from "@/assets/images/calendar_white.png";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/lib/api/userApi";
 import { profileImages } from "@/lib/profileImages";
+import { useEffect } from "react";
 
 const Header = ({ type = "" }: { type?: "" | "blue" }) => {
   const router = useRouter();
-  const { data: user } = useUser();
-
+  const { data: user, refetch } = useUser();
+  console.log(user);
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
   const profile = profileImages[user?.data.profileImageNumber];
 
   return (

@@ -1,4 +1,4 @@
-const NameTag = ({ name, isFuture }: { name: string; isFuture: boolean }) => {
+const NameTag = ({ name, isFuture }: { name: string; isFuture?: boolean }) => {
   return (
     <div>
       <div

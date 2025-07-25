@@ -56,19 +56,6 @@ const createWorkspace = async (id: string, data: CreateWorkSpaceRequest) => {
   return res.data;
 };
 
-const deleteWorkspace = async (workspaceId: string) => {
-  const res = await axiosInstance.post(
-    `/schedules/delete-workspace/${workspaceId}`,
-    workspaceId
-  );
-  return res.data;
-};
-
-const deleteSchedule = async (scheduleId: string) => {
-  const res = await axiosInstance.delete(`/schedules/delete/${scheduleId}`);
-  return res.data;
-};
-
 const updateScheduleInfo = async (
   scheduleId: string,
   data: UpdateScheduleInfoReqeust
@@ -77,6 +64,19 @@ const updateScheduleInfo = async (
     `/schedules/modify/${scheduleId}`,
     data
   );
+  return res.data;
+};
+
+const deleteWorkspace = async (id: string, workspaceId: string) => {
+  const res = await axiosInstance.post(
+    `/schedules/delete-workspace/${id}`,
+    workspaceId
+  );
+  return res.data;
+};
+
+const deleteSchedule = async (scheduleId: string) => {
+  const res = await axiosInstance.delete(`/schedules/delete/${scheduleId}`);
   return res.data;
 };
 
@@ -170,7 +170,7 @@ export const useDeleteWorkspace = ({
 }) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: () => deleteWorkspace(workspaceId),
+    mutationFn: () => deleteWorkspace(scheduleId, workspaceId),
     onSuccess: () => {
       ToastWell("🗑️", "워크스페이스가 삭제되었습니다.");
       queryClient.invalidateQueries({
