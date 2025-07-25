@@ -1,7 +1,6 @@
 import BottomSheet from "@/components/ui/BottomSheet";
 import TimeSelector from "./TimeSelector";
 import { Dispatch, SetStateAction } from "react";
-import useMediaQuery from "../hooks/useMediaQuery";
 import BottomSheetHeader from "@/components/layout/BottomSheetHeader";
 
 interface TimeEditBottomSheetProps {
@@ -12,6 +11,8 @@ interface TimeEditBottomSheetProps {
   onComplete: () => void;
   setStartTime: (str: string) => void;
   setEndTime: (str: string) => void;
+  startTime: string;
+  endTime: string;
 }
 
 const TimeEditBottomSheet = ({
@@ -22,13 +23,13 @@ const TimeEditBottomSheet = ({
   onComplete,
   setStartTime,
   setEndTime,
+  startTime,
+  endTime,
 }: TimeEditBottomSheetProps) => {
-  const isMobile = useMediaQuery("(min-width: 640px)");
-  const snapPoints = isMobile ? [0.55] : [0.9];
   return (
-    <BottomSheet isOpen={isOpen} setIsOpen={setIsOpen} snapPoints={snapPoints}>
+    <BottomSheet isOpen={isOpen} setIsOpen={setIsOpen} snapPoints={[0.9]}>
       {() => (
-        <div className="w-[375px] flex flex-col items-center px-5 mx-auto pt-3 gap-8">
+        <div className="w-[375px] flex flex-col items-center px-5 mx-auto pt-3 gap-8 h-[calc(100vh-18vh)] relative">
           <BottomSheetHeader setIsOpen={setIsOpen} title="모임 시간 수정" />
           <TimeSelector
             selectedDate={selectedDate}
@@ -36,6 +37,8 @@ const TimeEditBottomSheet = ({
             setStartTime={setStartTime}
             setEndTime={setEndTime}
             onComplete={onComplete}
+            startTime={startTime}
+            endTime={endTime}
           />
         </div>
       )}

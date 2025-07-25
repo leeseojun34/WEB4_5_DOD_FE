@@ -28,7 +28,9 @@ const EditScheduleInfo = () => {
     handleDelete,
     setStartTime,
     setEndTime,
-    handleEditInfo
+    handleEditInfo,
+    startTime,
+    endTime,
   } = useEditSchedule(id);
 
   return (
@@ -57,6 +59,8 @@ const EditScheduleInfo = () => {
           onComplete={handleEditTime}
           setStartTime={setStartTime}
           setEndTime={setEndTime}
+          startTime={startTime}
+          endTime={endTime}
         />
 
         <ActionButtons

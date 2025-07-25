@@ -10,6 +10,8 @@ interface TimeSelectorProps {
   onComplete: () => void;
   setStartTime: (str: string) => void;
   setEndTime: (str: string) => void;
+  startTime: string;
+  endTime: string;
 }
 
 const TimeSelector = ({
@@ -18,6 +20,8 @@ const TimeSelector = ({
   onComplete,
   setStartTime,
   setEndTime,
+  startTime,
+  endTime,
 }: TimeSelectorProps) => {
   const timeOptions = getHourlyTimeOptions();
   return (
@@ -45,7 +49,18 @@ const TimeSelector = ({
         selected={selectedDate}
         setSelected={setSelectedDate}
       />
-      <Button onClick={onComplete}>수정 완료</Button>
+      <div
+        className={`absolute w-full px-5 bottom-9 left-1/2 -translate-x-1/2`}
+      >
+        <Button
+          onClick={onComplete}
+          state={`${
+            !startTime || !endTime || !selectedDate ? "disabled" : "default"
+          }`}
+        >
+          수정 완료
+        </Button>
+      </div>
     </div>
   );
 };
