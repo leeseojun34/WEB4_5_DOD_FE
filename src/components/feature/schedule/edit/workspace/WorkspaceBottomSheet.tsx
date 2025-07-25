@@ -40,19 +40,14 @@ const WorkspaceBottomSheet = ({
   });
 
   return (
-    <BottomSheet
-      isOpen={isOpen}
-      setIsOpen={setIsOpen}
-      initialSnap={0}
-      snapPoints={[0.5]}
-    >
+    <BottomSheet isOpen={isOpen} setIsOpen={setIsOpen} snapPoints={[0.75]}>
       {() => (
-        <div className="px-5 w-full h-full flex flex-col gap-4">
+        <div className="px-5 w-full flex flex-col gap-4 h-[calc(100vh-32vh)] relative">
           <BottomSheetHeader
             setIsOpen={setIsOpen}
             title={defaultValue ? "워크스페이스 편집" : "워크스페이스 등록"}
           />
-          <div className="w-full max-w-[740px] px-5 flex flex-col mx-auto gap-4">
+          <div className="w-full max-w-[740px] flex flex-col mx-auto gap-4">
             <div className="w-full space-y-4">
               <h3 className="text-xs font-medium ml-2">워크 스페이스 종류</h3>
               <div className="flex gap-6 justify-center items-center">
@@ -104,7 +99,7 @@ const WorkspaceBottomSheet = ({
             )}
           </div>
 
-          <div className="w-full flex justify-center items-center flex-col gap-4 mt-8">
+          <div className="w-full flex justify-center items-center flex-col gap-4 mt-8 absolute left-1/2 -translate-x-1/2 px-5 bottom-9">
             {defaultValue && (
               <button
                 className="text-[color:var(--color-red)] text-xs cursor-pointer"
