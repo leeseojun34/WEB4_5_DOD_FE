@@ -47,10 +47,13 @@ const GroupContent = ({ groupId, schedules, groupRole }: GroupContentProps) => {
         </Link>
         <div className="flex flex-col gap-4">
           {hasNoData && (
-            <div className="w-full flex justify-center items-center text-center text-sm text-[color:var(--color-gray-placeholder)] h-50 leading-6">
+            <motion.div
+              variants={itemVariants}
+              className="w-full flex justify-center items-center text-center text-sm text-[color:var(--color-gray-placeholder)] h-50 leading-6"
+            >
               그룹 일정이 없어요 <br />
               새로운 일정을 만들어 봐요! 🫡
-            </div>
+            </motion.div>
           )}
           {!hasNoData &&
             future.map((schedule, index) => (
