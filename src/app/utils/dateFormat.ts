@@ -139,6 +139,7 @@ export const toISOStringWithTime = (
   date: Date,
   time: string
 ): string | null => {
+  if (!date || !time) return null;
   const [hours, minutes] = time.split(":").map(Number);
 
   const local = new Date(date);
