@@ -24,6 +24,7 @@ export const useUpdateName = () => {
     },
     onError: (err) => {
       console.error("이름 변경 실패: ", err);
+      Toast("이름 수정 실패");
     },
   });
 };
@@ -34,6 +35,10 @@ export const useUpdateProfileImg = () => {
     mutationFn: () => axiosInstance.patch("/member/profile"),
     onSuccess: () => {
       ToastWell("🎉", "프로필 랜덤 수정 완료!");
+    },
+    onError: (err) => {
+      console.error("프로필 이미지 수정 실패", err);
+      Toast("프로필 랜덤 수정 실패");
     },
   });
 };
@@ -102,6 +107,7 @@ export const useUpdateFavoriteLocation = () => {
     },
     onError: (err) => {
       console.error("주변역 등록 실패", err);
+      Toast("주변역 수정 실패");
     },
   });
 };
@@ -112,11 +118,12 @@ export const useLogoutMutation = () => {
   return useMutation({
     mutationFn: logout,
     onSuccess: () => {
-      ToastWell("👻", "로그아웃되었습니다!");
-      router.push("/");
+      ToastWell("😇", "로그아웃되었습니다!");
+      router.push("/auth/login");
     },
     onError: (err) => {
       console.error("로그아웃 실패", err);
+      Toast("로그아웃 실패");
     },
   });
 };
@@ -127,12 +134,13 @@ export const useDeactiveMutation = () => {
   return useMutation({
     mutationFn: () => axiosInstance.delete("/member/withdraw"),
     onSuccess: () => {
-      ToastWell("👻", "탈퇴되었습니다!");
+      ToastWell("😇", "탈퇴되었습니다!");
 
-      router.push("/");
+      router.push("/auth/login");
     },
     onError: (err) => {
       console.error("탈퇴 실패", err);
+      Toast("탈퇴 실패");
     },
   });
 };
