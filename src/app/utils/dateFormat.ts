@@ -1,13 +1,3 @@
-interface Schedule {
-  scheduleName: string;
-  meetingType: "ONLINE" | "OFFLINE";
-  time: string;
-  startTime: string;
-  endTime: string;
-  memberNames: string[];
-  scheduleId: string;
-}
-
 /**
  * 날짜 포맷팅
  * @param date 날짜
@@ -151,12 +141,14 @@ export const toISOStringWithTime = (
   return corrected.toISOString();
 };
 
-export const splitByDate = (schedules: Schedule[]) => {
+export const splitByDate = <T extends { startTime: string }>(
+  schedules: T[]
+) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const past: Schedule[] = [];
-  const future: Schedule[] = [];
+  const past: T[] = [];
+  const future: T[] = [];
 
   schedules.forEach((schedule) => {
     const scheduleDate = new Date(schedule.startTime);
