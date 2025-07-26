@@ -4,7 +4,6 @@ import {
   isValidTimeRange,
   toISOStringWithTime,
 } from "@/app/utils/dateFormat";
-import Toast from "@/components/ui/Toast";
 import {
   useDeleteSchedule,
   useGroupSchedule,
@@ -18,6 +17,7 @@ export const useEditSchedule = (id: string) => {
   const { data: scheduleData, isPending: schedulePending } =
     useGroupSchedule(id);
   const [scheduleName, setScheduleName] = useState("");
+  const [isError, setIsError] = useState(false);
   const [scheduleDescription, setScheduleDescription] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [startTime, setStartTime] = useState("");
@@ -55,7 +55,7 @@ export const useEditSchedule = (id: string) => {
     if (selectedDate && startTime && endTime) {
       const isValid = isValidTimeRange(startTime, endTime);
       if (!isValid) {
-        Toast("시작 시간은 종료 시간보다 이전이어야 합니다!");
+        setIsError(true);
         return;
       }
 
@@ -71,6 +71,7 @@ export const useEditSchedule = (id: string) => {
           endTime: endISOTime!,
         },
       });
+      setIsError(false);
       setIsOpen(false);
     }
   };
@@ -111,5 +112,7 @@ export const useEditSchedule = (id: string) => {
     setEndTime,
     handleEditInfo,
     schedulePending,
+    isError,
+    setIsError,
   };
 };

@@ -33,6 +33,8 @@ const EditScheduleInfo = () => {
     startTime,
     endTime,
     schedulePending,
+    isError,
+    setIsError,
   } = useEditSchedule(id);
 
   if (schedulePending) return <GlobalLoading />;
@@ -65,6 +67,8 @@ const EditScheduleInfo = () => {
           setEndTime={setEndTime}
           startTime={startTime}
           endTime={endTime}
+          isError={isError}
+          setIsError={setIsError}
         />
 
         <ActionButtons
