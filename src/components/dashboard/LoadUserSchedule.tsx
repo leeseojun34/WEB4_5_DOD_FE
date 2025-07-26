@@ -17,6 +17,13 @@ const LoadUserSchedule = () => {
   const { data: userSchedules, isPending: isUserSchedulePending } =
     useUserSchedulse();
 
+  const userSchedule = userSchedules
+    ? (Object.values(userSchedules).flat() as DashboardScheduleType[])
+    : [];
+  const filteredUserSchedules = userSchedule.filter(
+    (schedule) => schedule.activated === true
+  );
+
   const renderSkeletons = () => {
     return (
       <div className="space-y-4">
@@ -38,15 +45,13 @@ const LoadUserSchedule = () => {
       <div className="min-w-[375px] w-full max-w-185 min-h-screen px-5 mx-auto pt-20 pb-30 sm:pt-10">
         {isUserSchedulePending ? (
           renderSkeletons()
-        ) : Object.values(userSchedules).flat().length === 0 ? (
+        ) : filteredUserSchedules.length === 0 ? (
           <div className="w-full h-full flex justify-center items-center text-xs text-[color:var(--color-gray-placeholder)]">
             불러올 일정이 없습니다.
           </div>
         ) : (
           <LoadUserScheduleList
-            schedules={
-              Object.values(userSchedules).flat() as DashboardScheduleType[]
-            }
+            schedules={filteredUserSchedules}
             groupId={Number(groupId) ?? undefined}
           />
         )}

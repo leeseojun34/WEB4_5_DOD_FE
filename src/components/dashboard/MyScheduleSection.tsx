@@ -20,7 +20,10 @@ export const MyScheduleSection = ({
       "ko-KR"
     );
     const selected = selectedDate.toLocaleDateString("ko-KR");
-    return scheduleDate === selected;
+    const isDateMatch = scheduleDate === selected;
+
+    const isActivated = schedule.activated === true;
+    return isDateMatch && isActivated;
   });
 
   return (

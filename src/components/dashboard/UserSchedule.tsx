@@ -17,6 +17,13 @@ const UserSchedule = () => {
 
   if (isUserSchedulePending) return <GlobalLoading />;
 
+  const userSchedule = Object.values(
+    userSchedules
+  ).flat() as DashboardScheduleType[];
+  const filteredUserSchedules = userSchedule.filter(
+    (schedule) => schedule.activated === true
+  );
+
   return (
     <>
       <div className="w-full min-h-screen bg-[color:var(--color-gray-background)] relative">
@@ -28,7 +35,7 @@ const UserSchedule = () => {
         </div>
 
         <div className="min-w-[375px] w-full max-w-185 px-5 mx-auto pt-7 sm:pt-0 ">
-          {Object.values(userSchedules).flat().length === 0 ? (
+          {filteredUserSchedules.length === 0 ? (
             <EmptyUserScheduleList />
           ) : (
             <>
@@ -37,11 +44,7 @@ const UserSchedule = () => {
                 alt="글쓰는 토끼 이미지"
                 className="w-[178px] h-[178px] ml-auto"
               />
-              <UserScheduleList
-                schedules={
-                  Object.values(userSchedules).flat() as DashboardScheduleType[]
-                }
-              />
+              <UserScheduleList schedules={filteredUserSchedules} />
             </>
           )}
         </div>

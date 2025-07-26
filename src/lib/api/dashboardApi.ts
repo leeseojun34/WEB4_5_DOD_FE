@@ -17,6 +17,8 @@ export interface DashboardScheduleType {
   scheduleStatus: string;
   source: string;
   participantNames: string;
+  activated: boolean;
+  scheduleMemberId: number;
 }
 
 export interface DashboardGroupType {
@@ -84,4 +86,11 @@ export const useUserSchedulse = () => {
     queryFn: () => getUserSchedules("2025-07-01", "2026-07-01"),
     select: (data) => data.data,
   });
+};
+
+export const deactivatedSchedule = async (scheduleMemberId: number) => {
+  const response = await axiosInstance.patch(
+    `/main-page/schedule-members/${scheduleMemberId}/activation`
+  );
+  return response.data;
 };
