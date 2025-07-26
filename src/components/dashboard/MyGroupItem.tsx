@@ -1,22 +1,23 @@
-import character1 from "@/assets/images/profile_pastel_black.png";
 // import UserIcon from "@/assets/icon/user_icon.svg";
 import { BiUser } from "react-icons/bi";
 import Image from "next/image";
 import { DashboardGroupType } from "@/lib/api/dashboardApi";
+import { profileImages } from "@/lib/profileImages";
 
 interface MyGroupItemProps {
   group: DashboardGroupType;
 }
 
 export const MyGroupItem = ({ group }: MyGroupItemProps) => {
+  const groupProfileImg = profileImages[group.leaderProfileImage];
   return (
     <>
       <div className="flex gap-5 items-center min-w-50 max-w-185 py-2 pr-2 rounded-md hover:bg-[color:var(--color-gray-background)] hover:shadow-sm transition-all duration-200 ease-in-out">
         <div className="flex items-center justify-center min-w-[72px] h-[50px] bg-[color:var(--color-gray-background)] rounded-lg">
           <Image
-            src={character1}
+            src={groupProfileImg}
             alt="캐릭터 이미지"
-            className="w-[34px] h-[34px]"
+            className="w-[32px] h-[34px]"
           />
         </div>
         <div className="flex-1 flex flex-col justify-center gap-1 w-full min-w-0">

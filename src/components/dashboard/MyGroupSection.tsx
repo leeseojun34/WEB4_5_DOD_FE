@@ -10,7 +10,7 @@ interface MyGroupSectionProps {
 export const MyGroupSection = ({ groups }: MyGroupSectionProps) => {
   return (
     <>
-      <div className="bg-[color:var(--color-white)] p-6 rounded-[20px] w-full gap-2 flex flex-col  min-w-[375px]">
+      <div className="bg-[color:var(--color-white)] p-6 rounded-[20px] w-full gap-2 flex flex-col  min-w-[335px]">
         <div className="flex justify-between">
           <p className="font-semibold text-base text-[color:var(--color-black)]">
             나의 모임

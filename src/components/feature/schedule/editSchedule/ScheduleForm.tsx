@@ -1,11 +1,11 @@
 import Input from "@/components/ui/Input";
-import Dropdown from "@/components/ui/Dropdown";
 import { ChangeEvent } from "react";
 
 interface ScheduleFormProps {
   scheduleName: string;
   scheduleDescription: string;
   scheduleTime: string;
+  meetingType: string;
   onScheduleNameChange: (e: ChangeEvent<HTMLInputElement>) => void;
   onScheduleDescriptionChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
   onTimeClick: () => void;
@@ -14,6 +14,7 @@ interface ScheduleFormProps {
 const ScheduleForm = ({
   scheduleName,
   scheduleDescription,
+  meetingType,
   scheduleTime,
   onScheduleNameChange,
   onScheduleDescriptionChange,
@@ -38,13 +39,20 @@ const ScheduleForm = ({
         value={scheduleDescription}
         onChange={onScheduleDescriptionChange}
       />
-      <Dropdown label="온/오프라인" options={["온라인", "오프라인"]} />
+      <Input
+        label="온/오프라인"
+        value={meetingType === "ONLINE" ? "온라인" : "오프라인"}
+        readOnly
+      />
       <Input
         label="모임 시간"
         value={scheduleTime}
         onClick={onTimeClick}
         icon={
-          <button className="w-7 font-medium text-sm text-[color:var(--color-gray-placeholder)]]">
+          <button
+            className="w-7 font-medium text-sm text-[color:var(--color-gray-placeholder)]] hover:text-[color:var(--color-primary-400)]"
+            onClick={onTimeClick}
+          >
             수정
           </button>
         }

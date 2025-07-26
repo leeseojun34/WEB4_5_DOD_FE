@@ -2,7 +2,8 @@
  * 일정 등록 페이지
  *
  * @param eventScheduleInfo 이벤트 일정 정보 optional
- *
+ * @param mySchedule 내 일정 정보 optional
+ * @param mode 모드 (default: 이벤트 일정 등록, mypage: 내 일정 등록)
  * @returns 일정 등록 페이지 컴포넌트
  */
 "use client";
@@ -16,7 +17,7 @@ import { useParams } from "next/navigation";
 import { getGridColsClass } from "@/app/utils/styleFormat";
 
 const STYLES = {
-  container: "w-full",
+  container: "w-full px-2",
   header: "sticky top-0 z-10 bg-white",
   dayGrid: "grid gap-1 pl-6",
   dayCell: "py-2 text-center text-[#9EA6B2] text-[8px] sm:text-xl font-bold",
@@ -83,6 +84,9 @@ const Schedule = ({
   const [isDragging, setIsDragging] = useState(false);
   const [dragStartCell, setDragStartCell] = useState<string | null>(null);
   const [isDraggingAndClick, setIsDraggingAndClick] = useState(true);
+  const [isInteractionEnabled, setIsInteractionEnabled] = useState(
+    mode !== "mypage"
+  );
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -92,10 +96,13 @@ const Schedule = ({
     return `${String(hour).padStart(2, "0")}:${minute}`;
   };
 
-  const [isMyScheduleChanged, setIsMyScheduleChanged] = useState(true);
+  const [isMyScheduleChanged, setIsMyScheduleChanged] = useState(false);
 
   useEffect(() => {
     if (!mySchedule) return;
+    setCheckedCells(new Map());
+    setSelectedCells(new Set());
+
     setIsMyScheduleChanged(false);
     const timeBitArray = {
       FRI: "",
@@ -141,6 +148,12 @@ const Schedule = ({
 
     setSelectedCells(allCellIds);
     // applyXorToggle는 selectedCells 상태가 바뀐 이후에만 작동하도록 selectedCells에 대한 useEffect로 이동함
+
+    if (mode === "mypage") {
+      setTimeout(() => {
+        setIsInteractionEnabled(true);
+      }, 300);
+    }
   }, [mySchedule]);
 
   useEffect(() => {
@@ -246,7 +259,6 @@ const Schedule = ({
   }, [isDragging]);
 
   useEffect(() => {
-    setIsMyScheduleChanged(true);
     const container = containerRef.current;
     if (!container) return;
 
@@ -293,19 +305,20 @@ const Schedule = ({
   // 마우스 클릭으로 드래그 시작 및 해당 셀 선택
   const handleMouseDown = useCallback(
     (dayIndex: number, timeIndex: number) => {
-      if (!isDraggingAndClick) return;
+      if (!isDraggingAndClick || !isInteractionEnabled) return;
       const cellId = getCellId(dayIndex, timeIndex);
+      setIsMyScheduleChanged(true);
       setIsDragging(true);
       setDragStartCell(cellId);
       toggleCellSelection(cellId);
     },
-    [getCellId, toggleCellSelection, isDraggingAndClick]
+    [getCellId, toggleCellSelection, isDraggingAndClick, isInteractionEnabled]
   );
 
   // 마우스가 셀 위로 이동할 때 셀 선택 (드래그 중일 경우)
   const handleMouseEnter = useCallback(
     (dayIndex: number, timeIndex: number) => {
-      if (!isDraggingAndClick) return;
+      if (!isDraggingAndClick || !isInteractionEnabled) return;
       if (!isDragging || !dragStartCell) return;
 
       const [, startDayIndex] = dragStartCell.split("-");
@@ -320,44 +333,46 @@ const Schedule = ({
       getCellId,
       toggleCellSelection,
       isDraggingAndClick,
+      isInteractionEnabled,
     ]
   );
 
   // 마우스 클릭 종료 시 드래그 상태 초기화
   const handleMouseUp = useCallback(async () => {
-    if (!isDraggingAndClick) return;
+    if (!isDraggingAndClick || !isInteractionEnabled) return;
     setIsDragging(false);
     setDragStartCell(null);
-  }, [isDraggingAndClick]);
+  }, [isDraggingAndClick, isInteractionEnabled]);
 
   // 마우스가 영역을 벗어나면 드래그 상태 초기화
   const handleMouseLeave = useCallback(() => {
-    if (!isDraggingAndClick) return;
+    if (!isDraggingAndClick || !isInteractionEnabled) return;
     if (isDragging) {
       setIsDragging(false);
       setDragStartCell(null);
     }
-  }, [isDragging, isDraggingAndClick]);
+  }, [isDragging, isDraggingAndClick, isInteractionEnabled]);
 
   const lastTouchedCell = useRef<string | null>(null);
 
   // 터치 시작 시 드래그 시작 (셀 선택은 하지 않음, 중복 방지용 lastTouchedCell 설정)
   const handleTouchStart = useCallback(
     (e: React.TouchEvent, dayIndex: number, timeIndex: number) => {
-      if (!isDraggingAndClick) return;
+      if (!isDraggingAndClick || !isInteractionEnabled) return;
       const cellId = getCellId(dayIndex, timeIndex);
+      setIsMyScheduleChanged(true);
       setIsDragging(true);
       setDragStartCell(cellId);
       lastTouchedCell.current = cellId; // 중복 방지를 위해 초기 설정
       // 첫 터치에서 이미 터치무브로 선택될 수 있으므로 이 시점에는 선택하지 않음
     },
-    [getCellId, isDraggingAndClick]
+    [getCellId, isDraggingAndClick, isInteractionEnabled]
   );
 
   // 터치 이동 시 셀 위에 있으면 선택 처리
   const handleTouchMove = useCallback(
     (e: React.TouchEvent) => {
-      if (!isDraggingAndClick) return;
+      if (!isDraggingAndClick || !isInteractionEnabled) return;
       if (!isDragging || !dragStartCell) return;
 
       const touch = e.touches[0];
@@ -376,13 +391,19 @@ const Schedule = ({
         lastTouchedCell.current = id; // 마지막 셀 ID 저장
       }
     },
-    [isDragging, dragStartCell, toggleCellSelection, isDraggingAndClick]
+    [
+      isDragging,
+      dragStartCell,
+      toggleCellSelection,
+      isDraggingAndClick,
+      isInteractionEnabled,
+    ]
   );
 
   const handleTouchEnd = useCallback(() => {
-    if (!isDraggingAndClick) return;
+    if (!isDraggingAndClick || !isInteractionEnabled) return;
     lastTouchedCell.current = null;
-  }, [isDraggingAndClick]);
+  }, [isDraggingAndClick, isInteractionEnabled]);
 
   // 요일 및 날짜 헤더를 렌더링
   const renderDayHeader = (dayInfo: DayInfo, index: number) => (

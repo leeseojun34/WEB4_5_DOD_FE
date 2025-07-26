@@ -7,53 +7,58 @@ import googleMeetIcon from "@/assets/icon/googlemeet_icon.svg";
 import discordIcon from "@/assets/icon/discord_icon.svg";
 import zepIcon from "@/assets/icon/zep_icon.svg";
 import Image from "next/image";
-import { ChangeEvent, useState } from "react";
-import useMediaQuery from "../hooks/useMediaQuery";
+import { ChangeEvent } from "react";
 import BottomSheetHeader from "@/components/layout/BottomSheetHeader";
+import {
+  PlatformType,
+  useOnlineMeetingForm,
+} from "./hooks/useOnlineMeetingForm";
 
 interface OnlineMeetingEditBottomSheetProps {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
+  scheduleId: string;
 }
 
-type PlatformType = "zoom" | "googleMeet" | "discord" | "zep";
+const ICONMAP: Record<PlatformType, string> = {
+  ZOOM: zoomIcon,
+  GOOGLE_MEET: googleMeetIcon,
+  DISCORD: discordIcon,
+  ZEP: zepIcon,
+};
 
 const OnlineMeetingEditBottomSheet = ({
   isOpen,
   setIsOpen,
+  scheduleId,
 }: OnlineMeetingEditBottomSheetProps) => {
-  const [selectedPlatform, setSelectedPlatform] = useState<PlatformType | null>(
-    null
-  );
-  const [inputValue, setInputValue] = useState("");
-  const isMobile = useMediaQuery("(min-width: 640px)");
-  const snapPoints = isMobile ? [0.5] : [0.8];
+  const {
+    selectedPlatform,
+    inputValue,
+    handleChangePlatform,
+    handleCreateMeetingRoom,
+    handleUpdateMeetingRoom,
+    handleDeleteMeetingRoom,
+    setInputValue,
+    isError,
+  } = useOnlineMeetingForm(scheduleId, () => setIsOpen(false));
 
-  const ICONMAP: Record<PlatformType, string> = {
-    zoom: zoomIcon,
-    googleMeet: googleMeetIcon,
-    discord: discordIcon,
-    zep: zepIcon,
-  };
-
-  const handleChangePlatform = (p: PlatformType) => {
-    setSelectedPlatform(p);
-  };
   return (
-    <BottomSheet isOpen={isOpen} setIsOpen={setIsOpen} snapPoints={snapPoints}>
+    <BottomSheet isOpen={isOpen} setIsOpen={setIsOpen} snapPoints={[0.8]}>
       {() => (
-        <div className="min-w-[375px] w-full max-w-185 flex flex-col items-center px-5 mx-auto pt-3 gap-8">
+        <div className="min-w-[375px] w-full max-w-185 flex flex-col items-center px-5 mx-auto pt-3 gap-8 h-[calc(100vh-28vh)] relative">
           <BottomSheetHeader
             setIsOpen={setIsOpen}
             title="온라인 회의장 정하기"
           />
           <ShareButton
-            title="회의장이 없나요"
+            title="회의장이 없나요?"
             description="Zoom 회의장을 만들어드려요"
             mode="help"
             color="var(--color-primary-100)"
             borderColor="var(--color-primary-400)"
-          ></ShareButton>
+            onClick={handleCreateMeetingRoom}
+          />
           <div className="flex flex-col gap-4 w-full">
             <div className="flex flex-col gap-5">
               <p className="font-medium text-[color:var(--color-black)] text-sm">
@@ -64,12 +69,12 @@ const OnlineMeetingEditBottomSheet = ({
                   <div
                     key={p}
                     className={`flex justify-center items-center w-10 h-10 rounded-lg cursor-pointer
-                    ${
-                      selectedPlatform === p
-                        ? "bg-[color:var(--color-muted)]"
-                        : ""
-                    }
-                    hover:bg-[color:var(--color-muted)]`}
+                      ${
+                        selectedPlatform === p
+                          ? "bg-[color:var(--color-muted)]"
+                          : ""
+                      }
+                      hover:bg-[color:var(--color-muted)]`}
                     onClick={() => handleChangePlatform(p)}
                   >
                     <Image
@@ -82,18 +87,28 @@ const OnlineMeetingEditBottomSheet = ({
               </div>
             </div>
             <Input
-              fullWidth={true}
+              fullWidth
               placeholder="온라인 회의장 링크를 입력해주세요"
               value={inputValue}
               onChange={(e: ChangeEvent<HTMLInputElement>) =>
                 setInputValue(e.target.value)
               }
             />
-            <button className="cursor-pointer text-[color:var(--color-red)] text-xs font-semibold">
+            {isError && (
+              <p className="text-[color:var(--color-red)] text-xs ml-2">
+                회의장 종류와 링크를 모두 입력해주세요!
+              </p>
+            )}
+          </div>
+          <div className="absolute bottom-9 w-full px-5 left-1/2 -translate-x-1/2 flex flex-col justify-center items-center gap-4">
+            <button
+              className="cursor-pointer text-[color:var(--color-red)] text-xs font-semibold text-center"
+              onClick={handleDeleteMeetingRoom}
+            >
               삭제하기
             </button>
+            <Button onClick={handleUpdateMeetingRoom}>저장하기</Button>
           </div>
-          <Button>저장하기</Button>
         </div>
       )}
     </BottomSheet>

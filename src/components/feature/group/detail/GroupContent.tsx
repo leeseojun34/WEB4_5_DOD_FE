@@ -3,7 +3,7 @@
 import Link from "next/link";
 import ShareButton from "@/components/ui/ShareButton";
 import ScheduleCard from "@/components/ui/ScheduleCard";
-import { formatSchedule } from "@/app/utils/dateFormat";
+import { formatSchedule, splitByDate } from "@/app/utils/dateFormat";
 import { itemVariants, listVariants } from "../../schedule/motion";
 import { motion } from "framer-motion";
 
@@ -24,6 +24,9 @@ interface GroupContentProps {
 }
 
 const GroupContent = ({ groupId, schedules, groupRole }: GroupContentProps) => {
+  const { past, future } = splitByDate(schedules);
+  const hasNoData = past.length === 0 && future.length === 0;
+
   return (
     <motion.div
       variants={listVariants}
@@ -43,22 +46,49 @@ const GroupContent = ({ groupId, schedules, groupRole }: GroupContentProps) => {
           />
         </Link>
         <div className="flex flex-col gap-4">
-          {schedules.map((schedule, index) => (
+          {hasNoData && (
             <motion.div
               variants={itemVariants}
-              key={`${schedule.scheduleId}-${index}`}
+              className="w-full flex justify-center items-center text-center text-sm text-[color:var(--color-gray-placeholder)] h-50 leading-6"
             >
-              <ScheduleCard
-                variant="event"
-                title={schedule.scheduleName}
-                meetingType={schedule.meetingType}
-                time={formatSchedule(schedule.startTime, schedule.endTime)}
-                members={schedule.memberNames}
-                scheduleId={schedule.scheduleId}
-                groupRole={groupRole}
-              />
+              그룹 일정이 없어요 <br />
+              새로운 일정을 만들어 봐요! 🫡
             </motion.div>
-          ))}
+          )}
+          {!hasNoData &&
+            future.map((schedule, index) => (
+              <motion.div
+                variants={itemVariants}
+                key={`${schedule.scheduleId}-${index}`}
+              >
+                <ScheduleCard
+                  variant="event"
+                  title={schedule.scheduleName}
+                  meetingType={schedule.meetingType}
+                  time={formatSchedule(schedule.startTime, schedule.endTime)}
+                  members={schedule.memberNames}
+                  scheduleId={schedule.scheduleId}
+                  groupRole={groupRole}
+                />
+              </motion.div>
+            ))}
+          {!hasNoData &&
+            past.map((schedule, index) => (
+              <motion.div
+                variants={itemVariants}
+                key={`${schedule.scheduleId}-${index}`}
+              >
+                <ScheduleCard
+                  variant="event"
+                  title={schedule.scheduleName}
+                  meetingType={schedule.meetingType}
+                  time={formatSchedule(schedule.startTime, schedule.endTime)}
+                  members={schedule.memberNames}
+                  scheduleId={schedule.scheduleId}
+                  groupRole={groupRole}
+                />
+              </motion.div>
+            ))}
         </div>
       </motion.div>
     </motion.div>
