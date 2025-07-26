@@ -18,8 +18,6 @@ interface GroupMembersContentProps {
   groupId: string;
 }
 
-// onClick,
-
 const GroupMembersContent = ({
   members,
   myId,
