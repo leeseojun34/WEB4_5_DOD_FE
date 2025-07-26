@@ -77,3 +77,11 @@ export const getUserSchedules = async (startDate: string, endDate: string) => {
   });
   return response.data;
 };
+
+export const useUserSchedulse = () => {
+  return useQuery({
+    queryKey: ["userSchedules"],
+    queryFn: () => getUserSchedules("2025-07-01", "2026-07-01"),
+    select: (data) => data.data,
+  });
+};
