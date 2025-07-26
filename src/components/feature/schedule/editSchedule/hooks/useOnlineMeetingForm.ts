@@ -4,18 +4,15 @@ import {
   useUpdateScheduleInfo,
 } from "@/lib/api/scheduleApi";
 
-export type PlatformType = "ZOOM" | "GOOGLE_MEET" | "DISCORD" | "ZEP";
-
 export const useOnlineMeetingForm = (scheduleId: string, close: () => void) => {
-  const [selectedPlatform, setSelectedPlatform] = useState<PlatformType | null>(
+  const [selectedPlatform, setSelectedPlatform] = useState<OnlineMeetingPlatformType | null>(
     null
   );
   const [inputValue, setInputValue] = useState("");
   const createMeetingRoom = useCreateMeetingRoom();
   const updateScheduleInfo = useUpdateScheduleInfo();
-  const [isError, setIsError] = useState(false);
 
-  const handleChangePlatform = (p: PlatformType | null) => {
+  const handleChangePlatform = (p: OnlineMeetingPlatformType | null) => {
     setSelectedPlatform(p);
   };
 
@@ -25,14 +22,11 @@ export const useOnlineMeetingForm = (scheduleId: string, close: () => void) => {
   };
 
   const handleUpdateMeetingRoom = () => {
-    if (!selectedPlatform || !inputValue) {
-      setIsError(true);
-    } else {
-      setIsError(false);
+    if (selectedPlatform && inputValue) {
       updateScheduleInfo.mutate({
         scheduleId,
         data: {
-          meetingPlatform: selectedPlatform as PlatformType,
+          meetingPlatform: selectedPlatform as OnlineMeetingPlatformType,
           platformURL: inputValue,
         },
       });
@@ -61,6 +55,5 @@ export const useOnlineMeetingForm = (scheduleId: string, close: () => void) => {
     handleUpdateMeetingRoom,
     handleDeleteMeetingRoom,
     setInputValue,
-    isError,
   };
 };

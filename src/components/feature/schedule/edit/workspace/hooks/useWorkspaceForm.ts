@@ -5,14 +5,6 @@ import {
   useUpdateScheduleInfo,
 } from "@/lib/api/scheduleApi";
 
-export type WorkspacePlatformType =
-  | "GITHUB"
-  | "NOTION"
-  | "FIGMA"
-  | "GOOGLE_DOCS"
-  | "CANVA"
-  | "MIRO";
-
 interface UseWorkspaceFormProps {
   scheduleId: string;
   workspaceId: string;

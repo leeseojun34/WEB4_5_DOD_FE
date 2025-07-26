@@ -1,5 +1,10 @@
 "use client";
-import { formatSchedule, toISOStringWithTime } from "@/app/utils/dateFormat";
+import {
+  formatSchedule,
+  isValidTimeRange,
+  toISOStringWithTime,
+} from "@/app/utils/dateFormat";
+import Toast from "@/components/ui/Toast";
 import {
   useDeleteSchedule,
   useGroupSchedule,
@@ -47,7 +52,13 @@ export const useEditSchedule = (id: string) => {
   };
 
   const handleEditTime = () => {
-    if (selectedDate) {
+    if (selectedDate && startTime && endTime) {
+      const isValid = isValidTimeRange(startTime, endTime);
+      if (!isValid) {
+        Toast("시작 시간은 종료 시간보다 이전이어야 합니다!");
+        return;
+      }
+
       const startISOTime = toISOStringWithTime(selectedDate, startTime);
       const endISOTime = toISOStringWithTime(selectedDate, endTime);
 

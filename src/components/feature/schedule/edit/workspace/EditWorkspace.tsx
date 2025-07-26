@@ -9,14 +9,6 @@ import WorkspaceBottomSheet from "./WorkspaceBottomSheet";
 import { useWorkspaceModal } from "./hooks/useWorkspaceModal";
 import { itemVariants, listVariants } from "../../motion";
 
-type WorkspacePlatformType =
-  | "GITHUB"
-  | "NOTION"
-  | "MIRO"
-  | "FIGMA"
-  | "CANVA"
-  | "GOOGLE_DOCS";
-
 interface WorkspaceType {
   type: WorkspacePlatformType;
   name: string;
