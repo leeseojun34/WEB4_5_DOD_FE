@@ -99,7 +99,7 @@ const WorkspaceBottomSheet = ({
             />
             {isError && platform && (
               <p className="text-[color:var(--color-red)] text-sm ml-2">
-                유효한 {WORKSPACE_PLATFORM_NAME[platform]} 회의 링크를
+                유효한 {WORKSPACE_PLATFORM_NAME[platform]} 워크스페이스 링크를
                 입력해주세요.
               </p>
             )}
