@@ -5,7 +5,7 @@ import { formatSchedule } from "@/app/utils/dateFormat";
 import BottomSheet from "@/components/ui/BottomSheet";
 import GroupHeaderMap from "@/components/layout/GroupHeaderMap";
 import { motion } from "framer-motion";
-import { itemVariants, listVariants } from "../motion";
+import { itemVariants } from "../motion";
 
 interface OfflineBottomSheetProps {
   scheduleId: string;
@@ -54,19 +54,13 @@ const OfflineBottomSheet = ({
                     })
                   )}
                 >
-                  <motion.div
-                    variants={listVariants}
-                    initial="hidden"
-                    animate="visible"
-                  >
-                    <motion.div variants={itemVariants}>
-                      <MeetingLocation
-                        location={data.location}
-                        specificLocation={data.specificLocation}
-                        isLocationEditOpen={isLocationEditOpen}
-                        setIsLocationEditOpen={setIsLocationEditOpen}
-                      />
-                    </motion.div>
+                  <motion.div variants={itemVariants}>
+                    <MeetingLocation
+                      location={data.location}
+                      specificLocation={data.specificLocation}
+                      isLocationEditOpen={isLocationEditOpen}
+                      setIsLocationEditOpen={setIsLocationEditOpen}
+                    />
                   </motion.div>
                 </ScheduleDetailContent>
               </div>

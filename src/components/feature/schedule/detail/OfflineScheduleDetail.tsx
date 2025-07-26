@@ -10,7 +10,7 @@ import BlurredChevronHeader from "@/components/layout/BlurredChevronHeader";
 import LocationEditBottomSheet from "../editSchedule/LocationEditBottomSheet";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { itemVariants, listVariants } from "../motion";
+import { itemVariants } from "../motion";
 
 interface OfflineScheduleDetailProps {
   scheduleId: string;
@@ -55,19 +55,13 @@ const OfflineScheduleDetail = ({
               name: workspace.name,
             }))}
           >
-            <motion.div
-              variants={listVariants}
-              initial="hidden"
-              animate="visible"
-            >
-              <motion.div variants={itemVariants}>
-                <MeetingLocation
-                  location={data.location}
-                  specificLocation={data.specificLocation}
-                  isLocationEditOpen={isLocationEditOpen}
-                  setIsLocationEditOpen={setIsLocationEditOpen}
-                />
-              </motion.div>
+            <motion.div variants={itemVariants}>
+              <MeetingLocation
+                location={data.location}
+                specificLocation={data.specificLocation}
+                isLocationEditOpen={isLocationEditOpen}
+                setIsLocationEditOpen={setIsLocationEditOpen}
+              />
             </motion.div>
           </ScheduleDetailContent>
         </ScheduleDetailLayout>

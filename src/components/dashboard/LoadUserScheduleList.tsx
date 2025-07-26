@@ -32,6 +32,7 @@ const LoadUserScheduleList = ({
       if (response.code === "200") {
         router.push(`/group/${groupId}`);
       }
+      Toast("성공적으로 일정을 불러왔습니다!");
     } catch (error) {
       if (error instanceof AxiosError) {
         if (error.status === 404) {
