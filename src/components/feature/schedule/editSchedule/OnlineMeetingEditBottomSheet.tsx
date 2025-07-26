@@ -2,17 +2,11 @@ import BottomSheet from "@/components/ui/BottomSheet";
 import { Button } from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import ShareButton from "@/components/ui/ShareButton";
-import zoomIcon from "@/assets/icon/zoom_icon.svg";
-import googleMeetIcon from "@/assets/icon/googlemeet_icon.svg";
-import discordIcon from "@/assets/icon/discord_icon.svg";
-import zepIcon from "@/assets/icon/zep_icon.svg";
 import Image from "next/image";
 import { ChangeEvent, useEffect, useRef } from "react";
 import BottomSheetHeader from "@/components/layout/BottomSheetHeader";
-import {
-  PlatformType,
-  useOnlineMeetingForm,
-} from "./hooks/useOnlineMeetingForm";
+import { useOnlineMeetingForm } from "./hooks/useOnlineMeetingForm";
+import { ONLINE_MEETING_PLATFORM } from "../constants/platform";
 
 interface OnlineMeetingEditBottomSheetProps {
   isOpen: boolean;
@@ -21,13 +15,6 @@ interface OnlineMeetingEditBottomSheetProps {
   platform: string | undefined;
   url: string | undefined;
 }
-
-const ICONMAP: Record<PlatformType, string> = {
-  ZOOM: zoomIcon,
-  GOOGLE_MEET: googleMeetIcon,
-  DISCORD: discordIcon,
-  ZEP: zepIcon,
-};
 
 const OnlineMeetingEditBottomSheet = ({
   isOpen,
@@ -51,7 +38,7 @@ const OnlineMeetingEditBottomSheet = ({
   useEffect(() => {
     if (!initRef.current) {
       if (url) setInputValue(url);
-      if (platform) handleChangePlatform(platform as PlatformType);
+      if (platform) handleChangePlatform(platform as OnlineMeetingPlatformType);
       initRef.current = true;
     }
   }, [setInputValue, url, platform, handleChangePlatform]);
@@ -78,7 +65,11 @@ const OnlineMeetingEditBottomSheet = ({
                 온라인 회의장 종류
               </p>
               <div className="flex gap-6">
-                {(Object.keys(ICONMAP) as PlatformType[]).map((p) => (
+                {(
+                  Object.keys(
+                    ONLINE_MEETING_PLATFORM
+                  ) as OnlineMeetingPlatformType[]
+                ).map((p) => (
                   <div
                     key={p}
                     className={`flex justify-center items-center w-10 h-10 rounded-lg cursor-pointer
@@ -91,7 +82,7 @@ const OnlineMeetingEditBottomSheet = ({
                     onClick={() => handleChangePlatform(p)}
                   >
                     <Image
-                      src={ICONMAP[p]}
+                      src={ONLINE_MEETING_PLATFORM[p]}
                       alt={`${p} 아이콘`}
                       className="w-6 h-6"
                     />
@@ -108,8 +99,8 @@ const OnlineMeetingEditBottomSheet = ({
               }
             />
             {isError && (
-              <p className="text-[color:var(--color-red)] text-xs ml-2">
-                회의장 종류와 링크를 모두 입력해주세요!
+              <p className="text-[color:var(--color-red)] text-sm ml-2">
+                유효한 {selectedPlatform} 회의 링크를 입력해주세요.
               </p>
             )}
           </div>
@@ -120,7 +111,14 @@ const OnlineMeetingEditBottomSheet = ({
             >
               삭제하기
             </button>
-            <Button onClick={handleUpdateMeetingRoom}>저장하기</Button>
+            <Button
+              onClick={handleUpdateMeetingRoom}
+              state={`${
+                !inputValue || !selectedPlatform ? "disabled" : "default"
+              }`}
+            >
+              저장하기
+            </Button>
           </div>
         </div>
       )}
