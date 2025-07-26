@@ -39,7 +39,7 @@ const GroupMemberItem = ({
   } = useGroupMemberActions(groupId);
   const profileImage = profileImages[profileNum];
   return (
-    <div className="flex items-center justify-between w-full">
+    <div className="flex items-center justify-between w-full hover:bg-[color:var(--color-gray-background)] px-4 py-2 rounded-lg">
       <div className="flex gap-3 items-center">
         <div className="relative">
           <Image src={profileImage} alt="유저 캐릭터" className="w-6 h-7" />
@@ -56,7 +56,7 @@ const GroupMemberItem = ({
         </div>
       </div>
       {isLeader && myId !== memberId && (
-        <div className="relative">
+        <div className="relative flex items-center">
           <button className="cursor-pointer" onClick={() => setIsOpen(true)}>
             <EllipsisVertical className="w-[18px] h-[18px] text-[color:var(--color-gray)]" />
           </button>
