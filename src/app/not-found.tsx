@@ -2,10 +2,14 @@ import notFoundPhoto from "@/assets/images/404_not_found.png";
 import Image from "next/image";
 import { Button } from "@/components/ui/Button";
 import Link from "next/link";
+import Header from "@/components/layout/Header";
 
 const NotFound = () => {
   return (
     <>
+      <div className="hidden sm:block">
+        <Header />
+      </div>
       <div className="flex flex-col justify-center items-center h-screen bg-[color:var(--color-primary-100)]">
         <div className="flex flex-col items-center justify-between ">
           <div className="w-full justify-center flex flex-col gap-6 text-center">
