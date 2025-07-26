@@ -19,6 +19,8 @@ import {
 import GlobalLoading from "@/app/loading";
 import { useGroupDetailPage } from "@/components/feature/group/detail/hooks/useGroupDetailLogic";
 import { useQueryClient } from "@tanstack/react-query";
+import ControlledAlertBox from "@/components/ui/ControlledAlertBox";
+import Toast from "@/components/ui/Toast";
 
 const EditGroup = () => {
   const router = useRouter();
@@ -33,6 +35,8 @@ const EditGroup = () => {
   const [groupName, setGroupName] = useState("");
   const [groupDescription, setGroupDescription] = useState("");
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
 
   useEffect(() => {
     if (groupData?.data) {
@@ -57,33 +61,33 @@ const EditGroup = () => {
         queryClient.invalidateQueries({ queryKey: ["dashboard", "groups"] });
         queryClient.invalidateQueries({ queryKey: ["groupSchedule", groupId] });
         router.push(`/group/${response.data.groupId}`);
-      } else {
-        throw new Error(response.message);
       }
-    } catch (err) {
-      console.error(err);
+    } catch {
+      Toast("정보 수정에 실패했습니다.");
+      return;
     }
   };
 
   const handleDeleteGroup = async () => {
+    setIsDeleting(true);
     try {
       const response = await deleteGroup(groupId);
       if (response.code === "200") {
         queryClient.invalidateQueries({ queryKey: ["dashboard", "groups"] });
         queryClient.invalidateQueries({ queryKey: ["groupSchedule", groupId] });
         router.push("/");
-      } else {
-        throw new Error(response.message);
       }
-    } catch (err) {
-      console.error(err);
+    } catch {
+      Toast("그룹 삭제에 실패했습니다.");
+      return;
     }
   };
 
   const isFormValid =
     groupName.trim().length > 0 &&
     groupDescription.trim().length > 0 &&
-    !isUpdating;
+    !isUpdating &&
+    !isDeleting;
   const buttonState = !isFormValid ? "disabled" : "default";
 
   return (
@@ -130,8 +134,8 @@ const EditGroup = () => {
         <div className="fixed w-full left-0 right-0 px-5 bottom-9">
           <div className="max-w-185 mx-auto flex flex-col items-center gap-5">
             <button
-              className="text-[color:var(--color-red)] text-xs w-full text-center cursor-pointer"
-              onClick={handleDeleteGroup}
+              className="hover:text-[color:var(--color-red)] text-[color:var(--color-gray-placeholder)] text-xs w-full text-center cursor-pointer"
+              onClick={() => setIsAlertOpen(true)}
             >
               그룹 삭제하기
             </button>
@@ -141,6 +145,14 @@ const EditGroup = () => {
           </div>
         </div>
       </div>
+      <ControlledAlertBox
+        content={"정말 삭제하시겠습니까?"}
+        cancel="취소"
+        action="확인"
+        isOpen={isAlertOpen}
+        onClose={() => setIsAlertOpen(false)}
+        actionHandler={() => handleDeleteGroup()}
+      />
     </div>
   );
 };
