@@ -15,7 +15,7 @@ export const useOnlineMeetingForm = (scheduleId: string, close: () => void) => {
   const updateScheduleInfo = useUpdateScheduleInfo();
   const [isError, setIsError] = useState(false);
 
-  const handleChangePlatform = (p: PlatformType) => {
+  const handleChangePlatform = (p: PlatformType | null) => {
     setSelectedPlatform(p);
   };
 
@@ -48,6 +48,8 @@ export const useOnlineMeetingForm = (scheduleId: string, close: () => void) => {
         platformURL: null,
       },
     });
+    setInputValue("");
+    handleChangePlatform(null);
     close();
   };
 

@@ -80,6 +80,8 @@ const OnlineMeetingRoom = ({
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         scheduleId={scheduleId}
+        platform={platform}
+        url={url!}
       />
     </motion.div>
   );

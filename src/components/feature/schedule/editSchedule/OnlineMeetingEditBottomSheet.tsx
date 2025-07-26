@@ -7,7 +7,7 @@ import googleMeetIcon from "@/assets/icon/googlemeet_icon.svg";
 import discordIcon from "@/assets/icon/discord_icon.svg";
 import zepIcon from "@/assets/icon/zep_icon.svg";
 import Image from "next/image";
-import { ChangeEvent } from "react";
+import { ChangeEvent, useEffect, useRef } from "react";
 import BottomSheetHeader from "@/components/layout/BottomSheetHeader";
 import {
   PlatformType,
@@ -18,6 +18,8 @@ interface OnlineMeetingEditBottomSheetProps {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
   scheduleId: string;
+  platform: string | undefined;
+  url: string | undefined;
 }
 
 const ICONMAP: Record<PlatformType, string> = {
@@ -31,6 +33,8 @@ const OnlineMeetingEditBottomSheet = ({
   isOpen,
   setIsOpen,
   scheduleId,
+  platform,
+  url,
 }: OnlineMeetingEditBottomSheetProps) => {
   const {
     selectedPlatform,
@@ -42,6 +46,15 @@ const OnlineMeetingEditBottomSheet = ({
     setInputValue,
     isError,
   } = useOnlineMeetingForm(scheduleId, () => setIsOpen(false));
+  const initRef = useRef(false);
+
+  useEffect(() => {
+    if (!initRef.current) {
+      if (url) setInputValue(url);
+      if (platform) handleChangePlatform(platform as PlatformType);
+      initRef.current = true;
+    }
+  }, [setInputValue, url, platform, handleChangePlatform]);
 
   return (
     <BottomSheet isOpen={isOpen} setIsOpen={setIsOpen} snapPoints={[0.8]}>
