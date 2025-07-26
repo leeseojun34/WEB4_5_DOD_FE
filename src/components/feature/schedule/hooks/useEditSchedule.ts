@@ -1,19 +1,43 @@
 "use client";
-import { ChangeEvent, useState } from "react";
+import { formatSchedule, toISOStringWithTime } from "@/app/utils/dateFormat";
+import {
+  useDeleteSchedule,
+  useGroupSchedule,
+  useUpdateScheduleInfo,
+} from "@/lib/api/scheduleApi";
+import { useRouter } from "next/navigation";
+import { ChangeEvent, useEffect, useState } from "react";
 
-export const useEditSchedule = () => {
+export const useEditSchedule = (id: string) => {
+  const router = useRouter();
+  const { data: scheduleData } = useGroupSchedule(id);
   const [scheduleName, setScheduleName] = useState("");
   const [scheduleDescription, setScheduleDescription] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
-  
-  const scheduleTime = "2025년 07월 05일 17:36";
+  const meetingType = scheduleData ? scheduleData.data.meetingType : "";
+  const scheduleTime = scheduleData
+    ? formatSchedule(scheduleData.data.startTime, scheduleData.data.endTime)
+    : "";
+  const deleteSchedule = useDeleteSchedule();
+  const updateSchedule = useUpdateScheduleInfo();
+
+  useEffect(() => {
+    if (scheduleData) {
+      setScheduleName(scheduleData.data.scheduleName);
+      setScheduleDescription(scheduleData.data.description);
+    }
+  }, [scheduleData]);
 
   const handleScheduleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setScheduleName(e.target.value);
   };
 
-  const handleScheduleDescriptionChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+  const handleScheduleDescriptionChange = (
+    e: ChangeEvent<HTMLTextAreaElement>
+  ) => {
     setScheduleDescription(e.target.value);
   };
 
@@ -21,17 +45,44 @@ export const useEditSchedule = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleEditComplete = () => {
-    console.log("수정 완료", { scheduleName, scheduleDescription, selectedDate });
+  const handleEditTime = () => {
+    if (selectedDate) {
+      const startISOTime = toISOStringWithTime(selectedDate, startTime);
+      const endISOTime = toISOStringWithTime(selectedDate, endTime);
+
+      updateSchedule.mutate({
+        scheduleId: id,
+        data: {
+          scheduleName,
+          description: scheduleDescription,
+          startTime: startISOTime!,
+          endTime: endISOTime!,
+        },
+      });
+      setIsOpen(false);
+    }
+  };
+
+  const handleEditInfo = () => {
+    updateSchedule.mutate({
+      scheduleId: id,
+      data: {
+        scheduleName,
+        description: scheduleDescription,
+      },
+    });
+    router.push(`/schedule/${id}`);
   };
 
   const handleDelete = () => {
-    console.log("모임 삭제");
+    deleteSchedule.mutate(id);
+    router.push("/");
   };
 
   return {
     scheduleName,
     scheduleDescription,
+    meetingType,
     isOpen,
     selectedDate,
     scheduleTime,
@@ -40,7 +91,12 @@ export const useEditSchedule = () => {
     handleScheduleNameChange,
     handleScheduleDescriptionChange,
     handleTimeClick,
-    handleEditComplete,
+    handleEditTime,
     handleDelete,
+    startTime,
+    endTime,
+    setStartTime,
+    setEndTime,
+    handleEditInfo,
   };
 };

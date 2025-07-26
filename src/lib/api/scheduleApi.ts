@@ -1,12 +1,41 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "./axiosInstance";
+import ToastWell from "@/components/ui/ToastWell";
 import Toast from "@/components/ui/Toast";
 
 interface CreateWorkSpaceRequest {
-  workspace: WorkspacePlatformType;
+  workspaceType: WorkspacePlatformType;
   workspaceName: string;
   url: string;
 }
+
+interface UpdateScheduleInfoReqeust {
+  description?: string;
+  endTime?: string;
+  eventId?: number;
+  location?: string;
+  meetingPlatform?: PlatformType;
+  meetingType?: string;
+  members?: string[];
+  platformName?: string;
+  platformURL?: string | null;
+  scheduleName?: string;
+  scheduleStatus?: string;
+  specificLatitude?: string;
+  specificLocation?: string;
+  specificLongitude?: string;
+  startTime?: string;
+  workspaceId?: number;
+  workspace?: [
+    {
+      type: string;
+      name: string;
+      url: string;
+    }
+  ];
+}
+
+type PlatformType = "ZOOM" | "GOOGLE_MEET" | "DISCORD" | "ZEP" | "NONE";
 
 const getGroupSchedule = async (scheduleId: string) => {
   const res = await axiosInstance.get(`/schedules/show/${scheduleId}`, {
@@ -15,8 +44,26 @@ const getGroupSchedule = async (scheduleId: string) => {
   return res.data;
 };
 
+const createMeetingRoom = async (scheduleId: string) => {
+  const res = await axiosInstance.post(
+    `/schedules/create-online-meeting/${scheduleId}`
+  );
+  return res.data;
+};
+
 const createWorkspace = async (id: string, data: CreateWorkSpaceRequest) => {
   const res = await axiosInstance.post(`/schedules/add-workspace/${id}`, data);
+  return res.data;
+};
+
+const updateScheduleInfo = async (
+  scheduleId: string,
+  data: UpdateScheduleInfoReqeust
+) => {
+  const res = await axiosInstance.patch(
+    `/schedules/modify/${scheduleId}`,
+    data
+  );
   return res.data;
 };
 
@@ -37,18 +84,52 @@ export const useDeleteSchedule = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (scheduleId: string) => deleteSchedule(scheduleId),
-    onSuccess: (data) => {
-      console.log("일정 삭제 성공: ", data);
+    onSuccess: (_, scheduleId) => {
+      ToastWell("🗑️", "일정이 성공적으로 삭제되었습니다!");
       queryClient.invalidateQueries({
-        queryKey: ["groupSchedules"],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["groupSchedule"],
+        queryKey: ["groupSchedule", scheduleId],
       });
     },
-    onError: (err) => {
-      console.error("일정 삭제 실패: ", err);
-      Toast("일정 삭제에 실패했습니다");
+    onError: () => {
+      Toast("앗, 일정 삭제에 실패했어요");
+    },
+  });
+};
+
+export const useUpdateScheduleInfo = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      scheduleId,
+      data,
+    }: {
+      scheduleId: string;
+      data: UpdateScheduleInfoReqeust;
+    }) => updateScheduleInfo(scheduleId, data),
+    onSuccess: (_, variables) => {
+      ToastWell("✅", "일정 수정 완료!");
+      queryClient.invalidateQueries({
+        queryKey: ["groupSchedule", variables.scheduleId],
+      });
+    },
+    onError: () => {
+      Toast("앗, 일정 수정에 실패했어요");
+    },
+  });
+};
+
+export const useCreateMeetingRoom = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (scheduleId: string) => createMeetingRoom(scheduleId),
+    onSuccess: (_, scheduleId) => {
+      ToastWell("🎉", "온라인 회의장을 생성해드렸어요!");
+      queryClient.invalidateQueries({
+        queryKey: ["groupSchedule", scheduleId],
+      });
+    },
+    onError: () => {
+      Toast("온라인 회의장 생성에 실패했어요");
     },
   });
 };
@@ -69,30 +150,35 @@ export const useCreateWorkspace = () => {
     mutationFn: ({ id, data }: { id: string; data: CreateWorkSpaceRequest }) =>
       createWorkspace(id, data),
     onSuccess: (data, variables) => {
-      console.log("워크스페이스 등록 성공: ", data);
+      ToastWell("🎉", "워크스페이스가 등록되었어요!");
       queryClient.invalidateQueries({
         queryKey: ["groupSchedule", variables.id],
       });
     },
-    onError: (err) => {
-      console.error("워크스페이스 등록 실패: ", err);
+    onError: () => {
+      Toast("워크스페이스 등록에 실패했어요.");
     },
   });
 };
 
-export const useDeleteWorkspace = () => {
+export const useDeleteWorkspace = ({
+  workspaceId,
+  scheduleId,
+}: {
+  workspaceId: string;
+  scheduleId: string;
+}) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, workspaceId }: { id: string; workspaceId: string }) =>
-      deleteWorkspace(id, workspaceId),
-    onSuccess: (data, id) => {
-      console.log("워크스페이스 삭제 성공: ", data);
+    mutationFn: () => deleteWorkspace(scheduleId, workspaceId),
+    onSuccess: () => {
+      ToastWell("🗑️", "워크스페이스가 삭제되었습니다.");
       queryClient.invalidateQueries({
-        queryKey: ["groupSchedule", id],
+        queryKey: ["groupSchedule", scheduleId],
       });
     },
-    onError: (err) => {
-      console.error("워크스페이스 삭제 실패: ", err);
+    onError: () => {
+      Toast("워크스페이스 삭제에 실패했어요.");
     },
   });
 };

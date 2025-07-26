@@ -18,6 +18,7 @@ function TimeSheet({ isOpen, setIsOpen, onSave }: TimeSheetType) {
     queryKey: ["mySchedule"],
     queryFn: getMySchedule,
     retry: false,
+    enabled: isOpen,
   });
 
   return (

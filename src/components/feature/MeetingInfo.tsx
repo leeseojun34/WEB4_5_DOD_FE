@@ -3,7 +3,7 @@ import groupIcon from "@/assets/icon/group_icon.svg";
 import Image from "next/image";
 
 interface MeetingInfoProps {
-  members: string[];
+  members: { name: string; scheduleRole: string }[];
   time: string;
 }
 const MeetingInfo = ({ members, time }: MeetingInfoProps) => {
@@ -18,7 +18,7 @@ const MeetingInfo = ({ members, time }: MeetingInfoProps) => {
             모임 인원
           </div>
           <div className="text-[color:var(--color-black)] text-sm">
-            {members.join(", ")}
+            {members.map((member) => member.name).join(", ")}
           </div>
         </div>
       </div>
