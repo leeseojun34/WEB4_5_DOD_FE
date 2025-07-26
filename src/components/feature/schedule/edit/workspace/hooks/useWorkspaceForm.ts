@@ -4,6 +4,7 @@ import {
   useDeleteWorkspace,
   useUpdateScheduleInfo,
 } from "@/lib/api/scheduleApi";
+import { isValidUrl } from "@/app/utils/validateUrl";
 
 interface UseWorkspaceFormProps {
   scheduleId: string;
@@ -24,7 +25,7 @@ export const useWorkspaceForm = ({
 }: UseWorkspaceFormProps) => {
   const [name, setName] = useState(defaultValue?.name ?? "");
   const [url, setUrl] = useState(defaultValue?.url ?? "");
-  const [type, setType] = useState<WorkspacePlatformType | "">(
+  const [platform, setPlatform] = useState<WorkspacePlatformType>(
     (defaultValue?.type as WorkspacePlatformType) ?? ""
   );
   const [isError, setIsError] = useState(false);
@@ -36,9 +37,11 @@ export const useWorkspaceForm = ({
   const updateWorkspace = useUpdateScheduleInfo();
 
   const handleCreateOrUpdate = () => {
-    if (!type || !url || !name) {
-      setIsError(true);
-      return;
+    if (platform && url && name) {
+      if (!isValidUrl(platform, url)) {
+        setIsError(true);
+        return;
+      }
     }
 
     if (defaultValue) {
@@ -49,7 +52,7 @@ export const useWorkspaceForm = ({
           workspaceId: Number(workspaceId),
           workspace: [
             {
-              type,
+              type: platform,
               name,
               url,
             },
@@ -61,7 +64,7 @@ export const useWorkspaceForm = ({
       createWorkspace({
         id: scheduleId,
         data: {
-          workspaceType: type,
+          workspaceType: platform,
           workspaceName: name,
           url,
         },
@@ -72,7 +75,7 @@ export const useWorkspaceForm = ({
   };
 
   const handleDelete = () => {
-    if (!type) return;
+    if (!platform) return;
     deleteWorkspace();
     onClose();
   };
@@ -82,8 +85,8 @@ export const useWorkspaceForm = ({
     setName,
     url,
     setUrl,
-    type,
-    setType,
+    platform,
+    setPlatform,
     handleCreateOrUpdate,
     handleDelete,
     isError,
