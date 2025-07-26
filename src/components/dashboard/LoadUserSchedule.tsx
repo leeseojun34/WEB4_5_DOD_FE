@@ -35,7 +35,7 @@ const LoadUserSchedule = () => {
       <div className="min-w-[375px] w-full max-w-185 bg-[color:var(--color-gray-background)] mx-auto pt-8 sm:pt-30">
         <HeaderTop>불러올 일정 선택</HeaderTop>
       </div>
-      <div className="min-w-[375px] w-full max-w-185 min-h-screen px-5 mx-auto pt-20 pb-30">
+      <div className="min-w-[375px] w-full max-w-185 min-h-screen px-5 mx-auto pt-20 pb-30 sm:pt-10">
         {isUserSchedulePending ? (
           renderSkeletons()
         ) : Object.values(userSchedules).flat().length === 0 ? (

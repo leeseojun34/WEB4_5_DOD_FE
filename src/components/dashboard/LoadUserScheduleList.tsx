@@ -11,6 +11,8 @@ import {
   listVariants,
   itemVariants,
 } from "@/components/feature/schedule/motion";
+import Toast from "../ui/Toast";
+import { AxiosError } from "axios";
 
 interface UserScheduleListProps {
   schedules: DashboardScheduleType[];
@@ -29,11 +31,13 @@ const LoadUserScheduleList = ({
       const response = await moveSchedule(scheduleId, groupId);
       if (response.code === "200") {
         router.push(`/group/${groupId}`);
-      } else {
-        throw new Error(response.message);
       }
     } catch (error) {
-      console.error(error);
+      if (error instanceof AxiosError) {
+        if (error.status === 404) {
+          Toast("이미 그룹에 속한 일정입니다");
+        }
+      }
     }
   };
 
@@ -52,7 +56,7 @@ const LoadUserScheduleList = ({
         >
           <OptionBox isSelected={schedule.id === selectedSchedule}>
             <div
-              className=" flex flex-col flex-1 gap-2 min-w-[335px] max-w-185 w-full px-4"
+              className=" flex flex-col flex-1 gap-2 min-w-[335px] max-w-185 w-full px-2"
               onClick={() => setSelectedSchedule(schedule.id)}
             >
               <div className="flex justify-between">
