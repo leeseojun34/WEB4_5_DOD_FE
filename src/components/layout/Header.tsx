@@ -11,7 +11,6 @@ import { useEffect } from "react";
 const Header = ({ type = "" }: { type?: "" | "blue" }) => {
   const router = useRouter();
   const { data: user, refetch } = useUser();
-  console.log(user);
   useEffect(() => {
     refetch();
   }, [refetch]);
