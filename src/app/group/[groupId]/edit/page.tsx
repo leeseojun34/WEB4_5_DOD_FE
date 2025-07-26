@@ -4,45 +4,58 @@ import Header from "@/components/layout/Header";
 import HeaderTop from "@/components/layout/HeaderTop";
 import { Button } from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
-import { deleteGroup, getGroup, updateGroup } from "@/lib/api/groupApi";
-import { useParams, useRouter } from "next/navigation";
+import {
+  deleteGroup,
+  updateGroup,
+  useGroupSchedules,
+} from "@/lib/api/groupApi";
+import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
   listVariants,
   itemVariants,
 } from "@/components/feature/schedule/motion";
+import GlobalLoading from "@/app/loading";
+import { useGroupDetailPage } from "@/components/feature/group/detail/hooks/useGroupDetailLogic";
+import { useQueryClient } from "@tanstack/react-query";
 
 const EditGroup = () => {
   const router = useRouter();
-  const params = useParams();
-  const groupId = params.groupId as string;
+  const queryClient = useQueryClient();
+
+  const { groupId, userPending, isMember } = useGroupDetailPage();
+  const { data: groupData, isPending: groupPending } = useGroupSchedules(
+    groupId,
+    isMember
+  );
 
   const [groupName, setGroupName] = useState("");
   const [groupDescription, setGroupDescription] = useState("");
+  const [isUpdating, setIsUpdating] = useState(false);
 
   useEffect(() => {
-    const fetchGroup = async () => {
-      try {
-        const res = await getGroup(groupId);
-        if (res.data) {
-          setGroupName(res.data.groupName);
-          setGroupDescription(res.data.groupDescription);
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    };
-    fetchGroup();
-  }, [groupId]);
+    if (groupData?.data) {
+      setGroupName(groupData.data.groupName || "");
+      setGroupDescription(groupData.data.groupDescription || "");
+    }
+  }, [groupData]);
+
+  if (userPending || groupPending || !groupData) {
+    return <GlobalLoading />;
+  }
 
   const handleUpdateGroup = async () => {
+    if (isUpdating) return;
+    setIsUpdating(true);
     try {
       const response = await updateGroup(groupId, {
         groupName: groupName.trim(),
         description: groupDescription.trim(),
       });
       if (response.code === "200") {
+        queryClient.invalidateQueries({ queryKey: ["dashboard", "groups"] });
+        queryClient.invalidateQueries({ queryKey: ["groupSchedule", groupId] });
         router.push(`/group/${response.data.groupId}`);
       } else {
         throw new Error(response.message);
@@ -56,6 +69,8 @@ const EditGroup = () => {
     try {
       const response = await deleteGroup(groupId);
       if (response.code === "200") {
+        queryClient.invalidateQueries({ queryKey: ["dashboard", "groups"] });
+        queryClient.invalidateQueries({ queryKey: ["groupSchedule", groupId] });
         router.push("/");
       } else {
         throw new Error(response.message);
@@ -66,7 +81,9 @@ const EditGroup = () => {
   };
 
   const isFormValid =
-    groupName.trim().length > 0 && groupDescription.trim().length > 0;
+    groupName.trim().length > 0 &&
+    groupDescription.trim().length > 0 &&
+    !isUpdating;
   const buttonState = !isFormValid ? "disabled" : "default";
 
   return (
@@ -119,7 +136,7 @@ const EditGroup = () => {
               그룹 삭제하기
             </button>
             <Button onClick={handleUpdateGroup} state={buttonState}>
-              수정 완료
+              {isUpdating ? "수정 중.." : "수정 완료"}
             </Button>
           </div>
         </div>

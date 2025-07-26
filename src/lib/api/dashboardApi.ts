@@ -61,7 +61,7 @@ export const useDashboardGroups = () => {
     queryKey: ["dashboard", "groups"],
     queryFn: () => getDashboardDetail(formatDate(new Date())),
     select: (data) => data.data.groups.groupDetails,
-    staleTime: Infinity,
+    staleTime: 5 * 60 * 1000,
   });
 };
 
