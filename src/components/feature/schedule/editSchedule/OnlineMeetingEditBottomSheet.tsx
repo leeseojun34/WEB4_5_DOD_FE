@@ -3,10 +3,13 @@ import { Button } from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import ShareButton from "@/components/ui/ShareButton";
 import Image from "next/image";
-import { ChangeEvent, useEffect, useRef } from "react";
+import { ChangeEvent, useEffect } from "react";
 import BottomSheetHeader from "@/components/layout/BottomSheetHeader";
 import { useOnlineMeetingForm } from "./hooks/useOnlineMeetingForm";
-import { ONLINE_MEETING_PLATFORM } from "../constants/platform";
+import {
+  ONLINE_MEETING_PLATFORM,
+  ONLINE_MEETING_PLATFORM_NAME,
+} from "../constants/platform";
 
 interface OnlineMeetingEditBottomSheetProps {
   isOpen: boolean;
@@ -33,16 +36,13 @@ const OnlineMeetingEditBottomSheet = ({
     setInputValue,
     isError,
   } = useOnlineMeetingForm(scheduleId, () => setIsOpen(false));
-  const initRef = useRef(false);
 
   useEffect(() => {
-    if (!initRef.current) {
+    if (isOpen) {
       if (url) setInputValue(url);
       if (platform) handleChangePlatform(platform as OnlineMeetingPlatformType);
-      initRef.current = true;
     }
-  }, [setInputValue, url, platform, handleChangePlatform]);
-
+  }, [isOpen, handleChangePlatform, platform, setInputValue, url]);
   return (
     <BottomSheet isOpen={isOpen} setIsOpen={setIsOpen} snapPoints={[0.8]}>
       {() => (
@@ -100,7 +100,8 @@ const OnlineMeetingEditBottomSheet = ({
             />
             {isError && (
               <p className="text-[color:var(--color-red)] text-sm ml-2">
-                유효한 {selectedPlatform} 회의 링크를 입력해주세요.
+                유효한 {ONLINE_MEETING_PLATFORM_NAME[selectedPlatform!]} 회의
+                링크를 입력해주세요.
               </p>
             )}
           </div>
