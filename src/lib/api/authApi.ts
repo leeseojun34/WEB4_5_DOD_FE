@@ -167,10 +167,12 @@ export const useGoogleCalendarId = () => {
 
 // 구글 캘런더 Id 등록 (post)
 export const useResgisterCalendarId = () => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: registerCalendarId,
     onSuccess: () => {
       ToastWell("🎉", "구글 캘린더 등록 완료!");
+      queryClient.invalidateQueries({ queryKey: ["calendarId"] });
     },
   });
 };
