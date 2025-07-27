@@ -40,9 +40,10 @@ function MyPage() {
   const [calendarId, setCalendarId] = useState("");
   const { data: googleCalendar } = useGoogleCalendarId();
   const [hasGoogleCalendarId, setHasGoogleCalendarId] = useState(false);
+  const [bottomOffset, setBottomOffset] = useState(0);
 
   useEffect(() => {
-    refetch(); // 마운트 시 user 데이터 패치
+    refetch();
   }, [refetch]);
 
   useEffect(() => {
@@ -57,10 +58,17 @@ function MyPage() {
       setCalendarId(googleCalendar.calendarId || "");
     }
   }, [googleCalendar]);
-  // 즐겨찾는 시간 조회
-  // const favoriteTime = useFavoriteTime();
-  // console.log(favoriteTime.data);
-  // const [time, setTime] = useState(()=> favoriteTime);
+
+  useEffect(() => {
+    const updateOffset = () => {
+      // iPhone SE 높이 568px, iPhone 14 Pro 844px 기준
+      const h = window.innerHeight;
+      setBottomOffset(h >= 844 ? 120 : 100);
+    };
+    updateOffset();
+    window.addEventListener("resize", updateOffset);
+    return () => window.removeEventListener("resize", updateOffset);
+  }, []);
 
   const openSheet = (type: SheetType) => {
     setSheetType(type);
@@ -140,7 +148,7 @@ function MyPage() {
   };
 
   return (
-    <div className="w-full flex flex-col py-8">
+    <div className="w-full flex flex-col min-h-screen relative py-8">
       <div className="flex flex-1 flex-col justify-between gap-[4vh]">
         <div className="flex flex-col gap-8">
           {user?.data && (
@@ -173,7 +181,9 @@ function MyPage() {
           </div>
         </div>
 
-        <div className="flex justify-center items-center text-xs gap-24">
+        <div
+          className="fixed left-0 right-0 flex justify-center items-center text-xs gap-24 z-50"
+          style={{ bottom: `${bottomOffset}px` }}>
           <AlertBox
             actionHandler={handleLeave}
             content="탈퇴하시겠습니까?"
