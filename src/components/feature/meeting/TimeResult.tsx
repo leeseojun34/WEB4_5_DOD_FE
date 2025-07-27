@@ -52,8 +52,6 @@ const TimeResult = () => {
     }
   }, [eventDetail]);
 
-  console.log(eventDetailInfo);
-
   const handleCreateSchedule = async (data: string) => {
     let findData: MeetingTimeType | null = null;
     for (const item of list) {
@@ -69,18 +67,18 @@ const TimeResult = () => {
     }
 
     const payload: CreateScheduleRequest = {
-      eventId: eventDetailInfo?.eventId || 0,
+      eventId: eventDetailInfo.data.eventId,
       startTime: findData.startTime,
       endTime: findData.endTime,
-      scheduleName: eventDetailInfo?.title || "",
-      description: eventDetailInfo?.description || "",
+      scheduleName: eventDetailInfo.data.title,
+      description: eventDetailInfo.data.description,
       schedules_Status: "FIXED",
-      meetingType: eventDetailInfo?.meetingType || "",
+      meetingType: eventDetailInfo.data.meetingType,
       members: findData.participants.map((participant) => ({
         memberId: participant.memberId,
       })),
     };
-    console.log(payload);
+
     try {
       const res = await createSchedule(payload);
       console.log(res);

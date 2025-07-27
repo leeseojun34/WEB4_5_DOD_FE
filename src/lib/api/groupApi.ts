@@ -115,7 +115,7 @@ const updateMemberPermissions = async (
   return res.data;
 };
 
-const addGroupMember = async (groupId: string) => {
+export const addGroupMember = async (groupId: string) => {
   const res = await axiosInstance.post(`/groups/${groupId}/member`);
   return res.data;
 };
