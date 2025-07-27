@@ -83,12 +83,12 @@ const getGroupSchedules = async (groupId: string) => {
   return res.data;
 };
 
-const getGroupStatistics = async (groupId: string) => {
+export const getGroupStatistics = async (groupId: string) => {
   const res = await axiosInstance.get(`/groups/${groupId}/statistics`);
   return res.data;
 };
 
-const getGroupMembers = async (groupId: string) => {
+export const getGroupMembers = async (groupId: string) => {
   const res = await axiosInstance.get(`/groups/${groupId}/member`);
   return res.data;
 };

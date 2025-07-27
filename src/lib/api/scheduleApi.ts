@@ -37,7 +37,7 @@ interface UpdateScheduleInfoReqeust {
 
 type PlatformType = "ZOOM" | "GOOGLE_MEET" | "DISCORD" | "ZEP" | "NONE";
 
-const getGroupSchedule = async (scheduleId: string) => {
+export const getGroupSchedule = async (scheduleId: string) => {
   const res = await axiosInstance.get(`/schedules/show/${scheduleId}`, {
     params: { id: scheduleId },
   });
@@ -140,6 +140,7 @@ export const useGroupSchedule = (scheduleId: string) => {
     enabled: !!scheduleId,
     retry: false,
     refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 5,
   });
 };
 
