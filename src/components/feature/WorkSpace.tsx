@@ -31,7 +31,7 @@ const WorkSpace = ({ scheduleId, workspaces }: WorkSpaceProps) => {
       </div>
       <div className="flex flex-col gap-3 w-full">
         {(!workspaces || workspaces.length === 0) && (
-          <div className="flex w-full justify-center items-center py-4 text-xs text-[color:var(--color-gray)]">
+          <div className="flex w-full justify-center items-center py-4 text-xs text-[color:var(--color-gray)] pb-8">
             연동된 워크스페이스가 없습니다.
           </div>
         )}

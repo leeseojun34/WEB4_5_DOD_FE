@@ -108,7 +108,7 @@ export const ScheduleCardSkeleton = () => {
 export const OptionBoxSkeleton = () => {
   return (
     <div className="w-full animate-pulse">
-      <div className="border border-gray-200 rounded-lg bg-white px-2 py-3 flex flex-col gap-2 min-w-[335px] max-w-185 w-full">
+      <div className="border border-gray-200 rounded-lg  px-4 py-3 flex flex-col gap-2 min-w-[335px] max-w-185 w-full">
         <div className="flex gap-3">
           <div className="w-24 h-4 bg-gray-200 rounded" />
           <div className="w-12 h-4 bg-gray-200 rounded" />

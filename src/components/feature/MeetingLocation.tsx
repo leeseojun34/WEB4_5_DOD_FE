@@ -28,7 +28,7 @@ const MeetingLocation = ({
         </div>
       </div>
       {!location && !specificLocation ? (
-        <div className="flex w-full justify-center items-center py-4 text-xs text-[color:var(--color-gray)]">
+        <div className="flex w-full justify-center items-center py-4 text-xs text-[color:var(--color-gray)] pb-8">
           등록된 모임장소가 없습니다.
         </div>
       ) : (

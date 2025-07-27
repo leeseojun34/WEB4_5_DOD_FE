@@ -4,6 +4,8 @@ import ScheduleDetailContent from "./ScheduleDetailContent";
 import { formatSchedule } from "@/app/utils/dateFormat";
 import BottomSheet from "@/components/ui/BottomSheet";
 import GroupHeaderMap from "@/components/layout/GroupHeaderMap";
+import { motion } from "framer-motion";
+import { itemVariants } from "../motion";
 
 interface OfflineBottomSheetProps {
   scheduleId: string;
@@ -52,12 +54,14 @@ const OfflineBottomSheet = ({
                     })
                   )}
                 >
-                  <MeetingLocation
-                    location={data.location}
-                    specificLocation={data.specificLocation}
-                    isLocationEditOpen={isLocationEditOpen}
-                    setIsLocationEditOpen={setIsLocationEditOpen}
-                  />
+                  <motion.div variants={itemVariants}>
+                    <MeetingLocation
+                      location={data.location}
+                      specificLocation={data.specificLocation}
+                      isLocationEditOpen={isLocationEditOpen}
+                      setIsLocationEditOpen={setIsLocationEditOpen}
+                    />
+                  </motion.div>
                 </ScheduleDetailContent>
               </div>
             </div>
