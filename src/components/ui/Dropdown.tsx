@@ -19,15 +19,18 @@ const Dropdown: React.FC<DropdownProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState("Option");
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const optionsRef = useRef(false);
 
   //디폴트 인덱스
   useEffect(() => {
     if (
+      !optionsRef.current &&
       typeof defaultIndex === "number" &&
       defaultIndex >= 0 &&
       defaultIndex < options.length
     ) {
       setSelected(options[defaultIndex]);
+      optionsRef.current = true;
     }
   }, [defaultIndex, options]);
 

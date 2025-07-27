@@ -1,30 +1,46 @@
 "use client";
 
-import ActionButtons from "@/components/feature/schedule/editSchedule/ActionButtons";
+import GlobalLoading from "@/app/loading";
 import ScheduleForm from "@/components/feature/schedule/editSchedule/ScheduleForm";
 import TimeEditBottomSheet from "@/components/feature/schedule/editSchedule/TimeEditBottomSheet";
-import { useEditSchedule } from "@/components/feature/schedule/hooks/useEditSchedule";
+import { useEditSchedule } from "@/components/feature/schedule/editSchedule/hooks/useEditSchedule";
 import Header from "@/components/layout/Header";
 import HeaderTop from "@/components/layout/HeaderTop";
+import { useParams } from "next/navigation";
 
 const EditScheduleInfo = () => {
+  const params = useParams();
+  const id = params.id as string;
+
   const {
     scheduleName,
     scheduleDescription,
     isOpen,
     selectedDate,
     scheduleTime,
+    meetingType,
     setIsOpen,
     setSelectedDate,
     handleScheduleNameChange,
     handleScheduleDescriptionChange,
     handleTimeClick,
-    handleEditComplete,
+    handleEditTime,
     handleDelete,
-  } = useEditSchedule();
+    setStartTime,
+    setEndTime,
+    handleEditInfo,
+    startTime,
+    endTime,
+    schedulePending,
+    isError,
+    setIsError,
+  } = useEditSchedule(id);
+
+  if (schedulePending) return <GlobalLoading />;
+
   return (
     <div className="w-full">
-       <div className="hidden sm:block">
+      <div className="hidden sm:block">
         <Header />
       </div>
       <div className="min-w-[375px] w-full max-w-185 mx-auto pt-25 sm:pt-40 px-5 min-h-screen relative">
@@ -34,9 +50,12 @@ const EditScheduleInfo = () => {
           scheduleName={scheduleName}
           scheduleDescription={scheduleDescription}
           scheduleTime={scheduleTime}
+          meetingType={meetingType}
           onScheduleNameChange={handleScheduleNameChange}
           onScheduleDescriptionChange={handleScheduleDescriptionChange}
           onTimeClick={handleTimeClick}
+          handleDelete={handleDelete}
+          handleEditInfo={handleEditInfo}
         />
 
         <TimeEditBottomSheet
@@ -44,12 +63,13 @@ const EditScheduleInfo = () => {
           setIsOpen={setIsOpen}
           selectedDate={selectedDate}
           setSelectedDate={setSelectedDate}
-          onComplete={handleEditComplete}
-        />
-
-        <ActionButtons
-          onDelete={handleDelete}
-          onEditComplete={handleEditComplete}
+          onComplete={handleEditTime}
+          setStartTime={setStartTime}
+          setEndTime={setEndTime}
+          startTime={startTime}
+          endTime={endTime}
+          isError={isError}
+          setIsError={setIsError}
         />
       </div>
     </div>

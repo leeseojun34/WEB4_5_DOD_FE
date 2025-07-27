@@ -1,17 +1,17 @@
 import { MapPin, Pen } from "lucide-react";
-import LocationEditBottomSheet from "./schedule/editSchedule/LocationEditBottomSheet";
-import { useState } from "react";
 
 interface MeetingLocationProps {
   location?: string;
   specificLocation?: string;
+  isLocationEditOpen?: boolean;
+  setIsLocationEditOpen?: (open: boolean) => void;
 }
 
 const MeetingLocation = ({
   location,
   specificLocation,
+  setIsLocationEditOpen,
 }: MeetingLocationProps) => {
-  const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="bg-[color:var(--color-white)] px-5 py-4 gap-4 rounded-lg flex flex-col shadow-[var(--shadow-common)]">
       <div className="flex w-full justify-between items-center">
@@ -23,12 +23,12 @@ const MeetingLocation = ({
             모임 장소
           </div>
         </div>
-        <div onClick={() => setIsOpen(true)}>
+        <div onClick={() => setIsLocationEditOpen?.(true)}>
           <Pen className="w-3 h-3 text-[color:var(--color-gray)] cursor-pointer" />
         </div>
       </div>
       {!location && !specificLocation ? (
-        <div className="flex w-full justify-center items-center py-4 text-xs text-[color:var(--color-gray)]">
+        <div className="flex w-full justify-center items-center py-4 text-xs text-[color:var(--color-gray)] pb-8">
           등록된 모임장소가 없습니다.
         </div>
       ) : (
@@ -65,7 +65,6 @@ const MeetingLocation = ({
           </div>
         </div>
       )}
-      <LocationEditBottomSheet isOpen={isOpen} setIsOpen={setIsOpen} />
     </div>
   );
 };

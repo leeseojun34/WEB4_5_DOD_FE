@@ -4,6 +4,7 @@ import { ArrowRight, EllipsisVertical } from "lucide-react";
 import NameTag from "./NameTag";
 import Link from "next/link";
 import DropdownSmall from "./DropdownSmall";
+import { isFutureDate } from "@/app/utils/dateFormat";
 import ControlledAlertBox from "./ControlledAlertBox";
 import { useGroupScheduleActions } from "../feature/group/detail/hooks/useGroupDetailLogic";
 
@@ -19,7 +20,8 @@ interface EventProps extends BaseProps {
   meetingType: "ONLINE" | "OFFLINE";
   scheduleId: string;
   groupRole: boolean;
-  onCustomDelete?: (scheduleId: string) => void;
+  onCustomDelete?: (scheduleMemberId: number) => void;
+  scheduleMemberId?: number;
 }
 
 interface AttendanceProps extends BaseProps {
@@ -45,6 +47,8 @@ const ScheduleCard = (props: ScheduleCardProps) => {
   const groupRole = props.variant === "event" ? props.groupRole : "";
   const onCustomDelete =
     props.variant === "event" ? props.onCustomDelete : undefined;
+  const scheduleMemberId =
+    props.variant === "event" ? props.scheduleMemberId : undefined;
 
   const onTopClick = () => {
     handleTopClick(scheduleId);
@@ -54,9 +58,11 @@ const ScheduleCard = (props: ScheduleCardProps) => {
     handleBottomClick();
   };
 
-  const handleDelete = (scheduleId: string) => {
-    if (onCustomDelete) {
-      onCustomDelete(scheduleId);
+  const isFuture = isFutureDate(time);
+
+  const handleDelete = () => {
+    if (onCustomDelete && scheduleMemberId !== undefined) {
+      onCustomDelete(scheduleMemberId);
     } else {
       handleAlertAction(scheduleId);
     }
@@ -64,7 +70,11 @@ const ScheduleCard = (props: ScheduleCardProps) => {
 
   return (
     <div
-      className="min-w-[335px] max-w-185 w-full h-auto p-4 rounded-lg bg-[color:var(--color-white)]  flex cursor-pointer transition-all duration-100 hover:-translate-y-0.5"
+      className={`min-w-[335px] max-w-185 w-full h-auto p-4 rounded-lg ${
+        isFuture
+          ? "bg-[color:var(--color-white)]"
+          : "bg-[color:var(--color-muted)]"
+      }  flex cursor-pointer transition-all duration-100 hover:-translate-y-0.5`}
       style={{ boxShadow: "var(--shadow-common)" }}
     >
       {/* event 카드일 때 */}
@@ -75,20 +85,42 @@ const ScheduleCard = (props: ScheduleCardProps) => {
         >
           <div className="flex justify-between">
             <div className="flex gap-3">
-              <p className="text-[color:var(--color-gray)] text-xs">
+              <p
+                className={` ${
+                  isFuture
+                    ? "text-[color:var(--color-gray)]"
+                    : "text-[color:var(--color-gray-placeholder)]"
+                } text-xs`}
+              >
                 {props.title}
               </p>
-              <p className="text-[color:var(--color-primary-400)] text-xs font-regular">
+              <p
+                className={` ${
+                  isFuture
+                    ? "text-[color:var(--color-primary-400)]"
+                    : "text-[color:var(--color-gray-placeholder)]"
+                }  text-xs font-regular`}
+              >
                 {props.meetingType === "OFFLINE" ? "오프라인" : "온라인"}
               </p>
             </div>
           </div>
-          <div className="text-sm font-medium text-[color:var(--color-black)]">
+          <div
+            className={`text-sm font-medium ${
+              isFuture
+                ? "text-[color:var(--color-black)]"
+                : "text-[color:var(--color-gray-placeholder)]"
+            } `}
+          >
             {time}
           </div>
           <div className="flex gap-1">
             {members.map((member, i) => (
-              <NameTag name={member} key={`${member}-${i}`} />
+              <NameTag
+                name={member}
+                key={`${member}-${i}`}
+                isFuture={isFuture}
+              />
             ))}
           </div>
         </Link>
@@ -118,7 +150,13 @@ const ScheduleCard = (props: ScheduleCardProps) => {
       {variant === "event" && groupRole && (
         <div className="relative">
           <button onClick={() => setIsOpen(true)}>
-            <EllipsisVertical className="w-[18px] h-[18px] text-[color:var(--color-black)] cursor-pointer" />
+            <EllipsisVertical
+              className={`w-[18px] h-[18px] ${
+                isFuture
+                  ? "text-[color:var(--color-black)]"
+                  : "text-[color:var(--color-gray-placeholder)]"
+              } cursor-pointer`}
+            />
           </button>
           {isOpen && (
             <div className="absolute right-0 top-6">
@@ -146,7 +184,7 @@ const ScheduleCard = (props: ScheduleCardProps) => {
         action="확인"
         isOpen={isAlertOpen}
         onClose={() => setIsAlertOpen(false)}
-        actionHandler={() => handleDelete(scheduleId)}
+        actionHandler={handleDelete}
       />
     </div>
   );

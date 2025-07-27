@@ -1,30 +1,33 @@
 import { AtSign, ChevronRight, Pen } from "lucide-react";
-import zoomIcon from "@/assets/icon/zoom_icon.svg";
-import googleMeetIcon from "@/assets/icon/googlemeet_icon.svg";
-import discordIcon from "@/assets/icon/discord_icon.svg";
-import zepIcon from "@/assets/icon/zep_icon.svg";
 import Image from "next/image";
 import OnlineMeetingEditBottomSheet from "./schedule/editSchedule/OnlineMeetingEditBottomSheet";
 import { useState } from "react";
-
-type Platform = "zoom" | "googleMeet" | "discord" | "zep";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { itemVariants } from "./schedule/motion";
+import {
+  ONLINE_MEETING_PLATFORM,
+  ONLINE_MEETING_PLATFORM_NAME,
+} from "./schedule/constants/platform";
 
 interface OnlineMeetingRoomProps {
-  platform?: Platform;
-  name?: string;
+  scheduleId: string;
+  platform?: string;
+  url?: string;
 }
 
-const OnlineMeetingRoom = ({ platform, name }: OnlineMeetingRoomProps) => {
+const OnlineMeetingRoom = ({
+  scheduleId,
+  platform,
+  url,
+}: OnlineMeetingRoomProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const PLATFORM = {
-    zoom: zoomIcon,
-    googleMeet: googleMeetIcon,
-    discord: discordIcon,
-    zep: zepIcon,
-  };
 
   return (
-    <div className="bg-[color:var(--color-white)] px-5 py-4 gap-4 rounded-lg flex flex-col shadow-[var(--shadow-common)]">
+    <motion.div
+      variants={itemVariants}
+      className="bg-[color:var(--color-white)] px-5 py-4 gap-4 rounded-lg flex flex-col shadow-[var(--shadow-common)]"
+    >
       <div className="flex w-full justify-between items-center">
         <div className="flex gap-4 items-center">
           <div>
@@ -38,28 +41,47 @@ const OnlineMeetingRoom = ({ platform, name }: OnlineMeetingRoomProps) => {
           <Pen className="w-3 h-3 text-[color:var(--color-gray)] cursor-pointer" />
         </div>
       </div>
-      {!platform && !name && (
+      {!url && (
         <div className="flex w-full justify-center items-center py-4 text-xs text-[color:var(--color-gray)]">
           연동된 온라인 회의장이 없습니다.
         </div>
       )}
-      {platform && name && (
+      {url && (
         <div className="flex w-full justify-between items-center">
           <div className="flex gap-4 items-center">
             <div>
-              <Image src={PLATFORM[platform]} alt={`${platform} 아이콘`} />
+              <Image
+                src={
+                  ONLINE_MEETING_PLATFORM[platform as OnlineMeetingPlatformType]
+                }
+                alt={`${platform} 아이콘`}
+                className="w-4 h-4"
+              />
             </div>
             <div className="text-[color:var(--color-black)] text-sm">
-              {name}
+              {
+                ONLINE_MEETING_PLATFORM_NAME[
+                  platform as OnlineMeetingPlatformType
+                ]
+              }
             </div>
           </div>
-          <div>
+          <Link
+            href={url.startsWith("http") ? url : `https://${url}`}
+            target="blank"
+          >
             <ChevronRight className="w-[14px] h-[14px] text-[color:var(--color-gray)]" />
-          </div>
+          </Link>
         </div>
       )}
-      <OnlineMeetingEditBottomSheet isOpen={isOpen} setIsOpen={setIsOpen} />
-    </div>
+      <OnlineMeetingEditBottomSheet
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        scheduleId={scheduleId}
+        platform={platform}
+        url={url!}
+      />
+    </motion.div>
   );
 };
 

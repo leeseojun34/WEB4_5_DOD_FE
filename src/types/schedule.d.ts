@@ -28,15 +28,17 @@ interface ScheduleDetailType {
   meetingPlatform: string;
   platformName: string;
   platformUrl: string;
-  members: string[];
+  members: { name: string; scheduleRole: string }[];
   workspaces: WorkspaceType[];
 }
+
+type OnlineMeetingPlatformType = "ZOOM" | "GOOGLE_MEET" | "DISCORD" | "ZEP";
 
 type WorkspacePlatformType =
   | "GITHUB"
   | "NOTION"
   | "FIGMA"
-  | "GOOGLE_DOS"
+  | "GOOGLE_DOCS"
   | "MIRO"
   | "CANVA";
 

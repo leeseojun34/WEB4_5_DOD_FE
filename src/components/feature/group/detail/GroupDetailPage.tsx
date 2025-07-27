@@ -6,6 +6,7 @@ import GroupHeaderSection from "@/components/feature/group/detail/GroupHeaderSec
 import Footer from "@/components/layout/Footer";
 import { useGroupSchedules } from "@/lib/api/groupApi";
 import { useGroupDetailPage } from "./hooks/useGroupDetailLogic";
+import { usePrefetchGroupData } from "./hooks/usePrefetchGroupData";
 
 const GroupDetailPage = () => {
   const { groupId, userPending, isMember } = useGroupDetailPage();
@@ -13,13 +14,18 @@ const GroupDetailPage = () => {
     groupId,
     isMember
   );
+  usePrefetchGroupData(groupId, groupData?.data?.scheduleDetails);
 
   if (userPending || groupPending || !groupData) {
     return <GlobalLoading />;
   }
 
   return (
-    <div className="w-full min-h-screen bg-[color:var(--color-gray-background)]">
+    <div
+      className={`w-full min-h-screen bg-[color:var(--color-gray-background)] ${
+        groupData.data.scheduleDetails.length >= 3 && "pb-30"
+      }`}
+    >
       <GroupHeaderSection
         groupId={groupData.data.groupId}
         groupName={groupData.data.groupName}
