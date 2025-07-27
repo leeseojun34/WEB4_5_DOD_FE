@@ -13,6 +13,7 @@ import {
 } from "@/components/feature/schedule/motion";
 import Toast from "../ui/Toast";
 import { AxiosError } from "axios";
+import ToastWell from "../ui/ToastWell";
 
 interface UserScheduleListProps {
   schedules: DashboardScheduleType[];
@@ -32,11 +33,15 @@ const LoadUserScheduleList = ({
       if (response.code === "200") {
         router.push(`/group/${groupId}`);
       }
-      Toast("성공적으로 일정을 불러왔습니다!");
+      ToastWell("✅", "성공적으로 일정을 불러왔습니다!");
     } catch (error) {
       if (error instanceof AxiosError) {
         if (error.status === 404) {
           Toast("이미 그룹에 속한 일정입니다");
+        } else if (error.status === 403) {
+          Toast("그룹에 속하지 않은 멤버가 존재합니다");
+        } else {
+          Toast(error.message);
         }
       }
     }

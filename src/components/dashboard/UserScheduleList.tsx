@@ -11,6 +11,7 @@ import {
 } from "@/components/feature/schedule/motion";
 import { useQueryClient } from "@tanstack/react-query";
 import Toast from "../ui/Toast";
+import ToastWell from "../ui/ToastWell";
 
 interface UserScheduleListProps {
   schedules: DashboardScheduleType[];
@@ -25,8 +26,9 @@ const UserScheduleList = ({ schedules }: UserScheduleListProps) => {
       const response = await deactivatedSchedule(scheduleMemberId);
       if (response.code === "200") {
         queryClient.invalidateQueries({
-          queryKey: ["userSchedules", scheduleMemberId],
+          queryKey: ["userSchedules"],
         });
+        ToastWell("🗑️", "일정을 성공적으로 삭제했습니다");
       }
     } catch {
       Toast("일정 삭제에 실패했습니다");
