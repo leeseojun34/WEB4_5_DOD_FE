@@ -1,7 +1,6 @@
 "use client";
 
 import GlobalLoading from "@/app/loading";
-import ActionButtons from "@/components/feature/schedule/editSchedule/ActionButtons";
 import ScheduleForm from "@/components/feature/schedule/editSchedule/ScheduleForm";
 import TimeEditBottomSheet from "@/components/feature/schedule/editSchedule/TimeEditBottomSheet";
 import { useEditSchedule } from "@/components/feature/schedule/editSchedule/hooks/useEditSchedule";
@@ -55,6 +54,8 @@ const EditScheduleInfo = () => {
           onScheduleNameChange={handleScheduleNameChange}
           onScheduleDescriptionChange={handleScheduleDescriptionChange}
           onTimeClick={handleTimeClick}
+          handleDelete={handleDelete}
+          handleEditInfo={handleEditInfo}
         />
 
         <TimeEditBottomSheet
@@ -69,11 +70,6 @@ const EditScheduleInfo = () => {
           endTime={endTime}
           isError={isError}
           setIsError={setIsError}
-        />
-
-        <ActionButtons
-          onDelete={handleDelete}
-          onEditComplete={handleEditInfo}
         />
       </div>
     </div>

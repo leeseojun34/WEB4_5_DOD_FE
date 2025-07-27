@@ -1,5 +1,6 @@
 import Input from "@/components/ui/Input";
 import { ChangeEvent } from "react";
+import ActionButtons from "./ActionButtons";
 
 interface ScheduleFormProps {
   scheduleName: string;
@@ -9,6 +10,8 @@ interface ScheduleFormProps {
   onScheduleNameChange: (e: ChangeEvent<HTMLInputElement>) => void;
   onScheduleDescriptionChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
   onTimeClick: () => void;
+  handleDelete: () => void;
+  handleEditInfo: () => void;
 }
 
 const ScheduleForm = ({
@@ -19,6 +22,8 @@ const ScheduleForm = ({
   onScheduleNameChange,
   onScheduleDescriptionChange,
   onTimeClick,
+  handleDelete,
+  handleEditInfo,
 }: ScheduleFormProps) => {
   return (
     <div className="flex flex-col gap-4">
@@ -52,13 +57,19 @@ const ScheduleForm = ({
         onClick={onTimeClick}
         icon={
           <button
-            className="w-7 font-medium text-sm text-[color:var(--color-gray-placeholder)]] hover:text-[color:var(--color-primary-400)] cursor-pointer"
+            className="w-7 font-medium text-sm text-[color:var(--color-primary-400)] cursor-pointer"
             onClick={onTimeClick}
           >
             수정
           </button>
         }
         readOnly
+      />
+      <ActionButtons
+        onDelete={handleDelete}
+        onEditComplete={handleEditInfo}
+        scheduleName={scheduleName}
+        scheduleDescription={scheduleDescription}
       />
     </div>
   );
