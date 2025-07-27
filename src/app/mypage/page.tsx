@@ -74,6 +74,7 @@ function MyPage() {
         setName(newName);
         refetch();
         setIsOpen(false);
+        setNewName("");
       },
     });
   };
