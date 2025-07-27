@@ -107,7 +107,7 @@ const OnlineMeetingEditBottomSheet = ({
           </div>
           <div className="absolute bottom-9 w-full px-5 left-1/2 -translate-x-1/2 flex flex-col justify-center items-center gap-4">
             <button
-              className="cursor-pointer text-[color:var(--color-red)] text-xs font-semibold text-center"
+              className="cursor-pointer text-[color:var(--color-gray-placeholder)] hover:text-[color:var(--color-red)] text-xs font-semibold text-center"
               onClick={handleDeleteMeetingRoom}
             >
               삭제하기
