@@ -13,6 +13,7 @@ interface ScheduleDetailContentProps {
   time: string;
   workspace: { platform: WorkspacePlatformType; name: string }[];
   children: React.ReactNode;
+  isLeader: boolean
 }
 
 const ScheduleDetailContent = ({
@@ -21,6 +22,7 @@ const ScheduleDetailContent = ({
   time,
   workspace,
   children,
+  isLeader
 }: ScheduleDetailContentProps) => {
   const { shareWithTemplate } = useKakaoShare();
   const pathname = usePathname();
@@ -50,7 +52,7 @@ const ScheduleDetailContent = ({
       </motion.div>
       {children}
       <motion.div variants={itemVariants}>
-        <WorkSpace workspaces={workspace} scheduleId={scheduleId} />
+        <WorkSpace workspaces={workspace} scheduleId={scheduleId} isLeader={isLeader}/>
       </motion.div>
       <KakaoScript />
     </motion.div>

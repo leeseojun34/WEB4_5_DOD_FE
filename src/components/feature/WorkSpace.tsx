@@ -11,9 +11,10 @@ interface WorkSpaceProps {
       }[]
     | null;
   scheduleId: string;
+  isLeader: boolean;
 }
 
-const WorkSpace = ({ scheduleId, workspaces }: WorkSpaceProps) => {
+const WorkSpace = ({ scheduleId, workspaces, isLeader }: WorkSpaceProps) => {
   return (
     <div className="bg-[color:var(--color-white)] px-5 py-4 gap-4 rounded-lg flex flex-col shadow-[var(--shadow-common)]">
       <div className="flex w-full justify-between items-center">
@@ -25,9 +26,11 @@ const WorkSpace = ({ scheduleId, workspaces }: WorkSpaceProps) => {
             워크 스페이스
           </div>
         </div>
-        <Link href={`/schedule/${scheduleId}/edit/workspace`}>
-          <Pen className="w-3 h-3 text-[color:var(--color-gray)] cursor-pointer" />
-        </Link>
+        {isLeader && (
+          <Link href={`/schedule/${scheduleId}/edit/workspace`}>
+            <Pen className="w-3 h-3 text-[color:var(--color-gray)] cursor-pointer" />
+          </Link>
+        )}
       </div>
       <div className="flex flex-col gap-3 w-full">
         {(!workspaces || workspaces.length === 0) && (

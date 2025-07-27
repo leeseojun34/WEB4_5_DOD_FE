@@ -14,12 +14,14 @@ interface OnlineMeetingRoomProps {
   scheduleId: string;
   platform?: string;
   url?: string;
+  isLeader: boolean;
 }
 
 const OnlineMeetingRoom = ({
   scheduleId,
   platform,
   url,
+  isLeader,
 }: OnlineMeetingRoomProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -37,9 +39,11 @@ const OnlineMeetingRoom = ({
             온라인 회의장
           </div>
         </div>
-        <div onClick={() => setIsOpen(true)}>
-          <Pen className="w-3 h-3 text-[color:var(--color-gray)] cursor-pointer" />
-        </div>
+        {isLeader && (
+          <div onClick={() => setIsOpen(true)}>
+            <Pen className="w-3 h-3 text-[color:var(--color-gray)] cursor-pointer" />
+          </div>
+        )}
       </div>
       {!url && (
         <div className="flex w-full justify-center items-center py-4 text-xs text-[color:var(--color-gray)]">

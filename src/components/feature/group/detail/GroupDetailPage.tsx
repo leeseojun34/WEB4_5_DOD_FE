@@ -7,14 +7,24 @@ import Footer from "@/components/layout/Footer";
 import { useGroupSchedules } from "@/lib/api/groupApi";
 import { useGroupDetailPage } from "./hooks/useGroupDetailLogic";
 import { usePrefetchGroupData } from "./hooks/usePrefetchGroupData";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 const GroupDetailPage = () => {
   const { groupId, userPending, isMember } = useGroupDetailPage();
-  const { data: groupData, isPending: groupPending } = useGroupSchedules(
-    groupId,
-    isMember
-  );
+  const router= useRouter()
+  const {
+    data: groupData,
+    isPending: groupPending,
+    isError,
+  } = useGroupSchedules(groupId, isMember);
   usePrefetchGroupData(groupId, groupData?.data?.scheduleDetails);
+
+  useEffect(() => {
+    if (isError) {
+      router.push("/");
+    }
+  });
 
   if (userPending || groupPending || !groupData) {
     return <GlobalLoading />;
