@@ -20,7 +20,7 @@ const EmptyGroupAnalytics = ({ groupId }: { groupId: ParamValue }) => {
           width={200}
           height={160}
           unoptimized
-          className="w-50 h-50 sm:w-90 sm:h-90"
+          className="w-50 h-50 sm:w-70 sm:h-70"
         />
       </div>
       <FeatureListCard

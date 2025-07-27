@@ -1,35 +1,29 @@
 import { AtSign, ChevronRight, Pen } from "lucide-react";
-import zoomIcon from "@/assets/icon/zoom_icon.svg";
-import googleMeetIcon from "@/assets/icon/googlemeet_icon.svg";
-import discordIcon from "@/assets/icon/discord_icon.svg";
-import zepIcon from "@/assets/icon/zep_icon.svg";
 import Image from "next/image";
 import OnlineMeetingEditBottomSheet from "./schedule/editSchedule/OnlineMeetingEditBottomSheet";
 import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { itemVariants } from "./schedule/motion";
+import {
+  ONLINE_MEETING_PLATFORM,
+  ONLINE_MEETING_PLATFORM_NAME,
+} from "./schedule/constants/platform";
 
 interface OnlineMeetingRoomProps {
   scheduleId: string;
   platform?: string;
   url?: string;
+  isLeader: boolean;
 }
-
-type PlatformType = "ZOOM" | "GOOGLE_MEET" | "DISCORD" | "ZEP";
 
 const OnlineMeetingRoom = ({
   scheduleId,
   platform,
   url,
+  isLeader,
 }: OnlineMeetingRoomProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const PLATFORM = {
-    ZOOM: zoomIcon,
-    GOOGLE_MEET: googleMeetIcon,
-    DISCORD: discordIcon,
-    ZEP: zepIcon,
-  };
 
   return (
     <motion.div
@@ -45,9 +39,11 @@ const OnlineMeetingRoom = ({
             온라인 회의장
           </div>
         </div>
-        <div onClick={() => setIsOpen(true)}>
-          <Pen className="w-3 h-3 text-[color:var(--color-gray)] cursor-pointer" />
-        </div>
+        {isLeader && (
+          <div onClick={() => setIsOpen(true)}>
+            <Pen className="w-3 h-3 text-[color:var(--color-gray)] cursor-pointer" />
+          </div>
+        )}
       </div>
       {!url && (
         <div className="flex w-full justify-center items-center py-4 text-xs text-[color:var(--color-gray)]">
@@ -59,13 +55,19 @@ const OnlineMeetingRoom = ({
           <div className="flex gap-4 items-center">
             <div>
               <Image
-                src={PLATFORM[platform as PlatformType]}
+                src={
+                  ONLINE_MEETING_PLATFORM[platform as OnlineMeetingPlatformType]
+                }
                 alt={`${platform} 아이콘`}
                 className="w-4 h-4"
               />
             </div>
             <div className="text-[color:var(--color-black)] text-sm">
-              {platform}
+              {
+                ONLINE_MEETING_PLATFORM_NAME[
+                  platform as OnlineMeetingPlatformType
+                ]
+              }
             </div>
           </div>
           <Link
@@ -80,6 +82,8 @@ const OnlineMeetingRoom = ({
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         scheduleId={scheduleId}
+        platform={platform}
+        url={url!}
       />
     </motion.div>
   );

@@ -1,13 +1,3 @@
-interface Schedule {
-  scheduleName: string;
-  meetingType: "ONLINE" | "OFFLINE";
-  time: string;
-  startTime: string;
-  endTime: string;
-  memberNames: string[];
-  scheduleId: string;
-}
-
 /**
  * 날짜 포맷팅
  * @param date 날짜
@@ -151,12 +141,14 @@ export const toISOStringWithTime = (
   return corrected.toISOString();
 };
 
-export const splitByDate = (schedules: Schedule[]) => {
+export const splitByDate = <T extends { startTime: string }>(
+  schedules: T[]
+) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const past: Schedule[] = [];
-  const future: Schedule[] = [];
+  const past: T[] = [];
+  const future: T[] = [];
 
   schedules.forEach((schedule) => {
     const scheduleDate = new Date(schedule.startTime);
@@ -210,4 +202,43 @@ export const splitByDate = (schedules: Schedule[]) => {
   });
 
   return { past: sortedPast, future: sortedFuture };
+};
+
+export const isValidTimeRange = (
+  startTime: string,
+  endTime: string
+): boolean => {
+  const [startHours, startMinutes] = startTime.split(":").map(Number);
+  const [endHours, endMinutes] = endTime.split(":").map(Number);
+
+  const startTotalMinutes = startHours * 60 + startMinutes;
+  const endTotalMinutes = endHours * 60 + endMinutes;
+
+  return startTotalMinutes < endTotalMinutes;
+};
+
+const toKSTDate = (date: string): Date => {
+  const utcDate = new Date(date);
+  const calcKST = 1000 * 60 * 60 * 9;
+  return new Date(utcDate.getTime() - calcKST);
+};
+
+export const formatScheduleWithKST = (
+  startTime: string,
+  endTime: string
+): string => {
+  const startDate = toKSTDate(startTime);
+  const endDate = toKSTDate(endTime);
+
+  const year = startDate.getFullYear();
+  const month = startDate.getMonth() + 1;
+  const day = startDate.getDate();
+  const dayOfWeek = getKoreanDay(startDate);
+
+  const startHour = String(startDate.getHours()).padStart(2, "0");
+  const startMinute = String(startDate.getMinutes()).padStart(2, "0");
+  const endHour = String(endDate.getHours()).padStart(2, "0");
+  const endMinute = String(endDate.getMinutes()).padStart(2, "0");
+
+  return `${year}년 ${month}월 ${day}일 (${dayOfWeek}) ${startHour}:${startMinute} - ${endHour}:${endMinute}`;
 };

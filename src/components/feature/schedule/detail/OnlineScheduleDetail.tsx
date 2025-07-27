@@ -2,6 +2,10 @@ import OnlineMeetingRoom from "../../OnlineMeetingRoom";
 import ScheduleDetailContent from "./ScheduleDetailContent";
 import ScheduleDetailLayout from "./ScheduleDetailLayout";
 import { formatSchedule } from "@/app/utils/dateFormat";
+import {
+  MemberType,
+  useScheduleLeaderCheck,
+} from "./hooks/useScheduleLeaderCheck";
 
 interface OnineScheduleDetailProps {
   scheduleId: string;
@@ -12,10 +16,17 @@ const OnlineScheduleDetail = ({
   scheduleId,
   data,
 }: OnineScheduleDetailProps) => {
+  const isLeader = useScheduleLeaderCheck(data?.members as MemberType[]);
+
   return (
-    <ScheduleDetailLayout data={data} scheduleId={scheduleId}>
+    <ScheduleDetailLayout
+      data={data}
+      scheduleId={scheduleId}
+      isLeader={isLeader}
+    >
       <ScheduleDetailContent
         scheduleId={scheduleId}
+        isLeader={isLeader}
         members={data.members}
         time={formatSchedule(data.startTime, data.endTime)}
         workspace={data.workspaces.map((workspace: WorkspaceType) => ({
@@ -27,6 +38,7 @@ const OnlineScheduleDetail = ({
           scheduleId={scheduleId}
           platform={data.meetingPlatform}
           url={data.platformUrl}
+          isLeader={isLeader}
         />
       </ScheduleDetailContent>
     </ScheduleDetailLayout>

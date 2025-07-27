@@ -1,34 +1,22 @@
 import Header from "@/components/layout/Header";
 import GroupHeader from "@/components/layout/GroupHeader";
 import Footer from "@/components/layout/Footer";
-import { useEffect, useState } from "react";
-import useAuthStore from "@/stores/authStores";
 import useMediaQuery from "../hooks/useMediaQuery";
 
 interface ScheduleDetailLayoutProps {
   children: React.ReactNode;
   data: ScheduleDetailType;
   scheduleId: string;
+  isLeader: boolean;
 }
 
 const ScheduleDetailLayout = ({
   children,
   data,
   scheduleId,
+  isLeader,
 }: ScheduleDetailLayoutProps) => {
-  const { user } = useAuthStore();
-  const [isLeader, setIsLeader] = useState(false);
   const isSE = useMediaQuery("(min-height: 667px)");
-
-  useEffect(() => {
-    if (user && data?.members) {
-      const isMaster = data.members.some(
-        (member) =>
-          member.name === user.name && member.scheduleRole === "ROLE_MASTER"
-      );
-      setIsLeader(isMaster);
-    }
-  }, [user, data]);
 
   return (
     <div

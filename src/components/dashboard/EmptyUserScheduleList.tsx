@@ -6,9 +6,9 @@ import FeatureListCard from "../feature/group/analytics/FeatureListCard";
 
 const EmptyUserScheduleList = () => {
   return (
-    <div className="w-full flex flex-col items-center gap-10 sm:gap-15 relative min-h-[calc(100vh-100px)] sm:min-h-[calc(100vh-160px)] ">
+    <div className="w-full flex flex-col items-center gap-10 sm:gap-15 h-full ">
       <div className="w-full flex flex-col justify-center items-center gap-5">
-        <span className="w-full text-start font-semibold text-[color:var(--color-black)] text-xl ">
+        <span className="w-full text-start font-semibold text-[color:var(--color-black)] text-xl pt-10">
           내 이때어때 일정이
           <br /> 아직 없어요!
         </span>
@@ -19,7 +19,7 @@ const EmptyUserScheduleList = () => {
           width={222}
           height={183}
           unoptimized
-          className="w-55 h-55 sm:w-90 sm:h-90"
+          className="w-50 h-50 sm:w-70 sm:h-70"
         />
       </div>
       <FeatureListCard
@@ -29,7 +29,10 @@ const EmptyUserScheduleList = () => {
           { text: "내가 만든 약속들을 한눈에 확인할 수 있어요" },
         ]}
       />
-      <Link href={`/meeting`} className="absolute w-full bottom-9">
+      <Link
+        href={`/meeting`}
+        className="absolute w-full bottom-9 px-5 flex justify-center items-center"
+      >
         <Button>일정 만들러 가기</Button>
       </Link>
     </div>

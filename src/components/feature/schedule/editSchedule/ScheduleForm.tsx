@@ -1,5 +1,6 @@
 import Input from "@/components/ui/Input";
 import { ChangeEvent } from "react";
+import ActionButtons from "./ActionButtons";
 
 interface ScheduleFormProps {
   scheduleName: string;
@@ -9,6 +10,8 @@ interface ScheduleFormProps {
   onScheduleNameChange: (e: ChangeEvent<HTMLInputElement>) => void;
   onScheduleDescriptionChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
   onTimeClick: () => void;
+  handleDelete: () => void;
+  handleEditInfo: () => void;
 }
 
 const ScheduleForm = ({
@@ -19,13 +22,15 @@ const ScheduleForm = ({
   onScheduleNameChange,
   onScheduleDescriptionChange,
   onTimeClick,
+  handleDelete,
+  handleEditInfo,
 }: ScheduleFormProps) => {
   return (
     <div className="flex flex-col gap-4">
       <Input
         label="모임 이름"
         error="10글자를 이내로 작성해주세요"
-        maxLength={10}
+        maxLength={15}
         placeholder="모임 이름을 입력해주세요"
         value={scheduleName}
         onChange={onScheduleNameChange}
@@ -43,6 +48,8 @@ const ScheduleForm = ({
         label="온/오프라인"
         value={meetingType === "ONLINE" ? "온라인" : "오프라인"}
         readOnly
+        disabled
+        className="text-[color:var(--color-gray-placeholder)]"
       />
       <Input
         label="모임 시간"
@@ -50,13 +57,19 @@ const ScheduleForm = ({
         onClick={onTimeClick}
         icon={
           <button
-            className="w-7 font-medium text-sm text-[color:var(--color-gray-placeholder)]] hover:text-[color:var(--color-primary-400)]"
+            className="w-7 font-medium text-sm text-[color:var(--color-primary-400)] cursor-pointer"
             onClick={onTimeClick}
           >
             수정
           </button>
         }
         readOnly
+      />
+      <ActionButtons
+        onDelete={handleDelete}
+        onEditComplete={handleEditInfo}
+        scheduleName={scheduleName}
+        scheduleDescription={scheduleDescription}
       />
     </div>
   );
