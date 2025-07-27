@@ -20,7 +20,8 @@ interface EventProps extends BaseProps {
   meetingType: "ONLINE" | "OFFLINE";
   scheduleId: string;
   groupRole: boolean;
-  onCustomDelete?: (scheduleId: string) => void;
+  onCustomDelete?: (scheduleMemberId: number) => void;
+  scheduleMemberId?: number;
 }
 
 interface AttendanceProps extends BaseProps {
@@ -46,6 +47,8 @@ const ScheduleCard = (props: ScheduleCardProps) => {
   const groupRole = props.variant === "event" ? props.groupRole : "";
   const onCustomDelete =
     props.variant === "event" ? props.onCustomDelete : undefined;
+  const scheduleMemberId =
+    props.variant === "event" ? props.scheduleMemberId : undefined;
 
   const onTopClick = () => {
     handleTopClick(scheduleId);
@@ -57,9 +60,9 @@ const ScheduleCard = (props: ScheduleCardProps) => {
 
   const isFuture = isFutureDate(time);
 
-  const handleDelete = (scheduleId: string) => {
-    if (onCustomDelete) {
-      onCustomDelete(scheduleId);
+  const handleDelete = () => {
+    if (onCustomDelete && scheduleMemberId !== undefined) {
+      onCustomDelete(scheduleMemberId);
     } else {
       handleAlertAction(scheduleId);
     }
@@ -181,7 +184,7 @@ const ScheduleCard = (props: ScheduleCardProps) => {
         action="확인"
         isOpen={isAlertOpen}
         onClose={() => setIsAlertOpen(false)}
-        actionHandler={() => handleDelete(scheduleId)}
+        actionHandler={handleDelete}
       />
     </div>
   );

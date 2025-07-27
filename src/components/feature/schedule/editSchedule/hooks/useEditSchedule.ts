@@ -1,5 +1,10 @@
 "use client";
-import { formatSchedule, toISOStringWithTime } from "@/app/utils/dateFormat";
+import {
+  formatSchedule,
+  formatScheduleWithKST,
+  isValidTimeRange,
+  toISOStringWithTime,
+} from "@/app/utils/dateFormat";
 import {
   useDeleteSchedule,
   useGroupSchedule,
@@ -10,17 +15,17 @@ import { ChangeEvent, useEffect, useState } from "react";
 
 export const useEditSchedule = (id: string) => {
   const router = useRouter();
-  const { data: scheduleData } = useGroupSchedule(id);
+  const { data: scheduleData, isPending: schedulePending } =
+    useGroupSchedule(id);
   const [scheduleName, setScheduleName] = useState("");
+  const [isError, setIsError] = useState(false);
   const [scheduleDescription, setScheduleDescription] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
   const meetingType = scheduleData ? scheduleData.data.meetingType : "";
-  const scheduleTime = scheduleData
-    ? formatSchedule(scheduleData.data.startTime, scheduleData.data.endTime)
-    : "";
+  const [scheduleTime, setScheduleTime] = useState("");
   const deleteSchedule = useDeleteSchedule();
   const updateSchedule = useUpdateScheduleInfo();
 
@@ -28,6 +33,9 @@ export const useEditSchedule = (id: string) => {
     if (scheduleData) {
       setScheduleName(scheduleData.data.scheduleName);
       setScheduleDescription(scheduleData.data.description);
+      setScheduleTime(
+        formatSchedule(scheduleData.data.startTime, scheduleData.data.endTime)
+      );
     }
   }, [scheduleData]);
 
@@ -46,19 +54,23 @@ export const useEditSchedule = (id: string) => {
   };
 
   const handleEditTime = () => {
-    if (selectedDate) {
+    if (selectedDate && startTime && endTime) {
+      const isValid = isValidTimeRange(startTime, endTime);
+      if (!isValid) {
+        setIsError(true);
+        return;
+      }
+
       const startISOTime = toISOStringWithTime(selectedDate, startTime);
       const endISOTime = toISOStringWithTime(selectedDate, endTime);
 
-      updateSchedule.mutate({
-        scheduleId: id,
-        data: {
-          scheduleName,
-          description: scheduleDescription,
-          startTime: startISOTime!,
-          endTime: endISOTime!,
-        },
-      });
+      if (!startISOTime || !endISOTime) return;
+      console.log(formatScheduleWithKST(startISOTime, endISOTime));
+      setStartTime(startISOTime);
+      setEndTime(endISOTime);
+      setScheduleTime(formatScheduleWithKST(startISOTime, endISOTime));
+
+      setIsError(false);
       setIsOpen(false);
     }
   };
@@ -69,6 +81,8 @@ export const useEditSchedule = (id: string) => {
       data: {
         scheduleName,
         description: scheduleDescription,
+        startTime: startTime,
+        endTime: endTime,
       },
     });
     router.push(`/schedule/${id}`);
@@ -98,5 +112,8 @@ export const useEditSchedule = (id: string) => {
     setStartTime,
     setEndTime,
     handleEditInfo,
+    schedulePending,
+    isError,
+    setIsError,
   };
 };

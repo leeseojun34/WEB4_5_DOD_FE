@@ -37,7 +37,7 @@ interface UpdateScheduleInfoReqeust {
 
 type PlatformType = "ZOOM" | "GOOGLE_MEET" | "DISCORD" | "ZEP" | "NONE";
 
-const getGroupSchedule = async (scheduleId: string) => {
+export const getGroupSchedule = async (scheduleId: string) => {
   const res = await axiosInstance.get(`/schedules/show/${scheduleId}`, {
     params: { id: scheduleId },
   });
@@ -67,10 +67,9 @@ const updateScheduleInfo = async (
   return res.data;
 };
 
-const deleteWorkspace = async (id: string, workspaceId: string) => {
+const deleteWorkspace = async (workspaceId: string) => {
   const res = await axiosInstance.post(
-    `/schedules/delete-workspace/${id}`,
-    workspaceId
+    `/schedules/delete-workspace/${workspaceId}`
   );
   return res.data;
 };
@@ -141,6 +140,7 @@ export const useGroupSchedule = (scheduleId: string) => {
     enabled: !!scheduleId,
     retry: false,
     refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 5,
   });
 };
 
@@ -170,7 +170,7 @@ export const useDeleteWorkspace = ({
 }) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: () => deleteWorkspace(scheduleId, workspaceId),
+    mutationFn: () => deleteWorkspace(workspaceId),
     onSuccess: () => {
       ToastWell("🗑️", "워크스페이스가 삭제되었습니다.");
       queryClient.invalidateQueries({
@@ -206,7 +206,7 @@ export const useEventDetail = (eventId: number) => {
   return useQuery({
     queryKey: ["eventDetail", eventId],
     queryFn: () => getEventDetail(eventId),
-    retry: 2,
+    retry: false,
     gcTime: 3 * 60 * 60 * 1000,
     staleTime: 3 * 60 * 60 * 1000,
   });
@@ -228,7 +228,7 @@ export const useEventScheduleInfo = (eventId: number) => {
   return useQuery({
     queryKey: ["eventScheduleInfo", eventId],
     queryFn: () => getEventScheduleInfo(eventId),
-    retry: 2,
+    retry: false,
     gcTime: 3 * 60 * 60 * 1000,
   });
 };
@@ -320,5 +320,15 @@ export const getMySchedule = async () => {
  */
 export const setMySchedule = async (mySchedule: Record<string, string>) => {
   const response = await axiosInstance.post("/favorite-timetable", mySchedule);
+  return response.data;
+};
+
+/**
+ * 일정 생성
+ * @param data 일정 생성 데이터
+ * @returns
+ */
+export const createSchedule = async (data: CreateScheduleRequest) => {
+  const response = await axiosInstance.post("/schedules/create", data);
   return response.data;
 };
