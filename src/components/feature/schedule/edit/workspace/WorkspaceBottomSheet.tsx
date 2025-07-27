@@ -108,7 +108,7 @@ const WorkspaceBottomSheet = ({
           <div className="w-full flex justify-center items-center flex-col gap-4 mt-8 absolute left-1/2 -translate-x-1/2 px-5 bottom-9">
             {defaultValue && (
               <button
-                className="text-[color:var(--color-red)] text-xs cursor-pointer"
+                className="text-[color:var(--color-gray-placeholder)] hover:text-[color:var(--color-red)] text-xs cursor-pointer"
                 onClick={handleDelete}
               >
                 삭제하기
