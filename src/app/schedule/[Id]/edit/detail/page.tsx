@@ -1,9 +1,9 @@
 "use client";
 
-import ActionButtons from "@/components/feature/schedule/editSchedule/ActionButtons";
+import GlobalLoading from "@/app/loading";
 import ScheduleForm from "@/components/feature/schedule/editSchedule/ScheduleForm";
 import TimeEditBottomSheet from "@/components/feature/schedule/editSchedule/TimeEditBottomSheet";
-import { useEditSchedule } from "@/components/feature/schedule/hooks/useEditSchedule";
+import { useEditSchedule } from "@/components/feature/schedule/editSchedule/hooks/useEditSchedule";
 import Header from "@/components/layout/Header";
 import HeaderTop from "@/components/layout/HeaderTop";
 import { useParams } from "next/navigation";
@@ -31,7 +31,12 @@ const EditScheduleInfo = () => {
     handleEditInfo,
     startTime,
     endTime,
+    schedulePending,
+    isError,
+    setIsError,
   } = useEditSchedule(id);
+
+  if (schedulePending) return <GlobalLoading />;
 
   return (
     <div className="w-full">
@@ -49,6 +54,8 @@ const EditScheduleInfo = () => {
           onScheduleNameChange={handleScheduleNameChange}
           onScheduleDescriptionChange={handleScheduleDescriptionChange}
           onTimeClick={handleTimeClick}
+          handleDelete={handleDelete}
+          handleEditInfo={handleEditInfo}
         />
 
         <TimeEditBottomSheet
@@ -61,11 +68,8 @@ const EditScheduleInfo = () => {
           setEndTime={setEndTime}
           startTime={startTime}
           endTime={endTime}
-        />
-
-        <ActionButtons
-          onDelete={handleDelete}
-          onEditComplete={handleEditInfo}
+          isError={isError}
+          setIsError={setIsError}
         />
       </div>
     </div>
