@@ -31,10 +31,14 @@ export const useUpdateName = () => {
 
 // 프로필 이미지 업데이트
 export const useUpdateProfileImg = () => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: () => axiosInstance.patch("/member/profile"),
     onSuccess: () => {
       ToastWell("🎉", "프로필 랜덤 수정 완료!");
+      queryClient.invalidateQueries({
+        queryKey: ["user", "dashboard", "groups"],
+      });
     },
     onError: (err) => {
       console.error("프로필 이미지 수정 실패", err);
