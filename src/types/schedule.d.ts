@@ -1,5 +1,6 @@
 // 이벤트 생성 타입
 interface EventType {
+  eventId?: number;
   title: string;
   description: string;
   meetingType: string;
@@ -134,4 +135,15 @@ interface MyScheduleType {
   timeBitThu: string;
   timeBitTue: string;
   timeBitWed: string;
+}
+
+interface CreateScheduleRequest {
+  eventId: number;
+  startTime: string;
+  endTime: string;
+  scheduleName: string;
+  description: string;
+  schedules_Status: string;
+  meetingType: string;
+  members: { memberId: string }[];
 }

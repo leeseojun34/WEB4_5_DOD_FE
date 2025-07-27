@@ -120,7 +120,7 @@ export const useEventDetail = (eventId: number) => {
   return useQuery({
     queryKey: ["eventDetail", eventId],
     queryFn: () => getEventDetail(eventId),
-    retry: 2,
+    retry: false,
     gcTime: 3 * 60 * 60 * 1000,
     staleTime: 3 * 60 * 60 * 1000,
   });
@@ -142,7 +142,7 @@ export const useEventScheduleInfo = (eventId: number) => {
   return useQuery({
     queryKey: ["eventScheduleInfo", eventId],
     queryFn: () => getEventScheduleInfo(eventId),
-    retry: 2,
+    retry: false,
     gcTime: 3 * 60 * 60 * 1000,
   });
 };
@@ -234,5 +234,15 @@ export const getMySchedule = async () => {
  */
 export const setMySchedule = async (mySchedule: Record<string, string>) => {
   const response = await axiosInstance.post("/favorite-timetable", mySchedule);
+  return response.data;
+};
+
+/**
+ * 일정 생성
+ * @param data 일정 생성 데이터
+ * @returns
+ */
+export const createSchedule = async (data: CreateScheduleRequest) => {
+  const response = await axiosInstance.post("/schedules/create", data);
   return response.data;
 };

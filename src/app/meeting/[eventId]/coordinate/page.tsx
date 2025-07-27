@@ -9,6 +9,7 @@ import { useEventScheduleInfo } from "@/lib/api/scheduleApi";
 import Toast from "@/components/ui/Toast";
 import { AxiosError } from "axios";
 import { useEventDetail } from "@/lib/api/scheduleApi";
+import { useEffect } from "react";
 
 const CoordinatePage = () => {
   const { eventId } = useParams();
@@ -16,15 +17,20 @@ const CoordinatePage = () => {
     Number(eventId)
   );
   const router = useRouter();
-  const { data: eventDetail } = useEventDetail(Number(eventId));
-  if (error) {
-    const axiosError = error as AxiosError<{ message: string }>;
-    Toast(axiosError.response?.data.message || "오류가 발생했습니다.");
-    router.push(`/`);
-    return;
-  }
+  const { data: eventDetail, error: eventDetailError } = useEventDetail(
+    Number(eventId)
+  );
 
-  if (!eventScheduleInfo) {
+  useEffect(() => {
+    const err = error || eventDetailError;
+    if (err) {
+      const axiosError = err as AxiosError<{ message: string }>;
+      Toast(axiosError.response?.data.message || "오류가 발생했습니다.");
+      router.push(`/`);
+    }
+  }, [error, eventDetailError]);
+
+  if (!eventScheduleInfo || !eventDetail) {
     return <GlobalLoading />;
   }
 
