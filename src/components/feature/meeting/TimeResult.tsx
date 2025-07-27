@@ -8,16 +8,25 @@ import Footer from "@/components/layout/Footer";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import DropdownSmall from "@/components/ui/DropdownSmall";
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-import { useScheduleResult } from "@/lib/api/scheduleApi";
+import { useParams, useRouter } from "next/navigation";
+import {
+  useScheduleResult,
+  createSchedule,
+  useEventDetail,
+} from "@/lib/api/scheduleApi";
 import GlobalLoading from "@/app/loading";
 import TimeResultScheduleCard from "./TimeResultScheduleCard";
+import Toast from "@/components/ui/Toast";
+import { AxiosError } from "axios";
 
 const TimeResult = () => {
   const { eventId } = useParams();
+  const router = useRouter();
   const { data: eventDetail } = useScheduleResult(Number(eventId));
+  const { data: eventDetailInfo, error: eventDetailError } = useEventDetail(
+    Number(eventId)
+  );
   const [list, setList] = useState<MeetingTimeType[]>([]);
-
   const [isOpen, setIsOpen] = useState(false);
 
   const handleTopClick = () => {
@@ -29,10 +38,57 @@ const TimeResult = () => {
   };
 
   useEffect(() => {
+    const err = eventDetailError || eventDetailError;
+    if (err) {
+      const axiosError = err as AxiosError<{ message: string }>;
+      Toast(axiosError.response?.data.message || "오류가 발생했습니다.");
+      router.push("/");
+    }
+  }, []);
+
+  useEffect(() => {
     if (eventDetail) {
       setList(eventDetail.data.recommendation.earliestMeetingTimes);
     }
   }, [eventDetail]);
+
+  console.log(eventDetailInfo);
+
+  const handleCreateSchedule = async (data: string) => {
+    let findData: MeetingTimeType | null = null;
+    for (const item of list) {
+      if (item.timeSlotId === data) {
+        findData = item;
+        break;
+      }
+    }
+
+    if (!findData) {
+      Toast("일정을 생성할 수 없습니다.");
+      return;
+    }
+
+    const payload: CreateScheduleRequest = {
+      eventId: eventDetailInfo?.eventId || 0,
+      startTime: findData.startTime,
+      endTime: findData.endTime,
+      scheduleName: eventDetailInfo?.title || "",
+      description: eventDetailInfo?.description || "",
+      schedules_Status: "FIXED",
+      meetingType: eventDetailInfo?.meetingType || "",
+      members: findData.participants.map((participant) => ({
+        memberId: participant.memberId,
+      })),
+    };
+    console.log(payload);
+    try {
+      const res = await createSchedule(payload);
+      console.log(res);
+      router.push(`/schedule/${res.data.scheduleId}`);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   if (!eventDetail) {
     return <GlobalLoading />;
@@ -71,7 +127,7 @@ const TimeResult = () => {
               className="flex text-[color:var(--color-gray-placeholder)] items-center gap-1 px-2 cursor-pointer relative"
               onClick={() => setIsOpen(true)}
             >
-              <p className="text-xs">빠른 시간 순</p>
+              <p className="text-xs">가장 빨리 만날 수 있는 순</p>
               {isOpen ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
 
               {isOpen && (
@@ -82,7 +138,7 @@ const TimeResult = () => {
                     onTopClick={handleTopClick}
                     onBottomClick={handleBottomClick}
                   >
-                    {["빠른 시간 순", "많은 참여자 순"]}
+                    {["가장 빨리 만날 수 있는 순", "가장 오래 만날 수 있는 순"]}
                   </DropdownSmall>
                 </div>
               )}
@@ -91,6 +147,7 @@ const TimeResult = () => {
               <TimeResultScheduleCard
                 list={list}
                 totalParticipants={eventDetail.data.totalParticipants}
+                handleCreateSchedule={handleCreateSchedule}
               />
               <Tip>
                 일정을 선택하면 모임 리더가 되어 일정이 확정돼요.
