@@ -6,16 +6,13 @@ const ScheduleLoadingRabbits = ({ level }: { level: number }) => {
   return (
     <>
       {Array.from({ length: 3 }).map((_, index) => (
-        <div
-          className="relative w-1/3 flex flex-col items-center gap-2"
-          key={index}
-        >
+        <div className="relative w-1/3 flex flex-col items-center" key={index}>
           {index === level ? (
-            <div className="w-full h-6 md:h-12">
+            <div className="w-full h-8 md:h-12">
               <Moving target="rabbit" level={level} index={index} />
             </div>
           ) : (
-            <div className="h-6 md:h-12"></div>
+            <div className="h-8 md:h-12"></div>
           )}
           <div className="relative w-full h-1 rounded-full bg-gray-200 overflow-hidden">
             <Moving target="info" level={level} index={index} />
@@ -65,9 +62,10 @@ const Moving = ({
       <Image
         src={rabbits}
         alt="loading_rabbit"
-        width={18}
-        height={24}
-        className="md:w-9 md:h-12"
+        width={32}
+        height={32}
+        className="md:w-12 md:h-12"
+        unoptimized
       />
     </div>
   );

@@ -107,7 +107,7 @@ const EditGroup = () => {
             <Input
               label="그룹 이름"
               placeholder="그룹 이름을 입력하세요"
-              maxLength={15}
+              maxLength={20}
               value={groupName}
               onChange={(e: ChangeEvent<HTMLInputElement>) =>
                 setGroupName(e.target.value)
