@@ -2,49 +2,54 @@
 import Image from "next/image";
 import Header from "../layout/Header";
 import HeaderTop from "../layout/HeaderTop";
-import { Footer } from "react-day-picker";
 import rabbitWriting from "@/assets/images/rabbit_writing.png";
 import UserScheduleList from "./UserScheduleList";
-import { useDashboard } from "@/lib/api/dashboardApi";
-import { formatDate } from "@/app/utils/dateFormat";
+import {
+  DashboardScheduleType,
+  useUserSchedulse,
+} from "@/lib/api/dashboardApi";
+import EmptyUserScheduleList from "./EmptyUserScheduleList";
 import GlobalLoading from "@/app/loading";
-import { useSearchParams } from "next/navigation";
 
 const UserSchedule = () => {
-  const { data: scheduleData, isPending } = useDashboard(
-    formatDate(new Date())
+  const { data: userSchedules, isPending: isUserSchedulePending } =
+    useUserSchedulse();
+
+  if (isUserSchedulePending) return <GlobalLoading />;
+
+  const userSchedule = Object.values(
+    userSchedules
+  ).flat() as DashboardScheduleType[];
+  const filteredUserSchedules = userSchedule.filter(
+    (schedule) => schedule.activated === true
   );
-  const searchParams = useSearchParams();
-  const groupId = searchParams?.get("groupId");
-  if (isPending) return <GlobalLoading />;
 
   return (
-    <div className="w-full min-h-screen bg-[color:var(--color-gray-background)]">
-      <div className="hidden sm:block">
-        <Header />
+    <>
+      <div className="w-full min-h-screen bg-[color:var(--color-gray-background)] relative">
+        <div className="hidden sm:block">
+          <Header />
+        </div>
+        <div className="min-w-[375px] w-full max-w-185 bg-[color:var(--color-gray-background)] mx-auto pt-8 sm:pt-30">
+          <HeaderTop>나의 이때어때 일정</HeaderTop>
+        </div>
+
+        <div className="min-w-[375px] w-full max-w-185 px-5 mx-auto pt-7 sm:pt-0 ">
+          {filteredUserSchedules.length === 0 ? (
+            <EmptyUserScheduleList />
+          ) : (
+            <>
+              <Image
+                src={rabbitWriting}
+                alt="글쓰는 토끼 이미지"
+                className="w-[178px] h-[178px] ml-auto"
+              />
+              <UserScheduleList schedules={filteredUserSchedules} />
+            </>
+          )}
+        </div>
       </div>
-      <div className="min-w-[375px] w-full max-w-185 bg-[color:var(--color-gray-background)] mx-auto pt-8 sm:pt-30">
-        <HeaderTop>
-          {groupId ? "불러올 일정 선택" : "나의 이때어때 일정"}
-        </HeaderTop>
-      </div>
-      <div className="min-w-[375px] w-full max-w-185 min-h-screen px-5 mx-auto pt-25 sm:pt-10">
-        {!groupId && (
-          <Image
-            src={rabbitWriting}
-            alt="글쓰는 토끼 이미지"
-            className="w-[178px] h-[178px] ml-auto"
-          />
-        )}
-        <UserScheduleList
-          schedules={scheduleData.data.schedules}
-          groupId={Number(groupId) ?? undefined}
-        />
-      </div>
-      <div className="sm:hidden">
-        <Footer />
-      </div>
-    </div>
+    </>
   );
 };
 export default UserSchedule;

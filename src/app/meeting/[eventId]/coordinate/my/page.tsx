@@ -6,16 +6,21 @@ import Header from "@/components/layout/Header";
 import { useParams, useRouter } from "next/navigation";
 import { useEventDetail, useEventScheduleInfo } from "@/lib/api/scheduleApi";
 import GlobalLoading from "@/app/loading";
-import useAuthStore from "@/sotres/authStores";
+import useAuthStore from "@/stores/authStores";
 import Toast from "@/components/ui/Toast";
 import { useEffect } from "react";
+import { AxiosError } from "axios";
+
 const MySchedulePage = () => {
   const { eventId } = useParams();
   const { user } = useAuthStore();
   const router = useRouter();
 
-  const { data: eventScheduleInfo } = useEventScheduleInfo(Number(eventId));
-  const { data: eventDetail } = useEventDetail(Number(eventId));
+  const { data: eventScheduleInfo, error: eventScheduleInfoError } =
+    useEventScheduleInfo(Number(eventId));
+  const { data: eventDetail, error: eventDetailError } = useEventDetail(
+    Number(eventId)
+  );
 
   useEffect(() => {
     if (user) {
@@ -29,12 +34,23 @@ const MySchedulePage = () => {
         }
       }
     } else {
-      Toast("로그인 후 이용해주세요.");
-      router.push("/");
+      const err = eventScheduleInfoError || eventDetailError;
+      if (err) {
+        const axiosError = err as AxiosError<{ message: string }>;
+        Toast(axiosError.response?.data.message || "오류가 발생했습니다.");
+        router.push(`/`);
+      }
     }
-  }, [user, eventScheduleInfo, eventId, router]);
+  }, [
+    user,
+    eventScheduleInfo,
+    eventId,
+    router,
+    eventScheduleInfoError,
+    eventDetailError,
+  ]);
 
-  if (!eventScheduleInfo) {
+  if (!eventScheduleInfo || !eventDetail) {
     return <GlobalLoading />;
   }
   return (

@@ -10,6 +10,11 @@ import HeaderTop from "@/components/layout/HeaderTop";
 import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Header from "@/components/layout/Header";
+import { motion } from "framer-motion";
+import {
+  itemVariants,
+  listVariants,
+} from "@/components/feature/schedule/motion";
 
 const GroupScheduleCreateSelectPage = () => {
   const [selected, setSelected] = useState("create");
@@ -22,7 +27,7 @@ const GroupScheduleCreateSelectPage = () => {
     if (selected === "create") {
       router.push(`/schedule/create?groupId=${groupId}`);
     } else {
-      router.push(`/schedule/user/${userId}?groupId=${groupId}`);
+      router.push(`/group/${groupId}/user/${userId}/load`);
     }
   };
 
@@ -34,16 +39,22 @@ const GroupScheduleCreateSelectPage = () => {
       <div className="w-full">
         <div className="min-w-[375px] w-full max-w-185 px-5 flex flex-col items-center gap-9 mx-auto pt-25 sm:pt-40">
           <HeaderTop />
-          <div className="flex flex-col w-full gap-8">
+          <motion.div
+            variants={listVariants}
+            initial="hidden"
+            animate="visible"
+            className="flex flex-col w-full gap-8"
+          >
             <p className="w-full text-xl font-bold text-[color:var(--color-black)] text-start">
               일정 추가 방법을 선택해주세요
             </p>
-            <div className="w-full flex gap-5">
+            <motion.div className="w-full flex gap-5" variants={itemVariants}>
               <div className="w-full" onClick={() => setSelected("create")}>
                 <OptionBox isSelected={selected === "create"}>
                   <Image
-                    height={52}
-                    width={52}
+                    unoptimized
+                    height={51}
+                    width={50}
                     src={newScheduleImg}
                     alt="새로운 일정 추가 이미지"
                   />
@@ -67,13 +78,31 @@ const GroupScheduleCreateSelectPage = () => {
                   </p>
                 </OptionBox>
               </div>
-            </div>
-          </div>
-          {selected === "create" ? (
-            <Tip>새로운 만남, 여기서부터 시작해요! 🗓️</Tip>
-          ) : (
-            <Tip>전에 만든 일정이 있다면 불러와서 바로 써보세요! 🙌</Tip>
-          )}
+            </motion.div>
+            <motion.div className="w-full" variants={itemVariants}>
+              {selected === "create" ? (
+                <motion.div
+                  key="create"
+                  variants={itemVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="hidden"
+                >
+                  <Tip>새로운 만남, 여기서부터 시작해요! 🗓️</Tip>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="load"
+                  variants={itemVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="hidden"
+                >
+                  <Tip>전에 만든 일정이 있다면 불러와서 바로 써보세요! 🙌</Tip>
+                </motion.div>
+              )}
+            </motion.div>
+          </motion.div>
 
           <div className="fixed w-full left-0 right-0 px-5 bottom-9">
             <div className="max-w-185 mx-auto">

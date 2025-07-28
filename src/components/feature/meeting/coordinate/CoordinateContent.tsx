@@ -4,7 +4,7 @@ import ScheduleSection from "./ScheduleSection";
 import ActionButtons from "./ActionButtons";
 import Tip from "@/components/ui/Tip";
 import TitleWithShare from "./TitleWithShare";
-import useAuthStore from "@/sotres/authStores";
+import useAuthStore from "@/stores/authStores";
 import { useEffect, useState } from "react";
 
 const CoordinateContent = ({
@@ -27,8 +27,6 @@ const CoordinateContent = ({
       }
     }
   }, [user, eventScheduleInfo]);
-
-  console.log(eventScheduleInfo);
 
   return (
     <div className="pt-6 px-5 pb-9 flex flex-col w-full items-center gap-7 sm:gap-8 sm:pt-10">

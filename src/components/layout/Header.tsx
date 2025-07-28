@@ -6,13 +6,15 @@ import calendarWhite from "@/assets/images/calendar_white.png";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/lib/api/userApi";
 import { profileImages } from "@/lib/profileImages";
+import { useEffect } from "react";
 
 const Header = ({ type = "" }: { type?: "" | "blue" }) => {
   const router = useRouter();
-  const { data: user } = useUser();
-
-  const profile =
-    profileImages[user?.data.profileImageNumber] || profileImages[7];
+  const { data: user, refetch } = useUser();
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
+  const profile = profileImages[user?.data.profileImageNumber];
 
   return (
     <div
@@ -24,24 +26,26 @@ const Header = ({ type = "" }: { type?: "" | "blue" }) => {
     >
       <LogoWebHeader type={type} handleLogoClick={() => router.push("/")} />
       <div className="flex justify-between items-center gap-8">
-        <div className="flex justify-between items-center gap-8">
-          <Image
-            src={type === "blue" ? calendarWhite : calendarBlue}
-            alt="달력"
-            width={24}
-            height={24}
-            className="cursor-pointer"
-            onClick={() => router.push("/schedule/create")}
-          />
-          <Image
-            src={profile}
-            alt="프로필이미지"
-            width={20}
-            height={20}
-            className="cursor-pointer"
-            onClick={() => router.push("/mypage")}
-          />
-        </div>
+        {user && (
+          <div className="flex justify-between items-center gap-8">
+            <Image
+              src={type === "blue" ? calendarWhite : calendarBlue}
+              alt="달력"
+              width={24}
+              height={24}
+              className="cursor-pointer"
+              onClick={() => router.push("/schedule/create")}
+            />
+            <Image
+              src={profile}
+              alt="프로필이미지"
+              width={20}
+              height={20}
+              className="cursor-pointer"
+              onClick={() => router.push("/mypage")}
+            />
+          </div>
+        )}
 
         {!user && (
           <button

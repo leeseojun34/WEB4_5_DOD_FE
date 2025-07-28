@@ -24,9 +24,9 @@ function NameSheet({
       isOpen={isOpen}
       setIsOpen={setIsOpen}
       initialSnap={0}
-      snapPoints={[0.35]}>
+      snapPoints={[0.45]}>
       {() => (
-        <div className="w-full flex flex-col  px-5 gap-8 pb-12">
+        <div className="w-full flex flex-col relative  px-5 gap-8 pb-12 h-[calc(100vh-68%)]">
           <div className="flex justify-between items-center px-5">
             <X className="invisible" />
             <span className="text-base font-medium mt-3">이름 수정</span>
@@ -45,7 +45,9 @@ function NameSheet({
               placeholder="이름을 입력해주세요."
             />
           </div>
-          <div className="flex justify-center items-center">
+          <div
+            className="flex absolute justify-center items-center min-w-[375px] left-1/2
+-translate-x-1/2 w-full bottom-9 px-5">
             <Button
               onClick={() => {
                 onSave();

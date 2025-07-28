@@ -1,13 +1,16 @@
 "use client";
-import {
-  ScheduleDetailType,
-  WorkspacePlatformType,
-  WorkspaceType,
-} from "@/types/schedule";
+import Header from "@/components/layout/Header";
 import MeetingLocation from "../../MeetingLocation";
 import ScheduleDetailContent from "./ScheduleDetailContent";
 import ScheduleDetailLayout from "./ScheduleDetailLayout";
 import { formatSchedule } from "@/app/utils/dateFormat";
+import Map from "@/components/feature/kakaoMap/Map";
+import OfflineBottomSheet from "./OfflineBottomSheet";
+import BlurredChevronHeader from "@/components/layout/BlurredChevronHeader";
+import LocationEditBottomSheet from "../editSchedule/LocationEditBottomSheet";
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { itemVariants } from "../motion";
 
 interface OfflineScheduleDetailProps {
   scheduleId: string;
@@ -18,23 +21,63 @@ const OfflineScheduleDetail = ({
   scheduleId,
   data,
 }: OfflineScheduleDetailProps) => {
+  const [isLocationEditOpen, setIsLocationEditOpen] = useState(false);
   return (
-    <ScheduleDetailLayout>
-      <ScheduleDetailContent
-        scheduleId={scheduleId}
-        members={data.members}
-        time={formatSchedule(data.startTime, data.endTime)}
-        workspace={data.workspaces.map((workspace: WorkspaceType) => ({
-          platform: workspace.type as WorkspacePlatformType,
-          name: workspace.name,
-        }))}
-      >
-        <MeetingLocation
+    <>
+      {data.specificLocation ? (
+        <div className="flex flex-col h-screen relative w-full mx-auto ">
+          <div className="hidden sm:block">
+            <Header />
+          </div>
+          <BlurredChevronHeader />
+          <div className="flex-1">
+            <Map
+              longitude={data.specificLongitude}
+              latitude={data.specificLatitude}
+              offsetY={240}
+            />
+          </div>
+          <OfflineBottomSheet
+            data={data}
+            scheduleId={scheduleId}
+            isLocationEditOpen={isLocationEditOpen}
+            setIsLocationEditOpen={setIsLocationEditOpen}
+          />
+        </div>
+      ) : (
+        <ScheduleDetailLayout data={data} scheduleId={scheduleId}>
+          <ScheduleDetailContent
+            scheduleId={scheduleId}
+            members={data.members}
+            time={formatSchedule(data.startTime, data.endTime)}
+            workspace={data.workspaces.map((workspace: WorkspaceType) => ({
+              platform: workspace.type as WorkspacePlatformType,
+              name: workspace.name,
+            }))}
+          >
+            <motion.div variants={itemVariants}>
+              <MeetingLocation
+                location={data.location}
+                specificLocation={data.specificLocation}
+                isLocationEditOpen={isLocationEditOpen}
+                setIsLocationEditOpen={setIsLocationEditOpen}
+              />
+            </motion.div>
+          </ScheduleDetailContent>
+        </ScheduleDetailLayout>
+      )}
+      {isLocationEditOpen && (
+        <LocationEditBottomSheet
+          scheduleId={scheduleId}
           location={data.location}
           specificLocation={data.specificLocation}
+          specificLatitude={data.specificLatitude}
+          specificLongitude={data.specificLongitude}
+          isOpen={isLocationEditOpen ?? false}
+          setIsOpen={setIsLocationEditOpen || (() => {})}
         />
-      </ScheduleDetailContent>
-    </ScheduleDetailLayout>
+      )}
+    </>
   );
 };
 

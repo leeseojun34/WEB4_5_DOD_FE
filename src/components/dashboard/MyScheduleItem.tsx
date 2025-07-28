@@ -10,48 +10,55 @@ interface MyScheduleItemProps {
 export const MyScheduleItem = ({ schedule }: MyScheduleItemProps) => {
   return (
     <>
-      <div className="flex gap-5 w-full items-center">
+      <div className="flex gap-5 w-full items-center py-2 rounded-md hover:bg-[color:var(--color-gray-background)] hover:shadow-sm transition-all duration-200 ease-in-out">
         <div className="flex items-center justify-center w-18 h-[50px] bg-[color:var(--color-gray-background)] text-[color:var(--color-primary-400)] rounded-lg text-xs">
           {getDDay(schedule.startTime)}
         </div>
-        <div className="flex flex-col justify-between">
+        <div className="space-y-1 w-full">
           <div className="text-[color:var(--color-black)] text-sm font-semibold w-[150px] sm:w-[320px] truncate">
             {schedule.name}
           </div>
           <div className="text-[color:var(--color-gray)] font-regular text-xs">
             {formatScheduleTimeOnly(schedule.startTime, schedule.endTime)}
           </div>
-          <div className="flex items-center gap-1">
-            {schedule.source === "SERVICE" ? (
-              <>
-                {schedule.meetingType === "OFFLINE" ? (
-                  <>
-                    <MapPin className="w-3 h-[14px] text-[color:var(--color-gray-placeholder)]" />
-                    <p className="text-xs text-[color:var(--color-gray-placeholder)]">
-                      {schedule.location || "미정"}
-                    </p>
-                  </>
-                ) : (
-                  <>
-                    <AtSign className="w-3 h-[14px] text-[color:var(--color-gray-placeholder)]" />
-                    <p className="text-xs text-[color:var(--color-gray-placeholder)]">
-                      {schedule.meetingPlatform || "미정"}
-                    </p>
-                  </>
-                )}
-              </>
-            ) : (
-              <>
-                <Image
-                  src={googleCalendarIcon}
-                  alt="구글 캘린더"
-                  width={16}
-                  height={16}
-                />
-                <p className="text-xs text-[color:var(--color-gray-placeholder)]">
-                  Google Calendar
-                </p>
-              </>
+          <div className="flex justify-between w-full">
+            <div className="flex items-center gap-1">
+              {schedule.source === "SERVICE" ? (
+                <>
+                  {schedule.meetingType === "OFFLINE" ? (
+                    <>
+                      <MapPin className="w-3 h-[14px] text-[color:var(--color-gray-placeholder)]" />
+                      <p className="text-xs text-[color:var(--color-gray-placeholder)]">
+                        {schedule.specificLocation || "미정"}
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <AtSign className="w-3 h-[14px] text-[color:var(--color-gray-placeholder)]" />
+                      <p className="text-xs text-[color:var(--color-gray-placeholder)]">
+                        {schedule.meetingPlatform || "미정"}
+                      </p>
+                    </>
+                  )}
+                </>
+              ) : (
+                <>
+                  <Image
+                    src={googleCalendarIcon}
+                    alt="구글 캘린더"
+                    width={16}
+                    height={16}
+                  />
+                  <p className="text-xs text-[color:var(--color-gray-placeholder)]">
+                    Google Calendar
+                  </p>
+                </>
+              )}
+            </div>
+            {schedule.groupName && (
+              <span className="text-xs text-[color:var(--color-gray-placeholder)]">
+                {schedule.groupName}
+              </span>
             )}
           </div>
         </div>

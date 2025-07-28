@@ -7,9 +7,11 @@ import { useEffect, useState } from "react";
 const TimeResultScheduleCard = ({
   list,
   totalParticipants,
+  handleCreateSchedule,
 }: {
   list: MeetingTimeType[];
   totalParticipants: number;
+  handleCreateSchedule: (data: string) => void;
 }) => {
   const [scheduleList, setScheduleList] = useState<
     {
@@ -34,13 +36,14 @@ const TimeResultScheduleCard = ({
   return (
     <div className="flex flex-col gap-4">
       {scheduleList.map((item) => (
-        <ScheduleCard
-          key={item.key}
-          variant="attendance"
-          totalCount={totalParticipants}
-          members={item.members}
-          time={item.time}
-        />
+        <div key={item.key} onClick={() => handleCreateSchedule(item.key)}>
+          <ScheduleCard
+            variant="attendance"
+            totalCount={totalParticipants}
+            members={item.members}
+            time={item.time}
+          />
+        </div>
       ))}
     </div>
   );

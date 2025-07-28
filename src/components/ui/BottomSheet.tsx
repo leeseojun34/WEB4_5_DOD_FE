@@ -11,6 +11,7 @@ import { useEffect, useRef, useState } from "react";
  * @param initialSnap - 바텀시트 초기 위치 - number default: 0 optional
  * @param className - 바텀시트 컴포넌트 스타일 - string optional
  * @param disableDrag - 바텀시트 드래그 여부 - boolean optional
+ * @param hideBackdrop - 백드롭 여부 - boolean optional
  *
  * childrenFunction: snapTo - 바텀시트 높이 조절 함수 - snapTo(i: number) => void (i: 0 ~ snapPoints.length - 1) optional
  *
@@ -25,6 +26,7 @@ interface BottomSheetProps {
   initialSnap?: number;
   className?: string;
   disableDrag?: boolean;
+  hideBackdrop?: boolean;
 }
 
 const BottomSheet = ({
@@ -35,6 +37,7 @@ const BottomSheet = ({
   snapPoints = [0.8, 0.4, 0.2],
   initialSnap = 0,
   className = "",
+  hideBackdrop = false,
 }: BottomSheetProps) => {
   const sheetRef = useRef<SheetRef>(null);
   const [mounted, setMounted] = useState(false);
@@ -64,7 +67,9 @@ const BottomSheet = ({
           <Sheet.Header />
           <Sheet.Content> {children(snapTo)}</Sheet.Content>
         </Sheet.Container>
-        <Sheet.Backdrop />
+        <Sheet.Backdrop
+          style={hideBackdrop ? { background: "transparent" } : {}}
+        />
       </Sheet>
     </>
   );

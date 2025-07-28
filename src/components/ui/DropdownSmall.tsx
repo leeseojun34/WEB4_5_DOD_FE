@@ -40,7 +40,7 @@ const DropdownSmall = ({
             {topChild && (
               <div
                 className={`w-full text-center cursor-pointer hover:font-semibold ${
-                  !bottomChild && "text-[var(--color-red)]"
+                  !bottomChild && "text-[var(--color-black)]"
                 }`}
                 onClick={(e) => {
                   e.stopPropagation();
@@ -53,7 +53,7 @@ const DropdownSmall = ({
             )}
             {bottomChild && onBottomClick && (
               <div
-                className="w-full text-center text-[var(--color-red)] cursor-pointer hover:font-semibold"
+                className="w-full text-center text-[var(--color-black)] cursor-pointer hover:font-semibold"
                 onClick={(e) => {
                   e.stopPropagation();
                   onBottomClick();
