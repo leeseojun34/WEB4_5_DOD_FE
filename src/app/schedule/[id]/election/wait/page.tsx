@@ -11,7 +11,7 @@ import { useParams } from "next/navigation";
 import { getSuggestedLocations } from "@/lib/api/ElectionApi";
 import { useKakaoShare } from "@/lib/api/useKakaoShare";
 import BlurredChevronHeader from "@/components/layout/BlurredChevronHeader";
-
+import KakaoScript from "@/components/feature/KakaoScript";
 const ElectionWait = () => {
   const [isSmOrLarger, setIsSmOrLarger] = useState(false);
   const route = useRouter();
@@ -20,14 +20,15 @@ const ElectionWait = () => {
   >(null);
   const params = useParams();
   const scheduleId = params.id as string;
-  //const { data: schedule } = useSchedule(scheduleId);
   const { shareWithTemplate } = useKakaoShare();
+  const url = `https://localhost:3000/schedule/${scheduleId}/election/start-point`;
   const shareClickHandler = () => {
     shareWithTemplate(
       "내 출발 장소를 등록하고 모임 중간 장소를 찾아볼까요?",
-      `/schedule/${scheduleId}/election/start-point`
+      url
     );
   };
+
   useEffect(() => {
     const checkScreenSize = () => {
       setIsSmOrLarger(window.innerWidth >= 640);
@@ -91,6 +92,7 @@ const ElectionWait = () => {
                 description="빠르게 장소를 지정할 수 있도록 링크를 보내주세요"
                 onClick={shareClickHandler}
               />
+              <KakaoScript />
             </>
           )}
         </div>

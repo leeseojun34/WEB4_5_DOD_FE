@@ -14,9 +14,11 @@ import getTotalTravelTime from "@/app/utils/getTotalTravelTime";
 import {
   useSuggestedLocations,
   useVoteDepartLocation,
+  useVoteMembers,
 } from "@/lib/api/ElectionApi";
 import { useGroupSchedule } from "@/lib/api/scheduleApi";
 import ToastWell from "@/components/ui/ToastWell";
+import useAuthStore from "@/stores/authStores";
 
 const dummyUserData = [
   { latitude: 37.50578860265, longitude: 126.753192450274 },
@@ -58,9 +60,14 @@ const ElectionSpot = () => {
   const [stationList, setStationList] = useState<Station[]>([]);
   const { mutate: voteDepartLocation } = useVoteDepartLocation();
   const { data: scheduleData, isPending } = useGroupSchedule(scheduleId);
-
+  const { user } = useAuthStore();
+  const userId = user?.id;
   const router = useRouter();
   console.log(suggestedLocationsData);
+
+  const voteMemberList = useVoteMembers(scheduleId).data || [];
+  const hasVoted =
+    Boolean(userId) && voteMemberList.some((m) => m.memberId === userId);
 
   useEffect(() => {
     if (!suggestedLocationsData?.data?.suggestedLocations) {
@@ -97,8 +104,13 @@ const ElectionSpot = () => {
   }, [suggestedLocationsData, userPosition.longitude, userPosition.latitude]);
   const isActive = selectedStation !== null;
 
+  const clickStationHandler = (station: Station) => {
+    if (!hasVoted) {
+      setSelectedStation(station);
+    }
+  };
   const voteHandler = () => {
-    if (isActive && selectedStation) {
+    if (isActive && selectedStation && !hasVoted) {
       voteDepartLocation(
         {
           scheduleMemberId: scheduleId,
@@ -108,9 +120,6 @@ const ElectionSpot = () => {
         {
           onSuccess: () => {
             ToastWell("🎉", "투표 완료!");
-            setTimeout(() => {
-              router.push(`../result`);
-            }, 1000);
           },
           onError: (error) => {
             console.error("투표 실패", error);
@@ -167,7 +176,8 @@ const ElectionSpot = () => {
               <motion.div
                 key={station.locationName}
                 variants={itemVariants}
-                onClick={() => setSelectedStation(station)}
+                onClick={() => clickStationHandler}
+                className={hasVoted ? "cursor-not-allowed" : "cursor-pointer"}
               >
                 <SubwayCard
                   station={station}
@@ -189,6 +199,7 @@ const ElectionSpot = () => {
           <Button
             state={isActive ? "default" : "disabled"}
             onClick={voteHandler}
+            disabled={hasVoted}
           >
             투표완료
           </Button>
