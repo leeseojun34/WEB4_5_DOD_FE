@@ -6,6 +6,7 @@ import iphoneImage from "@/assets/images/iphone_image.png";
 import TextMessage from "./TextMessage";
 
 const Section2 = () => {
+  
   const messages = [
     { text: "우리 언제 만나", isMine: true, characterIndex: 1 },
     { text: "되는 시간 언제야?", isMine: false, characterIndex: 5 },
@@ -19,7 +20,7 @@ const Section2 = () => {
     { text: "그럼 다음에 봐야겠네", isMine: true, characterIndex: 1 },
   ];
   return (
-    <SectionLayout bgColor="blue">
+    <SectionLayout bgColor="blue" sectionNum="section2">
       <div className="flex flex-col gap-9">
         <div className="font-bold text-[color:var(--color-white)] text-[28px] text-center ">
           스케쥴 잡다가
