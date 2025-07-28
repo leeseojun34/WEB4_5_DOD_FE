@@ -6,17 +6,17 @@ import { ReactNode } from "react";
 
 const sectionStyles: Record<string, string> = {
   section1:
-    "flex flex-col px-10 justify-center items-center min-h-screen relative",
+    "flex flex-col px-10 justify-center items-center min-h-screen relative min-w-[375px] w-full max-w-185",
   section2:
-    "flex flex-col px-10 justify-center items-center min-h-screen relative",
+    "flex flex-col px-10 justify-center items-center min-h-screen relative min-w-[375px] w-full max-w-185",
   section3:
-    "flex flex-col px-10 justify-center items-center min-h-screen relative",
+    "flex flex-col px-10 justify-center items-center min-h-screen relative min-w-[375px] w-full max-w-185",
   section4:
-    "flex flex-col px-0 justify-center items-center min-h-screen relative",
+    "flex flex-col px-0 justify-center items-center min-h-screen relative min-w-[375px] w-full max-w-185",
   section5:
-    "flex flex-col px-10 justify-center items-center min-h-screen relative",
+    "flex flex-col px-10 justify-center items-center min-h-screen relative min-w-[375px] w-full max-w-185",
   section6:
-    "flex flex-col px-10 justify-center items-center min-h-screen relative",
+    "flex flex-col px-10 pt-24 items-center min-h-screen relative min-w-[375px] w-full max-w-185",
 };
 
 const SectionLayout = ({
@@ -36,8 +36,10 @@ const SectionLayout = ({
       className={`${
         bgColor === "blue"
           ? "bg-[color:var(--color-primary-400)]"
+          : bgColor === "skyblue"
+          ? "bg-[color:var(--color-primary-100)]"
           : "bg-[color:var(--color-white)]"
-      }`}
+      } flex justify-center`}
     >
       <main className={sectionStyles[sectionNum]}>
         {children}
