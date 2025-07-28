@@ -27,7 +27,8 @@ function TimeSheet({ isOpen, setIsOpen, onSave }: TimeSheetType) {
       setIsOpen={setIsOpen}
       initialSnap={0}
       snapPoints={[0.9]}
-      disableDrag={true}>
+      disableDrag={true}
+    >
       {() => (
         <div className="w-full h-[90%] flex flex-col px-5 gap-8 pb-12">
           <div className="flex justify-between items-center px-5">
@@ -42,8 +43,11 @@ function TimeSheet({ isOpen, setIsOpen, onSave }: TimeSheetType) {
           <div className="w-full flex-1 flex justify-center overflow-y-auto max-w-[700px] mx-auto">
             <Schedule mode="mypage" mySchedule={mySchedule?.data || null} />
           </div>
-          <div className="flex justify-center">
-            <Button onClick={onSave}>저장하기</Button>
+
+          <div className="fixed w-full left-0 right-0 px-5 bottom-9">
+            <div className="max-w-185 mx-auto">
+              <Button onClick={onSave}>그룹 생성</Button>
+            </div>
           </div>
         </div>
       )}
