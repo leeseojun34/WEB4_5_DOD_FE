@@ -16,7 +16,16 @@ const Section4 = () => {
   const description1Ref = useRef<HTMLDivElement>(null);
   const description2Ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (!titleRef.current) return;
+    if (
+      !titleRef.current ||
+      !groupManagementImgRef.current ||
+      !groupAnalyticsImgRef.current ||
+      !subtitle1Ref.current ||
+      !subtitle2Ref.current ||
+      !description1Ref.current ||
+      !description2Ref.current
+    )
+      return;
 
     const timeline = gsap.timeline({
       scrollTrigger: {
