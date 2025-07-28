@@ -67,7 +67,7 @@ const ScheduleSelectDate = ({
                 if (dates!.length !== 0) {
                   const today = new Date();
                   const selectedDates = dates as Date[];
-                  const isFuture = selectedDates.some(
+                  const isFuture = selectedDates.every(
                     (date) => date.getTime() >= today.getTime()
                   );
 
