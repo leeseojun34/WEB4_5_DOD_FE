@@ -13,6 +13,11 @@ interface SubwayCardProps {
   isPointer?: boolean;
 }
 
+interface MetroTransfer {
+  line: string;
+  color: string;
+}
+
 const SubwayCard: React.FC<SubwayCardProps> = ({
   station,
   isSelected,
@@ -22,18 +27,17 @@ const SubwayCard: React.FC<SubwayCardProps> = ({
     <>
       <OptionBox isSelected={isSelected} isPointer={isPointer}>
         <div className="flex gap-2 items-center justify-center">
-          {station.metroLines.map((line, idx) => {
-            const isSingleChar = line.length === 1;
+          {station.metroTransfer.map((transfer, idx) => {
+            const isSingleChar = transfer.length === 1;
             const widthClass = isSingleChar ? "w-5 h-5" : "px-2 py-1 rounded";
-            const bgColor = station.stationColors[idx] || "#353535";
 
             return (
               <p
                 key={idx}
                 className={`${widthClass} ${STYLES.stationMark}`}
-                style={{ backgroundColor: bgColor }}
+                style={{ backgroundColor: transfer.color }}
               >
-                {line}
+                {transfer.line}
               </p>
             );
           })}

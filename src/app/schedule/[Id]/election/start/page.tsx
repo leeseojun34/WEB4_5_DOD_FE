@@ -11,7 +11,7 @@ import Header from "@/components/layout/Header";
 const ElectionStart = () => {
   const router = useRouter();
   const params = useParams();
-  const scheduleId = params.Id as string;
+  const scheduleId = params.id as string;
   const { data: schedule, isLoading } = useSchedule(scheduleId);
 
   const clickHandler = () => {
