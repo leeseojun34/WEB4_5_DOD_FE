@@ -45,7 +45,11 @@ const OfflineScheduleDetail = ({
           />
         </div>
       ) : (
-        <ScheduleDetailLayout data={data} scheduleId={scheduleId}>
+        <ScheduleDetailLayout
+          data={data}
+          scheduleId={scheduleId}
+          isLeader={true}
+        >
           <ScheduleDetailContent
             scheduleId={scheduleId}
             members={data.members}
@@ -54,6 +58,7 @@ const OfflineScheduleDetail = ({
               platform: workspace.type as WorkspacePlatformType,
               name: workspace.name,
             }))}
+            isLeader={true}
           >
             <motion.div variants={itemVariants}>
               <MeetingLocation

@@ -1,5 +1,6 @@
 interface Window {
   Kakao: {
+    init: (key: string) => void;
     Share: {
       sendCustom: (options: {
         templateId: number;

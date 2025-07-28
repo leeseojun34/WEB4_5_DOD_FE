@@ -53,6 +53,7 @@ const OfflineBottomSheet = ({
                       name: workspace.name,
                     })
                   )}
+                  isLeader={true}
                 >
                   <motion.div variants={itemVariants}>
                     <MeetingLocation

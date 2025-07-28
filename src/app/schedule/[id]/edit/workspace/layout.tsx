@@ -5,9 +5,12 @@ import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
 import HeaderTop from "@/components/layout/HeaderTop";
 import React, { useState } from "react";
+import { useParams } from "next/navigation";
 
 function Layout({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
+  const params = useParams();
+  const workspaceId = (params.workspaceId as string) || "new";
 
   const handlePlusClick = () => {
     setIsOpen(true);
@@ -34,7 +37,13 @@ function Layout({ children }: { children: React.ReactNode }) {
       <div className="block sm:hidden">
         <Footer />
       </div>
-      {isOpen && <WorkspaceBottomSheet isOpen={isOpen} setIsOpen={setIsOpen} />}
+      {isOpen && (
+        <WorkspaceBottomSheet
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          workspaceId={workspaceId}
+        />
+      )}
     </>
   );
 }
