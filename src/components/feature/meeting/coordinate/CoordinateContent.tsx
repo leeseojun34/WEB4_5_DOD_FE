@@ -9,8 +9,10 @@ import { useEffect, useState } from "react";
 
 const CoordinateContent = ({
   eventScheduleInfo,
+  group,
 }: {
   eventScheduleInfo: EventScheduleInfoType;
+  group: string;
 }) => {
   const { user } = useAuthStore();
   const [isConfirmed, setIsConfirmed] = useState(false);
@@ -28,12 +30,10 @@ const CoordinateContent = ({
     }
   }, [user, eventScheduleInfo]);
 
-  console.log(eventScheduleInfo);
-
   return (
     <div className="pt-6 px-5 pb-9 flex flex-col w-full items-center gap-7 sm:gap-8 sm:pt-10">
       <div className="w-full">
-        <TitleWithShare />
+        <TitleWithShare group={group} />
       </div>
       <Tip>
         가능한 시간을 입력하면, 구성원들과 겹치는 시간대를 자동으로

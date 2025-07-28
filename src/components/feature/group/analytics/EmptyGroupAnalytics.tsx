@@ -1,9 +1,9 @@
 import Image from "next/image";
 import sadRabbitImg from "@/assets/images/rabbit_noschedule_sad.png";
 import { Button } from "@/components/ui/Button";
-import EmptyGroupAnalyticsCard from "./EmptyGroupAnalyticsCard";
 import Link from "next/link";
 import { ParamValue } from "next/dist/server/request/params";
+import FeatureListCard from "./FeatureListCard";
 
 const EmptyGroupAnalytics = ({ groupId }: { groupId: ParamValue }) => {
   return (
@@ -17,13 +17,19 @@ const EmptyGroupAnalytics = ({ groupId }: { groupId: ParamValue }) => {
           src={sadRabbitImg}
           alt="데이터가 없어 슬픈 토끼 이미지"
           priority
-          width={222}
-          height={183}
+          width={200}
+          height={160}
           unoptimized
-          className="w-55 h-55 sm:w-90 sm:h-90"
+          className="w-50 h-50 sm:w-70 sm:h-70"
         />
       </div>
-      <EmptyGroupAnalyticsCard />
+      <FeatureListCard
+        features={[
+          { text: "멤버별 참여율을 볼 수 있어요" },
+          { text: "요일별 모임 빈도수를 알려드려요" },
+          { text: "어디서 주로 만나는지 확인해요" },
+        ]}
+      />
       <Link
         href={`/group/${groupId}/schedule/create/select`}
         className="absolute w-full bottom-9"

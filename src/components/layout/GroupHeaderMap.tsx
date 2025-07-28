@@ -38,9 +38,8 @@ const GroupHeaderMap = ({
       <div className="w-full bg-[color:var(--color-white)] flex justify-center items-center min-w-[375px]">
         <div className="flex flex-col w-full max-w-[740px]  items-center justify-center gap-4 pb-5 pt-8 sm:pt-10 px-5">
           <div className="w-full flex justify-between items-center">
-            <div></div>
+            <div className="size-4"></div>
             <span className="text-lg">{name}</span>
-
             <span
               onClick={clickEllipsisHandler}
               className={`cursor-pointer relative ${

@@ -1,5 +1,6 @@
 // 이벤트 생성 타입
 interface EventType {
+  eventId?: number;
   title: string;
   description: string;
   meetingType: string;
@@ -27,15 +28,17 @@ interface ScheduleDetailType {
   meetingPlatform: string;
   platformName: string;
   platformUrl: string;
-  members: string[];
+  members: { name: string; scheduleRole: string }[];
   workspaces: WorkspaceType[];
 }
+
+type OnlineMeetingPlatformType = "ZOOM" | "GOOGLE_MEET" | "DISCORD" | "ZEP";
 
 type WorkspacePlatformType =
   | "GITHUB"
   | "NOTION"
   | "FIGMA"
-  | "GOOGLE_DOS"
+  | "GOOGLE_DOCS"
   | "MIRO"
   | "CANVA";
 
@@ -125,3 +128,24 @@ type ParticipantsType = {
   memberId: string;
   memberName: string;
 };
+
+interface MyScheduleType {
+  timeBitFri: string;
+  timeBitMon: string;
+  timeBitSat: string;
+  timeBitSun: string;
+  timeBitThu: string;
+  timeBitTue: string;
+  timeBitWed: string;
+}
+
+interface CreateScheduleRequest {
+  eventId: number;
+  startTime: string;
+  endTime: string;
+  scheduleName: string;
+  description: string;
+  schedules_Status: string;
+  meetingType: string;
+  members: { memberId: string }[];
+}

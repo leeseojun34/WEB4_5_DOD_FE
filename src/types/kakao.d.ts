@@ -1,5 +1,15 @@
 interface Window {
-  Kakao: any;
+  Kakao: {
+    init: (key: string) => void;
+    Share: {
+      sendCustom: (options: {
+        templateId: number;
+        templateArgs: {
+          [key: string]: string;
+        };
+      }) => void;
+    };
+  };
 }
 
 interface UserType {
@@ -9,4 +19,11 @@ interface UserType {
   profileImageNumber: number;
   provider: string;
   role: string;
+}
+
+namespace kakao.maps {
+  interface Map {
+    panBy(x: number, y: number): void;
+    setCenter(position: LatLng): void;
+  }
 }

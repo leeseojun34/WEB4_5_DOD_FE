@@ -1,30 +1,36 @@
 import Input from "@/components/ui/Input";
-import Dropdown from "@/components/ui/Dropdown";
 import { ChangeEvent } from "react";
+import ActionButtons from "./ActionButtons";
 
 interface ScheduleFormProps {
   scheduleName: string;
   scheduleDescription: string;
   scheduleTime: string;
+  meetingType: string;
   onScheduleNameChange: (e: ChangeEvent<HTMLInputElement>) => void;
   onScheduleDescriptionChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
   onTimeClick: () => void;
+  handleDelete: () => void;
+  handleEditInfo: () => void;
 }
 
 const ScheduleForm = ({
   scheduleName,
   scheduleDescription,
+  meetingType,
   scheduleTime,
   onScheduleNameChange,
   onScheduleDescriptionChange,
   onTimeClick,
+  handleDelete,
+  handleEditInfo,
 }: ScheduleFormProps) => {
   return (
     <div className="flex flex-col gap-4">
       <Input
         label="모임 이름"
         error="10글자를 이내로 작성해주세요"
-        maxLength={10}
+        maxLength={20}
         placeholder="모임 이름을 입력해주세요"
         value={scheduleName}
         onChange={onScheduleNameChange}
@@ -38,17 +44,32 @@ const ScheduleForm = ({
         value={scheduleDescription}
         onChange={onScheduleDescriptionChange}
       />
-      <Dropdown label="온/오프라인" options={["온라인", "오프라인"]} />
+      <Input
+        label="온/오프라인"
+        value={meetingType === "ONLINE" ? "온라인" : "오프라인"}
+        readOnly
+        disabled
+        className="text-[color:var(--color-gray-placeholder)]"
+      />
       <Input
         label="모임 시간"
         value={scheduleTime}
         onClick={onTimeClick}
         icon={
-          <button className="w-7 font-medium text-sm text-[color:var(--color-gray-placeholder)]]">
+          <button
+            className="w-7 font-medium text-sm text-[color:var(--color-primary-400)] cursor-pointer"
+            onClick={onTimeClick}
+          >
             수정
           </button>
         }
         readOnly
+      />
+      <ActionButtons
+        onDelete={handleDelete}
+        onEditComplete={handleEditInfo}
+        scheduleName={scheduleName}
+        scheduleDescription={scheduleDescription}
       />
     </div>
   );

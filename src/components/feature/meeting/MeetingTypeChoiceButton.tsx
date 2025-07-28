@@ -2,7 +2,13 @@
 import { Button } from "@/components/ui/Button";
 import { useRouter } from "next/navigation";
 
-const MeetingTypeChoiceButton = () => {
+interface MeetingTypeChoiceButtonProps {
+  selectedType: string;
+}
+
+const MeetingTypeChoiceButton = ({
+  selectedType,
+}: MeetingTypeChoiceButtonProps) => {
   const router = useRouter();
   const handleNext = () => {
     if (selectedType === "once") {

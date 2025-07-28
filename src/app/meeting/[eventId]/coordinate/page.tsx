@@ -9,22 +9,28 @@ import { useEventScheduleInfo } from "@/lib/api/scheduleApi";
 import Toast from "@/components/ui/Toast";
 import { AxiosError } from "axios";
 import { useEventDetail } from "@/lib/api/scheduleApi";
+import { useEffect } from "react";
 
 const CoordinatePage = () => {
-  const { eventId } = useParams();
+  const { eventId, group } = useParams();
   const { data: eventScheduleInfo, error } = useEventScheduleInfo(
     Number(eventId)
   );
   const router = useRouter();
-  const { data: eventDetail } = useEventDetail(Number(eventId));
-  if (error) {
-    const axiosError = error as AxiosError<{ message: string }>;
-    Toast(axiosError.response?.data.message || "오류가 발생했습니다.");
-    router.push(`/`);
-    return;
-  }
+  const { data: eventDetail, error: eventDetailError } = useEventDetail(
+    Number(eventId)
+  );
 
-  if (!eventScheduleInfo) {
+  useEffect(() => {
+    const err = error || eventDetailError;
+    if (err) {
+      const axiosError = err as AxiosError<{ message: string }>;
+      Toast(axiosError.response?.data.message || "오류가 발생했습니다.");
+      router.push(`/`);
+    }
+  }, [error, eventDetailError]);
+
+  if (!eventScheduleInfo || !eventDetail) {
     return <GlobalLoading />;
   }
 
@@ -42,7 +48,10 @@ const CoordinatePage = () => {
         id={eventId as string}
       />
       <div className="min-w-[375px] w-full max-w-185 mx-auto relative">
-        <CoordinateContent eventScheduleInfo={eventScheduleInfo} />
+        <CoordinateContent
+          eventScheduleInfo={eventScheduleInfo}
+          group={group ? "true" : "false"}
+        />
       </div>
     </section>
   );

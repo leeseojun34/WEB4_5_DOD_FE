@@ -6,11 +6,14 @@ import calendarWhite from "@/assets/images/calendar_white.png";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/lib/api/userApi";
 import { profileImages } from "@/lib/profileImages";
+import { useEffect } from "react";
 
-const Header = ({ type = "" }: { type?: "" | "blue" }) => {
+const Header = ({ type = "" }: { type?: "" | "blue" | "blur" }) => {
   const router = useRouter();
-  const { data: user } = useUser();
-
+  const { data: user, refetch } = useUser();
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
   const profile = profileImages[user?.data.profileImageNumber];
 
   return (
@@ -18,6 +21,8 @@ const Header = ({ type = "" }: { type?: "" | "blue" }) => {
       className={`w-full max-w-5xl fixed flex justify-between items-center px-10 md:px-20 py-6 z-50 ${
         type === "blue"
           ? "bg-[color:var(--color-primary-400)]"
+          : type === "blur"
+          ? "bg-white/30 backdrop-blur-md"
           : "bg-transparent"
       }`}>
       <LogoWebHeader type={type} handleLogoClick={() => router.push("/")} />
@@ -30,7 +35,7 @@ const Header = ({ type = "" }: { type?: "" | "blue" }) => {
               width={24}
               height={24}
               className="cursor-pointer"
-              onClick={() => router.push("/schedule/create")}
+              onClick={() => router.push("/meeting")}
             />
             <Image
               src={profile}

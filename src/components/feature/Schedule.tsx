@@ -2,38 +2,46 @@
  * 일정 등록 페이지
  *
  * @param eventScheduleInfo 이벤트 일정 정보 optional
- *
+ * @param mySchedule 내 일정 정보 optional
+ * @param mode 모드 (default: 이벤트 일정 등록, mypage: 내 일정 등록)
  * @returns 일정 등록 페이지 컴포넌트
  */
 "use client";
 import { useState, useRef, useCallback, useEffect } from "react";
-import { convertTimesToHexBit } from "@/app/utils/timebitFormat";
-import { setEventMyTimeApi } from "@/lib/api/scheduleApi";
+import {
+  convertTimesToHexBit,
+  convertHexBitToTimes,
+} from "@/app/utils/timebitFormat";
+import { setEventMyTimeApi, setMySchedule } from "@/lib/api/scheduleApi";
 import { useParams } from "next/navigation";
 import { getGridColsClass } from "@/app/utils/styleFormat";
 
 const STYLES = {
-  container: "w-full",
+  container: "w-full px-2",
   header: "sticky top-0 z-10 bg-white",
   dayGrid: "grid gap-1 pl-6",
-  dayCell: "py-2 text-center text-[#9EA6B2] text-[8px] md:text-xl font-bold",
+  dayCell: "py-2 text-center text-[#9EA6B2] text-[8px] sm:text-lg font-bold",
   dayText: "block",
   dateText: "text-[var(--color-primary-400)]",
   timeColumn: "flex w-6 flex-col items-end gap-1 pr-1",
-  timeCell: "h-10 md:h-20 text-right pr-1",
+  timeCell: "h-10 sm:h-20 text-right pr-1",
   timeText:
-    "block text-[#9EA6B2] text-[8px] md:text-base font-bold translate-y-0",
-  scheduleGrid: `grid flex-1 gap-1 md:gap-4`,
+    "block text-[#9EA6B2] text-[8px] sm:text-base font-bold translate-y-0",
+  scheduleGrid: `grid flex-1 gap-1 sm:gap-4`,
   dayColumn: "flex flex-col gap-2 overflow-hidden rounded-lg",
   timeSlot:
-    "w-full h-5 md:h-10 border-b border-white last:border-b-0 odd:border-dashed even:border-solid cursor-pointer transition-colors duration-150",
+    "w-full h-5 sm:h-10 border-b border-white last:border-b-0 odd:border-dashed even:border-solid cursor-pointer transition-colors duration-150",
   unselectedSlot: "bg-[var(--color-muted)]",
 };
 
 const Schedule = ({
   eventScheduleInfo,
+  mySchedule,
+  mode = "default",
 }: {
   eventScheduleInfo?: EventTimeTableType;
+  mySchedule: MyScheduleType | null;
+  mode?: "default" | "mypage";
 }) => {
   const { eventId } = useParams();
 
@@ -76,6 +84,9 @@ const Schedule = ({
   const [isDragging, setIsDragging] = useState(false);
   const [dragStartCell, setDragStartCell] = useState<string | null>(null);
   const [isDraggingAndClick, setIsDraggingAndClick] = useState(true);
+  const [isInteractionEnabled, setIsInteractionEnabled] = useState(
+    mode !== "mypage"
+  );
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -84,6 +95,72 @@ const Schedule = ({
     const minute = index % 2 === 0 ? "00" : "30";
     return `${String(hour).padStart(2, "0")}:${minute}`;
   };
+
+  const [isMyScheduleChanged, setIsMyScheduleChanged] = useState(false);
+
+  useEffect(() => {
+    if (!mySchedule) return;
+    setCheckedCells(new Map());
+    setSelectedCells(new Set());
+
+    setIsMyScheduleChanged(false);
+    const timeBitArray = {
+      FRI: "",
+      MON: "",
+      SAT: "",
+      SUN: "",
+      THU: "",
+      TUE: "",
+      WED: "",
+    };
+
+    Object.entries(mySchedule).forEach(([day, timeBit]) => {
+      if (day.includes("Fri")) timeBitArray.FRI = timeBit;
+      else if (day.includes("Mon")) timeBitArray.MON = timeBit;
+      else if (day.includes("Sat")) timeBitArray.SAT = timeBit;
+      else if (day.includes("Sun")) timeBitArray.SUN = timeBit;
+      else if (day.includes("Thu")) timeBitArray.THU = timeBit;
+      else if (day.includes("Tue")) timeBitArray.TUE = timeBit;
+      else if (day.includes("Wed")) timeBitArray.WED = timeBit;
+    });
+
+    const allCellIds = new Set<string>();
+
+    for (let i = 0; i < daysOfWeek.length; i++) {
+      const day = daysOfWeek[i];
+      const timeBit = timeBitArray[day.day as keyof typeof timeBitArray];
+      const times = convertHexBitToTimes(timeBit);
+      const date = mode === "default" ? day.fullDate! : i.toString();
+
+      if (!date) continue;
+
+      times.forEach((time) => {
+        if (mode === "default") {
+          const dayIndex = daysOfWeek.findIndex((d) => d.fullDate === date);
+          const cellId = `cell-${dayIndex}-${time}`;
+          allCellIds.add(cellId);
+        } else {
+          const cellId = `cell-${i}-${time}`;
+          allCellIds.add(cellId);
+        }
+      });
+    }
+
+    setSelectedCells(allCellIds);
+    // applyXorToggle는 selectedCells 상태가 바뀐 이후에만 작동하도록 selectedCells에 대한 useEffect로 이동함
+
+    if (mode === "mypage") {
+      setTimeout(() => {
+        setIsInteractionEnabled(true);
+      }, 300);
+    }
+  }, [mySchedule]);
+
+  useEffect(() => {
+    if (selectedCells.size > 0 && !isDragging) {
+      applyXorToggle();
+    }
+  }, [selectedCells]);
 
   const applyXorToggle = async () => {
     if (selectedCells.size === 0) return;
@@ -95,8 +172,33 @@ const Schedule = ({
     for (const cellId of selectedCells) {
       const [, dayIndexStr, time] = cellId.split("-");
       const dayIndex = Number(dayIndexStr);
-      const date = daysOfWeek[dayIndex].fullDate!;
-      const dateSet = updatedCheckedCells.get(date) ?? new Set();
+      let date = "";
+      if (mode === "mypage") {
+        if (dayIndexStr === "0") {
+          date = "timeBitMon";
+        } else if (dayIndexStr === "1") {
+          date = "timeBitTue";
+        } else if (dayIndexStr === "2") {
+          date = "timeBitWed";
+        } else if (dayIndexStr === "3") {
+          date = "timeBitThu";
+        } else if (dayIndexStr === "4") {
+          date = "timeBitFri";
+        } else if (dayIndexStr === "5") {
+          date = "timeBitSat";
+        } else if (dayIndexStr === "6") {
+          date = "timeBitSun";
+        }
+      } else {
+        date = daysOfWeek[dayIndex].fullDate!;
+      }
+
+      let dateSet: Set<string>;
+      if (mode === "mypage") {
+        dateSet = updatedCheckedCells.get(dayIndexStr) ?? new Set();
+      } else {
+        dateSet = updatedCheckedCells.get(date) ?? new Set();
+      }
 
       if (dateSet.has(time)) {
         dateSet.delete(time);
@@ -104,7 +206,11 @@ const Schedule = ({
         dateSet.add(time);
       }
 
-      updatedCheckedCells.set(date, dateSet);
+      if (mode === "mypage") {
+        updatedCheckedCells.set(dayIndexStr, dateSet);
+      } else {
+        updatedCheckedCells.set(date, dateSet);
+      }
 
       if (!groupedByDate[date]) {
         groupedByDate[date] = [];
@@ -112,18 +218,30 @@ const Schedule = ({
       groupedByDate[date].push(time);
     }
 
-    const dailyTimeSlots = Object.entries(groupedByDate)
-      .filter(([, times]) => times.length > 0)
-      .map(([date, times]) => ({
-        date,
-        timeBit: convertTimesToHexBit(times),
-      }));
+    if (mode !== "mypage") {
+      const dailyTimeSlots = Object.entries(groupedByDate)
+        .filter(([, times]) => times.length > 0)
+        .map(([date, times]) => ({
+          date,
+          timeBit: convertTimesToHexBit(times),
+        }));
 
-    if (dailyTimeSlots.length > 0) {
-      await setEventMyTimeApi(+eventId!, {
-        dailyTimeSlots,
-        timezone: "Asia/Seoul",
-      });
+      if (dailyTimeSlots.length > 0) {
+        await setEventMyTimeApi(+eventId!, {
+          dailyTimeSlots,
+          timezone: "Asia/Seoul",
+        });
+      }
+    } else {
+      const newMySchedule: Record<string, string> = {};
+      for (const date in groupedByDate) {
+        newMySchedule[date] = convertTimesToHexBit(groupedByDate[date]);
+      }
+
+      if (isMyScheduleChanged) {
+        await setMySchedule(newMySchedule);
+        setIsMyScheduleChanged(false);
+      }
     }
 
     setCheckedCells(updatedCheckedCells);
@@ -187,19 +305,20 @@ const Schedule = ({
   // 마우스 클릭으로 드래그 시작 및 해당 셀 선택
   const handleMouseDown = useCallback(
     (dayIndex: number, timeIndex: number) => {
-      if (!isDraggingAndClick) return;
+      if (!isDraggingAndClick || !isInteractionEnabled) return;
       const cellId = getCellId(dayIndex, timeIndex);
+      setIsMyScheduleChanged(true);
       setIsDragging(true);
       setDragStartCell(cellId);
       toggleCellSelection(cellId);
     },
-    [getCellId, toggleCellSelection, isDraggingAndClick]
+    [getCellId, toggleCellSelection, isDraggingAndClick, isInteractionEnabled]
   );
 
   // 마우스가 셀 위로 이동할 때 셀 선택 (드래그 중일 경우)
   const handleMouseEnter = useCallback(
     (dayIndex: number, timeIndex: number) => {
-      if (!isDraggingAndClick) return;
+      if (!isDraggingAndClick || !isInteractionEnabled) return;
       if (!isDragging || !dragStartCell) return;
 
       const [, startDayIndex] = dragStartCell.split("-");
@@ -214,44 +333,46 @@ const Schedule = ({
       getCellId,
       toggleCellSelection,
       isDraggingAndClick,
+      isInteractionEnabled,
     ]
   );
 
   // 마우스 클릭 종료 시 드래그 상태 초기화
   const handleMouseUp = useCallback(async () => {
-    if (!isDraggingAndClick) return;
+    if (!isDraggingAndClick || !isInteractionEnabled) return;
     setIsDragging(false);
     setDragStartCell(null);
-  }, [isDraggingAndClick]);
+  }, [isDraggingAndClick, isInteractionEnabled]);
 
   // 마우스가 영역을 벗어나면 드래그 상태 초기화
   const handleMouseLeave = useCallback(() => {
-    if (!isDraggingAndClick) return;
+    if (!isDraggingAndClick || !isInteractionEnabled) return;
     if (isDragging) {
       setIsDragging(false);
       setDragStartCell(null);
     }
-  }, [isDragging, isDraggingAndClick]);
+  }, [isDragging, isDraggingAndClick, isInteractionEnabled]);
 
   const lastTouchedCell = useRef<string | null>(null);
 
   // 터치 시작 시 드래그 시작 (셀 선택은 하지 않음, 중복 방지용 lastTouchedCell 설정)
   const handleTouchStart = useCallback(
     (e: React.TouchEvent, dayIndex: number, timeIndex: number) => {
-      if (!isDraggingAndClick) return;
+      if (!isDraggingAndClick || !isInteractionEnabled) return;
       const cellId = getCellId(dayIndex, timeIndex);
+      setIsMyScheduleChanged(true);
       setIsDragging(true);
       setDragStartCell(cellId);
       lastTouchedCell.current = cellId; // 중복 방지를 위해 초기 설정
       // 첫 터치에서 이미 터치무브로 선택될 수 있으므로 이 시점에는 선택하지 않음
     },
-    [getCellId, isDraggingAndClick]
+    [getCellId, isDraggingAndClick, isInteractionEnabled]
   );
 
   // 터치 이동 시 셀 위에 있으면 선택 처리
   const handleTouchMove = useCallback(
     (e: React.TouchEvent) => {
-      if (!isDraggingAndClick) return;
+      if (!isDraggingAndClick || !isInteractionEnabled) return;
       if (!isDragging || !dragStartCell) return;
 
       const touch = e.touches[0];
@@ -270,13 +391,19 @@ const Schedule = ({
         lastTouchedCell.current = id; // 마지막 셀 ID 저장
       }
     },
-    [isDragging, dragStartCell, toggleCellSelection, isDraggingAndClick]
+    [
+      isDragging,
+      dragStartCell,
+      toggleCellSelection,
+      isDraggingAndClick,
+      isInteractionEnabled,
+    ]
   );
 
   const handleTouchEnd = useCallback(() => {
-    if (!isDraggingAndClick) return;
+    if (!isDraggingAndClick || !isInteractionEnabled) return;
     lastTouchedCell.current = null;
-  }, [isDraggingAndClick]);
+  }, [isDraggingAndClick, isInteractionEnabled]);
 
   // 요일 및 날짜 헤더를 렌더링
   const renderDayHeader = (dayInfo: DayInfo, index: number) => (
@@ -305,9 +432,15 @@ const Schedule = ({
   const renderTimeSlot = (dayIndex: number, timeIndex: number) => {
     const cellId = getCellId(dayIndex, timeIndex);
     const timeStr = getTimeString(Number(startTime[0]), timeIndex);
-    const isChecked =
-      checkedCells.get(daysOfWeek[dayIndex]?.fullDate || "")?.has(timeStr) ??
-      false;
+    let isChecked = false;
+
+    if (mode === "mypage") {
+      isChecked = checkedCells.get(dayIndex.toString())?.has(timeStr) ?? false;
+    } else {
+      isChecked =
+        checkedCells.get(daysOfWeek[dayIndex]?.fullDate || "")?.has(timeStr) ??
+        false;
+    }
     const isSelected = selectedCells.has(cellId);
     let slotClass = STYLES.unselectedSlot;
     if (isSelected) {

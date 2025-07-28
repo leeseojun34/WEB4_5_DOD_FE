@@ -1,11 +1,9 @@
 export interface Station {
   locationName: string;
+  voteStatus: string;
   latitude: number;
   longitude: number;
-  suggestedMemberId?: number;
-  voteCount: number;
-  metroLines: string[];
-  stationColors: string[];
-  travelTime: number;
-  noVoteCount?: number;
+  metroTransfer: MetroTransfer[];
+  travelTime?: number;
+  locationId: number;
 }

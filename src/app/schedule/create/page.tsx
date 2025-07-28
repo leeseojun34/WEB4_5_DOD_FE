@@ -11,7 +11,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { formatDate } from "@/app/utils/dateFormat";
 import { createEvent } from "@/lib/api/scheduleApi";
 
-// TODO: groupId 가져오기
 const CreateSchedule = () => {
   const router = useRouter();
   const [level, setLevel] = useState(0);
@@ -62,7 +61,11 @@ const CreateSchedule = () => {
       const response = await createEvent(newSchedule);
       if (response.code === "200") {
         if (response.data.eventId) {
-          router.push(`/schedule/complete/${response.data.eventId}`);
+          router.push(
+            `/schedule/complete/${response.data.eventId}${
+              groupId ? `?group=true` : ""
+            }`
+          );
         } else {
           throw new Error(response.message);
         }

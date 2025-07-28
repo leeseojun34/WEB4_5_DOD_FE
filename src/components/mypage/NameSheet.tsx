@@ -24,9 +24,9 @@ function NameSheet({
       isOpen={isOpen}
       setIsOpen={setIsOpen}
       initialSnap={0}
-      snapPoints={[0.35]}>
+      snapPoints={[0.45]}>
       {() => (
-        <div className="w-full flex flex-col  px-5 gap-8 pb-12">
+        <div className="w-full flex flex-col relative  px-5 gap-8 pb-12 h-[calc(100vh-68%)]">
           <div className="flex justify-between items-center px-5">
             <X className="invisible" />
             <span className="text-base font-medium mt-3">이름 수정</span>
@@ -43,10 +43,19 @@ function NameSheet({
               maxLength={10}
               onChange={onChange}
               placeholder="이름을 입력해주세요."
+              onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  onSave();
+                  setIsOpen(false);
+                }
+              }}
             />
           </div>
-          <div className="flex justify-center items-center">
+          <div className="w-full h-12 items-center flex justify-center max-w-[700px] mx-auto">
             <Button
+              className="h-full flex items-center justify-center"
+              state={text.trim() === "" ? "disabled" : "default"}
               onClick={() => {
                 onSave();
                 setIsOpen(false);

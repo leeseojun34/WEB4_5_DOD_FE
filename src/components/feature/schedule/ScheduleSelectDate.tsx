@@ -28,7 +28,7 @@ const ScheduleSelectDate = ({
       <div className="flex flex-col gap-4 mt-10">
         <ScheduleTitleText
           title="모일 날짜와 시간을 선택해 주세요"
-          description="날짜는 최대 7일까지 선택 가능해요!"
+          description="날짜는 오늘 이후 최대 7일까지 선택 가능해요!"
         />
       </div>
       <motion.div
@@ -64,6 +64,19 @@ const ScheduleSelectDate = ({
                   Toast("최대 7일까지 선택 가능해요!");
                   return;
                 }
+                if (dates!.length !== 0) {
+                  const today = new Date();
+                  const selectedDates = dates as Date[];
+                  const isFuture = selectedDates.some(
+                    (date) => date.getTime() >= today.getTime()
+                  );
+
+                  if (!isFuture) {
+                    Toast("오늘 이후 날짜를 선택해 주세요!");
+                    return;
+                  }
+                }
+
                 setDateList(dates as Date[]);
               }}
             />

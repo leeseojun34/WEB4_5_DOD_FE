@@ -34,12 +34,12 @@ const AlertBox = ({
       <AlertDialog>
         <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
 
-        <AlertDialogContent className="w-[320px] px-10 flex flex-col justify-center items-center bg-[color:var(--color-white)] border-0">
+        <AlertDialogContent className="z-[9999] w-[320px] px-10 flex flex-col justify-center items-center bg-[color:var(--color-white)] border-0">
           <AlertDialogHeader>
             <AlertDialogTitle className="font-medium text-base text-[color:var(--color-black)]">
               {title}
             </AlertDialogTitle>
-            <AlertDialogDescription className="font-normal text-sm text-[color:var(--color-black)]">
+            <AlertDialogDescription className="whitespace-pre-line font-normal text-sm text-[color:var(--color-black)]">
               {content}
             </AlertDialogDescription>
           </AlertDialogHeader>

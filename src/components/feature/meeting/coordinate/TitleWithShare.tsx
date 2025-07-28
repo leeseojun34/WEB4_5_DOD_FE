@@ -4,15 +4,18 @@ import { useEventDetail } from "@/lib/api/scheduleApi";
 import { useParams } from "next/navigation";
 import { useKakaoShare } from "@/lib/api/useKakaoShare";
 import KakaoScript from "../../KakaoScript";
-const TitleWithShare = () => {
+const TitleWithShare = ({ group }: { group: string }) => {
   const { eventId } = useParams();
   const { data: eventDetail } = useEventDetail(Number(eventId));
   const { shareWithTemplate } = useKakaoShare();
 
+  // TODO: 초대 url 수정 필요
   const handleKakaoShare = () => {
     shareWithTemplate(
       "이때 어때에서 친구들과 함께 일정을 조율해보세요!",
-      `https://localhost:3000/meeting/${eventId}/coordinate/${eventDetail?.data.groupId}`
+      `https://localhost:3000/meeting/${eventId}/coordinate/${
+        eventDetail?.data.groupId
+      }${group === "true" ? "?group=true" : ""}`
     );
   };
 

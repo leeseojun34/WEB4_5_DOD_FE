@@ -2,9 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useUser } from "@/lib/api/userApi";
-import { useQuery } from "@tanstack/react-query";
-import { axiosInstance } from "@/lib/api/axiosInstance";
-
 import { kakaoSearch } from "@/types/kakaoSearch";
 
 import Profile from "@/components/mypage/Profile";
@@ -16,16 +13,18 @@ import AlertBox from "@/components/ui/AlertBox";
 
 import {
   useAddFavoriteLocation,
-  useCalendarSync,
   useDeactiveMutation,
+  useFavoriteLocation,
+  useGoogleCalendarId,
   useLogoutMutation,
+  useResgisterCalendarId,
   useUpdateFavoriteLocation,
   useUpdateName,
   useUpdateProfileImg,
 } from "@/lib/api/authApi";
-// import { profileImages } from "@/lib/profileImages";
+import GoogleCalenaderSheet from "@/components/mypage/GoogleCalendarSheet";
 
-type SheetType = "name" | "time" | "station";
+type SheetType = "name" | "time" | "station" | "calendar";
 
 function MyPage() {
   const { data: user, refetch } = useUser();
@@ -34,31 +33,42 @@ function MyPage() {
   const [newName, setNewName] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [sheetType, setSheetType] = useState<SheetType | null>(null);
-  const [calendarSynced, setCalendarSynced] = useState(false);
-
-  // 즐겨찾기 조회
-  const favoriteQuery = useQuery({
-    queryKey: ["favoriteLocation"],
-    queryFn: async () => {
-      const res = await axiosInstance.get("/favorite-location");
-      const list = res.data.data;
-      return list.length > 0 ? list[0] : { stationName: "미등록" };
-    },
-  });
-
-  const [myStation, setMyStation] = useState<string>(
-    () => favoriteQuery.data?.stationName
-  );
+  // const [calendarSynced, setCalendarSynced] = useState(false);
+  // 즐겨찾기 장소 조회
+  const { data: favoriteQuery } = useFavoriteLocation();
+  const [myStation, setMyStation] = useState(favoriteQuery?.stationName);
+  const [calendarId, setCalendarId] = useState("");
+  const { data: googleCalendar } = useGoogleCalendarId();
+  const [hasGoogleCalendarId, setHasGoogleCalendarId] = useState(false);
+  const [bottomOffset, setBottomOffset] = useState(0);
 
   useEffect(() => {
-    refetch(); // 마운트 시 user 데이터 패치
+    refetch();
   }, [refetch]);
 
-  // useEffect(() => {
-  //   if (favoriteQuery.data) {
-  //     setMyStation(favoriteQuery.data.stationName);
-  //   }
-  // }, [favoriteQuery.data]);
+  useEffect(() => {
+    if (user) {
+      setName(user.data.name);
+      setMyStation(favoriteQuery?.stationName);
+    }
+  }, [user, favoriteQuery]);
+  useEffect(() => {
+    if (googleCalendar) {
+      setHasGoogleCalendarId(googleCalendar.calendarId ? true : false);
+      setCalendarId(googleCalendar.calendarId || "");
+    }
+  }, [googleCalendar]);
+
+  useEffect(() => {
+    const updateOffset = () => {
+      // iPhone SE 높이 568px, iPhone 14 Pro 844px 기준
+      const h = window.innerHeight;
+      setBottomOffset(h >= 844 ? 120 : 100);
+    };
+    updateOffset();
+    window.addEventListener("resize", updateOffset);
+    return () => window.removeEventListener("resize", updateOffset);
+  }, []);
 
   const openSheet = (type: SheetType) => {
     setSheetType(type);
@@ -72,6 +82,7 @@ function MyPage() {
         setName(newName);
         refetch();
         setIsOpen(false);
+        setNewName("");
       },
     });
   };
@@ -80,8 +91,7 @@ function MyPage() {
   const handleRandomProfile = () => {
     updateProfileImg.mutate(undefined, {
       onSuccess: () => {
-        refetch(); // 새로운 프로필 반영
-        // setProfile();
+        refetch();
       },
     });
   };
@@ -93,7 +103,7 @@ function MyPage() {
     const stationName = station.place_name;
     const longitude = Number(station.x);
     const latitude = Number(station.y);
-    const favoritePlaceId = Number(favoriteQuery.data?.favoriteLocationId);
+    const favoritePlaceId = Number(favoriteQuery?.favoriteLocationId);
 
     if (favoritePlaceId) {
       updateFavoriteLocation.mutate(
@@ -119,10 +129,12 @@ function MyPage() {
     setIsOpen(false);
   };
 
-  const calendarMutation = useCalendarSync();
+  // 캘린더 등록
+  const calendarMutation = useResgisterCalendarId();
   const handleGoogleCalendar = () => {
-    calendarMutation.mutate();
-    setCalendarSynced((prev) => !prev);
+    calendarMutation.mutate(calendarId);
+    setIsOpen(false);
+    setCalendarId(calendarId);
   };
 
   const logoutMutation = useLogoutMutation();
@@ -136,7 +148,7 @@ function MyPage() {
   };
 
   return (
-    <div className="w-full flex flex-col py-8">
+    <div className="w-full flex flex-col min-h-screen relative py-8">
       <div className="flex flex-1 flex-col justify-between gap-[4vh]">
         <div className="flex flex-col gap-8">
           {user?.data && (
@@ -150,24 +162,28 @@ function MyPage() {
           )}
 
           <div className="flex flex-col gap-4">
-            <ListBox buttonText="수정" clickHandler={() => openSheet("time")}>
+            <ListBox
+              buttonText="수정하기"
+              clickHandler={() => openSheet("time")}>
               가능한 시간
             </ListBox>
             <ListBox
-              buttonText="등록"
-              station={myStation || "미등록"}
+              buttonText="등록하기"
+              station={myStation}
               clickHandler={() => openSheet("station")}>
               내 주변역
             </ListBox>
             <ListBox
-              onConnect={handleGoogleCalendar}
-              isConnected={calendarSynced}>
+              clickHandler={() => openSheet("calendar")}
+              hasGoogleCalendarId={hasGoogleCalendarId}>
               캘린더 연동
             </ListBox>
           </div>
         </div>
 
-        <div className="flex justify-center items-center text-xs gap-24">
+        <div
+          className="fixed left-0 right-0 flex justify-center items-center text-xs gap-24 z-50"
+          style={{ bottom: `${bottomOffset}px` }}>
           <AlertBox
             actionHandler={handleLeave}
             content="탈퇴하시겠습니까?"
@@ -206,7 +222,6 @@ function MyPage() {
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           onSave={() => {
-            // 시간 저장 로직
             setIsOpen(false);
           }}
         />
@@ -218,6 +233,16 @@ function MyPage() {
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           onSave={handleStationSave}
+        />
+      )}
+      {sheetType === "calendar" && (
+        <GoogleCalenaderSheet
+          text={calendarId}
+          hasGoogleCalendarId={hasGoogleCalendarId}
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          onSave={handleGoogleCalendar}
+          onChange={(e) => setCalendarId(e.target.value)}
         />
       )}
     </div>
