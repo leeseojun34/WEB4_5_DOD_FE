@@ -77,7 +77,9 @@ const ListBox = ({
                 className={isConnected ? "block" : "hidden"}
               />
             </button> */}
-            <MyButton buttonClickHandler={clickHandler}>등록하기</MyButton>
+            <MyButton buttonClickHandler={clickHandler}>
+              {hasGoogleCalendarId ? "삭제하기" : "등록하기"}
+            </MyButton>
           </div>
         )}
       </div>
