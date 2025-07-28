@@ -94,8 +94,10 @@ const Section6 = () => {
           시작부터 끝까지
         </div>
         <div className="font-medium text-xl text-[color:var(--color-gray)]">
-          <p ref={description1Ref}>당신의 소중한 시간을 더 가치있게</p>
-          <p ref={description2Ref}>
+          <p ref={description1Ref} className="w-full text-center">
+            당신의 소중한 시간을 더 가치있게
+          </p>
+          <p ref={description2Ref} className="w-full text-center">
             지금,
             <span className="text-[color:var(--color-primary-400)]">
               이때 어때
