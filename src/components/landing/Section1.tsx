@@ -5,7 +5,7 @@ import SectionLayout from "./SectionLayout";
 
 const Section1 = () => {
   return (
-    <SectionLayout>
+    <SectionLayout sectionNum="section1">
       <MainLogo />
     </SectionLayout>
   );
