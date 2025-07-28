@@ -12,10 +12,10 @@ import AlertBox from "../ui/AlertBox";
 type GoogleCalendarSheetType = {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
-  text: string;
+  text: string; // 최초 값
   hasGoogleCalendarId: boolean;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  onSave: () => void;
+  onSave: (value: string) => void;
 };
 
 export default function GoogleCalendarSheet({
@@ -26,13 +26,18 @@ export default function GoogleCalendarSheet({
   onChange,
   onSave,
 }: GoogleCalendarSheetType) {
+  const [inputValue, setInputValue] = useState(text);
+
   const isValidCalendarId = (id: string) =>
     /^[a-zA-Z0-9]+@(gmail\.com|group\.calendar\.google\.com)$/.test(id);
-  const [initialCalendarId, setInitialCalendarId] = useState(text);
-  const isValidForm = isValidCalendarId(text) && !hasGoogleCalendarId;
-  const isInputDisabled = hasGoogleCalendarId || !isValidForm;
-  const [isMobile, setIsMobile] = useState(false);
 
+  const isValidForm = isValidCalendarId(inputValue);
+  const shouldShowError =
+    !isValidForm && inputValue.length > 0 && !hasGoogleCalendarId;
+  const isInputDisabled = hasGoogleCalendarId;
+  const isButtonDisabled = !isValidForm || hasGoogleCalendarId;
+
+  const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
     const update = () => setIsMobile(window.innerWidth <= 640);
     update();
@@ -46,11 +51,26 @@ export default function GoogleCalendarSheet({
   };
 
   const deleteMutation = useDeleteCalendarId();
+
   const handleDelete = () => {
-    if (!initialCalendarId) return;
     deleteMutation.mutate();
-    setInitialCalendarId("");
+    setInputValue("");
     setIsOpen(false);
+  };
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+    onChange(e);
+  };
+
+  const handleClose = () => {
+    setInputValue("");
+    setIsOpen(false);
+  };
+
+  const handleSave = () => {
+    onSave(inputValue);
+    handleClose();
   };
 
   return (
@@ -70,35 +90,34 @@ export default function GoogleCalendarSheet({
             </span>
             <X
               size={20}
-              onClick={() => {
-                setIsOpen(false);
-                setInitialCalendarId("");
-              }}
+              onClick={handleClose}
               className="text-[var(--color-black)] cursor-pointer"
             />
           </div>
 
           <div className="w-full max-w-[700px] mx-auto flex flex-col gap-8">
-            <div className="w-full h-12 flex flex-col gap-2">
+            <div className="w-full flex flex-col gap-1">
               <Input
                 label="구글캘린더ID"
-                value={text}
-                className={`flex flex-col gap-2 w-full ${
+                value={inputValue}
+                onChange={handleInputChange}
+                placeholder="구글캘린더 ID를 입력해주세요."
+                disabled={isInputDisabled}
+                className={`w-full ${
                   isInputDisabled
                     ? "opacity-50 pointer-events-none disabled:bg-[var(--color-gray-placeholder)]"
                     : ""
                 }`}
-                onChange={onChange}
-                placeholder="구글캘린더 ID를 입력해주세요."
               />
-              {!isValidForm && (
-                <p className="text-xs text-[var(--color-red)] ml-2 ">
+              {shouldShowError && (
+                <p className="text-xs text-[var(--color-red)] ml-2">
                   *구글 캘린더 ID는 gmail.com 또는 group.calendar.google.com
                   형식이어야 합니다.
                 </p>
               )}
             </div>
-            {hasGoogleCalendarId ? null : (
+
+            {!hasGoogleCalendarId && (
               <Tip>
                 연결해서 사용하고 싶은 캘린더 ID를 복사해서 붙여 넣어주세요.
                 <br />
@@ -106,10 +125,11 @@ export default function GoogleCalendarSheet({
                 <strong>[복사 경로]</strong>
                 <br />
                 구글 캘린더 → 설정 → 내 캘린더의 설정 → 연결하고 싶은 캘린더
-                선택 → 캘린더 통합/캘린더 ID 복사
+                선택 → 캘린더 통합 / 캘린더 ID 복사
               </Tip>
             )}
-            {text && (
+
+            {inputValue && hasGoogleCalendarId && (
               <div className="flex justify-center items-center">
                 <AlertBox
                   actionHandler={handleDelete}
@@ -124,12 +144,9 @@ export default function GoogleCalendarSheet({
             )}
 
             <Button
-              state={!text || hasGoogleCalendarId ? "disabled" : "default"}
+              state={isButtonDisabled ? "disabled" : "default"}
               className="w-full h-12"
-              onClick={() => {
-                onSave();
-                setIsOpen(false);
-              }}>
+              onClick={handleSave}>
               등록하기
             </Button>
           </div>
