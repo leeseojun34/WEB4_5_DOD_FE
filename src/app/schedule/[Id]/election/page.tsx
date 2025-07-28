@@ -17,7 +17,6 @@ import {
 } from "@/lib/api/ElectionApi";
 import { useGroupSchedule } from "@/lib/api/scheduleApi";
 import ToastWell from "@/components/ui/ToastWell";
-import Toast from "@/components/ui/Toast";
 
 const dummyUserData = [
   { latitude: 37.50578860265, longitude: 126.753192450274 },
@@ -53,18 +52,18 @@ const SkeletonText = () => (
 const ElectionSpot = () => {
   const userPosition = dummyUserData[0];
   const params = useParams();
-  const scheduleId = params.Id as string;
-  const { data: suggestedLocationsData, isLoading: isLocationsLoading } =
-    useSuggestedLocations(scheduleId);
+  const scheduleId = params.id as string;
+  const { data: suggestedLocationsData } = useSuggestedLocations(scheduleId);
   const [selectedStation, setSelectedStation] = useState<Station | null>(null);
   const [stationList, setStationList] = useState<Station[]>([]);
   const { mutate: voteDepartLocation } = useVoteDepartLocation();
   const { data: scheduleData, isPending } = useGroupSchedule(scheduleId);
 
   const router = useRouter();
+  console.log(suggestedLocationsData);
 
   useEffect(() => {
-    if (!suggestedLocationsData?.data.suggestedLocations) {
+    if (!suggestedLocationsData?.data?.suggestedLocations) {
       setStationList([]);
       return;
     }
@@ -108,9 +107,9 @@ const ElectionSpot = () => {
         },
         {
           onSuccess: () => {
-            setShowPopup(true);
+            ToastWell("🎉", "투표 완료!");
             setTimeout(() => {
-              router.push("/election/result");
+              router.push(`../result`);
             }, 1000);
           },
           onError: (error) => {
@@ -164,7 +163,7 @@ const ElectionSpot = () => {
             animate="visible"
             className="flex flex-col gap-3"
           >
-            {stationList.map((station, idx) => (
+            {stationList.map((station) => (
               <motion.div
                 key={station.locationName}
                 variants={itemVariants}
@@ -189,15 +188,7 @@ const ElectionSpot = () => {
           </PopupMessage>
           <Button
             state={isActive ? "default" : "disabled"}
-            onClick={() => {
-              if (isActive && selectedStation) {
-                voteDepartLocation({
-                  scheduleMemberId: scheduleId,
-                  locationId: selectedStation.locationId,
-                  scheduleId: Number(scheduleId),
-                });
-              }
-            }}
+            onClick={voteHandler}
           >
             투표완료
           </Button>

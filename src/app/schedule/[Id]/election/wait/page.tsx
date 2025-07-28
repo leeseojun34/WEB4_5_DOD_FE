@@ -8,7 +8,9 @@ import ShareButton from "@/components/ui/ShareButton";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { getSuggestedLocations } from "@/lib/api/ElectionApi";
+import { getSuggestedLocations, useSchedule } from "@/lib/api/ElectionApi";
+import { useKakaoShare } from "@/lib/api/useKakaoShare";
+import BlurredChevronHeader from "@/components/layout/BlurredChevronHeader";
 
 const ElectionWait = () => {
   const [isSmOrLarger, setIsSmOrLarger] = useState(false);
@@ -18,17 +20,25 @@ const ElectionWait = () => {
     number | null
   >(null);
   const params = useParams();
-  const scheduleId = params.Id as string;
+  const scheduleId = params.id as string;
+  const { data: schedule } = useSchedule(scheduleId);
+  const { shareWithTemplate } = useKakaoShare();
+  const shareClickHandler = () => {
+    shareWithTemplate(
+      "내 출발 장소를 등록하고 모임 중간 장소를 찾아볼까요?",
+      `/schedule/${scheduleId}/election/start-point`
+    );
+  };
   useEffect(() => {
     const checkScreenSize = () => {
-      setIsSmOrLarger(window.innerWidth >= 640); // sm: 640px
+      setIsSmOrLarger(window.innerWidth >= 640);
     };
     checkScreenSize();
     window.addEventListener("resize", checkScreenSize);
 
     const fetchSuggestedLocations = async () => {
       try {
-        const response = await getSuggestedLocations(scheduleId); // 스케줄 ID 적절히 변경
+        const response = await getSuggestedLocations(scheduleId);
         setNoVoteCount(response.data.noVoteCount);
         setNoDepartLocationCount(response.data.noDepartLocationCount);
       } catch (error) {
@@ -45,17 +55,8 @@ const ElectionWait = () => {
       <div className="hidden sm:block">
         <Header type="blue" />
       </div>
-      {/* {isSmOrLarger ? (
-        <GroupHeader
-          groupName="카츠오모이 가는날"
-          groupCount={3}
-          groupIntroduction="배고프다 정말루"
-          clickToInvite={() => {}}
-        />
-      ) : (
-        <HeaderTop fontColor="black" backward={true} />
-      )} */}
-      {/* 지도 1024px*/}
+      {isSmOrLarger ? "" : <BlurredChevronHeader />}
+
       <div className="flex-1 w-full flex justify-center">
         <div className="w-full max-w-[1024px]">
           <Map latitude={37.5058098} longitude={126.7531869} />
@@ -90,6 +91,7 @@ const ElectionWait = () => {
               <ShareButton
                 title="투표 링크 공유하기"
                 description="빠르게 장소를 지정할 수 있도록 링크를 보내주세요"
+                onClick={shareClickHandler}
               />
             </>
           )}
