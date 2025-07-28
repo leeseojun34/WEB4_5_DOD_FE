@@ -15,7 +15,7 @@ const Section2 = () => {
   const description1Ref = useRef<HTMLParagraphElement>(null);
   const description2Ref = useRef<HTMLParagraphElement>(null);
   const messageRef = useRef<HTMLDivElement>(null);
-  const iphoneImgRef = useRef<HTMLImageElement>(null);
+  const iphoneRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (
@@ -23,7 +23,7 @@ const Section2 = () => {
       !description1Ref.current ||
       !description2Ref.current ||
       !messageRef.current ||
-      !iphoneImgRef.current
+      !iphoneRef.current
     )
       return;
     const messageEls = gsap.utils.toArray<HTMLDivElement>(".message-item");
@@ -76,14 +76,14 @@ const Section2 = () => {
     );
 
     gsap.fromTo(
-      iphoneImgRef.current,
+      iphoneRef.current,
       { y: 50, opacity: 0 },
       {
         y: 0,
         opacity: 1,
         ease: "power3.out",
         scrollTrigger: {
-          trigger: iphoneImgRef.current,
+          trigger: iphoneRef.current,
           start: "top 85%",
           end: "top 50%",
           scrub: 2,
@@ -137,8 +137,8 @@ const Section2 = () => {
             🤯 시간, 장소, 링크 따로 관리하느라 정신없다면?
           </p>
         </div>
-        <div className="relative">
-          <Image ref={iphoneImgRef} src={iphoneImage} alt="아이폰 이미지" />
+        <div ref={iphoneRef} className="relative">
+          <Image src={iphoneImage} alt="아이폰 이미지" />
 
           <div
             ref={messageRef}
