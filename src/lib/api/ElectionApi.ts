@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "./axiosInstance";
+import { useRouter } from "next/navigation";
 
 export interface CreateDepartLocationRequest {
   memberId: string;
@@ -48,26 +49,13 @@ export const createDepartLocation = async (
  */
 export const voteMiddleLocation = async (
   scheduleMemberId: string,
-  location: {
-    latitude: number;
-    longitude: number;
-  }
+  body: { locationId: number; scheduleId: number }
 ) => {
   const res = await axiosInstance.post(
-    `/api/v1/schedules/suggested-locations/vote/${scheduleMemberId}`,
-    location
+    `/schedules/suggested-locations/vote/${scheduleMemberId}`,
+    body
   );
   return res.data;
-};
-
-//React Query 훅
-//중간 장소 후보 조회
-export const useSuggestedLocations = (scheduleId: string) => {
-  return useQuery({
-    queryKey: ["suggestedLocations", scheduleId],
-    queryFn: () => getSuggestedLocations(scheduleId),
-    enabled: !!scheduleId,
-  });
 };
 
 //출발 장소 틍록
@@ -90,22 +78,32 @@ export const useCreateDepartLocation = () => {
   });
 };
 
+//중간 장소 조회
+export const useSuggestedLocations = (scheduleId: string) => {
+  return useQuery({
+    queryKey: ["suggestedLocations", scheduleId],
+    queryFn: () => getSuggestedLocations(scheduleId),
+    enabled: !!scheduleId,
+  });
+};
+
 //중간 장소 투표
 export const useVoteDepartLocation = () => {
   const queryClient = useQueryClient();
+  const router = useRouter();
   return useMutation({
     mutationFn: ({
       scheduleMemberId,
-      location,
+      locationId,
+      scheduleId,
     }: {
       scheduleMemberId: string;
-      location: {
-        latitude: number;
-        longitude: number;
-      };
-    }) => voteMiddleLocation(scheduleMemberId, location),
+      locationId: number;
+      scheduleId: number;
+    }) => voteMiddleLocation(scheduleMemberId, { locationId, scheduleId }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["suggestedLocations"] });
+      router.push("/election/result");
     },
     onError: (error) => {
       console.error("투표 실패", error);

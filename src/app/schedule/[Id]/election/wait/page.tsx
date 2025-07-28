@@ -11,7 +11,6 @@ import { useParams } from "next/navigation";
 import { getSuggestedLocations } from "@/lib/api/ElectionApi";
 
 const ElectionWait = () => {
-  //const noVoteCount = 0; //퍼블리싱 임시 변수
   const [isSmOrLarger, setIsSmOrLarger] = useState(false);
   const route = useRouter();
   const [noVoteCount, setNoVoteCount] = useState<number | null>(null);
