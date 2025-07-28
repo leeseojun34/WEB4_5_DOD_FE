@@ -39,7 +39,7 @@ const ScheduleSection = ({
     <>
       <div className={`flex flex-col gap-6 w-full ${className}`}>
         <div className="flex justify-between items-center">
-          <div className="text-[color:var(--color-black)] font-semibold">
+          <div className="text-[color:var(--color-black)] font-semibold text-xl">
             {title}
           </div>
           {showLoadButton && (

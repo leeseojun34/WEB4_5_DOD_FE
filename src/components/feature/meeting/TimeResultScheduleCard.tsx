@@ -3,6 +3,8 @@
 import ScheduleCard from "@/components/ui/ScheduleCard";
 import { formatSchedule } from "@/app/utils/dateFormat";
 import { useEffect, useState } from "react";
+import { listVariants, itemVariants } from "../schedule/motion";
+import { motion } from "framer-motion";
 
 const TimeResultScheduleCard = ({
   list,
@@ -34,18 +36,27 @@ const TimeResultScheduleCard = ({
   }, [list]);
 
   return (
-    <div className="flex flex-col gap-4">
+    <motion.div
+      variants={listVariants}
+      initial="hidden"
+      animate="visible"
+      className="flex flex-col gap-4"
+    >
       {scheduleList.map((item) => (
-        <div key={item.key} onClick={() => handleCreateSchedule(item.key)}>
+        <motion.div
+          key={item.key}
+          variants={itemVariants}
+          onClick={() => handleCreateSchedule(item.key)}
+        >
           <ScheduleCard
             variant="attendance"
             totalCount={totalParticipants}
             members={item.members}
             time={item.time}
           />
-        </div>
+        </motion.div>
       ))}
-    </div>
+    </motion.div>
   );
 };
 export default TimeResultScheduleCard;

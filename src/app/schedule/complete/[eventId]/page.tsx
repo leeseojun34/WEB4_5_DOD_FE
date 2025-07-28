@@ -17,7 +17,7 @@ import GlobalLoading from "@/app/loading";
 import Toast from "@/components/ui/Toast";
 
 const Complete = () => {
-  const { eventId } = useParams();
+  const { eventId, group } = useParams();
   const [eventInfo, setEventInfo] = useState<EventInfoType | null>(null);
   const router = useRouter();
 
@@ -84,7 +84,9 @@ const Complete = () => {
           모임 친구들과 시간 맞추러 가기
         </div>
         <Link
-          href={`/meeting/${eventInfo.eventId}/coordinate`}
+          href={`/meeting/${eventInfo.eventId}/coordinate${
+            group ? `?group=true` : ""
+          }`}
           className="w-full text-center"
         >
           <Button state="default">이동</Button>
