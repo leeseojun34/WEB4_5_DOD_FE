@@ -12,11 +12,20 @@ gsap.registerPlugin(ScrollTrigger);
 
 const Section2 = () => {
   const titleRef = useRef<HTMLDivElement>(null);
-  const descriptionRef = useRef<HTMLDivElement>(null);
+  const description1Ref = useRef<HTMLParagraphElement>(null);
+  const description2Ref = useRef<HTMLParagraphElement>(null);
   const messageRef = useRef<HTMLDivElement>(null);
+  const iphoneImgRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
-    if (!titleRef.current || !descriptionRef.current) return;
+    if (
+      !titleRef.current ||
+      !description1Ref.current ||
+      !description2Ref.current ||
+      !messageRef.current ||
+      !iphoneImgRef.current
+    )
+      return;
     const messageEls = gsap.utils.toArray<HTMLDivElement>(".message-item");
 
     gsap.fromTo(
@@ -30,23 +39,54 @@ const Section2 = () => {
           trigger: titleRef.current,
           start: "top 85%",
           end: "top 50%",
-          scrub: 1,
+          scrub: 2,
         },
       }
     );
 
     gsap.fromTo(
-      descriptionRef.current,
+      description1Ref.current,
       { y: 50, opacity: 0 },
       {
         y: 0,
         opacity: 1,
         ease: "power3.out",
         scrollTrigger: {
-          trigger: descriptionRef.current,
+          trigger: description1Ref.current,
           start: "top 85%",
           end: "top 50%",
-          scrub: 1,
+          scrub: 2,
+        },
+      }
+    );
+    gsap.fromTo(
+      description2Ref.current,
+      { y: 50, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: description2Ref.current,
+          start: "top 85%",
+          end: "top 50%",
+          scrub: 2,
+        },
+      }
+    );
+
+    gsap.fromTo(
+      iphoneImgRef.current,
+      { y: 50, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: iphoneImgRef.current,
+          start: "top 85%",
+          end: "top 50%",
+          scrub: 2,
         },
       }
     );
@@ -91,16 +131,14 @@ const Section2 = () => {
           스케쥴 잡다가
           <br /> 시간 다 간 적 있나요?
         </div>
-        <div
-          ref={descriptionRef}
-          className="text-xs text-[color:var(--color-white)] text-center leading-6"
-        >
-          💬 단톡방에서 끝없는 시간 조율…
-          <br />
-          🤯 시간, 장소, 링크 따로 관리하느라 정신없다면?
+        <div className="text-xs text-[color:var(--color-white)] text-center leading-6 flex flex-col">
+          <p ref={description1Ref}>💬 단톡방에서 끝없는 시간 조율…</p>
+          <p ref={description2Ref}>
+            🤯 시간, 장소, 링크 따로 관리하느라 정신없다면?
+          </p>
         </div>
         <div className="relative">
-          <Image src={iphoneImage} alt="아이폰 이미지" />
+          <Image ref={iphoneImgRef} src={iphoneImage} alt="아이폰 이미지" />
 
           <div
             ref={messageRef}
