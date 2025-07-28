@@ -6,7 +6,7 @@ import dashboardImg from "@/assets/images/landing_dashbard.png";
 
 const Section5 = () => {
   return (
-    <SectionLayout>
+    <SectionLayout sectionNum="section5">
       <div className="font-bold text-[28px] text-[color:var(--color-black)] w-full text-start">
         내 하루와 모임, <br />
         <span className="text-[color:var(--color-primary-400)]">대시보드</span>
