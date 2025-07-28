@@ -30,51 +30,50 @@ const Section4 = () => {
     const timeline = gsap.timeline({
       scrollTrigger: {
         trigger: titleRef.current,
-        start: "top 90%",
-        end: "top 10%",
-        scrub: 2,
+        start: "top 80%",
+        toggleActions: "play none none none",
       },
     });
 
     timeline.fromTo(
       titleRef.current,
-      { y: 50, opacity: 0 },
-      { y: 0, opacity: 1, ease: "power4.out", duration: 2 }
+      { y: 40, opacity: 0 },
+      { y: 0, opacity: 1, ease: "power4.out", duration: 0.8 }
     );
 
     timeline.fromTo(
       [subtitle1Ref.current, groupManagementImgRef.current],
-      { y: 50, opacity: 0 },
-      { y: 0, opacity: 1, ease: "power4.out", duration: 2 },
-      "+=0.2"
+      { y: 40, opacity: 0 },
+      { y: 0, opacity: 1, ease: "power4.out", duration: 0.8 },
+      "+=0.3"
     );
 
     timeline.fromTo(
       description1Ref.current,
-      { y: 50, opacity: 0 },
-      { y: 0, opacity: 1, ease: "power4.out", duration: 2 },
-      "+=0.2"
+      { y: 40, opacity: 0 },
+      { y: 0, opacity: 1, ease: "power4.out", duration: 0.8 },
+      "+=0.3"
     );
 
     timeline.fromTo(
       [subtitle2Ref.current, groupAnalyticsImgRef.current],
-      { y: 50, opacity: 0 },
-      { y: 0, opacity: 1, ease: "power4.out", duration: 2 },
-      "+=0.2"
+      { y: 40, opacity: 0 },
+      { y: 0, opacity: 1, ease: "power4.out", duration: 0.8 },
+      "+=0.3"
     );
 
     timeline.fromTo(
       description2Ref.current,
-      { y: 50, opacity: 0 },
-      { y: 0, opacity: 1, ease: "power4.out", duration: 2 },
-      "+=0.2"
+      { y: 40, opacity: 0 },
+      { y: 0, opacity: 1, ease: "power4.out", duration: 0.8 },
+      "+=0.3"
     );
   }, []);
   return (
     <SectionLayout sectionNum="section4">
       <div
         ref={titleRef}
-        className="text-[28px] font-bold text-[color:var(--color-black)]"
+        className="text-[28px] font-bold text-[color:var(--color-black)] w-full text-center"
       >
         <span className="text-[color:var(--color-primary-400)]">그룹</span>과
         함께, <br />더 체계적으로
