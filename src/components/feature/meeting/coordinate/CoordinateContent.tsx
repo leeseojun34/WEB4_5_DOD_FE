@@ -53,7 +53,9 @@ const CoordinateContent = ({
       <ActionButtons
         className="sm:mt-2"
         isConfirmed={isConfirmed}
-        complete={true}
+        complete={
+          eventScheduleInfo.confirmedMembers === eventScheduleInfo.totalMembers
+        }
       />
     </div>
   );
