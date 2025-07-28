@@ -13,10 +13,10 @@ interface SubwayCardProps {
   isPointer?: boolean;
 }
 
-interface MetroTransfer {
-  line: string;
-  color: string;
-}
+// interface MetroTransfer {
+//   line: string;
+//   color: string;
+// }
 
 const SubwayCard: React.FC<SubwayCardProps> = ({
   station,

@@ -48,8 +48,8 @@ const LocationEditBottomSheet = ({
       scheduleId,
       data: {
         specificLocation: destination,
-        specificLatitude: destinationLatitude,
-        specificLongitude: destinationLongitude,
+        specificLatitude: destinationLatitude?.toString(),
+        specificLongitude: destinationLongitude?.toString(),
       },
     });
     setIsOpen(false);
