@@ -4,6 +4,7 @@ import Image from "next/image";
 import rabbit from "@/assets/images/logo_half_rabbit.png";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
+import useMediaQuery from "../feature/schedule/hooks/useMediaQuery";
 
 const MainLogo = () => {
   const logoRef = useRef<HTMLDivElement>(null);
@@ -14,22 +15,27 @@ const MainLogo = () => {
   useEffect(() => {
     const timeline = gsap.timeline();
 
-    timeline.fromTo(
-      [imageRef.current, leftTextRef.current],
-      { x: -100, opacity: 0 },
-      { x: 0, opacity: 1, duration: 1, ease: "power3.out" }
-    ).fromTo(
-      rightTextRef.current,
-      { x: 100, opacity: 0 },
-      { x: 0, opacity: 1, duration: 1, ease: "power3.out" },
-      "-=0.8"
-    );
+    timeline
+      .fromTo(
+        [imageRef.current, leftTextRef.current],
+        { x: -30, opacity: 0 },
+        { x: 0, opacity: 1, duration: 1.5, ease: "power3.out" }
+      )
+      .fromTo(
+        rightTextRef.current,
+        { x: 30, opacity: 0 },
+        { x: 0, opacity: 1, duration: 1.5, ease: "power3.out" },
+        "-=0.8"
+      );
   }, []);
+  const isSE = useMediaQuery("(max-width: 429px)");
 
   return (
     <div
       ref={logoRef}
-      className="relative z-20 font-[TTTogether] text-[170px] sm:text-[200px] md:text-[250px] text-[color:var(--color-primary-400)] "
+      className={`relative z-20 font-[TTTogether] ${
+        isSE ? "text-[150px]" : "text-[170px]"
+      } sm:text-[200px] md:text-[250px] text-[color:var(--color-primary-400)]`}
     >
       <Image
         ref={imageRef}
