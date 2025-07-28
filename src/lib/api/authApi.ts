@@ -174,6 +174,30 @@ export const useResgisterCalendarId = () => {
       ToastWell("🎉", "구글 캘린더 등록 완료!");
       queryClient.invalidateQueries({ queryKey: ["calendarId"] });
     },
+    onError: (err) => {
+      console.error("구글 캘린더 등록 실패", err);
+      Toast("구글 캘린더 등록 실패");
+    },
+  });
+};
+
+// 구글 캘린더 Id 삭제 (delete)
+const deleteCalendarId = async () => {
+  return await axiosInstance.delete("/calendar/public-id");
+};
+
+export const useDeleteCalendarId = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: deleteCalendarId,
+    onSuccess: () => {
+      ToastWell("🎉", "구글 캘린더 삭제 완료!");
+      queryClient.invalidateQueries({ queryKey: ["calendarId"] });
+    },
+    onError: (err) => {
+      console.error("구글 캘린더 삭제 실패", err);
+      Toast("구글 캘린더 삭제 실패");
+    },
   });
 };
 

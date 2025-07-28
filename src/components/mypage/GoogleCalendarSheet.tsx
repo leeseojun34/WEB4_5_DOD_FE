@@ -6,11 +6,14 @@ import { Button } from "../ui/Button";
 import Input from "../ui/Input";
 import { ChangeEvent, useEffect, useState } from "react";
 import Tip from "../ui/Tip";
+import { useDeleteCalendarId } from "@/lib/api/authApi";
+import AlertBox from "../ui/AlertBox";
 
 type GoogleCalendarSheetType = {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
   text: string;
+  hasGoogleCalendarId: boolean;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   onSave: () => void;
 };
@@ -19,10 +22,17 @@ export default function GoogleCalendarSheet({
   isOpen,
   setIsOpen,
   text,
+  hasGoogleCalendarId,
   onChange,
   onSave,
 }: GoogleCalendarSheetType) {
+  const isValidCalendarId = (id: string) =>
+    /^[a-zA-Z0-9]+@(gmail\.com|group\.calendar\.google\.com)$/.test(id);
+  const [initialCalendarId, setInitialCalendarId] = useState(text);
+  const isValidForm = isValidCalendarId(text) && !hasGoogleCalendarId;
+  const isInputDisabled = hasGoogleCalendarId || !isValidForm;
   const [isMobile, setIsMobile] = useState(false);
+
   useEffect(() => {
     const update = () => setIsMobile(window.innerWidth <= 640);
     update();
@@ -31,9 +41,16 @@ export default function GoogleCalendarSheet({
   }, []);
 
   const snapHeight = isMobile ? 0.8 : 0.55;
-
   const contentStyle = {
     height: isMobile ? "calc(100vh - 10%)" : "calc(100vh - 35%)",
+  };
+
+  const deleteMutation = useDeleteCalendarId();
+  const handleDelete = () => {
+    if (!initialCalendarId) return;
+    deleteMutation.mutate();
+    setInitialCalendarId("");
+    setIsOpen(false);
   };
 
   return (
@@ -53,32 +70,61 @@ export default function GoogleCalendarSheet({
             </span>
             <X
               size={20}
-              onClick={() => setIsOpen(false)}
+              onClick={() => {
+                setIsOpen(false);
+                setInitialCalendarId("");
+              }}
               className="text-[var(--color-black)] cursor-pointer"
             />
           </div>
 
           <div className="w-full max-w-[700px] mx-auto flex flex-col gap-8">
-            <Input
-              label="구글캘린더ID"
-              className="flex flex-col gap-2 w-full"
-              value={text}
-              onChange={onChange}
-              placeholder="구글캘린더 ID를 입력해주세요."
-            />
-
-            <Tip>
-              연결해서 사용하고 싶은 캘린더 ID를 복사해서 붙여 넣어주세요.
-              <br />
-              <br />
-              <strong>[복사 경로]</strong>
-              <br />
-              구글 캘린더 → 설정 → 내 캘린더의 설정 → 연결하고 싶은 캘린더 선택
-              → 캘린더 통합/캘린더 ID 복사
-            </Tip>
+            <div className="w-full h-12 flex flex-col gap-2">
+              <Input
+                label="구글캘린더ID"
+                value={text}
+                className={`flex flex-col gap-2 w-full ${
+                  isInputDisabled
+                    ? "opacity-50 pointer-events-none disabled:bg-[var(--color-gray-placeholder)]"
+                    : ""
+                }`}
+                onChange={onChange}
+                placeholder="구글캘린더 ID를 입력해주세요."
+              />
+              {!isValidForm && (
+                <p className="text-xs text-[var(--color-red)] ml-2 ">
+                  *구글 캘린더 ID는 gmail.com 또는 group.calendar.google.com
+                  형식이어야 합니다.
+                </p>
+              )}
+            </div>
+            {hasGoogleCalendarId ? null : (
+              <Tip>
+                연결해서 사용하고 싶은 캘린더 ID를 복사해서 붙여 넣어주세요.
+                <br />
+                <br />
+                <strong>[복사 경로]</strong>
+                <br />
+                구글 캘린더 → 설정 → 내 캘린더의 설정 → 연결하고 싶은 캘린더
+                선택 → 캘린더 통합/캘린더 ID 복사
+              </Tip>
+            )}
+            {text && (
+              <div className="flex justify-center items-center">
+                <AlertBox
+                  actionHandler={handleDelete}
+                  content="삭제하시겠습니까?"
+                  cancel="취소"
+                  action="삭제하기">
+                  <span className="font-light text-xs text-[var(--color-gray-placeholder)] hover:text-[var(--color-primary-400)] cursor-pointer">
+                    삭제하기
+                  </span>
+                </AlertBox>
+              </div>
+            )}
 
             <Button
-              state={text ? "default" : "disabled"}
+              state={!text || hasGoogleCalendarId ? "disabled" : "default"}
               className="w-full h-12"
               onClick={() => {
                 onSave();

@@ -237,11 +237,12 @@ function MyPage() {
       )}
       {sheetType === "calendar" && (
         <GoogleCalenaderSheet
+          text={calendarId}
+          hasGoogleCalendarId={hasGoogleCalendarId}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           onSave={handleGoogleCalendar}
           onChange={(e) => setCalendarId(e.target.value)}
-          text={calendarId}
         />
       )}
     </div>
