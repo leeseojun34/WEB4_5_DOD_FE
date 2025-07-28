@@ -141,7 +141,7 @@ const ScheduleCard = (props: ScheduleCardProps) => {
           </div>
           <div className="flex gap-1">
             {members.map((member, i) => (
-              <NameTag name={member} key={`${member}-${i}`} />
+              <NameTag name={member} key={`${member}-${i}`} isFuture={true} />
             ))}
           </div>
         </div>
