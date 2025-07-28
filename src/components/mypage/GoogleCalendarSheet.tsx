@@ -27,6 +27,7 @@ export default function GoogleCalendarSheet({
   onSave,
 }: GoogleCalendarSheetType) {
   const [inputValue, setInputValue] = useState(text);
+  const [registered, setRegistered] = useState(hasGoogleCalendarId); // ✅ 내부 등록 여부 상태
 
   const isValidCalendarId = (id: string) =>
     /^[a-zA-Z0-9]+@(gmail\.com|group\.calendar\.google\.com)$/.test(id);
@@ -34,8 +35,8 @@ export default function GoogleCalendarSheet({
   const isValidForm = isValidCalendarId(inputValue);
   const shouldShowError =
     !isValidForm && inputValue.length > 0 && !hasGoogleCalendarId;
-  const isInputDisabled = hasGoogleCalendarId;
-  const isButtonDisabled = !isValidForm || hasGoogleCalendarId;
+  const isInputDisabled = registered || hasGoogleCalendarId;
+  const isButtonDisabled = !isValidForm || registered || hasGoogleCalendarId;
 
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
@@ -44,6 +45,13 @@ export default function GoogleCalendarSheet({
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);
   }, []);
+
+  useEffect(() => {
+    if (isOpen) {
+      setInputValue(text);
+      setRegistered(hasGoogleCalendarId);
+    }
+  }, [isOpen, text, hasGoogleCalendarId]);
 
   const snapHeight = isMobile ? 0.8 : 0.55;
   const contentStyle = {
@@ -54,8 +62,9 @@ export default function GoogleCalendarSheet({
 
   const handleDelete = () => {
     deleteMutation.mutate();
-    setInputValue("");
+    setRegistered(false);
     setIsOpen(false);
+    handleClose();
   };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -70,6 +79,7 @@ export default function GoogleCalendarSheet({
 
   const handleSave = () => {
     onSave(inputValue);
+    setRegistered(true);
     handleClose();
   };
 
