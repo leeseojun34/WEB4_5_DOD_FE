@@ -63,8 +63,8 @@ const Section5 = () => {
       {
         y: 0,
         opacity: 1,
-        duration: 1.4,
-        stagger: 0.8,
+        duration: 1.2,
+        stagger: 0.4,
         ease: "power4.out",
         scrollTrigger: {
           trigger: description1Ref.current,
@@ -90,7 +90,7 @@ const Section5 = () => {
         alt="대시보드 미리보기 이미지"
         unoptimized
       />
-      <div className="flex flex-col gap-2 text-sm text-[color:var(--color-gray)] pb-20">
+      <div className="flex flex-col gap-4 text-sm text-[color:var(--color-gray)] pb-20 mt-3">
         <p ref={description1Ref}>🗓️ 캘린더로 나의 하루를 정리하고</p>
         <p ref={description2Ref}>📌 모임 일정은 리스트로 쏙쏙</p>
         <p ref={description3Ref}>🔍 참여한 모든 모임을 한눈에 확인해요!</p>
