@@ -1,27 +1,26 @@
 "use client";
 import Map from "@/components/feature/kakaoMap/Map";
-import GroupHeader from "@/components/layout/GroupHeader";
+
 import Header from "@/components/layout/Header";
-import HeaderTop from "@/components/layout/HeaderTop";
+
 import PopupMessage from "@/components/ui/PopupMessage";
 import ShareButton from "@/components/ui/ShareButton";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { getSuggestedLocations, useSchedule } from "@/lib/api/ElectionApi";
+import { getSuggestedLocations } from "@/lib/api/ElectionApi";
 import { useKakaoShare } from "@/lib/api/useKakaoShare";
 import BlurredChevronHeader from "@/components/layout/BlurredChevronHeader";
 
 const ElectionWait = () => {
   const [isSmOrLarger, setIsSmOrLarger] = useState(false);
   const route = useRouter();
-  const [noVoteCount, setNoVoteCount] = useState<number | null>(null);
   const [noDepartLocationCount, setNoDepartLocationCount] = useState<
     number | null
   >(null);
   const params = useParams();
   const scheduleId = params.id as string;
-  const { data: schedule } = useSchedule(scheduleId);
+  //const { data: schedule } = useSchedule(scheduleId);
   const { shareWithTemplate } = useKakaoShare();
   const shareClickHandler = () => {
     shareWithTemplate(
@@ -39,7 +38,6 @@ const ElectionWait = () => {
     const fetchSuggestedLocations = async () => {
       try {
         const response = await getSuggestedLocations(scheduleId);
-        setNoVoteCount(response.data.noVoteCount);
         setNoDepartLocationCount(response.data.noDepartLocationCount);
       } catch (error) {
         console.error("중간 장소 후보 조회 실패", error);

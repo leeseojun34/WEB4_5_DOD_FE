@@ -4,8 +4,6 @@ import SubwaySearch from "@/components/feature/kakaoMap/SubwaySearch";
 import { useEffect, useState } from "react";
 import { kakaoSearch } from "@/types/kakaoSearch";
 import Map from "@/components/feature/kakaoMap/Map";
-import HeaderTop from "@/components/layout/HeaderTop";
-import GroupHeader from "@/components/layout/GroupHeader";
 import BottomSheet from "@/components/ui/BottomSheet";
 import Header from "@/components/layout/Header";
 import useAuthStore from "@/stores/authStores";
