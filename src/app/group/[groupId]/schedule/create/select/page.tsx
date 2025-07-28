@@ -107,7 +107,7 @@ const GroupScheduleCreateSelectPage = () => {
           <div className="fixed w-full left-0 right-0 px-5 bottom-9">
             <div className="max-w-185 mx-auto">
               <div className="w-full flex justify-center">
-                <Button onClick={handleNavigate}>그룹 일정으로 불러오기</Button>
+                <Button onClick={handleNavigate}>그룹 일정 생성하기</Button>
               </div>
             </div>
           </div>

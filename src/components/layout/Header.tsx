@@ -34,7 +34,7 @@ const Header = ({ type = "" }: { type?: "" | "blue" }) => {
               width={24}
               height={24}
               className="cursor-pointer"
-              onClick={() => router.push("/schedule/create")}
+              onClick={() => router.push("/meeting")}
             />
             <Image
               src={profile}

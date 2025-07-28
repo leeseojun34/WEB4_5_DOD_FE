@@ -30,7 +30,7 @@ const ScheduleForm = ({
       <Input
         label="모임 이름"
         error="10글자를 이내로 작성해주세요"
-        maxLength={15}
+        maxLength={20}
         placeholder="모임 이름을 입력해주세요"
         value={scheduleName}
         onChange={onScheduleNameChange}
