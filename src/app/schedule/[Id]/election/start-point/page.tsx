@@ -12,6 +12,7 @@ import useAuthStore from "@/stores/authStores";
 import { useParams } from "next/navigation";
 import { useGroupSchedule } from "@/lib/api/scheduleApi";
 import GlobalLoading from "@/app/loading";
+import BlurredChevronHeader from "@/components/layout/BlurredChevronHeader";
 //import { useRouter } from "next/navigation";
 
 const StartPoint = () => {
@@ -24,19 +25,8 @@ const StartPoint = () => {
   const { user } = useAuthStore();
   const userId = user?.id;
   const params = useParams();
-  const scheduleId = params.Id as string;
+  const scheduleId = params.id as string;
   const { data: scheduleData, isPending } = useGroupSchedule(scheduleId);
-  //const route = useRouter();
-
-  //console.log("scheduleId:", scheduleId);
-  //console.log("Id:", userId);
-
-  //스케줄 아이디가 없으면 메인으로
-  // useEffect(() => {
-  //   if (!userId || !scheduleData) {
-  //     route.replace("/"); // 메인으로 리디렉트
-  //   }
-  // }, [userId, scheduleData, route]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -53,7 +43,9 @@ const StartPoint = () => {
     setSelectedStation(station);
     console.log(station);
     //setIsSheetOpen(false);
-    if (isPending) return <GlobalLoading />;
+    if (!userId || isPending || !scheduleData) {
+      return <GlobalLoading />;
+    }
   };
   return (
     <main className="flex flex-col h-screen relative w-full mx-auto">
@@ -61,17 +53,8 @@ const StartPoint = () => {
         {" "}
         <Header type="blue" />{" "}
       </div>
-      {isSmOrLarger ? (
-        <GroupHeader
-          name={scheduleData?.data.scheduleName}
-          count={scheduleData?.data.members.length || 0}
-          description={scheduleData?.data.description}
-          isLeader={true}
-          type="schedule"
-        />
-      ) : (
-        <HeaderTop fontColor="black" backward={true} />
-      )}
+      {isSmOrLarger ? "" : <BlurredChevronHeader />}
+
       <div className="flex-1 w-full ">
         <Map
           longitude={selectedStation ? Number(selectedStation.x) : 127.0106459}
