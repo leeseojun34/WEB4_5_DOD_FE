@@ -44,8 +44,10 @@ function NameSheet({
               onChange={onChange}
               placeholder="이름을 입력해주세요."
               onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                if (e.nativeEvent.isComposing) return;
                 if (e.key === "Enter") {
                   e.preventDefault();
+                  // console.log("이름 수정 클릭, enter key pressed");
                   onSave();
                   setIsOpen(false);
                 }
@@ -57,6 +59,7 @@ function NameSheet({
               className="h-full flex items-center justify-center"
               state={text.trim() === "" ? "disabled" : "default"}
               onClick={() => {
+                // console.log("이름 수정 클릭");
                 onSave();
                 setIsOpen(false);
               }}>
