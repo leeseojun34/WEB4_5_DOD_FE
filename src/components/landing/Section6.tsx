@@ -6,8 +6,8 @@ import studyRabbitsImg from "@/assets/images/landing_study_rabbits.png";
 
 const Section6 = () => {
   return (
-    <SectionLayout>
-      <div className="flex flex-col gap-11">
+    <SectionLayout sectionNum="section6" bgColor="skyblue">
+      <div className="flex flex-col gap-11 items-center">
         <div className="font-bold text-[28px] text-[color:var(--color-black)]">
           <span className="text-[color:var(--color-primary-400)]">모임</span>의
           시작부터 끝까지
