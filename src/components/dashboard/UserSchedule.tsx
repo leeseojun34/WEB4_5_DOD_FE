@@ -10,12 +10,16 @@ import {
 } from "@/lib/api/dashboardApi";
 import EmptyUserScheduleList from "./EmptyUserScheduleList";
 import GlobalLoading from "@/app/loading";
+import useAuthRequired from "../feature/schedule/hooks/useAuthRequired";
 
 const UserSchedule = () => {
   const { data: userSchedules, isPending: isUserSchedulePending } =
     useUserSchedulse();
+  const { isAuthenticated, isLoading } = useAuthRequired();
 
-  if (isUserSchedulePending) return <GlobalLoading />;
+  if (isLoading || !isAuthenticated || isUserSchedulePending) {
+    return <GlobalLoading />;
+  }
 
   const userSchedule = Object.values(
     userSchedules
