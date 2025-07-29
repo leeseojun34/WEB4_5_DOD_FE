@@ -88,12 +88,12 @@ const Section6 = () => {
       <div className="flex flex-col gap-11 items-center">
         <div
           ref={titleRef}
-          className="font-bold text-[28px] text-[color:var(--color-black)]"
+          className="font-bold text-[28px] text-[color:var(--color-black)] sm:text-4xl"
         >
           <span className="text-[color:var(--color-primary-400)]">모임</span>의
           시작부터 끝까지
         </div>
-        <div className="font-medium text-xl text-[color:var(--color-gray)]">
+        <div className="text-xl text-[color:var(--color-gray)] mb-10">
           <p ref={description1Ref} className="w-full text-center">
             당신의 소중한 시간을 더 가치있게
           </p>
@@ -109,6 +109,7 @@ const Section6 = () => {
           ref={imgRef}
           src={studyRabbitsImg}
           alt="스터디하는 토끼 이미지"
+          className="mb-30"
         />
       </div>
     </SectionLayout>

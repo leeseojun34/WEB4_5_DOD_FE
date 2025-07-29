@@ -6,7 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import zoomRabbits from "@/assets/images/zoom_rabbits.png";
 import mapRabbits from "@/assets/images/map_rabbits.png";
 import timetableRabbits from "@/assets/images/timetable_rabbits.png";
-import bikeRabbit from "@/assets/images/bike_rabbit.png";
+import vacationRabbit from "@/assets/images/vacation_rabbit.png";
 import MvpCard from "./MvpCard";
 
 const mvpCards = [
@@ -16,7 +16,7 @@ const mvpCards = [
       "이름과 시간만 입력하면 바로 생성!",
       "링크 공유로 빠르게 참여받기 🙌",
     ],
-    imageSrc: bikeRabbit,
+    imageSrc: vacationRabbit,
   },
   {
     title: "가능한 시간대 한눈에 확인",
@@ -98,7 +98,7 @@ export default function Section3() {
       ref={wrapperRef}
       className="w-screen h-screen overflow-hidden bg-white min-w-[375px] max-w-[740px] mx-auto"
     >
-      <div className="pl-10 pt-20 font-bold text-[28px] text-[color:var(--color-black)] text-start w-full">
+      <div className="pl-10 pt-20 font-bold text-[28px] text-[color:var(--color-black)] text-start w-full sm:text-4xl">
         복잡한{" "}
         <span className="text-[color:var(--color-primary-400)]">일정 </span>
         조율,

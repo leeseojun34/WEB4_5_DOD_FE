@@ -78,7 +78,7 @@ const Section5 = () => {
     <SectionLayout sectionNum="section5">
       <div
         ref={titleRef}
-        className="font-bold text-[28px] text-[color:var(--color-black)] w-full text-start"
+        className="font-bold text-[28px] text-[color:var(--color-black)] w-full text-start sm:text-4xl leading-12 mb-4"
       >
         내 하루와 모임, <br />
         <span className="text-[color:var(--color-primary-400)]">대시보드</span>

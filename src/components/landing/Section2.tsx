@@ -126,12 +126,12 @@ const Section2 = () => {
       <div className="flex flex-col gap-9">
         <div
           ref={titleRef}
-          className="font-bold text-[color:var(--color-white)] text-[28px] text-center "
+          className="font-bold text-[color:var(--color-white)] text-[28px] text-center sm:text-4xl leading-12"
         >
           스케쥴 잡다가
           <br /> 시간 다 간 적 있나요?
         </div>
-        <div className="text-xs text-[color:var(--color-white)] text-center leading-6 flex flex-col">
+        <div className="text-xs text-[color:var(--color-white)] text-center leading-10 flex flex-col sm:text-xl">
           <p ref={description1Ref}>💬 단톡방에서 끝없는 시간 조율…</p>
           <p ref={description2Ref}>
             🤯 시간, 장소, 링크 따로 관리하느라 정신없다면?
