@@ -61,7 +61,7 @@ const SubwaySearch = ({
     if (snapTo) snapTo(1);
   };
 
-  console.log(selectedStation);
+  //console.log(selectedStation);
 
   return (
     <div className="w-full flex flex-col items-center justify-center px-5">

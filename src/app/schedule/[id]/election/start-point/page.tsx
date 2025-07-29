@@ -11,7 +11,7 @@ import { useParams } from "next/navigation";
 import { useGroupSchedule } from "@/lib/api/scheduleApi";
 import GlobalLoading from "@/app/loading";
 import BlurredChevronHeader from "@/components/layout/BlurredChevronHeader";
-//import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 const StartPoint = () => {
   const [selectedStation, setSelectedStation] = useState<kakaoSearch | null>(
@@ -25,6 +25,7 @@ const StartPoint = () => {
   const params = useParams();
   const scheduleId = params.id as string;
   const { data: scheduleData, isPending } = useGroupSchedule(scheduleId);
+  const router = useRouter();
 
   useEffect(() => {
     const handleResize = () => {
@@ -36,6 +37,20 @@ const StartPoint = () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  useEffect(() => {
+    if (isPending) return;
+    console.log(scheduleData);
+    if (!scheduleData || !scheduleData.data.members || !userId) return;
+    const isRegistered = scheduleData.data.members.some(
+      (member: MemberType) =>
+        member.id === userId && !!member.departLocationName
+    );
+    console.log(isRegistered);
+    if (isRegistered) {
+      router.replace("../election/wait");
+    }
+  }, [scheduleData, userId, isPending, router]);
 
   const selectStationHandler = (station: kakaoSearch) => {
     setSelectedStation(station);
