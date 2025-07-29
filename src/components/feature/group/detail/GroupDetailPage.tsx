@@ -9,22 +9,29 @@ import { useGroupDetailPage } from "./hooks/useGroupDetailLogic";
 import { usePrefetchGroupData } from "./hooks/usePrefetchGroupData";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Toast from "@/components/ui/Toast";
+import { AxiosError } from "axios";
 
 const GroupDetailPage = () => {
   const { groupId, userPending, isMember } = useGroupDetailPage();
-  const router= useRouter()
+  const router = useRouter();
   const {
     data: groupData,
     isPending: groupPending,
-    isError,
+    error,
   } = useGroupSchedules(groupId, isMember);
   usePrefetchGroupData(groupId, groupData?.data?.scheduleDetails);
 
+  const err = error as AxiosError<{ status: number }>;
+
   useEffect(() => {
-    if (isError) {
-      router.push("/");
+    if (err) {
+      if (err.response?.status === 403) {
+        router.push("/");
+        Toast("해당 그룹원의 그룹원이 아닙니다.");
+      }
     }
-  });
+  }, [err, router]);
 
   if (userPending || groupPending || !groupData) {
     return <GlobalLoading />;

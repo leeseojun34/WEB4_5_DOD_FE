@@ -6,9 +6,21 @@ import TimeEditBottomSheet from "@/components/feature/schedule/editSchedule/Time
 import { useEditSchedule } from "@/components/feature/schedule/editSchedule/hooks/useEditSchedule";
 import Header from "@/components/layout/Header";
 import HeaderTop from "@/components/layout/HeaderTop";
-import { useParams } from "next/navigation";
+import Toast from "@/components/ui/Toast";
+import useAuthStore from "@/stores/authStores";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 const EditScheduleInfoPage = () => {
+  const user = useAuthStore((state) => state.user);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!user) {
+      router.push("/auth/login");
+      Toast("로그인 후 이용해주세요");
+    }
+  }, [user, router]);
   const params = useParams();
   const id = params.id as string;
 

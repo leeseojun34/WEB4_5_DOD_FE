@@ -2,7 +2,7 @@
 
 import { useGroupSchedule } from "@/lib/api/scheduleApi";
 import WorkspaceItem from "./WorkspaceItem";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import WorkspaceSkeletonItem from "./WorkspaceSkeletonItem";
 import { motion } from "framer-motion";
 import WorkspaceBottomSheet from "./WorkspaceBottomSheet";
@@ -10,6 +10,9 @@ import { useWorkspaceModal } from "./hooks/useWorkspaceModal";
 import { itemVariants, listVariants } from "../../motion";
 import Image from "next/image";
 import noWorkspaceImg from "@/assets/images/no_workspace.png";
+import useAuthStore from "@/stores/authStores";
+import { useEffect } from "react";
+import Toast from "@/components/ui/Toast";
 
 interface WorkspaceType {
   type: WorkspacePlatformType;
@@ -19,6 +22,16 @@ interface WorkspaceType {
 }
 
 const EditWorkspace = () => {
+  const user = useAuthStore((state) => state.user);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!user) {
+      router.push("/auth/login");
+      Toast("로그인 후 이용해주세요");
+    }
+  }, [user, router]);
+
   const params = useParams();
   const id = params.id as string;
   const { data, isPending } = useGroupSchedule(id);

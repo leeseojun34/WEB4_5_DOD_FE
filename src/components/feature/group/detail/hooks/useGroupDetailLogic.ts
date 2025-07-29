@@ -61,7 +61,7 @@ export const useGroupDetailPage = () => {
     fetchUser();
   }, [fetchUser]);
 
-  useAuthRedirect(user, userPending, redirectUrl);
+  useAuthRedirect(user, userPending, redirectUrl, fromInvite);
   const { isMember } = useGroupMembership(fromInvite, user, groupId);
 
   return {
