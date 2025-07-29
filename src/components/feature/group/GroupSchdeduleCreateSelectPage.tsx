@@ -23,14 +23,20 @@ const GroupScheduleCreateSelectPage = () => {
   const params = useParams();
   const groupId = params?.groupId;
   const router = useRouter();
-  const user = useAuthStore((state) => state.user);
+  const { user } = useAuthStore();
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    if (!user) {
+    setIsMounted(true);
+  }, []);
+  useEffect(() => {
+    if (!user && isMounted) {
+      Toast("로그인 후 이용해주세요.");
       router.push("/auth/login");
-      Toast("로그인 후 이용해주세요");
     }
-  }, [router, user]);
+  }, [isMounted, user, router]);
+
+  if (!user || !isMounted) return null;
 
   const handleNavigate = () => {
     if (selected === "create") {

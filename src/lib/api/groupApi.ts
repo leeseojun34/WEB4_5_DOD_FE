@@ -193,9 +193,10 @@ export const useLeaveGroup = () => {
       queryClient.invalidateQueries({ queryKey: ["dashboard", "groups"] });
       router.push(`/`);
     },
-    onError: (err) => {
-      console.error("그룹 나가기 실패: ", err);
-      Toast("그룹 나가기에 실패했습니다");
+    onError: (err: AxiosError<{ message: string }>) => {
+      const errMessage =
+        err?.response?.data?.message || "그룹 나가기에 실패했습니다";
+      Toast(errMessage);
     },
   });
 };

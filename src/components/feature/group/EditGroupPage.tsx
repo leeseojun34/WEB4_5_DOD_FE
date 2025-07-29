@@ -24,15 +24,19 @@ import Toast from "@/components/ui/Toast";
 import useAuthStore from "@/stores/authStores";
 
 const EditGroupPage = () => {
-  const user = useAuthStore((state) => state.user);
   const router = useRouter();
+  const { user } = useAuthStore();
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    if (!user) {
+    setIsMounted(true);
+  }, []);
+  useEffect(() => {
+    if (!user && isMounted) {
+      Toast("로그인 후 이용해주세요.");
       router.push("/auth/login");
-      Toast("로그인 후 이용해주세요");
     }
-  }, [user, router]);
+  }, [isMounted, user, router]);
 
   const queryClient = useQueryClient();
 
