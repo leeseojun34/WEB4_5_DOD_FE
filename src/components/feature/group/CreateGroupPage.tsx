@@ -10,8 +10,11 @@ import {
   listVariants,
   itemVariants,
 } from "@/components/feature/schedule/motion";
+import useAuthRequired from "../schedule/hooks/useAuthRequired";
+import GlobalLoading from "@/app/loading";
 
 const CreateGroupPage = () => {
+  const { isAuthenticated, isLoading } = useAuthRequired();
   const [groupName, setGroupName] = useState("");
   const [description, setDescription] = useState("");
 
@@ -29,6 +32,10 @@ const CreateGroupPage = () => {
     description.trim().length > 0 &&
     !createGroupMutation.isPending;
   const buttonState = !isFormValid ? "disabled" : "default";
+
+  if (isLoading || !isAuthenticated) {
+    return <GlobalLoading />;
+  }
 
   return (
     <div className="bg-[color:var(--color-white)] min-h-screen">
