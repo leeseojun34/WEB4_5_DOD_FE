@@ -25,16 +25,16 @@ const ElectionStart = () => {
         <Header />
       </div>
       <div className="flex flex-col  min-h-screen relative pt-13 pb-32 max-w-[740px] mx-auto overflow-hidden">
-        <div className="flex flex-col gap-2 px-5 pt-7.5 ">
+        <div className="flex flex-col gap-2 px-10 pt-7.5 ">
           {isLoading ? (
             <div className="h-7 w-1/3 bg-[var(--color-gray-100)] rounded animate-pulse" />
           ) : (
-            <h2 className="font-semibold sm:text-2xl text-xl text-[var(--color-gray)]">
+            <h2 className="font-semibold text-2xl text-[var(--color-gray)]">
               {schedule?.scheduleName || "내 일정 1"}
             </h2>
           )}
 
-          <h1 className="font-semibold text-xl sm:text-2xl text-[var(--color-black)]">
+          <h1 className="font-semibold text-2xl text-[var(--color-black)]">
             <span className="text-[var(--color-primary-400)]">중간 지점</span>{" "}
             찾으러 가기
           </h1>

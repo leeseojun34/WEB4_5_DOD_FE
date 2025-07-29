@@ -24,13 +24,15 @@ const ActionMyButton = () => {
   };
 
   return (
-    <div className="flex gap-5 w-full">
-      <Button
-        onClick={myScheduleRegistration}
-        state={isLoading ? "disabled" : "default"}
-      >
-        {isLoading ? "등록 중..." : "내 시간표 등록"}
-      </Button>
+    <div className="fixed w-full left-0 right-0 px-5 bottom-9">
+      <div className="max-w-185 mx-auto">
+        <Button
+          onClick={myScheduleRegistration}
+          state={isLoading ? "disabled" : "default"}
+        >
+          {isLoading ? "등록 중..." : "내 시간표 등록"}
+        </Button>
+      </div>
     </div>
   );
 };

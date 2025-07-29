@@ -15,6 +15,11 @@ export interface RemoveGroupMemberRequest {
   userId: string;
 }
 
+export interface GroupInfoType {
+  groupName: string;
+  description: string;
+}
+
 // 전체 그룹 조회
 const getGroups = async () => {
   const res = await axiosInstance.get("/groups");
@@ -131,6 +136,7 @@ export const useAddGroupMember = (setIsMember: (bool: boolean) => void) => {
       router.push(`/group/${groupId}`);
       queryClient.invalidateQueries({ queryKey: ["group", groupId] });
       queryClient.invalidateQueries({ queryKey: ["groupMembers", groupId] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard", "groups"] });
     },
     onError: (err: Error, groupId) => {
       setIsMember(true);
@@ -232,5 +238,46 @@ export const useGroups = () => {
     queryFn: getGroups,
     retry: false,
     refetchOnWindowFocus: false,
+  });
+};
+
+export const useCreateGroup = () => {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+  return useMutation({
+    mutationFn: (data: GroupInfoType) => createGroup(data),
+    onSuccess: (response) => {
+      if (response.code === "200" && response.data.groupId) {
+        queryClient.invalidateQueries({ queryKey: ["dashboard", "groups"] });
+        queryClient.invalidateQueries({ queryKey: ["groups"] });
+        router.push(`/group/${response.data.groupId}/complete`);
+      }
+    },
+    onError: () => {
+      Toast("그룹 생성에 실패했습니다");
+    },
+  });
+};
+
+export const useUpdateGroupInfo = () => {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+
+  return useMutation({
+    mutationFn: ({ groupId, data }: { groupId: string; data: GroupInfoType }) =>
+      updateGroup(groupId, data),
+    onSuccess: (_, variables) => {
+      ToastWell("✅", "정보 수정 완료!");
+      queryClient.invalidateQueries({
+        queryKey: ["dashboard", "groups"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["groupSchedule", variables.groupId],
+      });
+      router.push(`/group/${variables.groupId}`);
+    },
+    onError: () => {
+      Toast("앗, 정보 수정에 실패했어요");
+    },
   });
 };
