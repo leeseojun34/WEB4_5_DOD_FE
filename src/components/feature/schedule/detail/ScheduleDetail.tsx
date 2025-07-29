@@ -6,22 +6,26 @@ import OnlineScheduleDetail from "./OnlineScheduleDetail";
 import { useGroupSchedule } from "@/lib/api/scheduleApi";
 import GlobalLoading from "@/app/loading";
 import useAuthStore from "@/stores/authStores";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Toast from "@/components/ui/Toast";
 import { AxiosError } from "axios";
 
 const ScheduleDetail = () => {
   const params = useParams();
   const scheduleId = params.id as string;
-  const user = useAuthStore((state) => state.user);
   const router = useRouter();
+  const { user } = useAuthStore();
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    if (!user) {
+    setIsMounted(true);
+  }, []);
+  useEffect(() => {
+    if (!user && isMounted) {
+      Toast("로그인 후 이용해주세요.");
       router.push("/auth/login");
-      Toast("로그인 후 이용해주세요");
     }
-  }, [user, router]);
+  }, [isMounted, user, router]);
 
   const { data: scheduleData, isPending, error } = useGroupSchedule(scheduleId);
 
