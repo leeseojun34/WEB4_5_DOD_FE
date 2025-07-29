@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "./axiosInstance";
-import { formatDate } from "@/app/utils/dateFormat";
+import { formatDate, getMonthRange } from "@/app/utils/dateFormat";
 
 export interface DashboardScheduleType {
   id: number;
@@ -30,9 +30,10 @@ export interface DashboardGroupType {
 }
 
 export interface DashboardDetailResponse {
-  schedules: DashboardScheduleType[];
-  groups: {
-    groupDetails: DashboardGroupType[];
+  groupDetails: DashboardGroupType[];
+  googleCalendarFetchSuccess: boolean;
+  groupedSchedules: {
+    [date: string]: DashboardScheduleType[];
   };
 }
 
@@ -41,28 +42,62 @@ export interface UserScheduleResponse {
 }
 
 /**
- * 회원의 그룹리스트, 일정, 캘린더 조회
- * @param date 날짜(2025-07-12)
+ * 회원의 그룹리스트, 한달 일정 조회
+ * @param startDate 날짜(2025-07-12)
+ * @param endDate 날짜(2025-08-12)
  * @returns
  */
-export const getDashboardDetail = async (date: string) => {
-  const response = await axiosInstance.get(`/main-page`, { params: { date } });
+export const getDashboardDetail = async (
+  startDate: string,
+  endDate: string
+) => {
+  const response = await axiosInstance.get(`/main-page/calendar`, {
+    params: { startDate, endDate },
+  });
   return response.data;
 };
 
+/**
+ * 월 단위로 스케줄을 가져오고 선택된 날짜 스케줄만 반환
+ */
 export const useDashboardSchedules = (selectedDate: Date) => {
+  const { startDate, endDate, monthKey } = getMonthRange(selectedDate);
+
   return useQuery({
-    queryKey: ["dashboard", "schedules", formatDate(selectedDate)],
-    queryFn: () => getDashboardDetail(formatDate(selectedDate)),
-    select: (data) => data.data.schedules,
+    queryKey: ["dashboard", "schedules", monthKey],
+    queryFn: () => getDashboardDetail(startDate, endDate),
+    select: (data) => {
+      const groupedSchedules = data.data.groupedSchedules;
+      const selectedDateString = formatDate(selectedDate);
+
+      return groupedSchedules[selectedDateString] || [];
+    },
+    staleTime: 5 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
+  });
+};
+
+/**
+ * 월 전체 스케줄
+ */
+export const useMonthlySchedule = (selectedDate: Date) => {
+  const { startDate, endDate, monthKey } = getMonthRange(selectedDate);
+
+  return useQuery({
+    queryKey: ["dashboard", "schedules", monthKey],
+    queryFn: () => getDashboardDetail(startDate, endDate),
+    select: (data) => data.data.groupedSchedules,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
   });
 };
 
 export const useDashboardGroups = () => {
+  const { startDate, endDate } = getMonthRange(new Date());
   return useQuery({
     queryKey: ["dashboard", "groups"],
-    queryFn: () => getDashboardDetail(formatDate(new Date())),
-    select: (data) => data.data.groups.groupDetails,
+    queryFn: () => getDashboardDetail(startDate, endDate),
+    select: (data) => data.data.groupDetails,
     staleTime: 5 * 60 * 1000,
   });
 };
