@@ -23,18 +23,20 @@ import {
   useUpdateProfileImg,
 } from "@/lib/api/authApi";
 import GoogleCalenaderSheet from "@/components/mypage/GoogleCalendarSheet";
+import { useRouter } from "next/navigation";
+import Toast from "@/components/ui/Toast";
 
 type SheetType = "name" | "time" | "station" | "calendar";
 
 function MyPage() {
-  const { data: user, refetch } = useUser();
-  // console.log(user.data);
+  const router = useRouter();
+
+  const { data: user, refetch, isPending } = useUser();
   const [name, setName] = useState(user?.data.name);
   const [newName, setNewName] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [sheetType, setSheetType] = useState<SheetType | null>(null);
-  // const [calendarSynced, setCalendarSynced] = useState(false);
-  // 즐겨찾기 장소 조회
+
   const { data: favoriteQuery } = useFavoriteLocation();
   const [myStation, setMyStation] = useState(favoriteQuery?.stationName);
   const [calendarId, setCalendarId] = useState("");
@@ -47,11 +49,17 @@ function MyPage() {
   }, [refetch]);
 
   useEffect(() => {
-    if (user) {
+    console.log("user", user);
+    if (user && !isPending) {
       setName(user.data.name);
       setMyStation(favoriteQuery?.stationName);
+    } else if (!user && !isPending) {
+      console.log("로그인이 필요합니다.");
+      router.push("/auth/login");
+      Toast("로그인이 필요합니다.");
     }
-  }, [user, favoriteQuery]);
+  }, [user, favoriteQuery, router, isPending]);
+
   useEffect(() => {
     if (googleCalendar) {
       setHasGoogleCalendarId(googleCalendar.calendarId ? true : false);
@@ -101,13 +109,14 @@ function MyPage() {
 
   const handleStationSave = (station: kakaoSearch) => {
     const stationName = station.place_name;
+    const address = station.road_address_name;
     const longitude = Number(station.x);
     const latitude = Number(station.y);
     const favoritePlaceId = Number(favoriteQuery?.favoriteLocationId);
 
     if (favoritePlaceId) {
       updateFavoriteLocation.mutate(
-        { favoritePlaceId, stationName, latitude, longitude },
+        { favoritePlaceId, stationName, latitude, longitude, address },
         {
           onSuccess: (res) => {
             const updated = res.data?.stationName || stationName;
@@ -117,7 +126,7 @@ function MyPage() {
       );
     } else {
       addFavoriteLocation.mutate(
-        { stationName, latitude, longitude },
+        { stationName, latitude, longitude, address },
         {
           onSuccess: (res) => {
             const createdName = res.data?.stationName || stationName;
@@ -146,12 +155,14 @@ function MyPage() {
   const handleLeave = () => {
     deactivateMutation.mutate();
   };
-
+  if (!user) {
+    return null;
+  }
   return (
     <div className="w-full flex flex-col min-h-screen relative py-8">
       <div className="flex flex-1 flex-col justify-between gap-[4vh]">
         <div className="flex flex-col gap-8">
-          {user?.data && (
+          {user && (
             <Profile
               name={name}
               email={user.data.email}

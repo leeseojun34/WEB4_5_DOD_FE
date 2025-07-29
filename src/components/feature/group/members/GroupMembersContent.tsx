@@ -24,8 +24,7 @@ const GroupMembersContent = ({
   isLeader,
   groupId,
 }: GroupMembersContentProps) => {
-  // const baseUrl = process.env.NEXT_PUBLIC_SERVER_BASE_URL;
-  const baseUrl = `https://localhost:3000`;
+  const baseUrl = window.location.origin;
   const url = `${baseUrl}${`/group/${groupId}`}?fromInvite=true`;
 
   const { shareWithTemplate } = useKakaoShare();

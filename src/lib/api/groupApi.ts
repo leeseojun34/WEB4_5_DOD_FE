@@ -3,6 +3,7 @@ import { axiosInstance } from "./axiosInstance";
 import { useRouter } from "next/navigation";
 import Toast from "@/components/ui/Toast";
 import ToastWell from "@/components/ui/ToastWell";
+import { AxiosError } from "axios";
 
 export interface UpdateMemberPermissionsReqeust {
   groupId: string;
@@ -13,6 +14,11 @@ export interface UpdateMemberPermissionsReqeust {
 export interface RemoveGroupMemberRequest {
   groupId: string;
   userId: string;
+}
+
+export interface GroupInfoType {
+  groupName: string;
+  description: string;
 }
 
 // 전체 그룹 조회
@@ -131,6 +137,7 @@ export const useAddGroupMember = (setIsMember: (bool: boolean) => void) => {
       router.push(`/group/${groupId}`);
       queryClient.invalidateQueries({ queryKey: ["group", groupId] });
       queryClient.invalidateQueries({ queryKey: ["groupMembers", groupId] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard", "groups"] });
     },
     onError: (err: Error, groupId) => {
       setIsMember(true);
@@ -183,6 +190,7 @@ export const useLeaveGroup = () => {
     onSuccess: () => {
       ToastWell("✅", "그룹에서 나갔습니다");
       queryClient.invalidateQueries({ queryKey: ["user", "groupSchedule"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard", "groups"] });
       router.push(`/`);
     },
     onError: (err) => {
@@ -199,7 +207,7 @@ export const useGroupSchedules = (groupId: string, isMember: boolean) => {
     enabled: !!groupId && isMember,
     retry: false,
     refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5,
+    staleTime: 1000 * 60,
   });
 };
 
@@ -210,7 +218,7 @@ export const useGroupStatistics = (groupId: string) => {
     enabled: !!groupId,
     retry: false,
     refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5,
+    staleTime: 1000 * 60,
   });
 };
 
@@ -221,7 +229,7 @@ export const useGroupMembers = (groupId: string) => {
     enabled: !!groupId,
     retry: false,
     refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5,
+    staleTime: 1000 * 60,
   });
 };
 
@@ -231,5 +239,84 @@ export const useGroups = () => {
     queryFn: getGroups,
     retry: false,
     refetchOnWindowFocus: false,
+  });
+};
+
+export const useCreateGroup = () => {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+  return useMutation({
+    mutationFn: (data: GroupInfoType) => createGroup(data),
+    onSuccess: (response) => {
+      if (response.code === "200" && response.data.groupId) {
+        queryClient.invalidateQueries({ queryKey: ["dashboard", "groups"] });
+        queryClient.invalidateQueries({ queryKey: ["groups"] });
+        router.push(`/group/${response.data.groupId}/complete`);
+      }
+    },
+    onError: () => {
+      Toast("그룹 생성에 실패했습니다");
+    },
+  });
+};
+
+export const useUpdateGroupInfo = () => {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+
+  return useMutation({
+    mutationFn: ({ groupId, data }: { groupId: string; data: GroupInfoType }) =>
+      updateGroup(groupId, data),
+    onSuccess: (_, variables) => {
+      ToastWell("✅", "정보 수정 완료!");
+      queryClient.invalidateQueries({
+        queryKey: ["dashboard", "groups"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["groupSchedule", variables.groupId],
+      });
+      router.push(`/group/${variables.groupId}`);
+    },
+    onError: () => {
+      Toast("앗, 정보 수정에 실패했어요");
+    },
+  });
+};
+
+export const useLoadPersonalSchedule = () => {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+
+  return useMutation({
+    mutationFn: ({
+      scheduleId,
+      groupId,
+    }: {
+      scheduleId: number;
+      groupId: number;
+    }) => moveSchedule(scheduleId, groupId),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["dashboard", "schedules"] });
+      queryClient.invalidateQueries({
+        queryKey: ["groupSchedule", String(variables.groupId)],
+      });
+      router.push(`/group/${variables.groupId}`);
+      ToastWell("✅", "성공적으로 일정을 불러왔습니다!");
+    },
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        const status = error.response?.status;
+
+        if (status === 404) {
+          Toast("이미 그룹에 속한 일정입니다");
+        } else if (status === 403) {
+          Toast("그룹에 속하지 않은 멤버가 존재합니다");
+        } else {
+          Toast(error.message || "오류가 발생했습니다");
+        }
+      } else {
+        Toast("예상치 못한 오류가 발생했습니다");
+      }
+    },
   });
 };

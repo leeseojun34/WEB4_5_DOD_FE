@@ -25,7 +25,7 @@ const TitleWithShare = ({ group }: { group: string }) => {
 
   return (
     <div className="flex flex-col gap-7 sm:gap-4">
-      <PageTitle className="hidden sm:block">
+      <PageTitle className="hidden sm:block ">
         가능한 시간을 입력해주세요
       </PageTitle>
       <div className="w-full">
@@ -35,7 +35,7 @@ const TitleWithShare = ({ group }: { group: string }) => {
           onClick={handleKakaoShare}
         />
       </div>
-      <PageTitle className="block sm:hidden">
+      <PageTitle className="block sm:hidden pl-2">
         가능한 시간을 입력해주세요
       </PageTitle>
       <KakaoScript />

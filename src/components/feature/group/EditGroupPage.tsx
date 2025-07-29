@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import {
   deleteGroup,
-  updateGroup,
   useGroupSchedules,
+  useUpdateGroupInfo,
 } from "@/lib/api/groupApi";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -21,9 +21,19 @@ import { useGroupDetailPage } from "@/components/feature/group/detail/hooks/useG
 import { useQueryClient } from "@tanstack/react-query";
 import ControlledAlertBox from "@/components/ui/ControlledAlertBox";
 import Toast from "@/components/ui/Toast";
+import useAuthStore from "@/stores/authStores";
 
 const EditGroupPage = () => {
+  const user = useAuthStore((state) => state.user);
   const router = useRouter();
+
+  useEffect(() => {
+    if (!user) {
+      router.push("/auth/login");
+      Toast("로그인 후 이용해주세요");
+    }
+  }, [user, router]);
+
   const queryClient = useQueryClient();
 
   const { groupId, userPending, isMember } = useGroupDetailPage();
@@ -31,10 +41,10 @@ const EditGroupPage = () => {
     groupId,
     isMember
   );
+  const updateGroupMutation = useUpdateGroupInfo();
 
   const [groupName, setGroupName] = useState("");
   const [groupDescription, setGroupDescription] = useState("");
-  const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
 
@@ -50,22 +60,13 @@ const EditGroupPage = () => {
   }
 
   const handleUpdateGroup = async () => {
-    if (isUpdating) return;
-    setIsUpdating(true);
-    try {
-      const response = await updateGroup(groupId, {
+    updateGroupMutation.mutate({
+      groupId,
+      data: {
         groupName: groupName.trim(),
         description: groupDescription.trim(),
-      });
-      if (response.code === "200") {
-        queryClient.invalidateQueries({ queryKey: ["dashboard", "groups"] });
-        queryClient.invalidateQueries({ queryKey: ["groupSchedule", groupId] });
-        router.push(`/group/${response.data.groupId}`);
-      }
-    } catch {
-      Toast("정보 수정에 실패했습니다.");
-      return;
-    }
+      },
+    });
   };
 
   const handleDeleteGroup = async () => {
@@ -86,7 +87,7 @@ const EditGroupPage = () => {
   const isFormValid =
     groupName.trim().length > 0 &&
     groupDescription.trim().length > 0 &&
-    !isUpdating &&
+    !updateGroupMutation.isPending &&
     !isDeleting;
   const buttonState = !isFormValid ? "disabled" : "default";
 
@@ -140,7 +141,7 @@ const EditGroupPage = () => {
               그룹 삭제하기
             </button>
             <Button onClick={handleUpdateGroup} state={buttonState}>
-              {isUpdating ? "수정 중.." : "수정 완료"}
+              {updateGroupMutation.isPending ? "수정 중.." : "수정 완료"}
             </Button>
           </div>
         </div>

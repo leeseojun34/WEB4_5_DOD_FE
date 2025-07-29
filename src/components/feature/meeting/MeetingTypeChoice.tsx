@@ -11,8 +11,12 @@ import {
   itemVariants,
   listVariants,
 } from "@/components/feature/schedule/motion";
+import useAuthRequired from "../schedule/hooks/useAuthRequired";
+import GlobalLoading from "@/app/loading";
 
 const MeetingTypeChoice = () => {
+  const { isAuthenticated, isLoading } = useAuthRequired();
+
   const router = useRouter();
   const [selectedType, setSelectedType] = useState<"once" | "recurring">(
     "once"
@@ -25,6 +29,10 @@ const MeetingTypeChoice = () => {
       router.push("/group/create");
     }
   };
+
+  if (isLoading || !isAuthenticated) {
+    return <GlobalLoading />;
+  }
   return (
     <>
       <section>

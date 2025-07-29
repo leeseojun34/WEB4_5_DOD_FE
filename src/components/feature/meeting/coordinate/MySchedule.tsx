@@ -11,8 +11,10 @@ const MySchedule = ({
       <ScheduleSection
         title={
           <>
-            <span className="text-[color:var(--color-primary-400)]">나</span>의
-            가능한 시간대
+            <span className="text-[color:var(--color-primary-400)] pl-2">
+              나
+            </span>
+            의 가능한 시간대
           </>
         }
         showLoadButton={true}

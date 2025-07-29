@@ -7,7 +7,7 @@ import prevScheduleImg from "@/assets/images/rabbit_prev_schedule.png";
 import Tip from "@/components/ui/Tip";
 import { Button } from "@/components/ui/Button";
 import HeaderTop from "@/components/layout/HeaderTop";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Header from "@/components/layout/Header";
 import { motion } from "framer-motion";
@@ -16,6 +16,7 @@ import {
   listVariants,
 } from "@/components/feature/schedule/motion";
 import useAuthStore from "@/stores/authStores";
+import Toast from "@/components/ui/Toast";
 
 const GroupScheduleCreateSelectPage = () => {
   const [selected, setSelected] = useState("create");
@@ -23,6 +24,13 @@ const GroupScheduleCreateSelectPage = () => {
   const groupId = params?.groupId;
   const router = useRouter();
   const user = useAuthStore((state) => state.user);
+
+  useEffect(() => {
+    if (!user) {
+      router.push("/auth/login");
+      Toast("로그인 후 이용해주세요");
+    }
+  }, [router, user]);
 
   const handleNavigate = () => {
     if (selected === "create") {

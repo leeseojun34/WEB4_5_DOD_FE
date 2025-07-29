@@ -5,6 +5,9 @@ import {
   useUpdateMemberPermissions,
 } from "@/lib/api/groupApi";
 import { useUser } from "@/lib/api/userApi";
+import useAuthStore from "@/stores/authStores";
+import { useRouter } from "next/navigation";
+import Toast from "@/components/ui/Toast";
 
 interface MemberDataType {
   userId: string;
@@ -15,6 +18,16 @@ interface MemberDataType {
 type AlertAction = "kick" | "transfer" | "take";
 
 export const useGroupMemberLogic = (groupId: string) => {
+  const user = useAuthStore((state) => state.user);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!user) {
+      router.push("/auth/login");
+      Toast("로그인 후 이용해주세요");
+    }
+  }, [user, router]);
+
   const { data: groupData, isPending: groupLoading } = useGroupMembers(groupId);
   const groupMemberData = groupData?.data.groupUser;
   const { data: userData, refetch } = useUser();

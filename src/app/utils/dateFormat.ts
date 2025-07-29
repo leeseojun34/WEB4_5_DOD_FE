@@ -242,3 +242,22 @@ export const formatScheduleWithKST = (
 
   return `${year}년 ${month}월 ${day}일 (${dayOfWeek}) ${startHour}:${startMinute} - ${endHour}:${endMinute}`;
 };
+
+/**
+ * 월의 첫날과 마지막날을 구하는 함수
+ * @param date 선택 날짜
+ * @returns 예: 2025-07-01 ~ 2025-07-31
+ */
+export const getMonthRange = (date: Date) => {
+  const year = date.getFullYear();
+  const month = date.getMonth();
+
+  const startDate = new Date(year, month, 1);
+  const endDate = new Date(year, month + 1, 0);
+
+  return {
+    startDate: formatDate(startDate),
+    endDate: formatDate(endDate),
+    monthKey: `${year}-${String(month + 1).padStart(2, "0")}`,
+  };
+};

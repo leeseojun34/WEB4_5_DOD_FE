@@ -1,9 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "./axiosInstance";
-import { useRouter } from "next/navigation";
 
 export interface CreateDepartLocationRequest {
-  memberId: string;
+  //memberId: string;
   departLocationName: string;
   latitude: number;
   longitude: number;
@@ -43,6 +42,7 @@ export const createDepartLocation = async (
       },
     }
   );
+  console.log("출발 장소 response:", res.data);
   return res.data;
 };
 
@@ -52,9 +52,10 @@ export const createDepartLocation = async (
  * @returns
  */
 export const voteMiddleLocation = async (
-  scheduleMemberId: string,
+  scheduleMemberId: number,
   body: { locationId: number; scheduleId: number }
 ) => {
+  console.log("투표 body:", body);
   const res = await axiosInstance.post(
     `/schedules/suggested-locations/vote/${scheduleMemberId}`,
     body
@@ -75,7 +76,7 @@ export const useVoteMembers = (scheduleId: string) => {
     queryKey: ["voteMembers", scheduleId],
     queryFn: () => getVoteMember(scheduleId),
     enabled: !!scheduleId,
-    select: (res) => res.data.voteMembersList || [],
+    select: (data) => data.voteMembersList || [],
   });
 };
 
@@ -111,31 +112,29 @@ export const useSuggestedLocations = (scheduleId: string) => {
 //중간 장소 투표
 export const useVoteDepartLocation = () => {
   const queryClient = useQueryClient();
-  const router = useRouter();
   return useMutation({
     mutationFn: ({
       scheduleMemberId,
       locationId,
       scheduleId,
     }: {
-      scheduleMemberId: string;
+      scheduleMemberId: number;
       locationId: number;
       scheduleId: number;
     }) => voteMiddleLocation(scheduleMemberId, { locationId, scheduleId }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["suggestedLocations"] });
-      router.push("/election/result");
     },
     onError: (error) => {
       console.error("투표 실패", error);
     },
   });
 };
-
-//테스트용 세부 일정 api 연결
+/*
+//세부 일정 api 연결
 export const getSchedule = async (scheduleId: string) => {
   const res = await axiosInstance.get(`/schedules/show/${scheduleId}`);
-  return res.data.data;
+  return res.data;
 };
 
 export const useSchedule = (scheduleId: string) => {
@@ -145,5 +144,20 @@ export const useSchedule = (scheduleId: string) => {
     enabled: !!scheduleId, // scheduleId가 있어야 실행
     retry: false,
     refetchOnWindowFocus: false,
+  });
+};
+*/
+
+//즐겨찾기 장소 조회
+export const getFavoriteLocation = async () => {
+  const res = await axiosInstance.get("/favorite-location");
+  return res.data.data;
+};
+
+export const useFavoriteLocation = () => {
+  return useQuery({
+    queryKey: ["favoriteLocation"],
+    queryFn: getFavoriteLocation,
+    enabled: false,
   });
 };

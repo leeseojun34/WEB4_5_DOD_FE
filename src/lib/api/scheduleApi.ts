@@ -110,6 +110,9 @@ export const useUpdateScheduleInfo = () => {
       queryClient.invalidateQueries({
         queryKey: ["groupSchedule", variables.scheduleId],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["dashboard", "schedules"],
+      });
     },
     onError: () => {
       Toast("앗, 일정 수정에 실패했어요");
@@ -140,7 +143,7 @@ export const useGroupSchedule = (scheduleId: string) => {
     enabled: !!scheduleId,
     retry: false,
     refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5,
+    staleTime: 1000 * 60,
   });
 };
 

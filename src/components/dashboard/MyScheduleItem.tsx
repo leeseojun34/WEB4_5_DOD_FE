@@ -11,7 +11,7 @@ export const MyScheduleItem = ({ schedule }: MyScheduleItemProps) => {
   return (
     <>
       <div className="flex gap-5 w-full items-center py-2 rounded-md hover:bg-[color:var(--color-gray-background)] hover:shadow-sm transition-all duration-200 ease-in-out">
-        <div className="flex items-center justify-center w-18 h-[50px] bg-[color:var(--color-gray-background)] text-[color:var(--color-primary-400)] rounded-lg text-xs">
+        <div className="flex items-center justify-center w-[72px] flex-shrink-0 h-[50px] bg-[color:var(--color-gray-background)] text-[color:var(--color-primary-400)] rounded-lg text-xs">
           {getDDay(schedule.startTime)}
         </div>
         <div className="space-y-1 w-full">

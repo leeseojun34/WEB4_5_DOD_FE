@@ -4,16 +4,12 @@ import { OptionBox } from "../ui/OptionBox";
 import NameTag from "../ui/NameTag";
 import { useState } from "react";
 import { Button } from "../ui/Button";
-import { useRouter } from "next/navigation";
-import { moveSchedule } from "@/lib/api/groupApi";
+import { useLoadPersonalSchedule } from "@/lib/api/groupApi";
 import { motion } from "framer-motion";
 import {
   listVariants,
   itemVariants,
 } from "@/components/feature/schedule/motion";
-import Toast from "../ui/Toast";
-import { AxiosError } from "axios";
-import ToastWell from "../ui/ToastWell";
 
 interface UserScheduleListProps {
   schedules: DashboardScheduleType[];
@@ -25,26 +21,14 @@ const LoadUserScheduleList = ({
   groupId,
 }: UserScheduleListProps) => {
   const [selectedSchedule, setSelectedSchedule] = useState<number | null>(null);
-  const router = useRouter();
+
+  const moveScheduleMutation = useLoadPersonalSchedule();
 
   const handleMoveSchedule = async (scheduleId: number, groupId: number) => {
-    try {
-      const response = await moveSchedule(scheduleId, groupId);
-      if (response.code === "200") {
-        router.push(`/group/${groupId}`);
-      }
-      ToastWell("✅", "성공적으로 일정을 불러왔습니다!");
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        if (error.status === 404) {
-          Toast("이미 그룹에 속한 일정입니다");
-        } else if (error.status === 403) {
-          Toast("그룹에 속하지 않은 멤버가 존재합니다");
-        } else {
-          Toast(error.message);
-        }
-      }
-    }
+    moveScheduleMutation.mutate({
+      scheduleId,
+      groupId,
+    });
   };
 
   return (

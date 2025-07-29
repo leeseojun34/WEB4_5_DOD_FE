@@ -12,7 +12,10 @@ const getTotalTravelTime = async (from: Coord, to: Coord): Promise<number> => {
   if (!res.ok) throw new Error("fail to road api");
 
   const json = await res.json();
-  if (!json?.result?.path?.length) throw new Error("경로 정보 없음");
+  if (!json?.result?.path?.length) {
+    // 경로 없으면 0 반환
+    return 0;
+  }
 
   const totalTime = json.result.path[0].info.totalTime;
   if (typeof totalTime !== "number") throw new Error("시간 정보 없음");
