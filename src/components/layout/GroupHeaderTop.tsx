@@ -33,7 +33,9 @@ const GroupHeaderTop = ({ name, id, isLeader, type }: GroupHeaderTopProps) => {
         <ChevronLeft color={"var(--color-white)"} size={20} />
       </span>
 
-      <span className="text-lg text-[color:var(--color-white)]">{name}</span>
+      <span className="text-lg text-[color:var(--color-white)] font-medium">
+        {name}
+      </span>
 
       <span
         onClick={clickEllipsisHandler}

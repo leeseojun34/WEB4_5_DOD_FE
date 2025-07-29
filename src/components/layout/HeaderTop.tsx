@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation";
 
 const headerStyle =
   "w-full flex items-center justify-between px-5 pt-11 min-h-7";
-const fontStyle = "text-lg text-[color:var(--color-black)]";
-const fontStyleWhite = "text-lg text-[color:var(--color-white)]";
+const fontStyle = "text-lg text-[color:var(--color-black)] font-medium";
+const fontStyleWhite = "text-lg text-[color:var(--color-white)] font-medium";
 
 type HeaderTopProps = {
   fontColor?: "black" | "white";

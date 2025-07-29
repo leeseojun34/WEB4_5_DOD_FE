@@ -15,11 +15,11 @@ const LoadButton = ({
       action="불러오기"
       actionHandler={handleLoadMySchedule}
     >
-      <div className="flex items-center gap-1 cursor-pointer">
+      <div className="flex items-center gap-1 cursor-pointer pr-2">
+        <TbCalendarDown className="w-[14px] h-[14px] text-[color:var(--color-gray-placeholder)]" />
         <div className="text-[color:var(--color-gray-placeholder)] text-xs">
           불러오기
         </div>
-        <TbCalendarDown className="w-[10px] h-[10px] text-[color:var(--color-gray-placeholder)]" />
       </div>
     </AlertBox>
   );

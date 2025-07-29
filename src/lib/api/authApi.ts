@@ -54,6 +54,9 @@ export const useUpdateProfileImg = () => {
 interface FavoriteLocation {
   favoriteLocationId?: number;
   stationName: string;
+  latituede: number;
+  longitude: number;
+  address?: string; // 선택적 필드로 변경
 }
 
 export const useFavoriteLocation = () => {
@@ -68,9 +71,11 @@ export const useFavoriteLocation = () => {
 };
 
 interface CreateFavoritePayload {
+  favoritePlaceId?: number; // 선택적 필드로 변경
   stationName: string;
   latitude: number;
   longitude: number;
+  address?: string; // 선택적 필드로 변경
 }
 
 const addFavoriteLocation = async (payload: CreateFavoritePayload) => {
@@ -99,6 +104,7 @@ interface FavoritePayload {
   stationName: string;
   latitude: number;
   longitude: number;
+  address?: string; // 선택적 필드로 변경
 }
 
 const updateFavoriteLocation = async (payload: FavoritePayload) => {
@@ -142,8 +148,7 @@ export const useDeactiveMutation = () => {
     mutationFn: () => axiosInstance.delete("/member/withdraw"),
     onSuccess: () => {
       ToastWell("😇", "탈퇴되었습니다!");
-
-      router.push("/auth/login");
+      router.push("/");
     },
     onError: (err) => {
       console.error("탈퇴 실패", err);

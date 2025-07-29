@@ -132,7 +132,7 @@ const SubwaySearch = ({
             </div>
           </>
         ) : (
-          <div className="flex flex-1 flex-col w-full items-center py-7 justify-center gap-4">
+          <div className="flex flex-1 flex-col w-full items-center py-7 justify-center gap-4 px-2">
             <div className="flex w-full justify-between">
               <div className="flex flex-col">
                 <h1 className="text-base font-semibold text-[var(--color-black)] ">
