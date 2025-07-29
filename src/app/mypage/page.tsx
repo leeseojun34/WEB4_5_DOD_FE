@@ -31,7 +31,7 @@ type SheetType = "name" | "time" | "station" | "calendar";
 function MyPage() {
   const router = useRouter();
 
-  const { data: user, refetch } = useUser();
+  const { data: user, refetch, isPending } = useUser();
   const [name, setName] = useState(user?.data.name);
   const [newName, setNewName] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -49,14 +49,16 @@ function MyPage() {
   }, [refetch]);
 
   useEffect(() => {
-    if (user) {
+    console.log("user", user);
+    if (user && !isPending) {
       setName(user.data.name);
       setMyStation(favoriteQuery?.stationName);
-    } else {
+    } else if (!user && !isPending) {
+      console.log("로그인이 필요합니다.");
       router.push("/auth/login");
       Toast("로그인이 필요합니다.");
     }
-  }, [user, favoriteQuery, router]);
+  }, [user, favoriteQuery, router, isPending]);
 
   useEffect(() => {
     if (googleCalendar) {
