@@ -82,7 +82,7 @@ const TimeResult = () => {
     try {
       const res = await createSchedule(payload);
       console.log(res);
-      router.push(`/schedule/${res.data.scheduleId}`);
+      router.push(`/schedule/${res.data.scheduleId}?created=true`);
     } catch (error) {
       console.error(error);
     }
