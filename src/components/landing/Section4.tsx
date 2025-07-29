@@ -70,63 +70,65 @@ const Section4 = () => {
     );
   }, []);
   return (
-    <SectionLayout sectionNum="section4">
-      <div
-        ref={titleRef}
-        className="text-[28px] sm:text-4xl font-bold text-[color:var(--color-black)] w-full text-center"
-      >
-        <span className="text-[color:var(--color-primary-400)]">그룹</span>과
-        함께, <br />더 체계적으로
-      </div>
-      <div className="flex items-center w-full">
-        <div className="flex flex-col gap-5 flex-1 pl-10 sm:pl-20">
-          <div
-            ref={subtitle1Ref}
-            className="text-xl sm:text-3xl font-semibold text-[color:var(--color-black)]"
-          >
-            간편한 그룹 관리
+    <div>
+      <SectionLayout sectionNum="section4">
+        <div
+          ref={titleRef}
+          className="text-[28px] sm:text-4xl font-bold text-[color:var(--color-black)] w-full text-center"
+        >
+          <span className="text-[color:var(--color-primary-400)]">그룹</span>과
+          함께, <br />더 체계적으로
+        </div>
+        <div className="flex items-center w-full">
+          <div className="flex flex-col gap-5 flex-1 pl-10 sm:pl-20">
+            <div
+              ref={subtitle1Ref}
+              className="text-xl sm:text-3xl font-semibold text-[color:var(--color-black)]"
+            >
+              간편한 그룹 관리
+            </div>
+            <div
+              ref={description1Ref}
+              className="text-sm sm:text-xl text-[color:var(--color-gray)]"
+            >
+              정해진 멤버 내에서 <br />
+              일정을 조율해요
+            </div>
           </div>
-          <div
-            ref={description1Ref}
-            className="text-sm sm:text-xl text-[color:var(--color-gray)]"
-          >
-            정해진 멤버 내에서 <br />
-            일정을 조율해요
+          <Image
+            ref={groupManagementImgRef}
+            src={groupManageImg}
+            alt="그룹 관리 이미지"
+            unoptimized
+            className="w-[200px] sm:w-[400px]"
+          />
+        </div>
+        <div className="flex items-center w-full">
+          <Image
+            ref={groupAnalyticsImgRef}
+            src={groupAnalyticsImg}
+            alt="그룹 통계 이미지"
+            unoptimized
+            className="w-[200px] sm:w-[400px]"
+          />
+          <div className="flex flex-col gap-5 flex-1 pr-10 sm:pr-20">
+            <div
+              ref={subtitle2Ref}
+              className="text-xl sm:text-3xl font-semibold text-[color:var(--color-black)] text-end"
+            >
+              모임 통계도 한눈에
+            </div>
+            <div
+              ref={description2Ref}
+              className="text-sm sm:text-xl text-[color:var(--color-gray)] text-end"
+            >
+              요일별 모임, 멤버별
+              <br /> 참여율까지 분석해드려요
+            </div>
           </div>
         </div>
-        <Image
-          ref={groupManagementImgRef}
-          src={groupManageImg}
-          alt="그룹 관리 이미지"
-          unoptimized
-          className="w-[200px] sm:w-[400px]"
-        />
-      </div>
-      <div className="flex items-center w-full">
-        <Image
-          ref={groupAnalyticsImgRef}
-          src={groupAnalyticsImg}
-          alt="그룹 통계 이미지"
-          unoptimized
-          className="w-[200px] sm:w-[400px]"
-        />
-        <div className="flex flex-col gap-5 flex-1 pr-10 sm:pr-20">
-          <div
-            ref={subtitle2Ref}
-            className="text-xl sm:text-3xl font-semibold text-[color:var(--color-black)] text-end"
-          >
-            모임 통계도 한눈에
-          </div>
-          <div
-            ref={description2Ref}
-            className="text-sm sm:text-xl text-[color:var(--color-gray)] text-end"
-          >
-            요일별 모임, 멤버별
-            <br /> 참여율까지 분석해드려요
-          </div>
-        </div>
-      </div>
-    </SectionLayout>
+      </SectionLayout>
+    </div>
   );
 };
 export default Section4;

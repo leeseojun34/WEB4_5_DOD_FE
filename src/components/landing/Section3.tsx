@@ -96,34 +96,36 @@ export default function Section3() {
   }, []);
 
   return (
-    <section
-      ref={wrapperRef}
-      className="w-screen h-screen overflow-hidden bg-white min-w-[375px] max-w-[740px] mx-auto"
-    >
-      <div className="pl-10 pt-20 font-bold text-[28px] text-[color:var(--color-black)] text-start w-full sm:text-4xl">
-        복잡한{" "}
-        <span className="text-[color:var(--color-primary-400)]">일정 </span>
-        조율,
-        <br />{" "}
-        <span className="text-[color:var(--color-primary-400)]">간편 </span>하게
-        끝내요
-      </div>
-      <div
-        ref={containerRef}
-        className="flex mt-30 h-auto items-center w-fit gap-[80px] px-[16vw]"
+    <div>
+      <section
+        ref={wrapperRef}
+        className="w-screen h-screen overflow-hidden bg-white min-w-[375px] max-w-[740px] mx-auto"
       >
-        {mvpCards.map((card, index) => (
-          <div
-            key={index}
-            ref={(el) => {
-              if (el) cardsRef.current[index] = el;
-            }}
-            className="w-[300px] h-[450px] flex-shrink-0"
-          >
-            <MvpCard {...card} />
-          </div>
-        ))}
-      </div>
-    </section>
+        <div className="pl-10 pt-20 font-bold text-[28px] text-[color:var(--color-black)] text-start w-full sm:text-4xl">
+          복잡한{" "}
+          <span className="text-[color:var(--color-primary-400)]">일정 </span>
+          조율,
+          <br />{" "}
+          <span className="text-[color:var(--color-primary-400)]">간편 </span>
+          하게 끝내요
+        </div>
+        <div
+          ref={containerRef}
+          className="flex mt-30 h-auto items-center w-fit gap-[80px] px-[16vw]"
+        >
+          {mvpCards.map((card, index) => (
+            <div
+              key={index}
+              ref={(el) => {
+                if (el) cardsRef.current[index] = el;
+              }}
+              className="w-[300px] h-[450px] flex-shrink-0"
+            >
+              <MvpCard {...card} />
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
   );
 }

@@ -76,27 +76,31 @@ const Section5 = () => {
     );
   }, []);
   return (
-    <SectionLayout sectionNum="section5">
-      <div
-        ref={titleRef}
-        className="font-bold text-[28px] text-[color:var(--color-black)] w-full text-start sm:text-4xl leading-12 mb-4"
-      >
-        내 하루와 모임, <br />
-        <span className="text-[color:var(--color-primary-400)]">대시보드</span>
-        로 깔끔하게
-      </div>
-      <Image
-        ref={iphoneImgRef}
-        src={dashboardImg}
-        alt="대시보드 미리보기 이미지"
-        unoptimized
-      />
-      <div className="flex flex-col gap-4 text-sm text-[color:var(--color-gray)] pb-20 mt-3">
-        <p ref={description1Ref}>🗓️ 캘린더로 나의 하루를 정리하고</p>
-        <p ref={description2Ref}>📌 모임 일정은 리스트로 쏙쏙</p>
-        <p ref={description3Ref}>🔍 참여한 모든 모임을 한눈에 확인해요!</p>
-      </div>
-    </SectionLayout>
+    <div>
+      <SectionLayout sectionNum="section5">
+        <div
+          ref={titleRef}
+          className="font-bold text-[28px] text-[color:var(--color-black)] w-full text-start sm:text-4xl leading-12 mb-4"
+        >
+          내 하루와 모임, <br />
+          <span className="text-[color:var(--color-primary-400)]">
+            대시보드
+          </span>
+          로 깔끔하게
+        </div>
+        <Image
+          ref={iphoneImgRef}
+          src={dashboardImg}
+          alt="대시보드 미리보기 이미지"
+          unoptimized
+        />
+        <div className="flex flex-col gap-4 text-sm text-[color:var(--color-gray)] pb-20 mt-3">
+          <p ref={description1Ref}>🗓️ 캘린더로 나의 하루를 정리하고</p>
+          <p ref={description2Ref}>📌 모임 일정은 리스트로 쏙쏙</p>
+          <p ref={description3Ref}>🔍 참여한 모든 모임을 한눈에 확인해요!</p>
+        </div>
+      </SectionLayout>
+    </div>
   );
 };
 export default Section5;

@@ -57,28 +57,30 @@ const SectionLayout = ({
       : "bg-[color:var(--color-white)]";
 
   return (
-    <section
-      ref={sectionRef}
-      id={sectionNum}
-      className={`${backgroundColorClass} flex justify-center`}
-    >
-      <main className={sectionStyles[sectionNum]}>
-        {children}
+    <div>
+      <section
+        ref={sectionRef}
+        id={sectionNum}
+        className={`${backgroundColorClass} flex justify-center`}
+      >
+        <main className={sectionStyles[sectionNum]}>
+          {children}
 
-        <div className="fixed bottom-9 w-full px-5 flex items-center gap-3 flex-col z-50">
-          {["section1", "section6"].includes(sectionNum) && isVisible && (
-            <Bubble>복잡한 일정 조율, 한 번에 끝내세요 🔥</Bubble>
-          )}
-          <Button
-            state="default"
-            onClick={() => router.push("/auth/login")}
-            className="shadow-sm"
-          >
-            이때어때 시작하기
-          </Button>
-        </div>
-      </main>
-    </section>
+          <div className="fixed bottom-9 w-full px-5 flex items-center gap-3 flex-col z-50">
+            {["section1", "section6"].includes(sectionNum) && isVisible && (
+              <Bubble>복잡한 일정 조율, 한 번에 끝내세요 🔥</Bubble>
+            )}
+            <Button
+              state="default"
+              onClick={() => router.push("/auth/login")}
+              className="shadow-sm"
+            >
+              이때어때 시작하기
+            </Button>
+          </div>
+        </main>
+      </section>
+    </div>
   );
 };
 

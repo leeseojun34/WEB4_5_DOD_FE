@@ -5,9 +5,11 @@ import SectionLayout from "./SectionLayout";
 
 const Section1 = () => {
   return (
-    <SectionLayout sectionNum="section1">
-      <MainLogo />
-    </SectionLayout>
+    <div>
+      <SectionLayout sectionNum="section1">
+        <MainLogo />
+      </SectionLayout>
+    </div>
   );
 };
 export default Section1;

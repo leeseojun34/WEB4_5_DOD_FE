@@ -122,41 +122,43 @@ const Section2 = () => {
     { text: "그럼 다음에 봐야겠네", isMine: true, characterIndex: 1 },
   ];
   return (
-    <SectionLayout bgColor="blue" sectionNum="section2">
-      <div className="flex flex-col gap-9">
-        <div
-          ref={titleRef}
-          className="font-bold text-[color:var(--color-white)] text-[28px] text-center sm:text-4xl leading-12"
-        >
-          스케쥴 잡다가
-          <br /> 시간 다 간 적 있나요?
-        </div>
-        <div className="text-xs text-[color:var(--color-white)] text-center leading-10 flex flex-col sm:text-xl">
-          <p ref={description1Ref}>💬 단톡방에서 끝없는 시간 조율…</p>
-          <p ref={description2Ref}>
-            🤯 시간, 장소, 링크 따로 관리하느라 정신없다면?
-          </p>
-        </div>
-        <div ref={iphoneRef} className="relative">
-          <Image src={iphoneImage} alt="아이폰 이미지" />
-
+    <div>
+      <SectionLayout bgColor="blue" sectionNum="section2">
+        <div className="flex flex-col gap-9">
           <div
-            ref={messageRef}
-            className="absolute top-16 left-0 right-0 flex flex-col items-center gap-3"
+            ref={titleRef}
+            className="font-bold text-[color:var(--color-white)] text-[28px] text-center sm:text-4xl leading-12"
           >
-            {messages.map((msg, index) => (
-              <TextMessage
-                key={index}
-                text={msg.text}
-                isMine={msg.isMine}
-                characterIndex={msg.characterIndex}
-                className="message-item"
-              />
-            ))}
+            스케쥴 잡다가
+            <br /> 시간 다 간 적 있나요?
+          </div>
+          <div className="text-xs text-[color:var(--color-white)] text-center leading-10 flex flex-col sm:text-xl">
+            <p ref={description1Ref}>💬 단톡방에서 끝없는 시간 조율…</p>
+            <p ref={description2Ref}>
+              🤯 시간, 장소, 링크 따로 관리하느라 정신없다면?
+            </p>
+          </div>
+          <div ref={iphoneRef} className="relative">
+            <Image src={iphoneImage} alt="아이폰 이미지" />
+
+            <div
+              ref={messageRef}
+              className="absolute top-16 left-0 right-0 flex flex-col items-center gap-3"
+            >
+              {messages.map((msg, index) => (
+                <TextMessage
+                  key={index}
+                  text={msg.text}
+                  isMine={msg.isMine}
+                  characterIndex={msg.characterIndex}
+                  className="message-item"
+                />
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-    </SectionLayout>
+      </SectionLayout>
+    </div>
   );
 };
 export default Section2;
