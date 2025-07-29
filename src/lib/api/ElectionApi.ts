@@ -74,7 +74,7 @@ export const useVoteMembers = (scheduleId: string) => {
     queryKey: ["voteMembers", scheduleId],
     queryFn: () => getVoteMember(scheduleId),
     enabled: !!scheduleId,
-    select: (res) => res.data.voteMembersList || [],
+    select: (data) => data.voteMembersList || [],
   });
 };
 

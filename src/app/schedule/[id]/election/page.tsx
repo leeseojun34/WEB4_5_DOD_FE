@@ -89,18 +89,18 @@ const ElectionSpot = () => {
   );
   //console.log(suggestedLocationsData);
 
-  const { data: voteMemberList = [], refetch: refetchVoteMembers } =
+  const { data: voteMembersList = [], refetch: refetchVoteMembers } =
     useVoteMembers(scheduleId);
   const hasVoted =
     Boolean(userId) &&
-    voteMemberList.some((m: VoteMember) => m.memberId === userId);
+    voteMembersList.some((m: VoteMember) => m.memberId === userId);
 
-  console.log(`투표했니?: ${hasVoted}`);
+  console.log(hasVoted);
   const myVoteLocationId = hasVoted
-    ? voteMemberList.find((m: VoteMember) => m.memberId === userId)?.locationId
+    ? voteMembersList.find((m: VoteMember) => m.memberId === userId)?.locationId
     : null;
 
-  const votedCount = voteMemberList.length;
+  const votedCount = voteMembersList.length;
   const totalMemberCount = scheduleData?.data?.members?.length || 0;
   const remainingVotes = totalMemberCount - votedCount;
 
@@ -192,6 +192,7 @@ const ElectionSpot = () => {
 
   useEffect(() => {
     if (hasVoted) {
+      ToastWell("✅", "이미 투표를 하셨습니다.");
       refetchVoteMembers();
     }
   }, [hasVoted, refetchVoteMembers]);
@@ -217,12 +218,6 @@ const ElectionSpot = () => {
       );
     }
   };
-
-  useEffect(() => {
-    if (hasVoted) {
-      ToastWell("✅", "이미 투표를 하셨습니다.");
-    }
-  });
 
   return (
     <main className="flex flex-col h-screen w-full mx-auto">
@@ -278,7 +273,9 @@ const ElectionSpot = () => {
                   <SubwayCard
                     station={station}
                     isSelected={
-                      selectedStation?.locationName === station.locationName
+                      hasVoted
+                        ? myVoteLocationId === station.locationId
+                        : selectedStation?.locationName === station.locationName
                     }
                   />
                 </motion.div>
@@ -288,17 +285,22 @@ const ElectionSpot = () => {
         </div>
 
         <div className="w-full flex flex-col items-center justify-center gap-7 mb-8">
-          {!hasVoted && (
+          {remainingVotes > 0 ? (
             <PopupMessage>
               <span className="text-[var(--color-primary-400)]">
                 {remainingVotes}명의
               </span>{" "}
-              친구들이 아직 투표를 하지 않았어요!
+              친구가 아직 투표를 하지 않았어요!
             </PopupMessage>
+          ) : (
+            <PopupMessage>투표가 완료되었어요!</PopupMessage>
           )}
 
           {hasVoted ? (
-            <Button state="default" onClick={() => route.push("/result")}>
+            <Button
+              onClick={() => route.push("/result")}
+              state={remainingVotes === 0 ? "default" : "disabled"}
+            >
               결과 보러 가기
             </Button>
           ) : (
