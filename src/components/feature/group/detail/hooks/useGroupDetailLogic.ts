@@ -8,8 +8,7 @@ import ToastWell from "@/components/ui/ToastWell";
 import Toast from "@/components/ui/Toast";
 
 export const useGroupScheduleActions = () => {
-  //   const BASE_URL = process.env.NEXT_PUBLIC_SERVER_BASE_URL;
-  const BASE_URL = "https://localhost:3000";
+  const BASE_URL = window.location.origin;
   const [isOpen, setIsOpen] = useState(false);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const deleteSchedule = useDeleteSchedule();
