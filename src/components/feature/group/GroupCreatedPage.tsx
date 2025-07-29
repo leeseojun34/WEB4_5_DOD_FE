@@ -54,7 +54,7 @@ const GroupCreatedPage = () => {
         </motion.div>
         <div className="fixed w-full left-0 right-0 px-5 bottom-9">
           <div className="max-w-185 mx-auto">
-            <Button onClick={() => router.push(`/group/${groupId}`)}>
+            <Button onClick={() => router.replace(`/group/${groupId}`)}>
               그룹 페이지로 이동
             </Button>
           </div>

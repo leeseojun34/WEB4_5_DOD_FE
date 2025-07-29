@@ -28,7 +28,7 @@ interface ScheduleDetailType {
   meetingPlatform: string;
   platformName: string;
   platformUrl: string;
-  members: { name: string; scheduleRole: string }[];
+  members: MemberType[];
   workspaces: WorkspaceType[];
 }
 
@@ -148,4 +148,15 @@ interface CreateScheduleRequest {
   schedulesStatus: string;
   meetingType: string;
   members: { memberId: string }[];
+}
+
+//장소에 표시될 멤버 타입
+interface MemberType {
+  id: string;
+  scheduleMemberId: number;
+  name: string;
+  scheduleRole: string;
+  departLocationName?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
 }

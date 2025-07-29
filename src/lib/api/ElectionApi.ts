@@ -1,6 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "./axiosInstance";
-import { useRouter } from "next/navigation";
 
 export interface CreateDepartLocationRequest {
   memberId: string;
@@ -52,7 +51,7 @@ export const createDepartLocation = async (
  * @returns
  */
 export const voteMiddleLocation = async (
-  scheduleMemberId: string,
+  scheduleMemberId: number,
   body: { locationId: number; scheduleId: number }
 ) => {
   const res = await axiosInstance.post(
@@ -111,20 +110,18 @@ export const useSuggestedLocations = (scheduleId: string) => {
 //중간 장소 투표
 export const useVoteDepartLocation = () => {
   const queryClient = useQueryClient();
-  const router = useRouter();
   return useMutation({
     mutationFn: ({
       scheduleMemberId,
       locationId,
       scheduleId,
     }: {
-      scheduleMemberId: string;
+      scheduleMemberId: number;
       locationId: number;
       scheduleId: number;
     }) => voteMiddleLocation(scheduleMemberId, { locationId, scheduleId }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["suggestedLocations"] });
-      router.push("/election/result");
     },
     onError: (error) => {
       console.error("투표 실패", error);
@@ -132,7 +129,7 @@ export const useVoteDepartLocation = () => {
   });
 };
 
-//테스트용 세부 일정 api 연결
+//세부 일정 api 연결
 export const getSchedule = async (scheduleId: string) => {
   const res = await axiosInstance.get(`/schedules/show/${scheduleId}`);
   return res.data.data;
@@ -145,5 +142,19 @@ export const useSchedule = (scheduleId: string) => {
     enabled: !!scheduleId, // scheduleId가 있어야 실행
     retry: false,
     refetchOnWindowFocus: false,
+  });
+};
+
+//즐겨찾기 장소 조회
+export const getFavoriteLocation = async () => {
+  const res = await axiosInstance.get("/favorite-location");
+  return res.data.data;
+};
+
+export const useFavoriteLocation = () => {
+  return useQuery({
+    queryKey: ["favoriteLocation"],
+    queryFn: getFavoriteLocation,
+    enabled: false,
   });
 };

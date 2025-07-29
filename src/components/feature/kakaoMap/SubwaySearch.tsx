@@ -9,7 +9,11 @@ import { Button } from "@/components/ui/Button";
 import { X } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useCreateDepartLocation } from "@/lib/api/ElectionApi";
+import {
+  useCreateDepartLocation,
+  useFavoriteLocation,
+} from "@/lib/api/ElectionApi";
+import ToastWell from "@/components/ui/ToastWell";
 
 const REST_API_KEY = process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY as string;
 
@@ -34,11 +38,13 @@ const SubwaySearch = ({
   );
   const route = useRouter();
   const createDepart = useCreateDepartLocation();
+  const { refetch: fetchFavorites } = useFavoriteLocation();
 
   const selectHandler = ({ station }: { station: kakaoSearch }) => {
     setSelectedStation(station);
     onSelectStation(station);
     if (snapTo) snapTo(2);
+    console.log(station);
   };
 
   const searchHandler = async () => {
@@ -61,7 +67,35 @@ const SubwaySearch = ({
     if (snapTo) snapTo(1);
   };
 
-  console.log(selectedStation);
+  const favoriteSelectHandler = async () => {
+    try {
+      const { data } = await fetchFavorites();
+
+      if (!data || data.length === 0) {
+        ToastWell("😣", "즐겨찾는 장소가 없습니다.");
+        return;
+      }
+
+      const favorite = data[0];
+
+      const station: kakaoSearch = {
+        id: favorite.id,
+        place_name: favorite.stationName,
+        category_name: "",
+        category_group_name: "",
+        road_address_name: favorite.roadAddressName ?? "",
+        x: String(favorite.longitude),
+        y: String(favorite.latitude),
+      };
+
+      selectHandler({ station });
+    } catch (err) {
+      console.error("즐겨찾기 불러오기 실패", err);
+      ToastWell("😣", "문제가 발생했어요.");
+    }
+  };
+
+  //console.log(selectedStation);
 
   return (
     <div className="w-full flex flex-col items-center justify-center px-5">
@@ -89,6 +123,12 @@ const SubwaySearch = ({
                 onSelect={selectHandler}
                 keyword={query}
               />
+              <Button
+                className="w-full justify-center"
+                onClick={favoriteSelectHandler}
+              >
+                즐겨찾는 장소 불러오기
+              </Button>
               {loading && <div className="text-center py-2">검색 중</div>}
             </div>
           </>
@@ -124,6 +164,7 @@ const SubwaySearch = ({
               latitude: Number(selectedStation.y),
               longitude: Number(selectedStation.x),
             };
+            console.log(payload);
             createDepart.mutate(
               {
                 scheduleId,
