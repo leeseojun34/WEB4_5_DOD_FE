@@ -1,24 +1,22 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { Bubble } from "../ui/Bubble";
-import { Button } from "../ui/Button";
-import MainLogo from "./MainLogo";
+import Section1 from "./Section1";
+import Section2 from "./Section2";
+import Section3 from "./Section3";
+import Section4 from "./Section4";
+import Section5 from "./Section5";
+import Section6 from "./Section6";
 
 const Landing = () => {
-  const router = useRouter();
   return (
-    <section>
-      <main className="flex flex-col px-5 justify-center items-center min-h-screen relative">
-        <MainLogo />
-        <div className="absolute bottom-9 w-full px-5 flex items-center gap-3 flex-col">
-          <Bubble>복잡한 일정 조율, 한 번에 끝내세요 🔥</Bubble>
-          <Button state="default" onClick={() => router.push("/auth/login")}>
-            이때어때 시작하기
-          </Button>
-        </div>
-      </main>
-    </section>
+    <>
+      <Section1 />
+      <Section2 />
+      <Section3 />
+      <Section4 />
+      <Section5 />
+      <Section6 />
+    </>
   );
 };
 export default Landing;
