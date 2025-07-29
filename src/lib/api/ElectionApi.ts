@@ -51,7 +51,7 @@ export const createDepartLocation = async (
  * @returns
  */
 export const voteMiddleLocation = async (
-  scheduleMemberId: string,
+  scheduleMemberId: number,
   body: { locationId: number; scheduleId: number }
 ) => {
   const res = await axiosInstance.post(
@@ -116,7 +116,7 @@ export const useVoteDepartLocation = () => {
       locationId,
       scheduleId,
     }: {
-      scheduleMemberId: string;
+      scheduleMemberId: number;
       locationId: number;
       scheduleId: number;
     }) => voteMiddleLocation(scheduleMemberId, { locationId, scheduleId }),

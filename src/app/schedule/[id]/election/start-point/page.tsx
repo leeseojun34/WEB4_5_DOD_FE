@@ -80,6 +80,7 @@ const StartPoint = () => {
         snapPoints={snapPoints}
         initialSnap={1}
         className="px-4"
+        hideBackdrop={true}
       >
         {(snapTo) => (
           <SubwaySearch
