@@ -27,7 +27,6 @@ interface SubwaySearchProps {
 const SubwaySearch = ({
   onSelectStation,
   snapTo,
-  userId,
   scheduleId,
 }: SubwaySearchProps) => {
   const [query, setQuery] = useState("");
@@ -159,7 +158,7 @@ const SubwaySearch = ({
             if (!selectedStation) return;
             const trimmedPlaceName = selectedStation.place_name.split(" ")[0];
             const payload = {
-              memberId: userId,
+              //memberId: userId,
               departLocationName: trimmedPlaceName,
               latitude: Number(selectedStation.y),
               longitude: Number(selectedStation.x),
