@@ -1,4 +1,4 @@
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useLeaveGroup } from "@/lib/api/groupApi";
 import { useDeleteSchedule } from "@/lib/api/scheduleApi";
@@ -17,11 +17,20 @@ export const useGroupHeaderActions = ({
   const [isOpen, setIsOpen] = useState(false);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const leaveGroup = useLeaveGroup();
   const deleteSchedule = useDeleteSchedule();
 
   const handleBack = () => {
-    router.back();
+    const created = searchParams.get("created");
+    if (pathname === `/group/${id}`) {
+      router.push("/");
+    } else if (pathname === `/schedule/${id}` && created === "true") {
+      router.push("/");
+    } else {
+      router.back();
+    }
   };
 
   const clickEllipsisHandler = () => {

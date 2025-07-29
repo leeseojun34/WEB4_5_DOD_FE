@@ -22,7 +22,7 @@ const CreateGroupPage = () => {
       const response = await createGroup({ groupName, description });
       if (response.code === "200") {
         if (response.data.groupId) {
-          router.push(`/group/${response.data.groupId}/complete`);
+          router.replace(`/group/${response.data.groupId}/complete`);
         } else {
           throw new Error(response.message);
         }

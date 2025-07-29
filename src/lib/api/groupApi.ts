@@ -183,6 +183,7 @@ export const useLeaveGroup = () => {
     onSuccess: () => {
       ToastWell("✅", "그룹에서 나갔습니다");
       queryClient.invalidateQueries({ queryKey: ["user", "groupSchedule"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard", "groups"] });
       router.push(`/`);
     },
     onError: (err) => {
