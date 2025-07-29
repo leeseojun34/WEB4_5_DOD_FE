@@ -41,14 +41,14 @@ const StartPoint = () => {
   useEffect(() => {
     if (isPending) return;
     console.log(scheduleData);
-    if (!scheduleData || !scheduleData.data.members || !userId) return;
+    if (!scheduleData || !scheduleData.data || !userId) return;
     const isRegistered = scheduleData.data.members.some(
       (member: MemberType) =>
         member.id === userId && !!member.departLocationName
     );
     console.log(isRegistered);
     if (isRegistered) {
-      router.replace("../election/wait");
+      //router.replace("../election/wait");
     }
   }, [scheduleData, userId, isPending, router]);
 

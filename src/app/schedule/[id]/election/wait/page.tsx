@@ -12,14 +12,23 @@ import { getSuggestedLocations } from "@/lib/api/ElectionApi";
 import { useKakaoShare } from "@/lib/api/useKakaoShare";
 import BlurredChevronHeader from "@/components/layout/BlurredChevronHeader";
 import KakaoScript from "@/components/feature/KakaoScript";
+import { useGroupSchedule } from "@/lib/api/scheduleApi";
+import useAuthStore from "@/stores/authStores";
 const ElectionWait = () => {
   const [isSmOrLarger, setIsSmOrLarger] = useState(false);
+  const { user } = useAuthStore();
+  const userId = user?.id;
   const route = useRouter();
   const [noDepartLocationCount, setNoDepartLocationCount] = useState<
     number | null
   >(null);
   const params = useParams();
   const scheduleId = params.id as string;
+  const { data: scheduleData, isPending } = useGroupSchedule(scheduleId);
+  const [myLocation, setMyLocation] = useState<{
+    latitude: number;
+    longitude: number;
+  } | null>(null);
   const { shareWithTemplate } = useKakaoShare();
   const url = `https://localhost:3000/schedule/${scheduleId}/election/start-point`;
   const shareClickHandler = () => {
@@ -49,6 +58,27 @@ const ElectionWait = () => {
     }
     return () => window.removeEventListener("resize", checkScreenSize);
   }, [scheduleId]);
+
+  useEffect(() => {
+    if (isPending) return;
+    if (!scheduleData?.data || !scheduleData.data.members || !userId) return;
+
+    const myMemberInfo = scheduleData.data.members.find(
+      (member: MemberType) => member.id === userId
+    );
+
+    if (
+      myMemberInfo &&
+      myMemberInfo.latitude != null &&
+      myMemberInfo.longitude != null
+    ) {
+      setMyLocation({
+        latitude: myMemberInfo.latitude,
+        longitude: myMemberInfo.longitude,
+      });
+    }
+  }, [scheduleData, userId, isPending]);
+
   return (
     <main className="flex flex-col h-screen w-full relative">
       <div className="hidden sm:block">
@@ -58,7 +88,10 @@ const ElectionWait = () => {
 
       <div className="flex-1 w-full flex justify-center">
         <div className="w-full max-w-[1024px]">
-          <Map latitude={37.5058098} longitude={126.7531869} />
+          <Map
+            latitude={myLocation?.latitude}
+            longitude={myLocation?.longitude}
+          />
         </div>
       </div>
       <div className="fixed bottom-9 left-0 right-0 w-full flex justify-center z-10">

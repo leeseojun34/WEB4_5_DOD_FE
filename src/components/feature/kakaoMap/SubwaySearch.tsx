@@ -39,6 +39,7 @@ const SubwaySearch = ({
     setSelectedStation(station);
     onSelectStation(station);
     if (snapTo) snapTo(2);
+    console.log(station);
   };
 
   const searchHandler = async () => {
@@ -124,6 +125,7 @@ const SubwaySearch = ({
               latitude: Number(selectedStation.y),
               longitude: Number(selectedStation.x),
             };
+            console.log(payload);
             createDepart.mutate(
               {
                 scheduleId,
