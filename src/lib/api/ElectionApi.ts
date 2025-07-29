@@ -144,3 +144,17 @@ export const useSchedule = (scheduleId: string) => {
     refetchOnWindowFocus: false,
   });
 };
+
+//즐겨찾기 장소 조회
+export const getFavoriteLocation = async () => {
+  const res = await axiosInstance.get("/favorite-location");
+  return res.data.data;
+};
+
+export const useFavoriteLocation = () => {
+  return useQuery({
+    queryKey: ["favoriteLocation"],
+    queryFn: getFavoriteLocation,
+    enabled: false,
+  });
+};
