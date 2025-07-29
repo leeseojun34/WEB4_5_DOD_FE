@@ -9,6 +9,10 @@ export interface CreateDepartLocationRequest {
   longitude: number;
 }
 
+export interface VoteMember {
+  memberId: string;
+}
+
 /*
  * 중간 장소 후보 조회
  * @param scheduleId 스케줄 ID, data(유저id, 출발지역 이름, 위도, 경도)

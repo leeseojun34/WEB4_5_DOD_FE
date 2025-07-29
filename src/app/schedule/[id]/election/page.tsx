@@ -9,12 +9,13 @@ import { Button } from "@/components/ui/Button";
 import { motion } from "framer-motion";
 import Header from "@/components/layout/Header";
 import HeaderTop from "@/components/layout/HeaderTop";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import getTotalTravelTime from "@/app/utils/getTotalTravelTime";
 import {
   useSuggestedLocations,
   useVoteDepartLocation,
   useVoteMembers,
+  VoteMember,
 } from "@/lib/api/ElectionApi";
 import { useGroupSchedule } from "@/lib/api/scheduleApi";
 import ToastWell from "@/components/ui/ToastWell";
@@ -62,12 +63,12 @@ const ElectionSpot = () => {
   const { data: scheduleData, isPending } = useGroupSchedule(scheduleId);
   const { user } = useAuthStore();
   const userId = user?.id;
-  const router = useRouter();
   console.log(suggestedLocationsData);
 
   const voteMemberList = useVoteMembers(scheduleId).data || [];
   const hasVoted =
-    Boolean(userId) && voteMemberList.some((m) => m.memberId === userId);
+    Boolean(userId) &&
+    voteMemberList.some((m: VoteMember) => m.memberId === userId);
 
   useEffect(() => {
     if (!suggestedLocationsData?.data?.suggestedLocations) {
