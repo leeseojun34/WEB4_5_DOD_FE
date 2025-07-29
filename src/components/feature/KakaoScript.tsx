@@ -4,7 +4,10 @@ import Script from "next/script";
 
 function KakaoScript() {
   const onLoad = () => {
-    window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY);
+    const kakaoKey = process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY;
+    if (kakaoKey) {
+      window.Kakao.init(kakaoKey);
+    }
   };
 
   return (

@@ -31,10 +31,17 @@ export const useUpdateName = () => {
 
 // 프로필 이미지 업데이트
 export const useUpdateProfileImg = () => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: () => axiosInstance.patch("/member/profile"),
     onSuccess: () => {
       ToastWell("🎉", "프로필 랜덤 수정 완료!");
+      queryClient.invalidateQueries({
+        queryKey: ["user"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["dashboard", "groups"],
+      });
     },
     onError: (err) => {
       console.error("프로필 이미지 수정 실패", err);
@@ -163,10 +170,36 @@ export const useGoogleCalendarId = () => {
 
 // 구글 캘런더 Id 등록 (post)
 export const useResgisterCalendarId = () => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: registerCalendarId,
     onSuccess: () => {
       ToastWell("🎉", "구글 캘린더 등록 완료!");
+      queryClient.invalidateQueries({ queryKey: ["calendarId"] });
+    },
+    onError: (err) => {
+      console.error("구글 캘린더 등록 실패", err);
+      Toast("구글 캘린더 등록 실패");
+    },
+  });
+};
+
+// 구글 캘린더 Id 삭제 (delete)
+const deleteCalendarId = async () => {
+  return await axiosInstance.delete("/calendar/public-id");
+};
+
+export const useDeleteCalendarId = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: deleteCalendarId,
+    onSuccess: () => {
+      ToastWell("🎉", "구글 캘린더 삭제 완료!");
+      queryClient.invalidateQueries({ queryKey: ["calendarId"] });
+    },
+    onError: (err) => {
+      console.error("구글 캘린더 삭제 실패", err);
+      Toast("구글 캘린더 삭제 실패");
     },
   });
 };

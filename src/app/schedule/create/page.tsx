@@ -61,7 +61,11 @@ const CreateSchedule = () => {
       const response = await createEvent(newSchedule);
       if (response.code === "200") {
         if (response.data.eventId) {
-          router.push(`/schedule/complete/${response.data.eventId}`);
+          router.push(
+            `/schedule/complete/${response.data.eventId}${
+              groupId ? `?group=true` : ""
+            }`
+          );
         } else {
           throw new Error(response.message);
         }

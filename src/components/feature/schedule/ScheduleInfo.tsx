@@ -25,7 +25,7 @@ const ScheduleInfo = ({
           <Input
             label="일정 이름"
             placeholder="일정 이름을 입력해 주세요"
-            maxLength={10}
+            maxLength={20}
             fullWidth
             value={schedule.title}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
