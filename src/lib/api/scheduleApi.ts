@@ -208,7 +208,7 @@ export const useEventDetail = (eventId: number) => {
     queryFn: () => getEventDetail(eventId),
     retry: false,
     gcTime: 3 * 60 * 60 * 1000,
-    staleTime: 3 * 60 * 60 * 1000,
+    refetchInterval: 5000,
   });
 };
 

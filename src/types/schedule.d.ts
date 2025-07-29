@@ -145,7 +145,7 @@ interface CreateScheduleRequest {
   endTime: string;
   scheduleName: string;
   description: string;
-  schedules_Status: string;
+  schedulesStatus: string;
   meetingType: string;
   members: { memberId: string }[];
 }

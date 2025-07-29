@@ -72,7 +72,7 @@ const TimeResult = () => {
       endTime: findData.endTime,
       scheduleName: eventDetailInfo.data.title,
       description: eventDetailInfo.data.description,
-      schedules_Status: "FIXED",
+      schedulesStatus: "FIXED",
       meetingType: eventDetailInfo.data.meetingType,
       members: findData.participants.map((participant) => ({
         memberId: participant.memberId,
