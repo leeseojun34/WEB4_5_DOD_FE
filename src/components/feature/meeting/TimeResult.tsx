@@ -72,7 +72,7 @@ const TimeResult = () => {
       endTime: findData.endTime,
       scheduleName: eventDetailInfo.data.title,
       description: eventDetailInfo.data.description,
-      schedules_Status: "FIXED",
+      schedulesStatus: "FIXED",
       meetingType: eventDetailInfo.data.meetingType,
       members: findData.participants.map((participant) => ({
         memberId: participant.memberId,
@@ -82,7 +82,7 @@ const TimeResult = () => {
     try {
       const res = await createSchedule(payload);
       console.log(res);
-      router.push(`/schedule/${res.data.scheduleId}`);
+      router.push(`/schedule/${res.data.scheduleId}?created=true`);
     } catch (error) {
       console.error(error);
     }

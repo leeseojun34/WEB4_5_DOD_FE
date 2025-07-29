@@ -110,6 +110,9 @@ export const useUpdateScheduleInfo = () => {
       queryClient.invalidateQueries({
         queryKey: ["groupSchedule", variables.scheduleId],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["dashboard", "schedules"],
+      });
     },
     onError: () => {
       Toast("앗, 일정 수정에 실패했어요");
@@ -208,7 +211,7 @@ export const useEventDetail = (eventId: number) => {
     queryFn: () => getEventDetail(eventId),
     retry: false,
     gcTime: 3 * 60 * 60 * 1000,
-    staleTime: 3 * 60 * 60 * 1000,
+    refetchInterval: 5000,
   });
 };
 
@@ -230,6 +233,7 @@ export const useEventScheduleInfo = (eventId: number) => {
     queryFn: () => getEventScheduleInfo(eventId),
     retry: false,
     gcTime: 3 * 60 * 60 * 1000,
+    refetchInterval: 5000,
   });
 };
 

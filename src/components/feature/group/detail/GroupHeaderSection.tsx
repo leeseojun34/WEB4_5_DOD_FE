@@ -26,8 +26,7 @@ const GroupHeaderSection = ({
   const router = useRouter();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const pathname = usePathname();
-  // const baseUrl = process.env.NEXT_PUBLIC_SERVER_BASE_URL;
-  const baseUrl = `https://localhost:3000`;
+  const baseUrl = window.location.origin;
   const url = `${baseUrl}${pathname}?fromInvite=true`;
 
   const handleEditClick = (): void => {

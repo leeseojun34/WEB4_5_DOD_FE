@@ -19,7 +19,10 @@ const Footer = () => {
           />
         </button>
         <div className="absolute left-1/2 -translate-x-1/2 -top-6">
-          <button className="w-15 h-15 rounded-full bg-[var(--color-primary-400)] flex items-center justify-center text-[var(--color-white)] cursor-pointer hover:bg-[var(--color-primary-400-hover)] transition duration-300 shadow-lg">
+          <button
+            onClick={() => router.push("/meeting")}
+            className="w-15 h-15 rounded-full bg-[var(--color-primary-400)] flex items-center justify-center text-[var(--color-white)] cursor-pointer hover:bg-[var(--color-primary-400-hover)] transition duration-300 shadow-lg"
+          >
             <Plus />
           </button>
         </div>

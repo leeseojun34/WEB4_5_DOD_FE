@@ -40,7 +40,7 @@ const Dashboard = () => {
           ) : (
             <MyScheduleSection
               selectedDate={selectedDate!}
-              schedules={schedules}
+              schedules={schedules || []}
               userId={user!.id}
             />
           )}
