@@ -25,7 +25,7 @@ const SubwaySearchResultItem: React.FC<SubwaySearchResultItemProps> = ({
 
   return (
     <button
-      className="w-full flex flex-col items-start rounded-lg hover:bg-[var(--color-muted)] transition duration-300 py-1.5 px-7.5 gap-2.5
+      className="w-full flex flex-col items-start rounded-lg hover:bg-[var(--color-muted)] transition duration-300 py-1.5 px-3 gap-2.5
     "
       onClick={() => onClick({ station })}
     >
