@@ -38,13 +38,12 @@ const TimeResult = () => {
   };
 
   useEffect(() => {
-    const err = eventDetailError || eventDetailError;
-    if (err) {
-      const axiosError = err as AxiosError<{ message: string }>;
+    if (eventDetailError) {
+      const axiosError = eventDetailError as AxiosError<{ message: string }>;
       Toast(axiosError.response?.data.message || "오류가 발생했습니다.");
       router.push("/");
     }
-  }, []);
+  }, [eventDetailError]);
 
   useEffect(() => {
     if (eventDetail) {
