@@ -6,28 +6,23 @@ import Header from "@/components/layout/Header";
 import { useParams, useRouter } from "next/navigation";
 import { useEventDetail, useEventScheduleInfo } from "@/lib/api/scheduleApi";
 import GlobalLoading from "@/app/loading";
-import useAuthStore from "@/stores/authStores";
 import Toast from "@/components/ui/Toast";
 import { useEffect, useState } from "react";
 import { AxiosError } from "axios";
 import { useRef } from "react";
+import useAuthRequired from "@/components/feature/schedule/hooks/useAuthRequired";
 
 const MySchedulePage = () => {
   const { eventId } = useParams();
-  const { user } = useAuthStore();
+  const { user, isAuthenticated, isLoading } = useAuthRequired();
   const router = useRouter();
   const hasHandledConfirmedRedirect = useRef(false);
-  const [isMounted, setIsMounted] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
   const { data: eventScheduleInfo, error: eventScheduleInfoError } =
     useEventScheduleInfo(Number(eventId));
   const { data: eventDetail, error: eventDetailError } = useEventDetail(
     Number(eventId)
   );
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   useEffect(() => {
     if (hasHandledConfirmedRedirect.current) return;
@@ -53,7 +48,7 @@ const MySchedulePage = () => {
     }
   }, [eventScheduleInfoError, eventDetailError]);
 
-  if (!isMounted) return null;
+  if (isLoading || !isAuthenticated) return null;
 
   if (!user || !eventScheduleInfo || !eventDetail || isRedirecting)
     return <GlobalLoading />;

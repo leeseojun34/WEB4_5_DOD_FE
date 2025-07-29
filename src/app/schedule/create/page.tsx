@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ScheduleInfo from "@/components/feature/schedule/ScheduleInfo";
 import ScheduleButton from "@/components/ui/ScheduleButton";
 import ScheduleRabbit from "@/components/ui/ScheduleRabbit";
@@ -10,16 +10,15 @@ import { ChevronLeft } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { formatDate } from "@/app/utils/dateFormat";
 import { createEvent } from "@/lib/api/scheduleApi";
-import useAuthStore from "@/stores/authStores";
 import Toast from "@/components/ui/Toast";
 import { AxiosError } from "axios";
+import useAuthRequired from "@/components/feature/schedule/hooks/useAuthRequired";
 
 const CreateSchedule = () => {
-  const { user } = useAuthStore.getState();
+  const { isAuthenticated, isLoading } = useAuthRequired();
   const router = useRouter();
   const [level, setLevel] = useState(0);
   const groupId = useSearchParams().get("groupId");
-  const [isMounted, setIsMounted] = useState(false);
   const [schedule, setSchedule] = useState<EventType>({
     title: "",
     description: "",
@@ -47,18 +46,7 @@ const CreateSchedule = () => {
     }
   };
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (!user && isMounted) {
-      Toast("로그인 후 이용해주세요.");
-      router.push("/auth/login");
-    }
-  }, [isMounted, user]);
-
-  if (!user || !isMounted) return null;
+  if (isLoading || !isAuthenticated) return null;
 
   const handleCreateSchedule = async () => {
     // 이벤트 등록 api 호출
