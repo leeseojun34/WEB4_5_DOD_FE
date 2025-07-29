@@ -6,8 +6,6 @@ const MySchedule = ({
 }: {
   eventScheduleInfo: EventScheduleInfoType;
 }) => {
-  console.log(eventScheduleInfo);
-
   return (
     <div className="pt-6 px-5 pb-9 flex flex-col w-full items-center gap-7 sm:gap-8 sm:pt-10">
       <ScheduleSection
