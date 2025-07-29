@@ -13,16 +13,16 @@ import { useSuggestedLocations } from "@/lib/api/ElectionApi";
 import { Station } from "@/types/station";
 import GlobalLoading from "@/app/loading";
 import { useGroupSchedule } from "@/lib/api/scheduleApi";
+import useAuthRequired from "../feature/schedule/hooks/useAuthRequired";
 
 const ShowMiddleLocationPage = () => {
   const router = useRouter();
   const params = useParams();
+  const { isAuthenticated, isLoading: isAuthLoading } = useAuthRequired();
   const scheduleId = params.id as string;
-  const { data: suggestedLocationsData, isLoading } =
+  const { data: suggestedLocationsData, isLoading: isScheduleLoading } =
     useSuggestedLocations(scheduleId);
   const { data: schedule } = useGroupSchedule(scheduleId);
-
-  if (isLoading) return <GlobalLoading />;
 
   const winnerStationData =
     suggestedLocationsData?.data?.suggestedLocations?.find(
@@ -33,9 +33,10 @@ const ShowMiddleLocationPage = () => {
     router.push(`/schedule/${scheduleId}`);
   };
 
-  console.log("scheduleId:", scheduleId);
-  console.log("suggestedLocationsData:", suggestedLocationsData);
-  console.log("winnerStationData:", winnerStationData);
+  if (isAuthLoading || isScheduleLoading || !isAuthenticated) {
+    return <GlobalLoading />;
+  }
+
   return (
     <>
       <main className="flex flex-col h-screen w-full mx-auto">

@@ -21,9 +21,10 @@ import {
 
 import { useGroupSchedule } from "@/lib/api/scheduleApi";
 
-import useAuthStore from "@/stores/authStores";
 import { easeOut } from "framer-motion";
 import { useRouter } from "next/navigation";
+import useAuthRequired from "../feature/schedule/hooks/useAuthRequired";
+import GlobalLoading from "@/app/loading";
 
 const cache: { [key: string]: number } = {};
 
@@ -70,14 +71,13 @@ const isSameLocation = (
 const VoteMiddleLocationPage = () => {
   const route = useRouter();
   const params = useParams();
+  const { isAuthenticated, isLoading, user } = useAuthRequired();
   const scheduleId = params.id as string;
   const { data: suggestedLocationsData } = useSuggestedLocations(scheduleId);
   const [selectedStation, setSelectedStation] = useState<Station | null>(null);
   const [stationList, setStationList] = useState<Station[]>([]);
   const { mutate: voteDepartLocation } = useVoteDepartLocation();
-
   const { data: scheduleData, isPending } = useGroupSchedule(scheduleId);
-  const { user } = useAuthStore();
   const userId = user?.id;
   console.log(userId);
   const [userPosition, setUserPosition] = useState<{
@@ -218,6 +218,10 @@ const VoteMiddleLocationPage = () => {
       );
     }
   };
+
+  if (isLoading || !isAuthenticated) {
+    return <GlobalLoading />;
+  }
 
   return (
     <main className="flex flex-col h-screen w-full mx-auto">

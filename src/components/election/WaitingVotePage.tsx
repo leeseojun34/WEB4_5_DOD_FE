@@ -13,10 +13,11 @@ import { useKakaoShare } from "@/lib/api/useKakaoShare";
 import BlurredChevronHeader from "@/components/layout/BlurredChevronHeader";
 import KakaoScript from "@/components/feature/KakaoScript";
 import { useGroupSchedule } from "@/lib/api/scheduleApi";
-import useAuthStore from "@/stores/authStores";
+import useAuthRequired from "../feature/schedule/hooks/useAuthRequired";
+import GlobalLoading from "@/app/loading";
 const WaitingVotePage = () => {
   const [isSmOrLarger, setIsSmOrLarger] = useState(false);
-  const { user } = useAuthStore();
+  const { isAuthenticated, isLoading, user } = useAuthRequired();
   const userId = user?.id;
   const route = useRouter();
   const [noDepartLocationCount, setNoDepartLocationCount] = useState<
@@ -78,6 +79,10 @@ const WaitingVotePage = () => {
       });
     }
   }, [scheduleData, userId, isPending]);
+
+  if (isLoading || !isAuthenticated) {
+    return <GlobalLoading />;
+  }
 
   return (
     <main className="flex flex-col h-screen w-full relative">
