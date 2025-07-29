@@ -61,6 +61,8 @@ const SubwaySearch = ({
     if (snapTo) snapTo(1);
   };
 
+  console.log(selectedStation);
+
   return (
     <div className="w-full flex flex-col items-center justify-center px-5">
       <div className="w-full max-w-[700px] flex flex-col mx-auto">
@@ -108,38 +110,38 @@ const SubwaySearch = ({
             </div>
           </div>
         )}
-        <div className="w-full pb-8.5">
-          <Button
-            state={selectedStation ? "default" : "disabled"}
-            className="w-full"
-            onClick={() => {
-              if (!selectedStation) return;
-              const trimmedPlaceName = selectedStation.place_name.split(" ")[0];
-              const payload = {
-                memberId: userId,
-                departLocationName: trimmedPlaceName,
-                latitude: Number(selectedStation.y),
-                longitude: Number(selectedStation.x),
-              };
-              createDepart.mutate(
-                {
-                  scheduleId,
-                  location: payload,
+      </div>
+      <div className="w-full sticky bottom-0 left-0 bg-white py-4 flex justify-center z-50">
+        <Button
+          state={selectedStation ? "default" : "disabled"}
+          className="w-full justify-center"
+          onClick={() => {
+            if (!selectedStation) return;
+            const trimmedPlaceName = selectedStation.place_name.split(" ")[0];
+            const payload = {
+              memberId: userId,
+              departLocationName: trimmedPlaceName,
+              latitude: Number(selectedStation.y),
+              longitude: Number(selectedStation.x),
+            };
+            createDepart.mutate(
+              {
+                scheduleId,
+                location: payload,
+              },
+              {
+                onSuccess: () => {
+                  route.push(`/schedule/${scheduleId}/election/wait`);
                 },
-                {
-                  onSuccess: () => {
-                    route.push(`/schedule/${scheduleId}/election/wait`);
-                  },
-                  onError: (err) => {
-                    console.error("출발지 등록 실패", err);
-                  },
-                }
-              );
-            }}
-          >
-            다음
-          </Button>
-        </div>
+                onError: (err) => {
+                  console.error("출발지 등록 실패", err);
+                },
+              }
+            );
+          }}
+        >
+          다음
+        </Button>
       </div>
     </div>
   );

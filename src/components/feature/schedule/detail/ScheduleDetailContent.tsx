@@ -13,7 +13,7 @@ interface ScheduleDetailContentProps {
   time: string;
   workspace: { platform: WorkspacePlatformType; name: string }[];
   children: React.ReactNode;
-  isLeader: boolean
+  isLeader: boolean;
 }
 
 const ScheduleDetailContent = ({
@@ -22,11 +22,16 @@ const ScheduleDetailContent = ({
   time,
   workspace,
   children,
-  isLeader
+  isLeader,
 }: ScheduleDetailContentProps) => {
   const { shareWithTemplate } = useKakaoShare();
   const pathname = usePathname();
-  const url = `https://localhost:3000/${pathname}`;
+  let url = "";
+  if (process.env.NODE_ENV === "development") {
+    url = `https://localhost:3000/${pathname}`;
+  } else {
+    url = `https://${window.location.hostname}/${pathname}`;
+  }
   const handleKakaoShare = () => {
     shareWithTemplate(
       "가장 잘 맞는 시간이 정리되었어요. 아래에서 확인해 주세요.",
@@ -52,7 +57,11 @@ const ScheduleDetailContent = ({
       </motion.div>
       {children}
       <motion.div variants={itemVariants}>
-        <WorkSpace workspaces={workspace} scheduleId={scheduleId} isLeader={isLeader}/>
+        <WorkSpace
+          workspaces={workspace}
+          scheduleId={scheduleId}
+          isLeader={isLeader}
+        />
       </motion.div>
       <KakaoScript />
     </motion.div>

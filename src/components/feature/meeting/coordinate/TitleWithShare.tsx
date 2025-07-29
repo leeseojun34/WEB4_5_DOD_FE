@@ -11,12 +11,16 @@ const TitleWithShare = ({ group }: { group: string }) => {
 
   // TODO: 초대 url 수정 필요
   const handleKakaoShare = () => {
-    shareWithTemplate(
-      "이때 어때에서 친구들과 함께 일정을 조율해보세요!",
-      `https://localhost:3000/meeting/${eventId}/coordinate/${
-        eventDetail?.data.groupId
-      }${group === "true" ? "?group=true" : ""}`
-    );
+    let url = "";
+    if (process.env.NODE_ENV === "development") {
+      url = `https://localhost:3000`;
+    } else {
+      url = `https://${window.location.hostname}`;
+    }
+    url += `/meeting/${eventId}/coordinate/${eventDetail?.data.groupId}${
+      group === "true" ? "?group=true" : ""
+    }`;
+    shareWithTemplate("이때 어때에서 친구들과 함께 일정을 조율해보세요!", url);
   };
 
   return (

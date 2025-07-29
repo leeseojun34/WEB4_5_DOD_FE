@@ -37,7 +37,10 @@ export const useUpdateProfileImg = () => {
     onSuccess: () => {
       ToastWell("🎉", "프로필 랜덤 수정 완료!");
       queryClient.invalidateQueries({
-        queryKey: ["user", "dashboard", "groups"],
+        queryKey: ["user"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["dashboard", "groups"],
       });
     },
     onError: (err) => {
