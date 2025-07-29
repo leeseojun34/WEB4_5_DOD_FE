@@ -43,7 +43,7 @@ const CoordinatePage = () => {
         name={eventScheduleInfo.eventTitle}
         description={eventScheduleInfo.description}
         count={eventScheduleInfo.totalMembers}
-        isLeader={eventDetail.data.role === "ROLE_MASTER" ? true : false}
+        isLeader={false}
         type="schedule"
         id={eventId as string}
       />
