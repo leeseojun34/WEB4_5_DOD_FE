@@ -2,17 +2,29 @@
 import Header from "../layout/Header";
 import HeaderTop from "../layout/HeaderTop";
 import { Footer } from "react-day-picker";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import {
   DashboardScheduleType,
   useUserSchedulse,
 } from "@/lib/api/dashboardApi";
 import { OptionBoxSkeleton } from "./Skeleton";
 import LoadUserScheduleList from "./LoadUserScheduleList";
+import useAuthStore from "@/stores/authStores";
+import Toast from "../ui/Toast";
+import { useEffect } from "react";
 
 const LoadUserSchedule = () => {
   const params = useParams();
   const groupId = params.groupId;
+  const user = useAuthStore((state) => state.user);
+  const route = useRouter();
+
+  useEffect(() => {
+    if (!user) {
+      route.push("/auth/login");
+      Toast("로그인 후 이용해주세요");
+    }
+  }, [user, route]);
 
   const { data: userSchedules, isPending: isUserSchedulePending } =
     useUserSchedulse();

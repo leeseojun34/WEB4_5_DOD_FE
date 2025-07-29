@@ -21,9 +21,19 @@ import { useGroupDetailPage } from "@/components/feature/group/detail/hooks/useG
 import { useQueryClient } from "@tanstack/react-query";
 import ControlledAlertBox from "@/components/ui/ControlledAlertBox";
 import Toast from "@/components/ui/Toast";
+import useAuthStore from "@/stores/authStores";
 
 const EditGroupPage = () => {
+  const user = useAuthStore((state) => state.user);
   const router = useRouter();
+
+  useEffect(() => {
+    if (!user) {
+      router.push("/auth/login");
+      Toast("로그인 후 이용해주세요");
+    }
+  }, [user, router]);
+
   const queryClient = useQueryClient();
 
   const { groupId, userPending, isMember } = useGroupDetailPage();

@@ -1,3 +1,4 @@
+import Toast from "@/components/ui/Toast";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -13,14 +14,18 @@ interface UserType {
 export const useAuthRedirect = (
   user: UserType,
   userPending: boolean,
-  redirectUrl: string
+  redirectUrl: string,
+  fromInvite: boolean
 ) => {
   const router = useRouter();
 
   useEffect(() => {
     if (!user && !userPending) {
-      localStorage.setItem("redirect", redirectUrl);
+      if (fromInvite) {
+        localStorage.setItem("redirect", redirectUrl);
+      }
+      Toast("로그인 후 이용해주세요");
       router.push(`/auth/login`);
     }
-  }, [user, userPending, router, redirectUrl]);
+  }, [user, userPending, router, redirectUrl, fromInvite]);
 };
