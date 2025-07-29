@@ -298,7 +298,7 @@ export const useLoadPersonalSchedule = () => {
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ["dashboard", "schedules"] });
       queryClient.invalidateQueries({
-        queryKey: ["groupSchedule", variables.groupId],
+        queryKey: ["groupSchedule", String(variables.groupId)],
       });
       router.push(`/group/${variables.groupId}`);
       ToastWell("✅", "성공적으로 일정을 불러왔습니다!");
