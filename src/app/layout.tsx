@@ -7,21 +7,21 @@ import { Toaster } from "react-hot-toast";
 export const metadata: Metadata = {
   title: "이때어때",
   description: "이때어때",
-  // openGraph: {
-  //   title: "이때어때",
-  //   description: "이때어때",
-  //   url: "https://www.ittaeok.com/",
-  //   siteName: "이때어때",
-  //   images: [
-  //     {
-  //       url: "https://localhost:3000/og-image.png",
-  //       width: 1200,
-  //       height: 630,
-  //       alt: "미리보기 이미지 설명",
-  //     },
-  //   ],
-  //   type: "website",
-  // },
+  openGraph: {
+    title: "이때어때",
+    description: "이때어때",
+    url: "https://www.ittaeok.com/",
+    siteName: "이때어때",
+    images: [
+      {
+        url: "https://www.ittaeok.com/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "미리보기 이미지 설명",
+      },
+    ],
+    type: "website",
+  },
 };
 
 const pretendard = localFont({
