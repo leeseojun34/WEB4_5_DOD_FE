@@ -18,15 +18,19 @@ interface MemberDataType {
 type AlertAction = "kick" | "transfer" | "take";
 
 export const useGroupMemberLogic = (groupId: string) => {
-  const user = useAuthStore((state) => state.user);
   const router = useRouter();
-
+  const { user } = useAuthStore();
+  const [isMounted, setIsMounted] = useState(false);
+  
   useEffect(() => {
-    if (!user) {
+    setIsMounted(true);
+  }, []);
+  useEffect(() => {
+    if (!user && isMounted) {
+      Toast("로그인 후 이용해주세요.");
       router.push("/auth/login");
-      Toast("로그인 후 이용해주세요");
     }
-  }, [user, router]);
+  }, [isMounted, user, router]);
 
   const { data: groupData, isPending: groupLoading } = useGroupMembers(groupId);
   const groupMemberData = groupData?.data.groupUser;
