@@ -11,39 +11,42 @@ import Header from "@/components/layout/Header";
 import HeaderTop from "@/components/layout/HeaderTop";
 import { useParams } from "next/navigation";
 import getTotalTravelTime from "@/app/utils/getTotalTravelTime";
+import ToastWell from "@/components/ui/ToastWell";
 import {
   useSuggestedLocations,
   useVoteDepartLocation,
   useVoteMembers,
   VoteMember,
 } from "@/lib/api/ElectionApi";
-import { useGroupSchedule } from "@/lib/api/scheduleApi";
-import ToastWell from "@/components/ui/ToastWell";
-import useAuthStore from "@/stores/authStores";
 
-const dummyUserData = [
-  { latitude: 37.50578860265, longitude: 126.753192450274 },
-];
+import { useGroupSchedule } from "@/lib/api/scheduleApi";
+
+import useAuthStore from "@/stores/authStores";
+import { easeOut } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 const cache: { [key: string]: number } = {};
 
 const listVariants = {
+  hidden: {
+    opacity: 1,
+  },
   visible: {
+    opacity: 1,
     transition: {
       staggerChildren: 0.15,
     },
   },
-  hidden: {},
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 40 },
+  hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
       duration: 0.5,
-      ease: "easeOut" as const,
+      ease: easeOut,
     },
   },
 };
@@ -52,26 +55,91 @@ const SkeletonText = () => (
   <div className="h-7 w-1/3 bg-[var(--color-gray-100)] rounded animate-pulse" />
 );
 
+//출도착 위치가 비슷한지 검증
+const isSameLocation = (
+  pos1: { latitude: number; longitude: number },
+  pos2: { latitude: number; longitude: number }
+) => {
+  const threshold = 0.0001; // 약 10미터 이내면 같은 위치로 간주
+  return (
+    Math.abs(pos1.latitude - pos2.latitude) < threshold &&
+    Math.abs(pos1.longitude - pos2.longitude) < threshold
+  );
+};
+
 const ElectionSpot = () => {
-  const userPosition = dummyUserData[0];
+  const route = useRouter();
   const params = useParams();
   const scheduleId = params.id as string;
   const { data: suggestedLocationsData } = useSuggestedLocations(scheduleId);
   const [selectedStation, setSelectedStation] = useState<Station | null>(null);
   const [stationList, setStationList] = useState<Station[]>([]);
   const { mutate: voteDepartLocation } = useVoteDepartLocation();
+
   const { data: scheduleData, isPending } = useGroupSchedule(scheduleId);
   const { user } = useAuthStore();
   const userId = user?.id;
-  console.log(suggestedLocationsData);
+  console.log(userId);
+  const [userPosition, setUserPosition] = useState<{
+    latitude: number;
+    longitude: number;
+  } | null>(null);
+  const [myScheduleMemberId, setMyScheduleMemberId] = useState<number | null>(
+    null
+  );
+  //console.log(suggestedLocationsData);
 
-  const voteMemberList = useVoteMembers(scheduleId).data || [];
+  const { data: voteMemberList = [], refetch: refetchVoteMembers } =
+    useVoteMembers(scheduleId);
   const hasVoted =
     Boolean(userId) &&
     voteMemberList.some((m: VoteMember) => m.memberId === userId);
 
+  console.log(`투표했니?: ${hasVoted}`);
+  const myVoteLocationId = hasVoted
+    ? voteMemberList.find((m: VoteMember) => m.memberId === userId)?.locationId
+    : null;
+
+  const votedCount = voteMemberList.length;
+  const totalMemberCount = scheduleData?.data?.members?.length || 0;
+  const remainingVotes = totalMemberCount - votedCount;
+
   useEffect(() => {
-    if (!suggestedLocationsData?.data?.suggestedLocations) {
+    if (!suggestedLocationsData?.data?.suggestedLocations) return;
+    if (!myVoteLocationId) return;
+
+    const votedStation = suggestedLocationsData.data.suggestedLocations.find(
+      (station: Station) => station.locationId === myVoteLocationId
+    );
+
+    if (votedStation) {
+      setSelectedStation(votedStation);
+    }
+  }, [suggestedLocationsData, myVoteLocationId]);
+
+  useEffect(() => {
+    if (isPending) return;
+    if (!scheduleData?.data?.members || !userId) return;
+
+    const myMemberInfo = scheduleData.data.members.find(
+      (member: MemberType) => member.id === userId
+    );
+
+    if (myMemberInfo) {
+      if (myMemberInfo.latitude != null && myMemberInfo.longitude != null) {
+        setUserPosition({
+          latitude: myMemberInfo.latitude,
+          longitude: myMemberInfo.longitude,
+        });
+      }
+      if (myMemberInfo.scheduleMemberId != null) {
+        setMyScheduleMemberId(myMemberInfo.scheduleMemberId);
+      }
+    }
+  }, [scheduleData, userId, isPending]);
+
+  useEffect(() => {
+    if (!suggestedLocationsData?.data?.suggestedLocations || !userPosition) {
       setStationList([]);
       return;
     }
@@ -79,10 +147,19 @@ const ElectionSpot = () => {
       const updateStations = await Promise.all(
         suggestedLocationsData.data.suggestedLocations.map(
           async (station: Station) => {
-            const cacheKey = `${userPosition.longitude},${userPosition.latitude}-${station.longitude},${station.latitude}`;
+            const fixed = (num: number) => num.toFixed(5);
+            const cacheKey = `${fixed(userPosition.longitude)},${fixed(
+              userPosition.latitude
+            )}-${fixed(station.longitude)},${fixed(station.latitude)}`;
 
             if (cache[cacheKey]) {
               return { ...station, travelTime: cache[cacheKey] };
+            }
+
+            //출발지랑 도착지 비슷한 경우
+            if (isSameLocation(userPosition, station)) {
+              cache[cacheKey] = 0;
+              return { ...station, travelTime: 0 };
             }
 
             try {
@@ -91,6 +168,7 @@ const ElectionSpot = () => {
                 { x: station.longitude, y: station.latitude }
               );
               cache[cacheKey] = time;
+              console.log("station:", station);
               return { ...station, travelTime: time };
             } catch (err) {
               console.error("계산 실패", err);
@@ -102,7 +180,8 @@ const ElectionSpot = () => {
       setStationList(updateStations);
     };
     fetchTravelTimes();
-  }, [suggestedLocationsData, userPosition.longitude, userPosition.latitude]);
+  }, [suggestedLocationsData, userPosition]);
+
   const isActive = selectedStation !== null;
 
   const clickStationHandler = (station: Station) => {
@@ -110,17 +189,26 @@ const ElectionSpot = () => {
       setSelectedStation(station);
     }
   };
+
+  useEffect(() => {
+    if (hasVoted) {
+      refetchVoteMembers();
+    }
+  }, [hasVoted, refetchVoteMembers]);
+
   const voteHandler = () => {
+    if (!myScheduleMemberId) return;
     if (isActive && selectedStation && !hasVoted) {
       voteDepartLocation(
         {
-          scheduleMemberId: scheduleId,
+          scheduleMemberId: myScheduleMemberId,
           locationId: selectedStation.locationId,
           scheduleId: Number(scheduleId),
         },
         {
           onSuccess: () => {
             ToastWell("🎉", "투표 완료!");
+            refetchVoteMembers();
           },
           onError: (error) => {
             console.error("투표 실패", error);
@@ -129,6 +217,12 @@ const ElectionSpot = () => {
       );
     }
   };
+
+  useEffect(() => {
+    if (hasVoted) {
+      ToastWell("✅", "이미 투표를 하셨습니다.");
+    }
+  });
 
   return (
     <main className="flex flex-col h-screen w-full mx-auto">
@@ -167,43 +261,55 @@ const ElectionSpot = () => {
         </div>
 
         <div className="flex-1 flex flex-col justify-center w-full">
-          <motion.div
-            variants={listVariants}
-            initial="hidden"
-            animate="visible"
-            className="flex flex-col gap-3"
-          >
-            {stationList.map((station) => (
-              <motion.div
-                key={station.locationName}
-                variants={itemVariants}
-                onClick={() => clickStationHandler}
-                className={hasVoted ? "cursor-not-allowed" : "cursor-pointer"}
-              >
-                <SubwayCard
-                  station={station}
-                  isSelected={
-                    selectedStation?.locationName === station.locationName
-                  }
-                />
-              </motion.div>
-            ))}
-          </motion.div>
+          {stationList.length > 0 && (
+            <motion.div
+              variants={listVariants}
+              initial="hidden"
+              animate="visible"
+              className="flex flex-col gap-3"
+            >
+              {stationList.map((station) => (
+                <motion.div
+                  key={station.locationName}
+                  variants={itemVariants}
+                  onClick={() => clickStationHandler(station)}
+                  className={hasVoted ? "cursor-not-allowed" : "cursor-pointer"}
+                >
+                  <SubwayCard
+                    station={station}
+                    isSelected={
+                      selectedStation?.locationName === station.locationName
+                    }
+                  />
+                </motion.div>
+              ))}
+            </motion.div>
+          )}
         </div>
 
         <div className="w-full flex flex-col items-center justify-center gap-7 mb-8">
-          <PopupMessage>
-            출발지 선택이{" "}
-            <span className="text-[var(--color-primary-400)]">완료</span>
-            되었어요!
-          </PopupMessage>
-          <Button
-            state={isActive ? "default" : "disabled"}
-            onClick={voteHandler}
-            disabled={hasVoted}
-          >
-            투표완료
-          </Button>
+          {!hasVoted && (
+            <PopupMessage>
+              <span className="text-[var(--color-primary-400)]">
+                {remainingVotes}명의
+              </span>{" "}
+              친구들이 아직 투표를 하지 않았어요!
+            </PopupMessage>
+          )}
+
+          {hasVoted ? (
+            <Button state="default" onClick={() => route.push("/result")}>
+              결과 보러 가기
+            </Button>
+          ) : (
+            <Button
+              state={selectedStation ? "default" : "disabled"}
+              onClick={voteHandler}
+              disabled={!selectedStation}
+            >
+              투표 완료
+            </Button>
+          )}
         </div>
       </div>
     </main>

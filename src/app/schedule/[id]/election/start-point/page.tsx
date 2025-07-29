@@ -31,7 +31,7 @@ const StartPoint = () => {
     const handleResize = () => {
       const width = window.innerWidth;
       setIsSmOrLarger(width >= 640);
-      setSnapPoints(width >= 640 ? [0.4, 0.24, 0.16] : [0.62, 0.35, 0.25]);
+      setSnapPoints(width >= 640 ? [0.5, 0.34, 0.26] : [0.72, 0.45, 0.25]);
     };
     handleResize();
     window.addEventListener("resize", handleResize);
@@ -41,14 +41,14 @@ const StartPoint = () => {
   useEffect(() => {
     if (isPending) return;
     console.log(scheduleData);
-    if (!scheduleData || !scheduleData.data.members || !userId) return;
+    if (!scheduleData || !scheduleData.data || !userId) return;
     const isRegistered = scheduleData.data.members.some(
       (member: MemberType) =>
         member.id === userId && !!member.departLocationName
     );
     console.log(isRegistered);
     if (isRegistered) {
-      router.replace("../election/wait");
+      //router.replace("../election/wait");
     }
   }, [scheduleData, userId, isPending, router]);
 
@@ -80,6 +80,7 @@ const StartPoint = () => {
         snapPoints={snapPoints}
         initialSnap={1}
         className="px-4"
+        hideBackdrop={true}
       >
         {(snapTo) => (
           <SubwaySearch

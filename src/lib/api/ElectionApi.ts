@@ -51,7 +51,7 @@ export const createDepartLocation = async (
  * @returns
  */
 export const voteMiddleLocation = async (
-  scheduleMemberId: string,
+  scheduleMemberId: number,
   body: { locationId: number; scheduleId: number }
 ) => {
   const res = await axiosInstance.post(
@@ -116,7 +116,7 @@ export const useVoteDepartLocation = () => {
       locationId,
       scheduleId,
     }: {
-      scheduleMemberId: string;
+      scheduleMemberId: number;
       locationId: number;
       scheduleId: number;
     }) => voteMiddleLocation(scheduleMemberId, { locationId, scheduleId }),
@@ -142,5 +142,19 @@ export const useSchedule = (scheduleId: string) => {
     enabled: !!scheduleId, // scheduleId가 있어야 실행
     retry: false,
     refetchOnWindowFocus: false,
+  });
+};
+
+//즐겨찾기 장소 조회
+export const getFavoriteLocation = async () => {
+  const res = await axiosInstance.get("/favorite-location");
+  return res.data.data;
+};
+
+export const useFavoriteLocation = () => {
+  return useQuery({
+    queryKey: ["favoriteLocation"],
+    queryFn: getFavoriteLocation,
+    enabled: false,
   });
 };
