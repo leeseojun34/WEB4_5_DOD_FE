@@ -36,13 +36,15 @@ const CoordinateContent = ({
         <TitleWithShare group={group} />
       </div>
       <Tip>
-        가능한 시간을 입력하면, 구성원들과 겹치는 시간대를 자동으로
-        확인해드려요.
+        아래 `내 시간표 입력`버튼을 통해 가능한 시간을 입력하면, <br />
+        겹치는 시간대를 자동으로 확인해드려요.
       </Tip>
       <ScheduleSection
         title={
           <>
-            <span className="text-[color:var(--color-primary-400)]">함께 </span>
+            <span className="text-[color:var(--color-primary-400)] pl-2">
+              함께{" "}
+            </span>
             가능한 시간대
           </>
         }

@@ -3,6 +3,7 @@ import { axiosInstance } from "./axiosInstance";
 import { useRouter } from "next/navigation";
 import Toast from "@/components/ui/Toast";
 import ToastWell from "@/components/ui/ToastWell";
+import { AxiosError } from "axios";
 
 export interface UpdateMemberPermissionsReqeust {
   groupId: string;
@@ -278,6 +279,44 @@ export const useUpdateGroupInfo = () => {
     },
     onError: () => {
       Toast("앗, 정보 수정에 실패했어요");
+    },
+  });
+};
+
+export const useLoadPersonalSchedule = () => {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+
+  return useMutation({
+    mutationFn: ({
+      scheduleId,
+      groupId,
+    }: {
+      scheduleId: number;
+      groupId: number;
+    }) => moveSchedule(scheduleId, groupId),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["dashboard", "schedules"] });
+      queryClient.invalidateQueries({
+        queryKey: ["groupSchedule", String(variables.groupId)],
+      });
+      router.push(`/group/${variables.groupId}`);
+      ToastWell("✅", "성공적으로 일정을 불러왔습니다!");
+    },
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        const status = error.response?.status;
+
+        if (status === 404) {
+          Toast("이미 그룹에 속한 일정입니다");
+        } else if (status === 403) {
+          Toast("그룹에 속하지 않은 멤버가 존재합니다");
+        } else {
+          Toast(error.message || "오류가 발생했습니다");
+        }
+      } else {
+        Toast("예상치 못한 오류가 발생했습니다");
+      }
     },
   });
 };

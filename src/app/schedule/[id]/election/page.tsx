@@ -237,10 +237,10 @@ const ElectionSpot = () => {
         )}
       </HeaderTop>
 
-      <div className="pt-[112px] px-5 flex-1 flex flex-col justify-between">
+      <div className="pt-15 px-5 flex-1 flex flex-col justify-between">
         {/* 상단 설명/이미지 */}
         <div className="flex justify-between items-center ">
-          <div className="flex flex-col gap-2 text-left pt-12 justify-center px-5">
+          <div className="flex flex-col gap-2 text-left pt-12 justify-center pl-4">
             {isPending || !scheduleData ? (
               <SkeletonText />
             ) : (
@@ -252,7 +252,7 @@ const ElectionSpot = () => {
               <span className="text-[var(--color-primary-400)]">모임 지역</span>{" "}
               투표하기
             </h1>
-            <h2 className=" text-base sm:text-xl text-[var(--color-gray-placeholder)] pt-2">
+            <h2 className=" text-base text-[var(--color-gray-placeholder)] pt-2">
               <span className="text-[var(--color-primary-400)]">3개</span>의
               역이 선정되었습니다.
             </h2>
