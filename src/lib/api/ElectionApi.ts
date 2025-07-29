@@ -9,6 +9,10 @@ export interface CreateDepartLocationRequest {
   longitude: number;
 }
 
+export interface VoteMember {
+  memberId: string;
+}
+
 /*
  * 중간 장소 후보 조회
  * @param scheduleId 스케줄 ID, data(유저id, 출발지역 이름, 위도, 경도)
@@ -56,6 +60,23 @@ export const voteMiddleLocation = async (
     body
   );
   return res.data;
+};
+
+//투표한 인원의 아이디 확인
+export const getVoteMember = async (scheduleId: string) => {
+  const res = await axiosInstance.get(
+    `/schedules/show-vote-members/${scheduleId}`
+  );
+  return res.data.data;
+};
+
+export const useVoteMembers = (scheduleId: string) => {
+  return useQuery({
+    queryKey: ["voteMembers", scheduleId],
+    queryFn: () => getVoteMember(scheduleId),
+    enabled: !!scheduleId,
+    select: (res) => res.data.voteMembersList || [],
+  });
 };
 
 //출발 장소 틍록
