@@ -50,6 +50,8 @@ export default function Section3() {
   const cardsRef = useRef<HTMLDivElement[]>([]);
 
   useEffect(() => {
+    if (!wrapperRef.current || !containerRef.current || !cardsRef.current)
+      return;
     gsap.registerPlugin(ScrollTrigger);
 
     const totalCards = mvpCards.length;

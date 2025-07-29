@@ -18,7 +18,8 @@ const Section5 = () => {
       !titleRef.current ||
       !description1Ref.current ||
       !description2Ref.current ||
-      !description3Ref.current
+      !description3Ref.current ||
+      !iphoneImgRef.current
     )
       return;
     gsap.fromTo(

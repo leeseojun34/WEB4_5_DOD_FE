@@ -16,7 +16,8 @@ const Section6 = () => {
     if (
       !titleRef.current ||
       !description1Ref.current ||
-      !description2Ref.current
+      !description2Ref.current ||
+      !imgRef.current
     )
       return;
 
