@@ -9,50 +9,20 @@ import { Button } from "@/components/ui/Button";
 import { motion } from "framer-motion";
 import Header from "@/components/layout/Header";
 import HeaderTop from "@/components/layout/HeaderTop";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import getTotalTravelTime from "@/app/utils/getTotalTravelTime";
+import {
+  useSuggestedLocations,
+  useVoteDepartLocation,
+} from "@/lib/api/ElectionApi";
+import { useGroupSchedule } from "@/lib/api/scheduleApi";
+import ToastWell from "@/components/ui/ToastWell";
 
 const dummyUserData = [
   { latitude: 37.50578860265, longitude: 126.753192450274 },
 ];
 
 const cache: { [key: string]: number } = {};
-
-const dummyData = [
-  {
-    locationName: "기흥역",
-    latitude: 37.2754972009506,
-    longitude: 127.115955078051,
-    suggestedMemberId: 1,
-    voteCount: 5,
-    metroLines: ["2", "4", "5"],
-    stationColors: ["#00A84D", "#0052A4", "#996CAC"],
-    travelTime: 47,
-    noVoteCount: 0,
-  },
-  {
-    locationName: "강남역",
-    latitude: 37.49808633653005,
-    longitude: 127.02800140627488,
-    suggestedMemberId: 2,
-    voteCount: 2,
-    metroLines: ["2", "8"],
-    stationColors: ["#00A84D", "#E6186C"],
-    travelTime: 47,
-    noVoteCount: 0,
-  },
-  {
-    locationName: "홍대입구역",
-    latitude: 37.5568707448873,
-    longitude: 126.923778562273,
-    suggestedMemberId: 3,
-    voteCount: 8,
-    metroLines: ["2", "5", "경의중앙", "수인분당"],
-    stationColors: ["#00A84D", "#996CAC", "#77C4A3", "#FABE00"],
-    travelTime: 47,
-    noVoteCount: 0,
-  },
-];
 
 const listVariants = {
   visible: {
@@ -75,50 +45,80 @@ const itemVariants = {
   },
 };
 
+const SkeletonText = () => (
+  <div className="h-7 w-1/3 bg-[var(--color-gray-100)] rounded animate-pulse" />
+);
+
 const ElectionSpot = () => {
   const userPosition = dummyUserData[0];
-  const [selectedId, setSelectedId] = useState<number | null>(null);
-  const [staionList, setStationList] = useState(dummyData);
-  // const [loading, setLoading] = useState(true);
-
-  const isActive = selectedId !== null;
+  const params = useParams();
+  const scheduleId = params.id as string;
+  const { data: suggestedLocationsData } = useSuggestedLocations(scheduleId);
+  const [selectedStation, setSelectedStation] = useState<Station | null>(null);
+  const [stationList, setStationList] = useState<Station[]>([]);
+  const { mutate: voteDepartLocation } = useVoteDepartLocation();
+  const { data: scheduleData, isPending } = useGroupSchedule(scheduleId);
 
   const router = useRouter();
+  console.log(suggestedLocationsData);
 
   useEffect(() => {
+    if (!suggestedLocationsData?.data?.suggestedLocations) {
+      setStationList([]);
+      return;
+    }
     const fetchTravelTimes = async () => {
-      //setLoading(true);
       const updateStations = await Promise.all(
-        dummyData.map(async (station) => {
-          const cacheKey = `${userPosition.longitude},${userPosition.latitude}-${station.longitude},${station.latitude}`;
+        suggestedLocationsData.data.suggestedLocations.map(
+          async (station: Station) => {
+            const cacheKey = `${userPosition.longitude},${userPosition.latitude}-${station.longitude},${station.latitude}`;
 
-          if (cache[cacheKey]) {
-            return { ...station, travelTime: cache[cacheKey] };
-          }
+            if (cache[cacheKey]) {
+              return { ...station, travelTime: cache[cacheKey] };
+            }
 
-          try {
-            const time = await getTotalTravelTime(
-              {
-                x: userPosition.longitude,
-                y: userPosition.latitude,
-              },
-              {
-                x: station.longitude,
-                y: station.latitude,
-              }
-            );
-            cache[cacheKey] = time;
-            return { ...station, travelTime: time };
-          } catch (err) {
-            console.error("계산 실패", err);
-            return { ...station, travelTime: -1 };
+            try {
+              const time = await getTotalTravelTime(
+                { x: userPosition.longitude, y: userPosition.latitude },
+                { x: station.longitude, y: station.latitude }
+              );
+              cache[cacheKey] = time;
+              return { ...station, travelTime: time };
+            } catch (err) {
+              console.error("계산 실패", err);
+              return { ...station, travelTime: -1 };
+            }
           }
-        })
+        )
       );
       setStationList(updateStations);
-      //setLoading(false);
     };
-  }, [userPosition.longitude, userPosition.latitude]);
+    fetchTravelTimes();
+  }, [suggestedLocationsData, userPosition.longitude, userPosition.latitude]);
+  const isActive = selectedStation !== null;
+
+  const voteHandler = () => {
+    if (isActive && selectedStation) {
+      voteDepartLocation(
+        {
+          scheduleMemberId: scheduleId,
+          locationId: selectedStation.locationId,
+          scheduleId: Number(scheduleId),
+        },
+        {
+          onSuccess: () => {
+            ToastWell("🎉", "투표 완료!");
+            setTimeout(() => {
+              router.push(`../result`);
+            }, 1000);
+          },
+          onError: (error) => {
+            console.error("투표 실패", error);
+          },
+        }
+      );
+    }
+  };
 
   return (
     <main className="flex flex-col h-screen w-full mx-auto">
@@ -126,16 +126,24 @@ const ElectionSpot = () => {
         <Header />
       </div>
       <HeaderTop fontColor="black" backward={true}>
-        카츠오모이 가는 날
+        {isPending || !scheduleData ? (
+          <SkeletonText />
+        ) : (
+          scheduleData.data.scheduleName
+        )}
       </HeaderTop>
 
       <div className="pt-[112px] px-5 flex-1 flex flex-col justify-between">
         {/* 상단 설명/이미지 */}
         <div className="flex justify-between items-center mb-6">
           <div className="flex flex-col gap-2 text-left pt-12 justify-center">
-            <h1 className="font-semibold text-xl text-[var(--color-gray)] sm:text-2xl">
-              카츠오모이 가는 날
-            </h1>
+            {isPending || !scheduleData ? (
+              <SkeletonText />
+            ) : (
+              <h1 className="font-semibold text-xl text-[var(--color-gray)] sm:text-2xl">
+                {scheduleData.data.scheduleName}
+              </h1>
+            )}
             <h1 className="font-semibold text-xl text-[var(--color-black)] sm:text-2xl">
               <span className="text-[var(--color-primary-400)]">모임 지역</span>{" "}
               투표하기
@@ -155,15 +163,17 @@ const ElectionSpot = () => {
             animate="visible"
             className="flex flex-col gap-3"
           >
-            {staionList.map((station, idx) => (
+            {stationList.map((station) => (
               <motion.div
-                key={idx}
+                key={station.locationName}
                 variants={itemVariants}
-                onClick={() => setSelectedId(station.suggestedMemberId)}
+                onClick={() => setSelectedStation(station)}
               >
                 <SubwayCard
-                  station={station as Station}
-                  isSelected={selectedId === station.suggestedMemberId}
+                  station={station}
+                  isSelected={
+                    selectedStation?.locationName === station.locationName
+                  }
                 />
               </motion.div>
             ))}
@@ -178,11 +188,7 @@ const ElectionSpot = () => {
           </PopupMessage>
           <Button
             state={isActive ? "default" : "disabled"}
-            onClick={() => {
-              if (isActive) {
-                router.push("election/result");
-              }
-            }}
+            onClick={voteHandler}
           >
             투표완료
           </Button>

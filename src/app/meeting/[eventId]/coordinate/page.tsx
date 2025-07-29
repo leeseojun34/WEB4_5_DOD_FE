@@ -12,7 +12,7 @@ import { useEventDetail } from "@/lib/api/scheduleApi";
 import { useEffect } from "react";
 
 const CoordinatePage = () => {
-  const { eventId } = useParams();
+  const { eventId, group } = useParams();
   const { data: eventScheduleInfo, error } = useEventScheduleInfo(
     Number(eventId)
   );
@@ -48,7 +48,10 @@ const CoordinatePage = () => {
         id={eventId as string}
       />
       <div className="min-w-[375px] w-full max-w-185 mx-auto relative">
-        <CoordinateContent eventScheduleInfo={eventScheduleInfo} />
+        <CoordinateContent
+          eventScheduleInfo={eventScheduleInfo}
+          group={group ? "true" : "false"}
+        />
       </div>
     </section>
   );

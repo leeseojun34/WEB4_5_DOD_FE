@@ -1,5 +1,15 @@
 interface Window {
-  Kakao: any;
+  Kakao: {
+    init: (key: string) => void;
+    Share: {
+      sendCustom: (options: {
+        templateId: number;
+        templateArgs: {
+          [key: string]: string;
+        };
+      }) => void;
+    };
+  };
 }
 
 interface UserType {

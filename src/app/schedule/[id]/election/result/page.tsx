@@ -7,35 +7,44 @@ import Map from "@/components/feature/kakaoMap/Map";
 import { Button } from "@/components/ui/Button";
 import PopupMessage from "@/components/ui/PopupMessage";
 import HeaderTop from "@/components/layout/HeaderTop";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Header from "@/components/layout/Header";
-
-const dummyData = {
-  locationName: "상동역",
-  latitude: 37.5572,
-  longitude: 126.9245,
-  voteCount: 8,
-  metroLines: ["2", "7"],
-  stationColors: ["#33A23D", "#E9546B"],
-  travelTime: 47,
-};
+import { useSchedule, useSuggestedLocations } from "@/lib/api/ElectionApi";
+import { Station } from "@/types/station";
+import GlobalLoading from "@/app/loading";
 
 const ElectionResult = () => {
   const router = useRouter();
+  const params = useParams();
+  const scheduleId = params.id as string;
+  const { data: suggestedLocationsData, isLoading } =
+    useSuggestedLocations(scheduleId);
+  const { data: schedule } = useSchedule(scheduleId);
+
+  if (isLoading) return <GlobalLoading />;
+
+  const winnerStationData =
+    suggestedLocationsData?.data?.suggestedLocations?.find(
+      (station: Station) => station.voteStatus === "WINNER"
+    );
 
   const goToSchedule = () => {
-    router.push("/schedule/123");
+    router.push(`/schedule/${scheduleId}`);
   };
+
+  console.log("scheduleId:", scheduleId);
+  console.log("suggestedLocationsData:", suggestedLocationsData);
+  console.log("winnerStationData:", winnerStationData);
   return (
     <>
       <main className="flex flex-col h-screen w-full mx-auto">
         <div className="hidden sm:block">
           <Header />
         </div>
-        <HeaderTop>카츠오모이 가는 날</HeaderTop>
+        <HeaderTop>{schedule?.scheduleName}</HeaderTop>
         <div className="pt-[154px] px-5 flex flex-col justify-between gap-2 m-0">
           <h2 className="font-semibold sm:text-2xl text-xl text-[var(--color-gray)]">
-            카츠오모이 가는 날
+            {schedule?.scheduleName}
           </h2>
 
           <h1 className="font-semibold text-xl sm:text-2xl text-[var(--color-black)]">
@@ -53,22 +62,27 @@ const ElectionResult = () => {
               className="absolute right-8 bottom-23.5 z-10"
             />
             <SubwayCard
-              station={dummyData}
+              station={winnerStationData}
               isSelected={true}
               isPointer={false}
             />
           </div>
           <div className="w-[316px] sm:w-[500px] mx-auto aspect-square rounded-lg overflow-hidden shadow-[var(--shadow-common)]">
-            <Map latitude={37.5058098} longitude={126.7531869} />
+            <Map
+              latitude={winnerStationData.latitude}
+              longitude={winnerStationData.longitude}
+            />
           </div>
         </div>
         <div className="w-full px-5 pb-8.5 flex flex-col items-center justify-center gap-4">
           <div className="sm:pt-0 pt-5">
             <PopupMessage>
               <span className="text-[var(--color-primary-400)]">2명</span>의
-              친구들이
-              <span className="text-[var(--color-primary-400)]"> 상동역</span>을
-              택했습니다.
+              친구들이{" "}
+              <span className="text-[var(--color-primary-400)]">
+                {winnerStationData.locationName}
+              </span>
+              을 택했습니다.
             </PopupMessage>
           </div>
           <Button onClick={goToSchedule}>세부 장소 정하러 가기</Button>

@@ -20,7 +20,7 @@ const STYLES = {
   container: "w-full px-2",
   header: "sticky top-0 z-10 bg-white",
   dayGrid: "grid gap-1 pl-6",
-  dayCell: "py-2 text-center text-[#9EA6B2] text-[8px] sm:text-xl font-bold",
+  dayCell: "py-2 text-center text-[#9EA6B2] text-[8px] sm:text-lg font-bold",
   dayText: "block",
   dateText: "text-[var(--color-primary-400)]",
   timeColumn: "flex w-6 flex-col items-end gap-1 pr-1",
@@ -130,7 +130,7 @@ const Schedule = ({
       const day = daysOfWeek[i];
       const timeBit = timeBitArray[day.day as keyof typeof timeBitArray];
       const times = convertHexBitToTimes(timeBit);
-      const date = mode === "default" ? day.fullDate! : i;
+      const date = mode === "default" ? day.fullDate! : i.toString();
 
       if (!date) continue;
 

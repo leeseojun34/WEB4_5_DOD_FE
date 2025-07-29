@@ -70,11 +70,11 @@ export const useDashboardGroups = () => {
 /**
  * 회원의 모든 일정 조회
  * @param startDate 날짜(2025-07-12)
- * @param endDate 날짜(2025-07-12)
+ * @param endDate 날짜(2026-07-12)
  * @returns
  */
 export const getUserSchedules = async (startDate: string, endDate: string) => {
-  const response = await axiosInstance.get(`/main-page/calendar`, {
+  const response = await axiosInstance.get(`/main-page/schedules`, {
     params: { startDate, endDate },
   });
   return response.data;
