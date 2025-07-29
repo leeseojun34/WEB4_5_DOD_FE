@@ -17,33 +17,34 @@ import {
   useVoteMembers,
   VoteMember,
 } from "@/lib/api/ElectionApi";
+
 import { useGroupSchedule } from "@/lib/api/scheduleApi";
 import ToastWell from "@/components/ui/ToastWell";
 import useAuthStore from "@/stores/authStores";
-
-const dummyUserData = [
-  { latitude: 37.50578860265, longitude: 126.753192450274 },
-];
+import { easeOut } from "framer-motion";
 
 const cache: { [key: string]: number } = {};
 
 const listVariants = {
+  hidden: {
+    opacity: 1,
+  },
   visible: {
+    opacity: 1,
     transition: {
       staggerChildren: 0.15,
     },
   },
-  hidden: {},
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 40 },
+  hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
       duration: 0.5,
-      ease: "easeOut" as const,
+      ease: easeOut,
     },
   },
 };
@@ -52,8 +53,19 @@ const SkeletonText = () => (
   <div className="h-7 w-1/3 bg-[var(--color-gray-100)] rounded animate-pulse" />
 );
 
+//출도착 위치가 비슷한지 검증
+const isSameLocation = (
+  pos1: { latitude: number; longitude: number },
+  pos2: { latitude: number; longitude: number }
+) => {
+  const threshold = 0.0001; // 약 10미터 이내면 같은 위치로 간주
+  return (
+    Math.abs(pos1.latitude - pos2.latitude) < threshold &&
+    Math.abs(pos1.longitude - pos2.longitude) < threshold
+  );
+};
+
 const ElectionSpot = () => {
-  const userPosition = dummyUserData[0];
   const params = useParams();
   const scheduleId = params.id as string;
   const { data: suggestedLocationsData } = useSuggestedLocations(scheduleId);
@@ -63,7 +75,11 @@ const ElectionSpot = () => {
   const { data: scheduleData, isPending } = useGroupSchedule(scheduleId);
   const { user } = useAuthStore();
   const userId = user?.id;
-  console.log(suggestedLocationsData);
+  const [userPosition, setUserPosition] = useState<{
+    latitude: number;
+    longitude: number;
+  } | null>(null);
+  //console.log(suggestedLocationsData);
 
   const voteMemberList = useVoteMembers(scheduleId).data || [];
   const hasVoted =
@@ -71,7 +87,27 @@ const ElectionSpot = () => {
     voteMemberList.some((m: VoteMember) => m.memberId === userId);
 
   useEffect(() => {
-    if (!suggestedLocationsData?.data?.suggestedLocations) {
+    if (isPending) return;
+    if (!scheduleData?.data?.members || !userId) return;
+
+    const myMemberInfo = scheduleData.data.members.find(
+      (member: MemberType) => member.id === userId
+    );
+
+    if (
+      myMemberInfo &&
+      myMemberInfo.latitude != null &&
+      myMemberInfo.longitude != null
+    ) {
+      setUserPosition({
+        latitude: myMemberInfo.latitude,
+        longitude: myMemberInfo.longitude,
+      });
+    }
+  }, [scheduleData, userId, isPending]);
+
+  useEffect(() => {
+    if (!suggestedLocationsData?.data?.suggestedLocations || !userPosition) {
       setStationList([]);
       return;
     }
@@ -79,10 +115,19 @@ const ElectionSpot = () => {
       const updateStations = await Promise.all(
         suggestedLocationsData.data.suggestedLocations.map(
           async (station: Station) => {
-            const cacheKey = `${userPosition.longitude},${userPosition.latitude}-${station.longitude},${station.latitude}`;
+            const fixed = (num: number) => num.toFixed(5);
+            const cacheKey = `${fixed(userPosition.longitude)},${fixed(
+              userPosition.latitude
+            )}-${fixed(station.longitude)},${fixed(station.latitude)}`;
 
             if (cache[cacheKey]) {
               return { ...station, travelTime: cache[cacheKey] };
+            }
+
+            //출발지랑 도착지 비슷한 경우
+            if (isSameLocation(userPosition, station)) {
+              cache[cacheKey] = 0;
+              return { ...station, travelTime: 0 };
             }
 
             try {
@@ -91,6 +136,7 @@ const ElectionSpot = () => {
                 { x: station.longitude, y: station.latitude }
               );
               cache[cacheKey] = time;
+              console.log("station:", station);
               return { ...station, travelTime: time };
             } catch (err) {
               console.error("계산 실패", err);
@@ -102,7 +148,8 @@ const ElectionSpot = () => {
       setStationList(updateStations);
     };
     fetchTravelTimes();
-  }, [suggestedLocationsData, userPosition.longitude, userPosition.latitude]);
+  }, [suggestedLocationsData, userPosition]);
+
   const isActive = selectedStation !== null;
 
   const clickStationHandler = (station: Station) => {
@@ -167,28 +214,30 @@ const ElectionSpot = () => {
         </div>
 
         <div className="flex-1 flex flex-col justify-center w-full">
-          <motion.div
-            variants={listVariants}
-            initial="hidden"
-            animate="visible"
-            className="flex flex-col gap-3"
-          >
-            {stationList.map((station) => (
-              <motion.div
-                key={station.locationName}
-                variants={itemVariants}
-                onClick={() => clickStationHandler}
-                className={hasVoted ? "cursor-not-allowed" : "cursor-pointer"}
-              >
-                <SubwayCard
-                  station={station}
-                  isSelected={
-                    selectedStation?.locationName === station.locationName
-                  }
-                />
-              </motion.div>
-            ))}
-          </motion.div>
+          {stationList.length > 0 && (
+            <motion.div
+              variants={listVariants}
+              initial="hidden"
+              animate="visible"
+              className="flex flex-col gap-3"
+            >
+              {stationList.map((station) => (
+                <motion.div
+                  key={station.locationName}
+                  variants={itemVariants}
+                  onClick={() => clickStationHandler(station)}
+                  className={hasVoted ? "cursor-not-allowed" : "cursor-pointer"}
+                >
+                  <SubwayCard
+                    station={station}
+                    isSelected={
+                      selectedStation?.locationName === station.locationName
+                    }
+                  />
+                </motion.div>
+              ))}
+            </motion.div>
+          )}
         </div>
 
         <div className="w-full flex flex-col items-center justify-center gap-7 mb-8">
