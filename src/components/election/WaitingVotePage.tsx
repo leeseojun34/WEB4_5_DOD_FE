@@ -31,7 +31,7 @@ const WaitingVotePage = () => {
     longitude: number;
   } | null>(null);
   const { shareWithTemplate } = useKakaoShare();
-  const url = `https://localhost:3000/schedule/${scheduleId}/election/start-point`;
+  const url = `https://www.ittaeok.com/schedule/${scheduleId}/election/start-point`;
   const shareClickHandler = () => {
     shareWithTemplate(
       "내 출발 장소를 등록하고 모임 중간 장소를 찾아볼까요?",
