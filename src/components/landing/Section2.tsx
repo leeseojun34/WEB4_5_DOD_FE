@@ -7,6 +7,7 @@ import TextMessage from "./TextMessage";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import useMediaQuery from "../feature/schedule/hooks/useMediaQuery";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -16,6 +17,7 @@ const Section2 = () => {
   const description2Ref = useRef<HTMLParagraphElement>(null);
   const messageRef = useRef<HTMLDivElement>(null);
   const iphoneRef = useRef<HTMLDivElement>(null);
+  const isSE = useMediaQuery("(max-width: 390px)");
 
   useEffect(() => {
     if (
@@ -143,7 +145,9 @@ const Section2 = () => {
 
             <div
               ref={messageRef}
-              className="absolute top-16 left-0 right-0 flex flex-col items-center gap-3"
+              className={`absolute ${
+                isSE ? "top-10" : "top-16"
+              } left-0 right-0 flex flex-col items-center gap-3`}
             >
               {messages.map((msg, index) => (
                 <TextMessage
@@ -152,6 +156,7 @@ const Section2 = () => {
                   isMine={msg.isMine}
                   characterIndex={msg.characterIndex}
                   className="message-item"
+                  isSE={isSE}
                 />
               ))}
             </div>

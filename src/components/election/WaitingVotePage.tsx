@@ -1,8 +1,7 @@
 "use client";
+
 import Map from "@/components/feature/kakaoMap/Map";
-
 import Header from "@/components/layout/Header";
-
 import PopupMessage from "@/components/ui/PopupMessage";
 import ShareButton from "@/components/ui/ShareButton";
 import { useRouter } from "next/navigation";
@@ -16,6 +15,7 @@ import { useGroupSchedule } from "@/lib/api/scheduleApi";
 import useAuthRequired from "../feature/schedule/hooks/useAuthRequired";
 import GlobalLoading from "@/app/loading";
 import ToastWell from "../ui/ToastWell";
+
 const WaitingVotePage = () => {
   const [isSmOrLarger, setIsSmOrLarger] = useState(false);
   const { isAuthenticated, isLoading, user } = useAuthRequired();
@@ -26,7 +26,11 @@ const WaitingVotePage = () => {
   >(null);
   const params = useParams();
   const scheduleId = params.id as string;
-  const { data: scheduleData, isPending } = useGroupSchedule(scheduleId);
+  const {
+    data: scheduleData,
+    isPending,
+    refetch,
+  } = useGroupSchedule(scheduleId);
   const [myLocation, setMyLocation] = useState<{
     latitude: number;
     longitude: number;
@@ -53,6 +57,13 @@ const WaitingVotePage = () => {
       route.replace("/");
     }
   }, [isLoading, isPending, scheduleData, userId, route]);
+
+  // 페이지 마운트 시 데이터 갱신
+  useEffect(() => {
+    if (scheduleId) {
+      refetch();
+    }
+  }, [scheduleId, refetch]);
 
   useEffect(() => {
     const checkScreenSize = () => {

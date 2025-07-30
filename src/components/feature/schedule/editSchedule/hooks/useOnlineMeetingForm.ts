@@ -49,7 +49,7 @@ export const useOnlineMeetingForm = (scheduleId: string, close: () => void) => {
       scheduleId,
       data: {
         meetingPlatform: "NONE",
-        platformURL: null,
+        platformURL: "",
       },
     });
     setInputValue("");

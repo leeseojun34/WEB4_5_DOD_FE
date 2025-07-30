@@ -88,12 +88,20 @@ export const Calendar = (props: CalendarProps) => {
   };
 
   if (props.isCompact) {
+    const handleDateSelect = (date: Date | undefined) => {
+      if (!date) return;
+
+      if (props.selected?.toDateString() === date.toDateString()) return;
+
+      props.setSelected(date);
+    };
+
     return (
       <DayPicker
         {...commonProps}
         mode="single"
         selected={props.selected}
-        onSelect={props.setSelected}
+        onSelect={handleDateSelect}
       />
     );
   }

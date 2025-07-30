@@ -8,9 +8,10 @@ import Map from "@/components/feature/kakaoMap/Map";
 import OfflineBottomSheet from "./OfflineBottomSheet";
 import BlurredChevronHeader from "@/components/layout/BlurredChevronHeader";
 import LocationEditBottomSheet from "../editSchedule/LocationEditBottomSheet";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { itemVariants } from "../motion";
+import { useRouter } from "next/navigation";
 
 interface OfflineScheduleDetailProps {
   scheduleId: string;
@@ -22,6 +23,22 @@ const OfflineScheduleDetail = ({
   data,
 }: OfflineScheduleDetailProps) => {
   const [isLocationEditOpen, setIsLocationEditOpen] = useState(false);
+  const [goHome, setGoHome] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    const referrer = document.referrer;
+    const isFromGroup = referrer.includes("/group/");
+    setGoHome(isFromGroup);
+  }, []);
+
+  const handleBackHome = () => {
+    if (goHome) {
+      router.push("/");
+    } else {
+      router.back();
+    }
+  };
   return (
     <>
       {data.specificLocation ? (
@@ -29,7 +46,7 @@ const OfflineScheduleDetail = ({
           <div className="hidden sm:block">
             <Header />
           </div>
-          <BlurredChevronHeader />
+          <BlurredChevronHeader onBack={handleBackHome} />
           <div className="flex-1">
             <Map
               longitude={data.specificLongitude}

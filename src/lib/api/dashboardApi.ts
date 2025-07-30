@@ -19,6 +19,8 @@ export interface DashboardScheduleType {
   participantNames: string;
   activated: boolean;
   scheduleMemberId: number;
+  googleEventId: string;
+  allDay: boolean;
 }
 
 export interface DashboardGroupType {

@@ -102,7 +102,7 @@ const Schedule = ({
 
   useEffect(() => {
     if (!timeSlots) return;
-
+    setCheckedCells(new Map());
     for (const timeSlot of timeSlots) {
       const dayIndex = daysOfWeek.findIndex(
         (d) => d.fullDate === timeSlot.date
@@ -123,6 +123,9 @@ const Schedule = ({
 
   useEffect(() => {
     if (!mySchedule) return;
+    if (mode === "mypage") {
+      setCheckedCells(new Map());
+    }
     setSelectedCells(new Set());
 
     setIsMyScheduleChanged(false);
@@ -175,19 +178,18 @@ const Schedule = ({
       setTimeout(() => {
         setIsInteractionEnabled(true);
       }, 300);
+    } else {
+      setIsMyScheduleChanged(true);
     }
   }, [mySchedule]);
 
   useEffect(() => {
-    console.log(isMyScheduleChanged);
-
     if (selectedCells.size > 0 && !isDragging) {
       applyXorToggle();
     }
   }, [selectedCells]);
 
   const applyXorToggle = async () => {
-    console.log(isMyScheduleChanged);
     if (selectedCells.size === 0) return;
     setIsDraggingAndClick(false);
 

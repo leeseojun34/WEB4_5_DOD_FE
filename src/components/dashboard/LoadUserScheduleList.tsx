@@ -86,7 +86,7 @@ const LoadUserScheduleList = ({
               }}
               state={selectedSchedule ? "default" : "disabled"}
             >
-              그룹 일정으로 불러오기
+              그룹 일정 생성하기
             </Button>
           </div>
         </div>

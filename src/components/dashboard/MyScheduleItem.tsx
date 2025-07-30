@@ -19,7 +19,9 @@ export const MyScheduleItem = ({ schedule }: MyScheduleItemProps) => {
             {schedule.name}
           </div>
           <div className="text-[color:var(--color-gray)] font-regular text-xs">
-            {formatScheduleTimeOnly(schedule.startTime, schedule.endTime)}
+            {schedule.allDay
+              ? "하루 종일"
+              : formatScheduleTimeOnly(schedule.startTime, schedule.endTime)}
           </div>
           <div className="flex justify-between w-full">
             <div className="flex items-center gap-1">
@@ -56,7 +58,7 @@ export const MyScheduleItem = ({ schedule }: MyScheduleItemProps) => {
               )}
             </div>
             {schedule.groupName && (
-              <span className="text-xs text-[color:var(--color-gray-placeholder)]">
+              <span className="text-xs text-[color:var(--color-gray-placeholder)] pr-2">
                 {schedule.groupName}
               </span>
             )}
