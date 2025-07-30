@@ -77,7 +77,6 @@ export const useVoteMembers = (scheduleId: string) => {
     queryFn: () => getVoteMember(scheduleId),
     enabled: !!scheduleId,
     select: (data) => data.voteMembersList || [],
-    // onError 대신 useQuery의 결과 객체를 사용해 에러 처리
   });
 };
 

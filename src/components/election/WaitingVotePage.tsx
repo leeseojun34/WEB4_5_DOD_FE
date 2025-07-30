@@ -15,6 +15,7 @@ import KakaoScript from "@/components/feature/KakaoScript";
 import { useGroupSchedule } from "@/lib/api/scheduleApi";
 import useAuthRequired from "../feature/schedule/hooks/useAuthRequired";
 import GlobalLoading from "@/app/loading";
+import ToastWell from "../ui/ToastWell";
 const WaitingVotePage = () => {
   const [isSmOrLarger, setIsSmOrLarger] = useState(false);
   const { isAuthenticated, isLoading, user } = useAuthRequired();
@@ -40,6 +41,20 @@ const WaitingVotePage = () => {
   };
 
   useEffect(() => {
+    if (isLoading || isPending || !scheduleData?.data?.members || !userId)
+      return;
+
+    const isUserInSchedule = scheduleData.data.members.some(
+      (member: { id: string }) => member.id === userId
+    );
+
+    if (!isUserInSchedule) {
+      ToastWell("🚫", "해당 일정에 포함된 멤버가 아닙니다.");
+      route.replace("/");
+    }
+  }, [isLoading, isPending, scheduleData, userId, route]);
+
+  useEffect(() => {
     const checkScreenSize = () => {
       setIsSmOrLarger(window.innerWidth >= 640);
     };
@@ -56,9 +71,19 @@ const WaitingVotePage = () => {
     };
     if (scheduleId) {
       fetchSuggestedLocations();
+      const intervalId = setInterval(() => {
+        if (noDepartLocationCount === 0) return; // 출발 장소 전부 등록 시 폴링 중단
+        console.log("폴링: noDepartLocationCount 갱신");
+        fetchSuggestedLocations();
+      }, 5000); // 5초마다 갱신
+
+      return () => {
+        console.log("폴링 정리: intervalId", intervalId);
+        clearInterval(intervalId);
+      };
     }
     return () => window.removeEventListener("resize", checkScreenSize);
-  }, [scheduleId]);
+  }, [scheduleId, noDepartLocationCount]);
 
   useEffect(() => {
     if (isPending) return;
@@ -94,6 +119,7 @@ const WaitingVotePage = () => {
       <div className="flex-1 w-full flex justify-center">
         <div className="w-full max-w-[1024px]">
           <Map
+            key={`${myLocation?.latitude}-${myLocation?.longitude}`}
             latitude={myLocation?.latitude}
             longitude={myLocation?.longitude}
           />

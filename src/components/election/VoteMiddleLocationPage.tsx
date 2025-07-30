@@ -77,6 +77,8 @@ const VoteMiddleLocationPage = () => {
   const [stationList, setStationList] = useState<Station[]>([]);
   const { mutate: voteDepartLocation } = useVoteDepartLocation();
   const { data: scheduleData, isPending } = useGroupSchedule(scheduleId);
+  const [hasShownVoteCompleteToast, setHasShownVoteCompleteToast] =
+    useState(false);
   const userId = user?.id;
 
   const [userPosition, setUserPosition] = useState<{
@@ -86,7 +88,6 @@ const VoteMiddleLocationPage = () => {
   const [myScheduleMemberId, setMyScheduleMemberId] = useState<number | null>(
     null
   );
-  //console.log(suggestedLocationsData);
 
   const { data: voteMembersList = [], refetch: refetchVoteMembers } =
     useVoteMembers(scheduleId);
@@ -95,7 +96,6 @@ const VoteMiddleLocationPage = () => {
     Boolean(userId) &&
     voteMembersList.some((m: VoteMember) => m.memberId === userId);
 
-  console.log("투표했니? :", hasVoted);
   const myVoteLocationId = hasVoted
     ? voteMembersList.find((m: VoteMember) => m.memberId === userId)?.locationId
     : null;
@@ -196,6 +196,21 @@ const VoteMiddleLocationPage = () => {
     fetchTravelTimes();
   }, [suggestedLocationsData, userPosition]);
 
+  //데이터 풀링
+  useEffect(() => {
+    if (remainingVotes === 0) return; //투표가 완료 폴링 중단
+
+    const intervalId = setInterval(() => {
+      console.log("폴링: voteMembersList 갱신");
+      refetchVoteMembers();
+    }, 5000); // 5초마다 갱신
+
+    return () => {
+      console.log("폴링 정리: intervalId", intervalId);
+      clearInterval(intervalId);
+    };
+  }, [refetchVoteMembers, remainingVotes]);
+
   const isActive = selectedStation !== null;
 
   const clickStationHandler = (station: Station) => {
@@ -205,11 +220,11 @@ const VoteMiddleLocationPage = () => {
   };
 
   useEffect(() => {
-    if (hasVoted) {
+    if (hasVoted && !hasShownVoteCompleteToast) {
       ToastWell("✅", "이미 투표를 하셨습니다.");
       refetchVoteMembers();
     }
-  }, [hasVoted, refetchVoteMembers]);
+  }, [hasVoted, hasShownVoteCompleteToast, refetchVoteMembers]);
 
   const voteHandler = () => {
     if (!myScheduleMemberId) return;
@@ -223,6 +238,7 @@ const VoteMiddleLocationPage = () => {
         {
           onSuccess: () => {
             ToastWell("🎉", "투표 완료!");
+            setHasShownVoteCompleteToast(true);
             refetchVoteMembers();
           },
           onError: (error) => {
@@ -303,17 +319,18 @@ const VoteMiddleLocationPage = () => {
         </div>
 
         <div className="w-full flex flex-col items-center justify-center gap-7 mb-8">
-          {remainingVotes > 0 ? (
+          {remainingVotes > 0 && (
             <PopupMessage>
               <span className="text-[var(--color-primary-400)]">
                 {remainingVotes}명의
               </span>{" "}
               친구가 아직 투표를 하지 않았어요!
             </PopupMessage>
-          ) : (
-            <PopupMessage>투표가 완료되었어요!</PopupMessage>
           )}
 
+          {remainingVotes === 0 && (
+            <PopupMessage>투표가 완료되었어요!</PopupMessage>
+          )}
           {hasVoted ? (
             <Button
               onClick={() =>

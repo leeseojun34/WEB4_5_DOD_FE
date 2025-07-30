@@ -76,6 +76,7 @@ const SubwaySearch = ({
       }
 
       const favorite = data.data[0];
+      console.log(favorite);
 
       const station: kakaoSearch = {
         id: favorite.favoriteLocationId?.toString() || "",

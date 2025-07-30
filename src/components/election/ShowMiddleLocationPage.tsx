@@ -15,7 +15,8 @@ import GlobalLoading from "@/app/loading";
 import { useGroupSchedule } from "@/lib/api/scheduleApi";
 import useAuthRequired from "../feature/schedule/hooks/useAuthRequired";
 import ToastWell from "../ui/ToastWell";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import getTotalTravelTime from "@/app/utils/getTotalTravelTime";
 
 const ShowMiddleLocationPage = () => {
   const router = useRouter();
@@ -26,6 +27,11 @@ const ShowMiddleLocationPage = () => {
   const { data: suggestedLocationsData, isLoading: isScheduleLoading } =
     useSuggestedLocations(scheduleId);
   const { data: schedule } = useGroupSchedule(scheduleId);
+  const [userPosition, setUserPosition] = useState<{
+    latitude: number;
+    longitude: number;
+  } | null>(null);
+  const [winnerStation, setWinnerStation] = useState<Station | null>(null);
 
   useEffect(() => {
     if (isAuthLoading || isScheduleLoading) return;
@@ -41,16 +47,66 @@ const ShowMiddleLocationPage = () => {
     }
   }, [isAuthLoading, isScheduleLoading, schedule, userId, router]);
 
+  useEffect(() => {
+    if (!schedule?.data?.members || !userId) return;
+
+    const myMemberInfo = schedule.data.members.find(
+      (member: MemberType) => member.id === userId
+    );
+
+    if (
+      myMemberInfo &&
+      myMemberInfo.latitude != null &&
+      myMemberInfo.longitude != null
+    ) {
+      setUserPosition({
+        latitude: myMemberInfo.latitude,
+        longitude: myMemberInfo.longitude,
+      });
+    }
+  }, [schedule, userId]);
+
   const winnerStationData =
     suggestedLocationsData?.data?.suggestedLocations?.find(
       (station: Station) => station.voteStatus === "WINNER"
     );
 
+  useEffect(() => {
+    if (!userPosition || !winnerStationData) return;
+    const calc = async () => {
+      try {
+        const time = await getTotalTravelTime(
+          { x: userPosition.longitude, y: userPosition.latitude },
+          { x: winnerStationData.longitude, y: winnerStationData.latitude }
+        );
+
+        setWinnerStation({
+          ...winnerStationData,
+          travelTime: time,
+        });
+      } catch (e) {
+        console.error("실패", e);
+        setWinnerStation({
+          ...winnerStationData,
+          travelTime: -1,
+        });
+      }
+    };
+    calc();
+  }, [userPosition, winnerStationData]);
+
+  console.log(winnerStation);
+
   const goToSchedule = () => {
     router.push(`/schedule/${scheduleId}`);
   };
 
-  if (isAuthLoading || isScheduleLoading || !isAuthenticated) {
+  if (
+    isAuthLoading ||
+    isScheduleLoading ||
+    !isAuthenticated ||
+    !winnerStation
+  ) {
     return <GlobalLoading />;
   }
 
@@ -81,15 +137,15 @@ const ShowMiddleLocationPage = () => {
               className="absolute right-8 bottom-23.5 z-10"
             />
             <SubwayCard
-              station={winnerStationData}
+              station={winnerStation}
               isSelected={true}
               isPointer={false}
             />
           </div>
           <div className="w-[316px] sm:w-[500px] mx-auto aspect-square rounded-lg overflow-hidden shadow-[var(--shadow-common)]">
             <Map
-              latitude={winnerStationData.latitude}
-              longitude={winnerStationData.longitude}
+              latitude={winnerStation.latitude}
+              longitude={winnerStation.longitude}
             />
           </div>
         </div>
@@ -99,7 +155,7 @@ const ShowMiddleLocationPage = () => {
               <span className="text-[var(--color-primary-400)]">2명</span>의
               친구들이{" "}
               <span className="text-[var(--color-primary-400)]">
-                {winnerStationData.locationName}
+                {winnerStation.locationName}
               </span>
               을 택했습니다.
             </PopupMessage>
