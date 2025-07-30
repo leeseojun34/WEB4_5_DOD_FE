@@ -58,7 +58,7 @@ export const MyScheduleItem = ({ schedule }: MyScheduleItemProps) => {
               )}
             </div>
             {schedule.groupName && (
-              <span className="text-xs text-[color:var(--color-gray-placeholder)]">
+              <span className="text-xs text-[color:var(--color-gray-placeholder)] pr-2">
                 {schedule.groupName}
               </span>
             )}
