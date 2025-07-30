@@ -123,6 +123,9 @@ const Schedule = ({
 
   useEffect(() => {
     if (!mySchedule) return;
+    if (mode === "mypage") {
+      setCheckedCells(new Map());
+    }
     setSelectedCells(new Set());
 
     setIsMyScheduleChanged(false);
@@ -175,6 +178,8 @@ const Schedule = ({
       setTimeout(() => {
         setIsInteractionEnabled(true);
       }, 300);
+    } else {
+      setIsMyScheduleChanged(true);
     }
   }, [mySchedule]);
 
