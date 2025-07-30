@@ -73,7 +73,6 @@ const WaitingVotePage = () => {
       fetchSuggestedLocations();
       const intervalId = setInterval(() => {
         if (noDepartLocationCount === 0) return; // 출발 장소 전부 등록 시 폴링 중단
-        console.log("폴링: noDepartLocationCount 갱신");
         fetchSuggestedLocations();
       }, 5000); // 5초마다 갱신
 
@@ -105,7 +104,7 @@ const WaitingVotePage = () => {
     }
   }, [scheduleData, userId, isPending]);
 
-  if (isLoading || !isAuthenticated) {
+  if (isLoading || !isAuthenticated || !myLocation) {
     return <GlobalLoading />;
   }
 
