@@ -20,10 +20,10 @@ import {
 } from "@/lib/api/ElectionApi";
 
 import { useGroupSchedule } from "@/lib/api/scheduleApi";
-
-import useAuthStore from "@/stores/authStores";
 import { easeOut } from "framer-motion";
 import { useRouter } from "next/navigation";
+import useAuthRequired from "../feature/schedule/hooks/useAuthRequired";
+import GlobalLoading from "@/app/loading";
 
 const cache: { [key: string]: number } = {};
 
@@ -70,16 +70,17 @@ const isSameLocation = (
 const VoteMiddleLocationPage = () => {
   const route = useRouter();
   const params = useParams();
+  const { isAuthenticated, isLoading, user } = useAuthRequired();
   const scheduleId = params.id as string;
   const { data: suggestedLocationsData } = useSuggestedLocations(scheduleId);
   const [selectedStation, setSelectedStation] = useState<Station | null>(null);
   const [stationList, setStationList] = useState<Station[]>([]);
   const { mutate: voteDepartLocation } = useVoteDepartLocation();
-
   const { data: scheduleData, isPending } = useGroupSchedule(scheduleId);
-  const { user } = useAuthStore();
+  const [hasShownVoteCompleteToast, setHasShownVoteCompleteToast] =
+    useState(false);
   const userId = user?.id;
-  console.log(userId);
+
   const [userPosition, setUserPosition] = useState<{
     latitude: number;
     longitude: number;
@@ -87,15 +88,14 @@ const VoteMiddleLocationPage = () => {
   const [myScheduleMemberId, setMyScheduleMemberId] = useState<number | null>(
     null
   );
-  //console.log(suggestedLocationsData);
 
   const { data: voteMembersList = [], refetch: refetchVoteMembers } =
     useVoteMembers(scheduleId);
+
   const hasVoted =
     Boolean(userId) &&
     voteMembersList.some((m: VoteMember) => m.memberId === userId);
 
-  console.log(hasVoted);
   const myVoteLocationId = hasVoted
     ? voteMembersList.find((m: VoteMember) => m.memberId === userId)?.locationId
     : null;
@@ -103,6 +103,20 @@ const VoteMiddleLocationPage = () => {
   const votedCount = voteMembersList.length;
   const totalMemberCount = scheduleData?.data?.members?.length || 0;
   const remainingVotes = totalMemberCount - votedCount;
+
+  useEffect(() => {
+    if (isLoading) return;
+    if (!scheduleData?.data?.members || !userId) return;
+
+    const isUserInSchedule = scheduleData.data.members.some(
+      (member: MemberType) => member.id === userId
+    );
+
+    if (!isUserInSchedule) {
+      ToastWell("🚫", "해당 일정에 포함된 멤버가 아닙니다.");
+      route.replace("/");
+    }
+  }, [isLoading, scheduleData, userId, route]);
 
   useEffect(() => {
     if (!suggestedLocationsData?.data?.suggestedLocations) return;
@@ -182,6 +196,21 @@ const VoteMiddleLocationPage = () => {
     fetchTravelTimes();
   }, [suggestedLocationsData, userPosition]);
 
+  //데이터 풀링
+  useEffect(() => {
+    if (remainingVotes === 0) return; //투표가 완료 폴링 중단
+
+    const intervalId = setInterval(() => {
+      console.log("폴링: voteMembersList 갱신");
+      refetchVoteMembers();
+    }, 5000); // 5초마다 갱신
+
+    return () => {
+      console.log("폴링 정리: intervalId", intervalId);
+      clearInterval(intervalId);
+    };
+  }, [refetchVoteMembers, remainingVotes]);
+
   const isActive = selectedStation !== null;
 
   const clickStationHandler = (station: Station) => {
@@ -191,11 +220,11 @@ const VoteMiddleLocationPage = () => {
   };
 
   useEffect(() => {
-    if (hasVoted) {
+    if (hasVoted && !hasShownVoteCompleteToast) {
       ToastWell("✅", "이미 투표를 하셨습니다.");
       refetchVoteMembers();
     }
-  }, [hasVoted, refetchVoteMembers]);
+  }, [hasVoted, hasShownVoteCompleteToast, refetchVoteMembers]);
 
   const voteHandler = () => {
     if (!myScheduleMemberId) return;
@@ -209,6 +238,7 @@ const VoteMiddleLocationPage = () => {
         {
           onSuccess: () => {
             ToastWell("🎉", "투표 완료!");
+            setHasShownVoteCompleteToast(true);
             refetchVoteMembers();
           },
           onError: (error) => {
@@ -218,6 +248,10 @@ const VoteMiddleLocationPage = () => {
       );
     }
   };
+
+  if (isLoading || !isAuthenticated) {
+    return <GlobalLoading />;
+  }
 
   return (
     <main className="flex flex-col h-screen w-full mx-auto">
@@ -285,17 +319,18 @@ const VoteMiddleLocationPage = () => {
         </div>
 
         <div className="w-full flex flex-col items-center justify-center gap-7 mb-8">
-          {remainingVotes > 0 ? (
+          {remainingVotes > 0 && (
             <PopupMessage>
               <span className="text-[var(--color-primary-400)]">
                 {remainingVotes}명의
               </span>{" "}
               친구가 아직 투표를 하지 않았어요!
             </PopupMessage>
-          ) : (
-            <PopupMessage>투표가 완료되었어요!</PopupMessage>
           )}
 
+          {remainingVotes === 0 && (
+            <PopupMessage>투표가 완료되었어요!</PopupMessage>
+          )}
           {hasVoted ? (
             <Button
               onClick={() =>

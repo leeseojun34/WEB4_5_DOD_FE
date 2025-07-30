@@ -13,10 +13,12 @@ import { useKakaoShare } from "@/lib/api/useKakaoShare";
 import BlurredChevronHeader from "@/components/layout/BlurredChevronHeader";
 import KakaoScript from "@/components/feature/KakaoScript";
 import { useGroupSchedule } from "@/lib/api/scheduleApi";
-import useAuthStore from "@/stores/authStores";
+import useAuthRequired from "../feature/schedule/hooks/useAuthRequired";
+import GlobalLoading from "@/app/loading";
+import ToastWell from "../ui/ToastWell";
 const WaitingVotePage = () => {
   const [isSmOrLarger, setIsSmOrLarger] = useState(false);
-  const { user } = useAuthStore();
+  const { isAuthenticated, isLoading, user } = useAuthRequired();
   const userId = user?.id;
   const route = useRouter();
   const [noDepartLocationCount, setNoDepartLocationCount] = useState<
@@ -30,13 +32,27 @@ const WaitingVotePage = () => {
     longitude: number;
   } | null>(null);
   const { shareWithTemplate } = useKakaoShare();
-  const url = `https://localhost:3000/schedule/${scheduleId}/election/start-point`;
+  const url = `https://www.ittaeok.com/schedule/${scheduleId}/election/start-point`;
   const shareClickHandler = () => {
     shareWithTemplate(
       "내 출발 장소를 등록하고 모임 중간 장소를 찾아볼까요?",
       url
     );
   };
+
+  useEffect(() => {
+    if (isLoading || isPending || !scheduleData?.data?.members || !userId)
+      return;
+
+    const isUserInSchedule = scheduleData.data.members.some(
+      (member: { id: string }) => member.id === userId
+    );
+
+    if (!isUserInSchedule) {
+      ToastWell("🚫", "해당 일정에 포함된 멤버가 아닙니다.");
+      route.replace("/");
+    }
+  }, [isLoading, isPending, scheduleData, userId, route]);
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -55,9 +71,19 @@ const WaitingVotePage = () => {
     };
     if (scheduleId) {
       fetchSuggestedLocations();
+      const intervalId = setInterval(() => {
+        if (noDepartLocationCount === 0) return; // 출발 장소 전부 등록 시 폴링 중단
+        console.log("폴링: noDepartLocationCount 갱신");
+        fetchSuggestedLocations();
+      }, 5000); // 5초마다 갱신
+
+      return () => {
+        console.log("폴링 정리: intervalId", intervalId);
+        clearInterval(intervalId);
+      };
     }
     return () => window.removeEventListener("resize", checkScreenSize);
-  }, [scheduleId]);
+  }, [scheduleId, noDepartLocationCount]);
 
   useEffect(() => {
     if (isPending) return;
@@ -79,6 +105,10 @@ const WaitingVotePage = () => {
     }
   }, [scheduleData, userId, isPending]);
 
+  if (isLoading || !isAuthenticated) {
+    return <GlobalLoading />;
+  }
+
   return (
     <main className="flex flex-col h-screen w-full relative">
       <div className="hidden sm:block">
@@ -89,6 +119,7 @@ const WaitingVotePage = () => {
       <div className="flex-1 w-full flex justify-center">
         <div className="w-full max-w-[1024px]">
           <Map
+            key={`${myLocation?.latitude}-${myLocation?.longitude}`}
             latitude={myLocation?.latitude}
             longitude={myLocation?.longitude}
           />

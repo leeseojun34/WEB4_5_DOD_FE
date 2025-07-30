@@ -6,12 +6,13 @@ import { kakaoSearch } from "@/types/kakaoSearch";
 import Map from "@/components/feature/kakaoMap/Map";
 import BottomSheet from "@/components/ui/BottomSheet";
 import Header from "@/components/layout/Header";
-import useAuthStore from "@/stores/authStores";
 import { useParams } from "next/navigation";
 import { useGroupSchedule } from "@/lib/api/scheduleApi";
 import GlobalLoading from "@/app/loading";
 import BlurredChevronHeader from "@/components/layout/BlurredChevronHeader";
 import { useRouter } from "next/navigation";
+import useAuthRequired from "../feature/schedule/hooks/useAuthRequired";
+import ToastWell from "../ui/ToastWell";
 
 const CreateDepartLocationPage = () => {
   const [selectedStation, setSelectedStation] = useState<kakaoSearch | null>(
@@ -20,12 +21,25 @@ const CreateDepartLocationPage = () => {
   const [isSmOrLarger, setIsSmOrLarger] = useState(false);
   const [isSheetOpen, setIsSheetOpen] = useState(true);
   const [snapPoints, setSnapPoints] = useState([0.6, 0.33, 0.25]); //모바일 화면 비 값 : 서치결과, 서치, 선택
-  const { user } = useAuthStore();
+  const { isAuthenticated, isLoading, user } = useAuthRequired();
   const userId = user?.id;
   const params = useParams();
   const scheduleId = params.id as string;
   const { data: scheduleData, isPending } = useGroupSchedule(scheduleId);
   const router = useRouter();
+  useEffect(() => {
+    if (isLoading) return;
+    if (!scheduleData?.data?.members || !userId) return;
+
+    const isUserInSchedule = scheduleData.data.members.some(
+      (member: MemberType) => member.id === userId
+    );
+
+    if (!isUserInSchedule) {
+      ToastWell("🚫", "해당 일정에 포함된 멤버가 아닙니다.");
+      router.replace("/");
+    }
+  }, [isLoading, scheduleData, userId, router]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -55,10 +69,10 @@ const CreateDepartLocationPage = () => {
   const selectStationHandler = (station: kakaoSearch) => {
     setSelectedStation(station);
     console.log(station);
-    if (!userId || isPending || !scheduleData) {
-      return <GlobalLoading />;
-    }
   };
+  if (isLoading || isPending || !isAuthenticated) {
+    return <GlobalLoading />;
+  }
   return (
     <main className="flex flex-col h-screen relative w-full mx-auto">
       <div className="hidden sm:block">

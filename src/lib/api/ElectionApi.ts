@@ -130,28 +130,11 @@ export const useVoteDepartLocation = () => {
     },
   });
 };
-/*
-//세부 일정 api 연결
-export const getSchedule = async (scheduleId: string) => {
-  const res = await axiosInstance.get(`/schedules/show/${scheduleId}`);
-  return res.data;
-};
-
-export const useSchedule = (scheduleId: string) => {
-  return useQuery<ScheduleDetailType>({
-    queryKey: ["groupSchedule", scheduleId],
-    queryFn: () => getSchedule(scheduleId),
-    enabled: !!scheduleId, // scheduleId가 있어야 실행
-    retry: false,
-    refetchOnWindowFocus: false,
-  });
-};
-*/
 
 //즐겨찾기 장소 조회
 export const getFavoriteLocation = async () => {
   const res = await axiosInstance.get("/favorite-location");
-  return res.data.data;
+  return res.data;
 };
 
 export const useFavoriteLocation = () => {

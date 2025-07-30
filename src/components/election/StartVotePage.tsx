@@ -7,19 +7,44 @@ import rabbit from "@/assets/images/rabbit_vote.png";
 import { useParams, useRouter } from "next/navigation";
 import { useGroupSchedule } from "@/lib/api/scheduleApi";
 import Header from "@/components/layout/Header";
+import useAuthRequired from "../feature/schedule/hooks/useAuthRequired";
+import GlobalLoading from "@/app/loading";
+import { useEffect } from "react";
+import ToastWell from "../ui/ToastWell";
 
 const StartVotePage = () => {
   const router = useRouter();
   const params = useParams();
+  const { isAuthenticated, isLoading: isAuthLoading, user } = useAuthRequired();
   const scheduleId = params.id as string;
-  const { data: schedule, isLoading } = useGroupSchedule(scheduleId);
+  const userId = user?.id;
+
+  const { data: schedule, isLoading: isScheduleLoading } =
+    useGroupSchedule(scheduleId);
   console.log(schedule);
 
   const clickHandler = () => {
     router.push(`/schedule/${scheduleId}/election/start-point`);
   };
 
-  console.log(schedule);
+  useEffect(() => {
+    if (isAuthLoading) return;
+    if (!schedule?.data?.members || !userId) return;
+
+    const isUserInSchedule = schedule.data.members.some(
+      (member: MemberType) => member.id === userId
+    );
+
+    if (!isUserInSchedule) {
+      ToastWell("🚫", "해당 일정에 포함된 멤버가 아닙니다.");
+      router.replace("/");
+    }
+  }, [isAuthLoading, schedule, userId, router]);
+  //console.log(schedule);
+  if (isAuthLoading || isScheduleLoading || !isAuthenticated) {
+    return <GlobalLoading />;
+  }
+
   return (
     <main className="w-full">
       <div className="hidden sm:block">
@@ -27,7 +52,7 @@ const StartVotePage = () => {
       </div>
       <div className="flex flex-col  min-h-screen relative pt-13 pb-32 max-w-[740px] mx-auto overflow-hidden">
         <div className="flex flex-col gap-2 px-10 pt-7.5 ">
-          {isLoading ? (
+          {isScheduleLoading ? (
             <div className="h-7 w-1/3 bg-[var(--color-gray-100)] rounded animate-pulse" />
           ) : (
             <h2 className="font-semibold text-2xl text-[var(--color-gray)]">

@@ -30,7 +30,6 @@ const SubwaySearch = ({
   scheduleId,
 }: SubwaySearchProps) => {
   const [query, setQuery] = useState("");
-  const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<kakaoSearch[]>([]);
   const [selectedStation, setSelectedStation] = useState<kakaoSearch | null>(
     null
@@ -43,12 +42,12 @@ const SubwaySearch = ({
     setSelectedStation(station);
     onSelectStation(station);
     if (snapTo) snapTo(2);
-    console.log(station);
+    //console.log(station);
   };
 
   const searchHandler = async () => {
     if (!query.trim()) return;
-    setLoading(true);
+
     try {
       const data = await searchSubwayStation(query, REST_API_KEY);
       setResults(data.documents);
@@ -56,7 +55,6 @@ const SubwaySearch = ({
     } catch (e) {
       console.log("fail", e);
     }
-    setLoading(false);
   };
 
   const resetHandler = () => {
@@ -68,21 +66,24 @@ const SubwaySearch = ({
 
   const favoriteSelectHandler = async () => {
     try {
-      const { data } = await fetchFavorites();
+      const result = await fetchFavorites();
+
+      const data = result.data;
 
       if (!data || data.length === 0) {
         ToastWell("😣", "즐겨찾는 장소가 없습니다.");
         return;
       }
 
-      const favorite = data[0];
+      const favorite = data.data[0];
+      console.log(favorite);
 
       const station: kakaoSearch = {
-        id: favorite.id,
+        id: favorite.favoriteLocationId?.toString() || "",
         place_name: favorite.stationName,
         category_name: "",
         category_group_name: "",
-        road_address_name: favorite.roadAddressName ?? "",
+        road_address_name: favorite.address || "",
         x: String(favorite.longitude),
         y: String(favorite.latitude),
       };
@@ -94,7 +95,30 @@ const SubwaySearch = ({
     }
   };
 
-  //console.log(selectedStation);
+  const departRegisterHandler = () => {
+    if (!selectedStation) return;
+    const trimmedPlaceName = selectedStation.place_name.split(" ")[0];
+    const payload = {
+      departLocationName: trimmedPlaceName,
+      latitude: Number(selectedStation.y),
+      longitude: Number(selectedStation.x),
+    };
+    //console.log(payload);
+    createDepart.mutate(
+      {
+        scheduleId,
+        location: payload,
+      },
+      {
+        onSuccess: () => {
+          route.push(`/schedule/${scheduleId}/election/wait`);
+        },
+        onError: (err) => {
+          console.error("출발지 등록 실패", err);
+        },
+      }
+    );
+  };
 
   return (
     <div className="w-full flex flex-col items-center justify-center px-5">
@@ -128,7 +152,6 @@ const SubwaySearch = ({
               >
                 즐겨찾는 장소 불러오기
               </Button>
-              {loading && <div className="text-center py-2">검색 중</div>}
             </div>
           </>
         ) : (
@@ -154,31 +177,7 @@ const SubwaySearch = ({
         <Button
           state={selectedStation ? "default" : "disabled"}
           className="w-full justify-center"
-          onClick={() => {
-            if (!selectedStation) return;
-            const trimmedPlaceName = selectedStation.place_name.split(" ")[0];
-            const payload = {
-              //memberId: userId,
-              departLocationName: trimmedPlaceName,
-              latitude: Number(selectedStation.y),
-              longitude: Number(selectedStation.x),
-            };
-            console.log(payload);
-            createDepart.mutate(
-              {
-                scheduleId,
-                location: payload,
-              },
-              {
-                onSuccess: () => {
-                  route.push(`/schedule/${scheduleId}/election/wait`);
-                },
-                onError: (err) => {
-                  console.error("출발지 등록 실패", err);
-                },
-              }
-            );
-          }}
+          onClick={departRegisterHandler}
         >
           다음
         </Button>
