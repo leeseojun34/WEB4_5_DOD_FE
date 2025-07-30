@@ -5,12 +5,14 @@ interface MeetingLocationProps {
   specificLocation?: string;
   isLocationEditOpen?: boolean;
   setIsLocationEditOpen?: (open: boolean) => void;
+  isMaster: boolean;
 }
 
 const MeetingLocation = ({
   location,
   specificLocation,
   setIsLocationEditOpen,
+  isMaster,
 }: MeetingLocationProps) => {
   return (
     <div className="bg-[color:var(--color-white)] px-5 py-4 gap-4 rounded-lg flex flex-col shadow-[var(--shadow-common)]">
@@ -23,9 +25,11 @@ const MeetingLocation = ({
             모임 장소
           </div>
         </div>
-        <div onClick={() => setIsLocationEditOpen?.(true)}>
-          <Pen className="w-3 h-3 text-[color:var(--color-gray)] cursor-pointer" />
-        </div>
+        {isMaster && (
+          <div onClick={() => setIsLocationEditOpen?.(true)}>
+            <Pen className="w-3 h-3 text-[color:var(--color-gray)] cursor-pointer" />
+          </div>
+        )}
       </div>
       {!location && !specificLocation ? (
         <div className="flex w-full justify-center items-center py-4 text-xs text-[color:var(--color-gray)] pb-8">

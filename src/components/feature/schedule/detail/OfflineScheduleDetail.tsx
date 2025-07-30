@@ -16,13 +16,18 @@ import { useRouter } from "next/navigation";
 interface OfflineScheduleDetailProps {
   scheduleId: string;
   data: ScheduleDetailType;
+  userId: string | undefined;
 }
 
 const OfflineScheduleDetail = ({
   scheduleId,
   data,
+  userId,
 }: OfflineScheduleDetailProps) => {
   const [isLocationEditOpen, setIsLocationEditOpen] = useState(false);
+  const userData = data.members.find((member) => member.id === userId);
+  const isMaster = userData?.scheduleRole === "ROLE_MASTER";
+
   const [goHome, setGoHome] = useState(false);
   const router = useRouter();
 
@@ -59,13 +64,14 @@ const OfflineScheduleDetail = ({
             scheduleId={scheduleId}
             isLocationEditOpen={isLocationEditOpen}
             setIsLocationEditOpen={setIsLocationEditOpen}
+            isMaster={isMaster}
           />
         </div>
       ) : (
         <ScheduleDetailLayout
           data={data}
           scheduleId={scheduleId}
-          isLeader={true}
+          isLeader={isMaster}
         >
           <ScheduleDetailContent
             scheduleId={scheduleId}
@@ -75,7 +81,7 @@ const OfflineScheduleDetail = ({
               platform: workspace.type as WorkspacePlatformType,
               name: workspace.name,
             }))}
-            isLeader={true}
+            isLeader={isMaster}
           >
             <motion.div variants={itemVariants}>
               <MeetingLocation
@@ -83,6 +89,7 @@ const OfflineScheduleDetail = ({
                 specificLocation={data.specificLocation}
                 isLocationEditOpen={isLocationEditOpen}
                 setIsLocationEditOpen={setIsLocationEditOpen}
+                isMaster={isMaster}
               />
             </motion.div>
           </ScheduleDetailContent>

@@ -12,6 +12,7 @@ interface OfflineBottomSheetProps {
   data: ScheduleDetailType;
   isLocationEditOpen: boolean;
   setIsLocationEditOpen: (isOpen: boolean) => void;
+  isMaster: boolean;
 }
 
 const OfflineBottomSheet = ({
@@ -19,6 +20,7 @@ const OfflineBottomSheet = ({
   data,
   isLocationEditOpen,
   setIsLocationEditOpen,
+  isMaster,
 }: OfflineBottomSheetProps) => {
   const snapPoints = [0.9, 0.7, 0.05];
 
@@ -38,7 +40,7 @@ const OfflineBottomSheet = ({
               name={data.scheduleName}
               description={data.description}
               count={data.members.length}
-              isLeader={true}
+              isLeader={isMaster}
               id={String(data.eventId)}
             />
             <div className="min-w-[375px] w-full max-w-185 mx-auto pt-6 sm:pt-10">
@@ -53,7 +55,7 @@ const OfflineBottomSheet = ({
                       name: workspace.name,
                     })
                   )}
-                  isLeader={true}
+                  isLeader={isMaster}
                 >
                   <motion.div variants={itemVariants}>
                     <MeetingLocation
@@ -61,6 +63,7 @@ const OfflineBottomSheet = ({
                       specificLocation={data.specificLocation}
                       isLocationEditOpen={isLocationEditOpen}
                       setIsLocationEditOpen={setIsLocationEditOpen}
+                      isMaster={isMaster}
                     />
                   </motion.div>
                 </ScheduleDetailContent>
