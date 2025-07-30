@@ -37,10 +37,12 @@ const STYLES = {
 const Schedule = ({
   eventScheduleInfo,
   mySchedule,
+  timeSlots,
   mode = "default",
 }: {
   eventScheduleInfo?: EventTimeTableType;
   mySchedule: MyScheduleType | null;
+  timeSlots?: { date: string; timeBit: string }[];
   mode?: "default" | "mypage";
 }) => {
   const { eventId } = useParams();
@@ -99,8 +101,28 @@ const Schedule = ({
   const [isMyScheduleChanged, setIsMyScheduleChanged] = useState(false);
 
   useEffect(() => {
+    if (!timeSlots) return;
+
+    for (const timeSlot of timeSlots) {
+      const dayIndex = daysOfWeek.findIndex(
+        (d) => d.fullDate === timeSlot.date
+      );
+      const timeBit = timeSlot.timeBit;
+      const times = convertHexBitToTimes(timeBit);
+      for (const time of times) {
+        const cellId = `cell-${dayIndex}-${time}`;
+        setSelectedCells((prev) => {
+          const newSet = new Set(prev);
+          newSet.add(cellId);
+          return newSet;
+        });
+      }
+    }
+    setIsMyScheduleChanged(false);
+  }, [timeSlots]);
+
+  useEffect(() => {
     if (!mySchedule) return;
-    setCheckedCells(new Map());
     setSelectedCells(new Set());
 
     setIsMyScheduleChanged(false);
@@ -157,12 +179,15 @@ const Schedule = ({
   }, [mySchedule]);
 
   useEffect(() => {
+    console.log(isMyScheduleChanged);
+
     if (selectedCells.size > 0 && !isDragging) {
       applyXorToggle();
     }
   }, [selectedCells]);
 
   const applyXorToggle = async () => {
+    console.log(isMyScheduleChanged);
     if (selectedCells.size === 0) return;
     setIsDraggingAndClick(false);
 
@@ -226,7 +251,7 @@ const Schedule = ({
           timeBit: convertTimesToHexBit(times),
         }));
 
-      if (dailyTimeSlots.length > 0) {
+      if (dailyTimeSlots.length > 0 && isMyScheduleChanged) {
         await setEventMyTimeApi(+eventId!, {
           dailyTimeSlots,
           timezone: "Asia/Seoul",
@@ -402,6 +427,8 @@ const Schedule = ({
 
   const handleTouchEnd = useCallback(() => {
     if (!isDraggingAndClick || !isInteractionEnabled) return;
+    setIsDragging(false);
+    setDragStartCell(null);
     lastTouchedCell.current = null;
   }, [isDraggingAndClick, isInteractionEnabled]);
 

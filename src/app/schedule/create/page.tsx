@@ -10,12 +10,15 @@ import { ChevronLeft } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { formatDate } from "@/app/utils/dateFormat";
 import { createEvent } from "@/lib/api/scheduleApi";
+import Toast from "@/components/ui/Toast";
+import { AxiosError } from "axios";
+import useAuthRequired from "@/components/feature/schedule/hooks/useAuthRequired";
 
 const CreateSchedule = () => {
+  const { isAuthenticated, isLoading } = useAuthRequired();
   const router = useRouter();
   const [level, setLevel] = useState(0);
   const groupId = useSearchParams().get("groupId");
-
   const [schedule, setSchedule] = useState<EventType>({
     title: "",
     description: "",
@@ -42,6 +45,8 @@ const CreateSchedule = () => {
       setLevel((prev) => prev - 1);
     }
   };
+
+  if (isLoading || !isAuthenticated) return null;
 
   const handleCreateSchedule = async () => {
     // 이벤트 등록 api 호출
@@ -73,7 +78,11 @@ const CreateSchedule = () => {
         throw new Error(response.message);
       }
     } catch (error) {
-      console.error(error);
+      if (error instanceof AxiosError) {
+        Toast(error.response?.data.message);
+      } else {
+        Toast("알 수 없는 오류가 발생했습니다.");
+      }
     }
   };
 

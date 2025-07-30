@@ -2,9 +2,12 @@
 
 import CommonSchedule from "@/components/feature/CommonSchedule";
 import LoadButton from "./LoadButton";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Schedule from "@/components/feature/Schedule";
 import { getMySchedule } from "@/lib/api/scheduleApi";
+import useAuthStore from "@/stores/authStores";
+import Toast from "@/components/ui/Toast";
+import { useRouter } from "next/navigation";
 
 interface ScheduleSectionProps {
   title: React.ReactNode;
@@ -22,7 +25,10 @@ const ScheduleSection = ({
   mode,
 }: ScheduleSectionProps) => {
   const [mySchedule, setMySchedule] = useState<MyScheduleType | null>(null);
-
+  const [timeSlots, setTimeSlots] =
+    useState<{ date: string; timeBit: string }[]>();
+  const { user } = useAuthStore();
+  const router = useRouter();
   const handleLoadMySchedule = async () => {
     try {
       const { data } = await getMySchedule();
@@ -34,6 +40,20 @@ const ScheduleSection = ({
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    if (user) {
+      for (const member of eventScheduleInfo.memberSchedules) {
+        if (member.eventMemberId === user.id) {
+          setTimeSlots(member.dailyTimeSlots);
+          break;
+        }
+      }
+    } else {
+      Toast("로그인 후 이용해주세요.");
+      router.push("/");
+    }
+  }, [user, eventScheduleInfo]);
 
   return (
     <>
@@ -51,6 +71,7 @@ const ScheduleSection = ({
             <Schedule
               eventScheduleInfo={eventScheduleInfo.timeTable}
               mySchedule={mySchedule}
+              timeSlots={timeSlots}
             />
           ) : (
             <CommonSchedule eventScheduleInfo={eventScheduleInfo} />
