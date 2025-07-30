@@ -79,7 +79,7 @@ const SubwaySearch = ({
         return;
       }
 
-      const favorite = data[0];
+      const favorite = data.data[0];
       console.log("즐겨찾기 장소:", favorite);
 
       const station: kakaoSearch = {
@@ -124,10 +124,6 @@ const SubwaySearch = ({
     );
   };
 
-  useEffect(() => {
-    console.log("컴포넌트 마운트 시 selectedStation:", selectedStation);
-  }, []);
-
   return (
     <div className="w-full flex flex-col items-center justify-center px-5">
       <div className="w-full max-w-[700px] flex flex-col mx-auto">
@@ -156,8 +152,7 @@ const SubwaySearch = ({
               />
               <Button
                 className="w-full justify-center"
-                //onClick={favoriteSelectHandler}
-                onClick={() => console.log("clicked")}
+                onClick={favoriteSelectHandler}
               >
                 즐겨찾는 장소 불러오기
               </Button>
