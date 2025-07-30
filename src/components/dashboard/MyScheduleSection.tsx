@@ -48,7 +48,12 @@ export const MyScheduleSection = ({
                 </Link>
               );
             } else {
-              return <MyScheduleItem key={schedule.id} schedule={schedule} />;
+              return (
+                <MyScheduleItem
+                  key={schedule.googleEventId}
+                  schedule={schedule}
+                />
+              );
             }
           })
         ) : (
