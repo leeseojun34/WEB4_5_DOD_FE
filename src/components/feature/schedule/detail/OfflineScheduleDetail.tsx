@@ -47,6 +47,7 @@ const OfflineScheduleDetail = ({
             scheduleId={scheduleId}
             isLocationEditOpen={isLocationEditOpen}
             setIsLocationEditOpen={setIsLocationEditOpen}
+            isMaster={isMaster}
           />
         </div>
       ) : (
