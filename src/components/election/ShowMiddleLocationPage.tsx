@@ -117,7 +117,7 @@ const ShowMiddleLocationPage = () => {
           <Header />
         </div>
         <HeaderTop>{schedule?.data.scheduleName}</HeaderTop>
-        <div className="pt-[154px] px-5 flex flex-col justify-between gap-2 m-0">
+        <div className="pt-[154px] w-full max-w-[740px] mx-auto  px-5 flex flex-col justify-between gap-2 ">
           <h2 className="font-semibold sm:text-2xl text-xl text-[var(--color-gray)]">
             {schedule?.data.scheduleName}
           </h2>
@@ -127,7 +127,7 @@ const ShowMiddleLocationPage = () => {
             투표 결과
           </h1>
         </div>
-        <div className="flex flex-col px-5 w-full my-auto items-center gap-6 sm:gap-10 ">
+        <div className="flex flex-col px-5 w-full max-w-[740px] mx-auto my-auto items-center gap-6 sm:gap-10 ">
           <div className="relative my-6 flex w-full ">
             <Image
               src={tikky}

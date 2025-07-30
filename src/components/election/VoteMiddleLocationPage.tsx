@@ -263,8 +263,7 @@ const VoteMiddleLocationPage = () => {
           scheduleData.data.scheduleName
         )}
       </HeaderTop>
-
-      <div className="pt-[112px] px-5 flex-1 flex flex-col justify-between">
+      <div className="w-full max-w-[740px] mx-auto pt-[112px] px-5 flex-1 flex flex-col justify-between">
         {/* 상단 설명/이미지 */}
         <div className="flex justify-between items-center ">
           <div className="flex flex-col gap-2 text-left pt-12 justify-center px-5">
