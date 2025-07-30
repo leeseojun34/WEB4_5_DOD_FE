@@ -39,7 +39,6 @@ const SubwaySearch = ({
   const { refetch: fetchFavorites } = useFavoriteLocation();
 
   const selectHandler = ({ station }: { station: kakaoSearch }) => {
-    console.log("이거?");
     setSelectedStation(station);
     onSelectStation(station);
     if (snapTo) snapTo(2);
@@ -66,13 +65,10 @@ const SubwaySearch = ({
   };
 
   const favoriteSelectHandler = async () => {
-    console.log("favoriteSelectHandler 호출됨");
     try {
       const result = await fetchFavorites();
-      console.log("fetchFavorites 호출 결과 전체:", result);
 
       const data = result.data;
-      console.log("즐겨찾기 데이터 배열:", data);
 
       if (!data || data.length === 0) {
         ToastWell("😣", "즐겨찾는 장소가 없습니다.");
@@ -80,7 +76,6 @@ const SubwaySearch = ({
       }
 
       const favorite = data.data[0];
-      console.log("즐겨찾기 장소:", favorite);
 
       const station: kakaoSearch = {
         id: favorite.favoriteLocationId?.toString() || "",
