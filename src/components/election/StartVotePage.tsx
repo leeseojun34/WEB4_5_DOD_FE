@@ -21,7 +21,6 @@ const StartVotePage = () => {
 
   const { data: schedule, isLoading: isScheduleLoading } =
     useGroupSchedule(scheduleId);
-  console.log(schedule);
 
   const clickHandler = () => {
     router.push(`/schedule/${scheduleId}/election/start-point`);

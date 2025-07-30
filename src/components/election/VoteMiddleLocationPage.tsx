@@ -182,7 +182,7 @@ const VoteMiddleLocationPage = () => {
                 { x: station.longitude, y: station.latitude }
               );
               cache[cacheKey] = time;
-              console.log("station:", station);
+              //console.log("station:", station);
               return { ...station, travelTime: time };
             } catch (err) {
               console.error("계산 실패", err);
@@ -201,12 +201,10 @@ const VoteMiddleLocationPage = () => {
     if (remainingVotes === 0) return; //투표가 완료 폴링 중단
 
     const intervalId = setInterval(() => {
-      console.log("폴링: voteMembersList 갱신");
       refetchVoteMembers();
-    }, 5000); // 5초마다 갱신
+    }, 5000);
 
     return () => {
-      console.log("폴링 정리: intervalId", intervalId);
       clearInterval(intervalId);
     };
   }, [refetchVoteMembers, remainingVotes]);

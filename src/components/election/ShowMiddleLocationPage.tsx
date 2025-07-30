@@ -95,7 +95,7 @@ const ShowMiddleLocationPage = () => {
     calc();
   }, [userPosition, winnerStationData]);
 
-  console.log(winnerStation);
+  // console.log(winnerStation);
 
   const goToSchedule = () => {
     router.push(`/schedule/${scheduleId}`);
