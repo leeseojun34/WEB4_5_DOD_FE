@@ -102,7 +102,7 @@ const Schedule = ({
 
   useEffect(() => {
     if (!timeSlots) return;
-
+    setCheckedCells(new Map());
     for (const timeSlot of timeSlots) {
       const dayIndex = daysOfWeek.findIndex(
         (d) => d.fullDate === timeSlot.date
@@ -179,15 +179,12 @@ const Schedule = ({
   }, [mySchedule]);
 
   useEffect(() => {
-    console.log(isMyScheduleChanged);
-
     if (selectedCells.size > 0 && !isDragging) {
       applyXorToggle();
     }
   }, [selectedCells]);
 
   const applyXorToggle = async () => {
-    console.log(isMyScheduleChanged);
     if (selectedCells.size === 0) return;
     setIsDraggingAndClick(false);
 
