@@ -11,6 +11,7 @@ import LocationEditBottomSheet from "../editSchedule/LocationEditBottomSheet";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { itemVariants } from "../motion";
+import { useRouter } from "next/navigation";
 
 interface OfflineScheduleDetailProps {
   scheduleId: string;
@@ -22,6 +23,11 @@ const OfflineScheduleDetail = ({
   data,
 }: OfflineScheduleDetailProps) => {
   const [isLocationEditOpen, setIsLocationEditOpen] = useState(false);
+  const router = useRouter();
+
+  const handleBackHome = () => {
+    router.push("/");
+  };
   return (
     <>
       {data.specificLocation ? (
@@ -29,7 +35,7 @@ const OfflineScheduleDetail = ({
           <div className="hidden sm:block">
             <Header />
           </div>
-          <BlurredChevronHeader />
+          <BlurredChevronHeader onBack={handleBackHome} />
           <div className="flex-1">
             <Map
               longitude={data.specificLongitude}
