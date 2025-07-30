@@ -54,13 +54,13 @@ const CreateDepartLocationPage = () => {
 
   useEffect(() => {
     if (isPending) return;
-    console.log(scheduleData);
+
     if (!scheduleData || !scheduleData.data || !userId) return;
     const isRegistered = scheduleData.data.members.some(
       (member: MemberType) =>
         member.id === userId && !!member.departLocationName
     );
-    console.log(isRegistered);
+    //console.log(isRegistered);
     if (isRegistered) {
       router.replace("../election/wait");
     }
@@ -68,7 +68,7 @@ const CreateDepartLocationPage = () => {
 
   const selectStationHandler = (station: kakaoSearch) => {
     setSelectedStation(station);
-    console.log(station);
+    //console.log(station);
   };
   if (isLoading || isPending || !isAuthenticated) {
     return <GlobalLoading />;

@@ -182,7 +182,7 @@ const VoteMiddleLocationPage = () => {
                 { x: station.longitude, y: station.latitude }
               );
               cache[cacheKey] = time;
-              console.log("station:", station);
+              //console.log("station:", station);
               return { ...station, travelTime: time };
             } catch (err) {
               console.error("계산 실패", err);
@@ -201,12 +201,10 @@ const VoteMiddleLocationPage = () => {
     if (remainingVotes === 0) return; //투표가 완료 폴링 중단
 
     const intervalId = setInterval(() => {
-      console.log("폴링: voteMembersList 갱신");
       refetchVoteMembers();
-    }, 5000); // 5초마다 갱신
+    }, 5000);
 
     return () => {
-      console.log("폴링 정리: intervalId", intervalId);
       clearInterval(intervalId);
     };
   }, [refetchVoteMembers, remainingVotes]);
@@ -265,8 +263,7 @@ const VoteMiddleLocationPage = () => {
           scheduleData.data.scheduleName
         )}
       </HeaderTop>
-
-      <div className="pt-[112px] px-5 flex-1 flex flex-col justify-between">
+      <div className="w-full max-w-[740px] mx-auto pt-[112px] px-5 flex-1 flex flex-col justify-between">
         {/* 상단 설명/이미지 */}
         <div className="flex justify-between items-center ">
           <div className="flex flex-col gap-2 text-left pt-12 justify-center px-5">
