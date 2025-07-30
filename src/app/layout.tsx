@@ -7,6 +7,9 @@ import { Toaster } from "react-hot-toast";
 export const metadata: Metadata = {
   title: "이때어때",
   description: "이때어때",
+  icons: {
+    icon: "/favicon.ico",
+  },
   openGraph: {
     title: "이때어때",
     description: "모두의 일정을 쉽고 빠르게 조율하는 서비스, 이때어때!",
