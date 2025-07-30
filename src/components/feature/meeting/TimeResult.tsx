@@ -22,6 +22,7 @@ import { AxiosError } from "axios";
 const TimeResult = () => {
   const { eventId } = useParams();
   const router = useRouter();
+  const [sort, setSort] = useState<"earliest" | "longest">("earliest");
   const { data: eventDetail } = useScheduleResult(Number(eventId));
   const { data: eventDetailInfo, error: eventDetailError } = useEventDetail(
     Number(eventId)
@@ -30,10 +31,12 @@ const TimeResult = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleTopClick = () => {
+    setSort("earliest");
     setList(eventDetail.data.recommendation.earliestMeetingTimes);
   };
 
   const handleBottomClick = () => {
+    setSort("longest");
     setList(eventDetail.data.recommendation.longestMeetingTimes);
   };
 
@@ -124,7 +127,11 @@ const TimeResult = () => {
               className="flex text-[color:var(--color-gray-placeholder)] items-center gap-1 px-2 cursor-pointer relative"
               onClick={() => setIsOpen(true)}
             >
-              <p className="text-xs">가장 빨리 만날 수 있는 순</p>
+              <p className="text-xs">
+                {sort === "earliest"
+                  ? "가장 빨리 만날 수 있는 순"
+                  : "가장 오래 만날 수 있는 순"}
+              </p>
               {isOpen ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
 
               {isOpen && (
