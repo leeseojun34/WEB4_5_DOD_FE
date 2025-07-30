@@ -9,12 +9,16 @@ import { useGroupSchedule } from "@/lib/api/scheduleApi";
 import Header from "@/components/layout/Header";
 import useAuthRequired from "../feature/schedule/hooks/useAuthRequired";
 import GlobalLoading from "@/app/loading";
+import { useEffect } from "react";
+import ToastWell from "../ui/ToastWell";
 
 const StartVotePage = () => {
   const router = useRouter();
   const params = useParams();
-  const { isAuthenticated, isLoading: isAuthLoading } = useAuthRequired();
+  const { isAuthenticated, isLoading: isAuthLoading, user } = useAuthRequired();
   const scheduleId = params.id as string;
+  const userId = user?.id;
+
   const { data: schedule, isLoading: isScheduleLoading } =
     useGroupSchedule(scheduleId);
   console.log(schedule);
@@ -23,6 +27,19 @@ const StartVotePage = () => {
     router.push(`/schedule/${scheduleId}/election/start-point`);
   };
 
+  useEffect(() => {
+    if (isAuthLoading) return;
+    if (!schedule?.data?.members || !userId) return;
+
+    const isUserInSchedule = schedule.data.members.some(
+      (member: MemberType) => member.id === userId
+    );
+
+    if (!isUserInSchedule) {
+      ToastWell("🚫", "해당 일정에 포함된 멤버가 아닙니다.");
+      router.replace("/");
+    }
+  }, [isAuthLoading, schedule, userId, router]);
   //console.log(schedule);
   if (isAuthLoading || isScheduleLoading || !isAuthenticated) {
     return <GlobalLoading />;

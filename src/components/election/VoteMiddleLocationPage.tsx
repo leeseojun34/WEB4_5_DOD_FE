@@ -20,7 +20,6 @@ import {
 } from "@/lib/api/ElectionApi";
 
 import { useGroupSchedule } from "@/lib/api/scheduleApi";
-
 import { easeOut } from "framer-motion";
 import { useRouter } from "next/navigation";
 import useAuthRequired from "../feature/schedule/hooks/useAuthRequired";
@@ -79,7 +78,7 @@ const VoteMiddleLocationPage = () => {
   const { mutate: voteDepartLocation } = useVoteDepartLocation();
   const { data: scheduleData, isPending } = useGroupSchedule(scheduleId);
   const userId = user?.id;
-  console.log(userId);
+
   const [userPosition, setUserPosition] = useState<{
     latitude: number;
     longitude: number;
@@ -91,11 +90,12 @@ const VoteMiddleLocationPage = () => {
 
   const { data: voteMembersList = [], refetch: refetchVoteMembers } =
     useVoteMembers(scheduleId);
+
   const hasVoted =
     Boolean(userId) &&
     voteMembersList.some((m: VoteMember) => m.memberId === userId);
 
-  console.log(hasVoted);
+  console.log("투표했니? :", hasVoted);
   const myVoteLocationId = hasVoted
     ? voteMembersList.find((m: VoteMember) => m.memberId === userId)?.locationId
     : null;
@@ -103,6 +103,20 @@ const VoteMiddleLocationPage = () => {
   const votedCount = voteMembersList.length;
   const totalMemberCount = scheduleData?.data?.members?.length || 0;
   const remainingVotes = totalMemberCount - votedCount;
+
+  useEffect(() => {
+    if (isLoading) return;
+    if (!scheduleData?.data?.members || !userId) return;
+
+    const isUserInSchedule = scheduleData.data.members.some(
+      (member: MemberType) => member.id === userId
+    );
+
+    if (!isUserInSchedule) {
+      ToastWell("🚫", "해당 일정에 포함된 멤버가 아닙니다.");
+      route.replace("/");
+    }
+  }, [isLoading, scheduleData, userId, route]);
 
   useEffect(() => {
     if (!suggestedLocationsData?.data?.suggestedLocations) return;

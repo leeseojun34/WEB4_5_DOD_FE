@@ -12,6 +12,7 @@ import GlobalLoading from "@/app/loading";
 import BlurredChevronHeader from "@/components/layout/BlurredChevronHeader";
 import { useRouter } from "next/navigation";
 import useAuthRequired from "../feature/schedule/hooks/useAuthRequired";
+import ToastWell from "../ui/ToastWell";
 
 const CreateDepartLocationPage = () => {
   const [selectedStation, setSelectedStation] = useState<kakaoSearch | null>(
@@ -26,6 +27,19 @@ const CreateDepartLocationPage = () => {
   const scheduleId = params.id as string;
   const { data: scheduleData, isPending } = useGroupSchedule(scheduleId);
   const router = useRouter();
+  useEffect(() => {
+    if (isLoading) return;
+    if (!scheduleData?.data?.members || !userId) return;
+
+    const isUserInSchedule = scheduleData.data.members.some(
+      (member: MemberType) => member.id === userId
+    );
+
+    if (!isUserInSchedule) {
+      ToastWell("🚫", "해당 일정에 포함된 멤버가 아닙니다.");
+      router.replace("/");
+    }
+  }, [isLoading, scheduleData, userId, router]);
 
   useEffect(() => {
     const handleResize = () => {

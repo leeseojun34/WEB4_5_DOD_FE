@@ -14,15 +14,32 @@ import { Station } from "@/types/station";
 import GlobalLoading from "@/app/loading";
 import { useGroupSchedule } from "@/lib/api/scheduleApi";
 import useAuthRequired from "../feature/schedule/hooks/useAuthRequired";
+import ToastWell from "../ui/ToastWell";
+import { useEffect } from "react";
 
 const ShowMiddleLocationPage = () => {
   const router = useRouter();
   const params = useParams();
-  const { isAuthenticated, isLoading: isAuthLoading } = useAuthRequired();
+  const { isAuthenticated, isLoading: isAuthLoading, user } = useAuthRequired();
   const scheduleId = params.id as string;
+  const userId = user?.id;
   const { data: suggestedLocationsData, isLoading: isScheduleLoading } =
     useSuggestedLocations(scheduleId);
   const { data: schedule } = useGroupSchedule(scheduleId);
+
+  useEffect(() => {
+    if (isAuthLoading || isScheduleLoading) return;
+    if (!schedule?.data?.members || !userId) return;
+
+    const isUserInSchedule = schedule.data.members.some(
+      (member: MemberType) => member.id === userId
+    );
+
+    if (!isUserInSchedule) {
+      ToastWell("🚫", "해당 일정에 포함된 멤버가 아닙니다.");
+      router.replace("/");
+    }
+  }, [isAuthLoading, isScheduleLoading, schedule, userId, router]);
 
   const winnerStationData =
     suggestedLocationsData?.data?.suggestedLocations?.find(
