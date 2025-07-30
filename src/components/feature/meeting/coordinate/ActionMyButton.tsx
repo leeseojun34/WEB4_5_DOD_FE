@@ -14,7 +14,7 @@ const ActionMyButton = () => {
     try {
       setIsLoading(true);
       await setEventMyTime(Number(eventId));
-      router.push(`/meeting/${eventId}/coordinate`);
+      router.back();
     } catch (error) {
       Toast("내 시간표 등록에 실패했습니다.");
       console.error(error);
