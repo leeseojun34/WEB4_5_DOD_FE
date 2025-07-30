@@ -6,19 +6,23 @@ const TextMessage = ({
   isMine,
   characterIndex,
   className,
+  isSE,
 }: {
   text: string;
   isMine: boolean;
   characterIndex: number;
   className?: string;
+  isSE: boolean;
 }) => {
   const profileImage = profileImages[characterIndex];
   return (
     <div>
       <div
-        className={`w-53 transparent px-4 space-y-1 flex flex-col ${
-          isMine ? "items-end" : "items-start"
-        } ${className ?? ""}`}
+        className={`w-53 transparent ${
+          isSE ? "px-7" : "px-4"
+        } space-y-1 flex flex-col ${isMine ? "items-end" : "items-start"} ${
+          className ?? ""
+        }`}
       >
         {!isMine && (
           <Image
