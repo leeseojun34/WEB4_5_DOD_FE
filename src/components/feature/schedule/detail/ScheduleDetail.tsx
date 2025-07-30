@@ -55,6 +55,7 @@ const ScheduleDetail = () => {
         <OfflineScheduleDetail
           scheduleId={scheduleId}
           data={scheduleData.data}
+          userId={user?.id}
         />
       )}
     </>

@@ -15,13 +15,18 @@ import { itemVariants } from "../motion";
 interface OfflineScheduleDetailProps {
   scheduleId: string;
   data: ScheduleDetailType;
+  userId: string | undefined;
 }
 
 const OfflineScheduleDetail = ({
   scheduleId,
   data,
+  userId,
 }: OfflineScheduleDetailProps) => {
   const [isLocationEditOpen, setIsLocationEditOpen] = useState(false);
+  const userData = data.members.find((member) => member.id === userId);
+  const isMaster = userData?.scheduleRole === "ROLE_MASTER";
+
   return (
     <>
       {data.specificLocation ? (
@@ -48,7 +53,7 @@ const OfflineScheduleDetail = ({
         <ScheduleDetailLayout
           data={data}
           scheduleId={scheduleId}
-          isLeader={true}
+          isLeader={isMaster}
         >
           <ScheduleDetailContent
             scheduleId={scheduleId}
@@ -58,7 +63,7 @@ const OfflineScheduleDetail = ({
               platform: workspace.type as WorkspacePlatformType,
               name: workspace.name,
             }))}
-            isLeader={true}
+            isLeader={isMaster}
           >
             <motion.div variants={itemVariants}>
               <MeetingLocation
@@ -66,6 +71,7 @@ const OfflineScheduleDetail = ({
                 specificLocation={data.specificLocation}
                 isLocationEditOpen={isLocationEditOpen}
                 setIsLocationEditOpen={setIsLocationEditOpen}
+                isMaster={isMaster}
               />
             </motion.div>
           </ScheduleDetailContent>
