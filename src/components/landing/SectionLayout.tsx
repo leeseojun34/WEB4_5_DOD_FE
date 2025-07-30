@@ -42,7 +42,7 @@ const SectionLayout = ({
       ([entry]) => {
         setIsVisible(entry.isIntersecting);
       },
-      { threshold: 1 }
+      { threshold: 0.9 }
     );
 
     observer.observe(sectionRef.current);
