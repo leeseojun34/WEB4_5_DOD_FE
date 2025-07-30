@@ -25,7 +25,7 @@ const Dashboard = () => {
   return (
     <section>
       <div className="hidden sm:block">
-        <Header />
+        <Header type="blur" />
       </div>
       <div className="w-full flex min-h-screen justify-center bg-[color:var(--color-gray-background)] pt-10 pb-30 px-5 sm:pt-18">
         <div className="w-full max-w-185 flex flex-col items-center gap-5">

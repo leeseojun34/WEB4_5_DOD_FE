@@ -51,7 +51,7 @@ const ActionButtons = ({
       </Button>
       <Button
         onClick={scheduleResultNavigate}
-        state={isLoading ? "disabled" : "default"}
+        state={isLoading || !isConfirmed ? "disabled" : "default"}
       >
         결과 보기
       </Button>

@@ -29,5 +29,7 @@ export const useUser = () => {
 };
 
 export const logout = async () => {
+  const { resetUser } = useAuthStore.getState();
+  resetUser();
   return await axiosInstance.post("/auth/logout");
 };

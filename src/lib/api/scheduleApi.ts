@@ -143,7 +143,7 @@ export const useGroupSchedule = (scheduleId: string) => {
     enabled: !!scheduleId,
     retry: false,
     refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5,
+    staleTime: 1000 * 60,
   });
 };
 
@@ -211,7 +211,6 @@ export const useEventDetail = (eventId: number) => {
     queryFn: () => getEventDetail(eventId),
     retry: false,
     gcTime: 3 * 60 * 60 * 1000,
-    refetchInterval: 5000,
   });
 };
 

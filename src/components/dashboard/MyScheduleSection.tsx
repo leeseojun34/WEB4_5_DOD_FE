@@ -40,11 +40,17 @@ export const MyScheduleSection = ({
           </Link>
         </div>
         {filteredSchedules.length > 0 ? (
-          filteredSchedules.map((schedule) => (
-            <Link href={`/schedule/${schedule.id}`} key={schedule.id}>
-              <MyScheduleItem schedule={schedule} />
-            </Link>
-          ))
+          filteredSchedules.map((schedule) => {
+            if (schedule.source === "SERVICE") {
+              return (
+                <Link href={`/schedule/${schedule.id}`} key={schedule.id}>
+                  <MyScheduleItem schedule={schedule} />
+                </Link>
+              );
+            } else {
+              return <MyScheduleItem key={schedule.id} schedule={schedule} />;
+            }
+          })
         ) : (
           <div className="flex flex-1 justify-center items-center py-4">
             <EmptySchedule />

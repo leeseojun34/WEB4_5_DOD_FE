@@ -50,13 +50,13 @@ export const useUpdateProfileImg = () => {
   });
 };
 
-// 즐겨찾는 역 등록
+// 즐겨찾는 역 get
 interface FavoriteLocation {
   favoriteLocationId?: number;
   stationName: string;
   latituede: number;
   longitude: number;
-  address?: string; // 선택적 필드로 변경
+  address: string; // 선택적 필드로 변경
 }
 
 export const useFavoriteLocation = () => {
@@ -70,12 +70,13 @@ export const useFavoriteLocation = () => {
   });
 };
 
+// 즐겨찾는 역 등록
 interface CreateFavoritePayload {
-  favoritePlaceId?: number; // 선택적 필드로 변경
+  favoritePlaceId?: number;
   stationName: string;
   latitude: number;
   longitude: number;
-  address?: string; // 선택적 필드로 변경
+  address: string;
 }
 
 const addFavoriteLocation = async (payload: CreateFavoritePayload) => {
@@ -104,7 +105,7 @@ interface FavoritePayload {
   stationName: string;
   latitude: number;
   longitude: number;
-  address?: string; // 선택적 필드로 변경
+  address: string;
 }
 
 const updateFavoriteLocation = async (payload: FavoritePayload) => {
