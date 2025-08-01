@@ -15,6 +15,7 @@ type BaseProps = {
   isTextarea?: boolean;
   fullWidth?: boolean;
   width?: number;
+  type?: "text" | "number";
 };
 
 type InputProps = BaseProps &
@@ -33,6 +34,7 @@ const Input = ({
   className,
   value = "",
   width,
+  type = "text",
   ...props
 }: InputProps) => {
   const valueLength = typeof value === "string" ? value.length : 0;
@@ -157,11 +159,12 @@ const Input = ({
           <>
             <input
               className={inputBaseClass}
-              maxLength={maxLength}
-              value={value}
+              maxLength={type === "number" ? undefined : maxLength}
+              value={value?.toString() ?? ""}
               onFocus={handleInputFocus}
               onBlur={handleInputBlur}
               onKeyDown={handleKeyDownInput}
+              type={type}
               {...(props as InputHTMLAttributes<HTMLInputElement>)}
             />
             {icon && (
