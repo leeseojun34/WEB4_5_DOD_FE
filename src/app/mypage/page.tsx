@@ -229,13 +229,7 @@ function MyPage() {
 
       {/* 시간 설정 */}
       {sheetType === "time" && (
-        <TimeSheet
-          isOpen={isOpen}
-          setIsOpen={setIsOpen}
-          onSave={() => {
-            setIsOpen(false);
-          }}
-        />
+        <TimeSheet isOpen={isOpen} setIsOpen={setIsOpen} />
       )}
 
       {/* 주변역 등록 */}

@@ -2,7 +2,6 @@
 
 import { X } from "lucide-react";
 import BottomSheet from "../ui/BottomSheet";
-import { Button } from "../ui/Button";
 import Schedule from "../feature/Schedule";
 import { getMySchedule } from "@/lib/api/scheduleApi";
 import { useQuery } from "@tanstack/react-query";
@@ -10,10 +9,9 @@ import { useQuery } from "@tanstack/react-query";
 type TimeSheetType = {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
-  onSave: () => void;
 };
 
-function TimeSheet({ isOpen, setIsOpen, onSave }: TimeSheetType) {
+function TimeSheet({ isOpen, setIsOpen }: TimeSheetType) {
   const { data: mySchedule } = useQuery({
     queryKey: ["mySchedule"],
     queryFn: getMySchedule,
@@ -30,8 +28,7 @@ function TimeSheet({ isOpen, setIsOpen, onSave }: TimeSheetType) {
         setIsOpen={setIsOpen}
         snapPoints={snapPoints}
         initialSnap={1}
-        disableDrag={true}
-      >
+        disableDrag={true}>
         {() => (
           <div className="w-full h-[90%] flex flex-col px-5 gap-8 pb-12">
             <div className="flex justify-between items-center px-5">
@@ -52,13 +49,6 @@ function TimeSheet({ isOpen, setIsOpen, onSave }: TimeSheetType) {
           </div>
         )}
       </BottomSheet>
-      {isOpen && (
-        <div className="fixed bottom-9 left-0 right-0 px-5 z-[99999]">
-          <div className="min-w-[335px] w-full max-w-185 mx-auto flex justify-center items-center">
-            <Button onClick={onSave}>저장하기</Button>
-          </div>
-        </div>
-      )}
     </>
   );
 }
