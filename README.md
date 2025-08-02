@@ -4,6 +4,7 @@
 개인과 그룹의 일정 조율 과정에서 발생하는 비효율성을 해결하고 모든 구성원이 참여하지 못하는 현실적인 상황을 고려하여 유연한 일정 관리 서비스를 제공합니다.
 
 - 배포 URL : https://ittaeok.com
+- 시연 URL : https://www.youtube.com/watch?v=coeKWbkHD6g
 
 ## 프로젝트 소개
 
