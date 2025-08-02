@@ -7,7 +7,7 @@
 
 ## 프로젝트 소개
 
-![landing gif](/public/ladingPage_1.gif)
+![landing gif](/public/ladingPage.gif)
 
 - 바쁜 현대인들의 일정 잡기를 클릭 몇번으로 쉽고 간편하게 해주는 서비스입니다.
 - 나의 가능한 시간을 등록하고 다른 모임원들의 시간을 취합하여 가장 빠른 일정, 긴 시간 볼 수 있는 일정을 확인하고 정할 수 있습니다.
