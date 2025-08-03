@@ -15,17 +15,24 @@ const InvitePage = () => {
   const router = useRouter();
 
   const setInviteEventMember = async () => {
-    try {
-      if (group === "true") {
+    if (group === "true") {
+      try {
         await addGroupMember(groupId as string);
         ToastWell("🎉", "일정 조율을 위해 그룹에 참여했습니다!");
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          Toast(error.response?.data.message);
+        } else {
+          Toast("알 수 없는 오류가 발생했습니다.");
+        }
       }
+    }
 
+    try {
       await setInviteEvent(Number(eventId), Number(groupId));
       ToastWell("🎉", "일정 초대가 완료되었어요!");
       router.push(`/meeting/${eventId}/coordinate`);
     } catch (error) {
-      console.error(error);
       if (error instanceof AxiosError) {
         if (error.status === 401) {
           localStorage.setItem("redirect", `${window.location.pathname}`);
