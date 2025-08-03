@@ -42,14 +42,13 @@ const ScheduleModeList = ({
                 value={schedule.maxMember}
                 placeholder="0"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  if (Number(e.target.value) >= 100) return;
+
                   setSchedule({
                     ...schedule,
                     maxMember: Number(e.target.value),
                   });
                 }}
-                inputMode="numeric"
-                pattern="[0-9]*"
-                min={1}
               />
             </div>
             <span> 명</span>
