@@ -7,7 +7,7 @@ import Toast from "@/components/ui/Toast";
 
 const timeOptions: string[] = [];
 
-for (let hour = 0; hour <= 24; hour++) {
+for (let hour = 0; hour < 24; hour++) {
   const hh = String(hour).padStart(2, "0");
   timeOptions.push(`${hh}:00`);
 }
