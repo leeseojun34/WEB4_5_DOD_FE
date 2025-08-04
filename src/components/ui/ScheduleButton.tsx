@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/Button";
 import { useEffect, useState } from "react";
+import Toast from "./Toast";
 
 const ScheduleButton = ({
   level,
@@ -27,6 +28,19 @@ const ScheduleButton = ({
     if (level === 2) {
       handleCreateSchedule();
     } else {
+      const startTimeHour = parseInt(startTime.split(":")[0]);
+      const endTimeHour = parseInt(endTime.split(":")[0]);
+
+      if (startTimeHour === endTimeHour) {
+        Toast("시작 시간과 종료 시간이 같을 수 없어요..");
+        setIsDisabled(true);
+        return;
+      } else if (startTimeHour >= endTimeHour) {
+        Toast("시작 시간이 종료 시간보다 늦을 수 없어요..");
+        setIsDisabled(true);
+        return;
+      }
+
       setLevel(level + 1);
     }
     setIsDisabled(true);
